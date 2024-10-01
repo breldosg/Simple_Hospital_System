@@ -8,13 +8,13 @@ export class BrCustomForm extends HTMLElement {
     connectedCallback() {
         this.formElement = this.shadowRoot.querySelector('form');
         this.slotElement = this.shadowRoot.querySelector('slot'); // Access the slot element
+        this.submit_btn = this.shadowRoot.host.querySelector('br-button[type="submit"]')
 
-        // Add event listener for form submission
-        this.formElement.addEventListener('submit', (event) => {
-            event.preventDefault(); // Prevent default form submission
+        // Fix: Pass a function reference, not an invocation
+        this.submit_btn.addEventListener('click', (event) => {
+            event.preventDefault();
             this.handleSubmit();
         });
-
         // add event listener for press enter key
         this.formElement.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
@@ -37,7 +37,6 @@ export class BrCustomForm extends HTMLElement {
             </style>
             <form>
                 <slot></slot> <!-- Slot for custom inputs -->
-                <button class="${btn_class}" type="submit">Submit</button>
             </form>
         `;
     }
@@ -60,44 +59,6 @@ export class BrCustomForm extends HTMLElement {
             display: flex;
             flex-direction: column;
                 ${additionalStyles}
-            }
-            .add_user_btn{
-                border: none;
-                background-color: var(--pri_color);
-                padding: 10px 20px;
-                font-weight: bold;
-                font-size: 12px;
-                color: var(--white);
-                cursor: pointer;
-                margin-block: 20px;
-                margin-right: 10px; 
-
-                align-self: flex-end;
-                border-radius: var(--input_main_border_r);
-            }
-            .btn_main {
-                text-align: center;
-                border: none;
-                background-color: var(--pri_color);
-                width: 300px;
-                padding: 15px;
-                font-weight: bolder;
-                cursor: pointer;
-                border-radius: var(--input_border_r);
-                margin-top: 10px;
-                /* color: var(--white); */
-            }
-
-            .btn_main:hover {
-                background-color: var(--btn_hover_color);
-                transform: scale(1.007);
-
-
-            }
-
-            .btn_main:active {
-                transform: scale(0.96);
-                /* color: var(--white); */
             }
         `;
     }

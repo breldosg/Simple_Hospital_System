@@ -32,7 +32,7 @@ const routes = {
     '/login': screenCollection.loginScreen,
     '/dashboard': dashboardController.staffListView,
 
-    '/users': dashboardController.addUserView,
+    '/users': dashboardController.staffListView,
     '/users/userlist': dashboardController.staffListView,
     '/users/adduser': dashboardController.addUserView,
     '/users/attendance': dashboardController.attendanceView,

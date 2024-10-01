@@ -2,7 +2,6 @@ class FrontRouter {
 
     constructor() {
         this.routes = {};  // Initialize routes with an empty object
-
         // Listen for popstate events
         window.addEventListener('popstate', () => {
             this.handleRoute();
@@ -14,6 +13,7 @@ class FrontRouter {
         console.log(path);
 
         history.pushState(null, null, path);
+
         this.handleRoute();  // Handle the route after navigating
     }
 

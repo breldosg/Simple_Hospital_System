@@ -7,11 +7,15 @@ export class BrCustomNavigation extends HTMLElement {
         this.render();
         this.setup();
         this.listeners();
+        window.addEventListener('popstate', () => {
+            this.setup();
+        });
     }
 
     render() {
         const staff_name = this.getAttribute('name') || '';
         const staff_role = this.getAttribute('role') || '';
+        const nameInitial = staff_name.split('')[0];
 
         this.shadowRoot.innerHTML = `
 <style>
@@ -183,7 +187,7 @@ export class BrCustomNavigation extends HTMLElement {
             <p class="sub_name">${staff_role}</p>
         </div>
         <div class="imag">
-            <span>M</span>
+            <span>${nameInitial.toLocaleUpperCase()}</span>
         </div>
     </div>
 </div>
@@ -274,21 +278,53 @@ export class BrCustomNavigation extends HTMLElement {
         //split path that found by /
         const pathParts = rawPath.split('/');
         pathParts.shift(); // remove empty string at the beginning
-        console.log('/' + pathParts[0]);
 
-        nav_collection.forEach(nav => {
-            if (nav.getAttribute('type') === '/' + pathParts[0]) {
-                nav.classList.add('active');
-                activeFound = true;
-                choiceNavs.forEach(choiceNav => {
-                    if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {
-                        choiceNav.classList.add('active');
-                    } else {
-                        choiceNav.classList.remove('active');
-                    }
-                })
-            }
-        });
+
+        // nav_collection.forEach(nav => {
+        //     if (nav.getAttribute('type') === '/' + pathParts[0]) {
+        //         nav.classList.add('active');
+        //         activeFound = true;
+        //         choiceNavs.forEach(choiceNav => {
+        //             if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {
+        //                 choiceNav.classList.add('active');
+        //             } else {
+        //                 choiceNav.classList.remove('active');
+        //             }
+        //         })
+        //     }
+        //     else {
+        //         nav.classList.remove('active');
+        //     }
+        // });
+
+        // navs.forEach(nav => {
+        //     const navPath = nav.getAttribute('link').toLowerCase();
+
+        //     if (navPath === '/' + pathParts[0]) {
+        //         nav.classList.add('active');
+        //         activeFound = true;
+
+        //         if (pathParts.length == 2) {
+        //             choiceNavs.forEach(choiceNav => {
+        //                 if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {
+        //                     choiceNav.classList.add('active');
+        //                 } else {
+        //                     choiceNav.classList.remove('active');
+        //                 }
+        //             })
+        //         }
+
+        //     } else {
+        //         nav.classList.remove('active');
+        //     }
+
+        // });
+
+        // // If no matching nav item was found, set the first item as active
+        // if (!activeFound && navs.length > 0) {
+        //     navs[0].classList.add('active');
+        //     nav_collection[0].classList.add('active');
+        // }
 
         navs.forEach(nav => {
             const navPath = nav.getAttribute('link').toLowerCase();
@@ -296,9 +332,29 @@ export class BrCustomNavigation extends HTMLElement {
             if (navPath === '/' + pathParts[0]) {
                 nav.classList.add('active');
                 activeFound = true;
+            }
+            else {
+                nav.classList.remove('active');
+            }
+        })
 
-                if (pathParts.length == 2) {
+        if (!activeFound && navs.length > 0) {
+            navs[0].classList.add('active');
+            activeFound = false;
+        }
+
+        nav_collection.forEach(nav => {
+            const navPath = nav.getAttribute('type');
+
+
+
+            if (navPath === '/' + pathParts[0]) {
+                nav.classList.add('active');
+                activeFound = true;
+
+                if (pathParts.length >= 2) {
                     choiceNavs.forEach(choiceNav => {
+
                         if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {
                             choiceNav.classList.add('active');
                         } else {
@@ -306,30 +362,25 @@ export class BrCustomNavigation extends HTMLElement {
                         }
                     })
                 }
+                else {
 
-            } else {
-                nav.classList.remove('active');
+                    const nav_choices = this.shadowRoot.querySelectorAll('.nav_collection.active .choice_item');
+
+                    if (nav_choices.length > 0) {
+                        nav_choices[0].classList.add('active');
+                    }
+
+                }
             }
 
-        });
+            else {
+                nav.classList.remove('active');
+            }
+        })
 
-        // If no matching nav item was found, set the first item as active
-        if (!activeFound && navs.length > 0) {
-            navs[0].classList.add('active');
+        if (!activeFound && nav_collection.length > 0) {
+            nav_collection[0].classList.add('active');
+            activeFound = false;
         }
     }
-
-    // attributeChangedCallback(name, oldValue, newValue) {
-    // if (name === 'selected') {
-    // this.shadowRoot.querySelector('.checkbox span').classList.toggle('checked', newValue === 'true');
-    // }
-    // }
-
-    // static get observedAttributes() {
-    // return ['selected'];
-    // }
-
-
-
-
 }

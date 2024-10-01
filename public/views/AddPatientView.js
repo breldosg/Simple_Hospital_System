@@ -120,6 +120,9 @@ export class AddPatientView {
 
 
 
+                <div class="btn_cont">
+                    <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
+                </div>
 
             </div>
 
@@ -132,7 +135,8 @@ export class AddPatientView {
 
 
     async register_patient(data) {
-        console.log(data);
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
 
         try {
             const response = await fetch('/api/patient/register_patient', {
@@ -157,6 +161,9 @@ export class AddPatientView {
         } catch (error) {
             console.error('Error:', error);
             alert(error.message);
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
         }
     }
 

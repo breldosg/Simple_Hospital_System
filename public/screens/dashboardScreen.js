@@ -38,7 +38,18 @@ export class dashboardScreen {
                     
                     <br-navigation name="${this.Staff_name}" role="${this.staff_role}"></br-navigation>
 
-                </div>
+<div class="alert_collection">
+                    <br-alert status="warning" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
+</div>
+                    </div>
 
                 <div class="update_cont">
 

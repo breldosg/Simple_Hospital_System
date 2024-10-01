@@ -14,77 +14,7 @@ export class AddUserView {
 
 
         const cont = document.querySelector('.update_cont');
-        cont.innerHTML = `
-            <div class="container add_user">
-            <br-form class="slides" callback="registerUser" btn_class="add_user_btn">
-                <div class="slide">
-                    <p class="heading">Staff information</p>
-                    <div class="input_group">
-                        <br-input label="Full name" name="name" type="text" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required></br-input>
-
-                        <br-select required fontSize="13px" label="Gender" name="gender" placeholder="Select Gender" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;">
-                            <br-option value="Male">Male</br-option>
-                            <br-option value="Female">Female</br-option>
-                        </br-select>
-
-                        <br-input label="Username" name="user_name" type="text" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required ></br-input>
-
-                        <br-select required fontSize="13px" label="Role" name="role" placeholder="Select Role" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;">
-                        </br-select>
-
-                        <br-input label="Phone number" type="tel" name="phone" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required></br-input>
-
-                        <br-input label="Password" name="pass" type="password" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required></br-input>
-                    </div>
-                </div>
-            </br-form>
-                <div class="loader_cont active">
-                    <div class="loader"></div>
-                </div>
-            </div>
-        `;
+        cont.innerHTML = this.ViewReturn('', 'active');
 
         // Now call render which will fetch data and populate it
         this.render();
@@ -114,7 +44,7 @@ export class AddUserView {
         }
     }
 
-    ViewReturn(roles) {
+    ViewReturn(roles, loader = '') {
         return `
         <div class="container add_user">
             <br-form class="slides" callback="registerUser" btn_class="add_user_btn">
@@ -179,15 +109,23 @@ export class AddUserView {
                             background-color: transparent;
                             border: 2px solid var(--input_border);
                         " labelStyles="font-size: 13px;" required></br-input>
+
+                        <div class="btn_cont">
+                            <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
+                        </div>
                     </div>
                 </div>
             </br-form>
+            <div class="loader_cont ${loader}">
+                    <div class="loader"></div>
+            </div>
         </div>
         `;
     }
 
     async registerUser(data) {
-        console.log(data);
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
 
         try {
             const response = await fetch('/api/users/register_staff', {
@@ -212,6 +150,9 @@ export class AddUserView {
         } catch (error) {
             console.error('Error:', error);
             alert(error.message);
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
         }
     }
 

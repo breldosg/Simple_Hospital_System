@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { frontRouter } from "../script/route.js";
 
 export class loginScreen {
@@ -42,6 +43,8 @@ export class loginScreen {
                     height: 47px;
                     " placeholder="Enter your password" name="pass" type="password" required></br-input>
 
+                    <br-button class="btn_main" type="submit" >Login</br-button>
+
                 </br-form>
 
             </div>
@@ -51,6 +54,11 @@ export class loginScreen {
     }
 
     async LoginUser(data) {
+
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
+
+
         try {
             // send fetch request to the server with the data
             const response = await fetch('/api/auth/login', {
@@ -79,6 +87,10 @@ export class loginScreen {
             // if not successful, display an error message
             console.error('Error:', error);
             alert(error.message); // Show error to user
+        }
+        finally {
+            //remove loader ver on wrapper
+            btn_submit.setAttribute('loading', false);
         }
     }
 
