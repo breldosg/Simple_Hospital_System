@@ -64,6 +64,7 @@ input {
 
     --main_background: #606676;
     --white_background: #dadada;
+    --image_background: #EBF1F7;
 
     --input_background: #ffffff61;
     --input_border: #8e8e8e61;
@@ -78,6 +79,7 @@ input {
 
     --success_color: #05CD99;
     --error_color: #EE5D50;
+    --error_background_color: #ad0e0065;
     --warning_color: #FFCE20;
 
     --white_op: rgba(255, 255, 255, 0.247);
@@ -92,6 +94,7 @@ input {
     --black-op2: #0e0e0e3f;
 
     --main_text: #3b3f48;
+    --gray_text: #8f8f8f;
 
     --main_border_r: 10px;
     --input_border_r: 30px;
@@ -192,6 +195,27 @@ input {
 
 
 
+    }
+
+
+
+    .error_login {
+        width: 100%;
+        padding: 20px;
+        background-color: var(--error_background_color);
+        border: 1.5px var(--error_color) solid;
+        border-radius: 30px;
+        opacity: 0;
+
+        p {
+            text-align: center;
+            font-weight: 500;
+            color: var(--white);
+        }
+    }
+
+    .error_login.active {
+        opacity: 1;
     }
 
 }
@@ -436,6 +460,10 @@ input {
                 font-size: 14px;
             }
 
+            .main_btn:hover {
+                background-color: var(--btn_hover_color);
+            }
+
             .d_flex {
                 display: flex;
             }
@@ -535,8 +563,12 @@ input {
 
                     .action {
                         width: 18%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 15px;
 
-                        .main_btn {
+                        .error {
                             background-color: var(--error_color);
                         }
                     }
@@ -1404,6 +1436,160 @@ input {
                     }
 
                 }
+            }
+
+        }
+
+
+        /* ------------------------------------------------------- */
+
+        .single_patient_cont {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            .loader_cont {
+                border-radius: var(--main_border_r);
+                position: absolute;
+            }
+
+            .top_card {
+                width: 100%;
+                background-color: var(--white);
+                /* height: 100px; */
+                border-radius: 10px;
+                padding: 20px;
+                display: flex;
+                gap: 40px;
+                position: relative;
+
+                .Patient_imag {
+                    width: 170px;
+                    height: 170px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    background-color: var(--image_background);
+                    flex: none;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                }
+
+                .patient_detail {
+                    width: 100%;
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: column;
+
+                    .card {
+                        width: 100%;
+                        display: flex;
+                        align-items: flex-end;
+                        gap: 40px;
+                        flex-wrap: wrap;
+
+                        .name {
+                            font-size: 30px;
+                            font-weight: 900;
+                        }
+
+                        .edit_btn {
+                            padding: 10px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            font-weight: 500;
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                        }
+
+                        .icon_card {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+
+                            p {
+                                font-weight: 500;
+                                color: var(--gray_text);
+
+                                span {
+                                    color: var(--gray_text);
+                                    font-weight: 700;
+                                }
+                            }
+                        }
+
+                    }
+
+                    .name_card {
+                        justify-content: space-between;
+                    }
+
+                    .vital {
+                        gap: 30px;
+                        margin-top: 20px;
+
+                        .vital_card {
+                            padding: 5px 15px;
+                            border: dashed 2px var(--input_border);
+                            border-radius: 10px;
+
+                            .main_ms {
+                                font-size: 30px;
+                                font-weight: 900;
+                            }
+
+                            .dist {
+                                display: flex;
+                                gap: 5px;
+
+                                p {
+                                    color: var(--gray_text);
+                                    font-weight: 500;
+                                }
+
+                                .range {
+                                    display: flex;
+                                    gap: 5px;
+
+
+
+                                }
+
+                                ;
+
+                                .up {
+
+                                    p,
+                                    span {
+                                        color: var(--success_color);
+                                    }
+                                }
+
+                                .down {
+
+                                    p,
+                                    span {
+                                        color: var(--error_color);
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+
+                }
+
             }
 
         }

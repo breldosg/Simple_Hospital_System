@@ -1,10 +1,11 @@
 import { dashboardController } from "../controller/DashboardController.js";
+import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class loginScreen {
 
     constructor() {
-        // globalize the nextpage function
+        // globalize the LoginUser function
         window.LoginUser = this.LoginUser.bind(this);
     }
 
@@ -45,7 +46,12 @@ export class loginScreen {
 
                     <br-button class="btn_main" type="submit" >Login</br-button>
 
+                    
+                    <div class="error_login">
+                        <p></p>
+                    </div>
                 </br-form>
+                    
 
             </div>
 
@@ -80,13 +86,13 @@ export class loginScreen {
                 frontRouter.navigate('/dashboard');
             }
             else {
-                alert(result.message);
+                notify('login', result.message, 'error');
                 return;  // exit the function if login failed
             }
         } catch (error) {
             // if not successful, display an error message
             console.error('Error:', error);
-            alert(error.message); // Show error to user
+            notify('login', error.message, 'error');
         }
         finally {
             //remove loader ver on wrapper

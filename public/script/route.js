@@ -2,7 +2,6 @@ class FrontRouter {
 
     constructor() {
         this.routes = {};  // Initialize routes with an empty object
-        // Listen for popstate events
         window.addEventListener('popstate', () => {
             this.handleRoute();
         });
@@ -22,11 +21,13 @@ class FrontRouter {
         const path = window.location.pathname.toLowerCase();
         console.log(`Navigated to ${path}`);
 
-        const matchingRoute = this.routes[path] || this.routes['404'];
+        // Find a matching route or return 404
+        const matchingRoute = this.matchRoute(path);
         if (matchingRoute) {
-            matchingRoute.PreRender();
+            matchingRoute.route.PreRender(matchingRoute.params);
         } else {
             console.warn('No matching route found');
+            this.routes['404'].PreRender();
         }
     }
 
@@ -36,8 +37,31 @@ class FrontRouter {
         this.handleRoute();  // Handle route after setting routes
     }
 
+    // Function to match dynamic routes and extract parameters
+    matchRoute(path) {
+        for (let route in this.routes) {
+            // Convert route to a regex, replacing :param with a capturing group
+            const paramNames = [];
+            const regexPath = route.replace(/\/:([^/]+)/g, (match, paramName) => {
+                paramNames.push(paramName);
+                return '/([^/]+)';
+            });
+            const regex = new RegExp(`^${regexPath}$`);
+
+            // Test the current path against the regex
+            const match = path.match(regex);
+            if (match) {
+                // Extract parameter values
+                const params = paramNames.reduce((acc, paramName, index) => {
+                    acc[paramName] = match[index + 1];  // Get corresponding matched value
+                    return acc;
+                }, {});
+
+                return { route: this.routes[route], params };
+            }
+        }
+
+        return null;  // No matching route found
+    }
 }
-
-// create global instance variables
-
 export const frontRouter = new FrontRouter();

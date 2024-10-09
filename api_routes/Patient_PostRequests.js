@@ -129,6 +129,24 @@ router.post('/search_patient', async (req, res) => {
     }
 });
 
+router.post('/single_patient', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 190, body); // Add `await` since it's an async function
+        console.log('Single patient Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /single_patient route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
 
 
 

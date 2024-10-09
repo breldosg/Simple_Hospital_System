@@ -1,4 +1,5 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
 
 export class StaffListView {
     constructor() {
@@ -140,7 +141,7 @@ export class StaffListView {
             return result.success ? result.data : null;
         } catch (error) {
             console.error('Error:', error);
-            alert(error.message);
+            notify('top_left', error.message, 'error');
             return null;
         }
     }

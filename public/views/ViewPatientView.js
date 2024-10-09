@@ -1,4 +1,6 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class ViewPatientView {
     constructor() {
@@ -55,6 +57,17 @@ export class ViewPatientView {
         });
     }
 
+    row_listener() {
+        // listeners for each row
+        const rows = document.querySelectorAll('.table_body .tr');
+        rows.forEach((row) => {
+            row.addEventListener('click', async () => {
+                const patientId = row.getAttribute('data_src');
+                frontRouter.navigate('/patient/viewpatient/' + patientId);
+            })
+        });
+    }
+
     async fetchAndRenderData() {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn(); // Show loader
@@ -101,10 +114,13 @@ export class ViewPatientView {
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
 
+        var checkout_btn = '<button type="button" class="main_btn error">CheckOut</button>';
+        var view_visit_btn = '<button type="button" class="main_btn">View Visit</button>';
+        var create_visit_btn = '<button type="button" class="main_btn">Create Visit</button>';
 
         PatientData.PatientList.forEach((patient, index) => {
             const row = `
-                <div class="tr d_flex flex__c_a">
+                <div class="tr d_flex flex__c_a" data_src="${patient.id}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.name}</p>
                     <p class="gender">${patient.gender}</p>
@@ -112,12 +128,14 @@ export class ViewPatientView {
                     <p class="name">${patient.created_by}</p>
                     <p class="date">${this.date_formatter(patient.created_at)}</p>
                     <div class="action d_flex flex__c_c">
-                        <button type="button" class="main_btn">Deactivate</button>
+                        ${patient.visit_status === 'active' ? view_visit_btn + checkout_btn : create_visit_btn}
                     </div>
                 </div>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
         });
+
+        this.row_listener();
     }
 
     async fetchData() {
@@ -141,7 +159,7 @@ export class ViewPatientView {
             return result.success ? result.data : null;
         } catch (error) {
             console.error('Error:', error);
-            alert(error.message);
+            notify('top_left', error.message, 'error');
             return null;
         }
     }

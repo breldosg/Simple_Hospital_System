@@ -353,6 +353,9 @@ export class BrCustomNavigation extends HTMLElement {
                 activeFound = true;
 
                 if (pathParts.length >= 2) {
+                    
+                    // remove the other path out of the first two
+                    pathParts.splice(2, 1)
                     choiceNavs.forEach(choiceNav => {
 
                         if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {

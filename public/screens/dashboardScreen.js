@@ -1,3 +1,6 @@
+// import { notify } from "../script.js";
+
+import { notify } from "../script/index.js";
 
 
 export class dashboardScreen {
@@ -19,9 +22,9 @@ export class dashboardScreen {
         // }
         // else {
 
-        //     // Pre-rendering logic goes here
+        // Pre-rendering logic goes here
         this.render();
-        //     // this.listeners();
+        // this.listeners();
         this.setup()
         // }
     }
@@ -38,18 +41,10 @@ export class dashboardScreen {
                     
                     <br-navigation name="${this.Staff_name}" role="${this.staff_role}"></br-navigation>
 
-<div class="alert_collection">
-                    <br-alert status="warning" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-                    <br-alert status="success" message="vhefuiewhf wf wef we f ewfewfew fwe fwefew fwefewf ew few f ewfewf ewfew fewfewf" ></br-alert>
-</div>
+                    <div class="alert_collection">
+                        <!-- -------------------- pop up here ----------------------- -->
                     </div>
+                </div>
 
                 <div class="update_cont">
 
@@ -94,8 +89,7 @@ export class dashboardScreen {
             const result = await response.json();
             return result.success ? result.data : null;
         } catch (error) {
-            console.error('Error:', error);
-            alert(error.message);
+            notify('top_left', error.message, 'error');
             return null;
         }
     }

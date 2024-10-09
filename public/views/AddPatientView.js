@@ -1,4 +1,5 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
 
 export class AddPatientView {
     constructor() {
@@ -154,13 +155,13 @@ export class AddPatientView {
             const result = await response.json();
 
             if (result.success) {
-                alert('Patient registered successfully');
+                notify('top_left', result.message, 'success');
             } else {
-                alert(result.message);
+                notify('top_left', result.message, 'warning');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert(error.message);
+            notify('top_left', error.message, 'error');
         }
         finally {
             btn_submit.setAttribute('loading', false);

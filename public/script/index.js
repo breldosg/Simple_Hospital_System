@@ -43,6 +43,7 @@ const routes = {
     '/patient/createvisit': screenCollection.dashboardScreen,
     '/patient/dischargepatient': screenCollection.dashboardScreen,
     '/patient/onprogresspatient': screenCollection.dashboardScreen,
+    '/patient/viewpatient/:id': dashboardController.singlePatientView,
 
 
     '/medicine': screenCollection.dashboardScreen,
@@ -68,3 +69,23 @@ document.addEventListener('click', (e) => {
         frontRouter.navigate(e.target.getAttribute('href'));
     }
 });
+
+
+// pop up a notification initiate
+
+export function notify(type, message, status = success) {
+
+    if (type === 'top_left') {
+        const notification_cont = document.querySelector('.alert_collection');
+        notification_cont.insertAdjacentHTML('beforeend', `<br-alert status="${status}" message="${message}" ></br-alert>`);
+    }
+    else if (type === 'login') {
+        const notification_cont = document.querySelector('.error_login');
+        notification_cont.querySelector('p').innerHTML = message;
+        notification_cont.classList.add('active');
+    }
+    else {
+        notification_cont.insertAdjacentHTML('beforeend', `<br-alert status="${status}" message="${message}" ></br-alert>`);
+    }
+
+}
