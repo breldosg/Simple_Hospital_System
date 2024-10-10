@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -66,6 +67,29 @@ export class ViewPatientView {
                 frontRouter.navigate('/patient/viewpatient/' + patientId);
             })
         });
+
+        const createVisit_btn = document.querySelectorAll('#createVisit_btn');
+
+        createVisit_btn.forEach(btn => {
+            btn.addEventListener('click', async (event) => {
+                // disable propagation
+                event.stopPropagation();
+
+                // get the btn closest with class tr
+                const btnParent = btn.closest('.tr');
+                const patientId = btnParent.getAttribute('data_src');
+                const patientName = btnParent.getAttribute('title');
+
+                dashboardController.createVisitPopUpView.PreRender(
+                    {
+                        id: patientId,
+                        p_name: patientName,
+                    })
+
+            })
+        });
+
+
     }
 
     async fetchAndRenderData() {
@@ -114,13 +138,13 @@ export class ViewPatientView {
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
 
-        var checkout_btn = '<button type="button" class="main_btn error">CheckOut</button>';
-        var view_visit_btn = '<button type="button" class="main_btn">View Visit</button>';
-        var create_visit_btn = '<button type="button" class="main_btn">Create Visit</button>';
+        var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
+        var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
+        var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
 
         PatientData.PatientList.forEach((patient, index) => {
             const row = `
-                <div class="tr d_flex flex__c_a" data_src="${patient.id}">
+                <div class="tr d_flex flex__c_a" data_src="${patient.id}" title="${patient.name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.name}</p>
                     <p class="gender">${patient.gender}</p>

@@ -4,6 +4,7 @@ import { AddMedicineView } from "../views/AddMedicineView.js";
 import { AddPatientView } from "../views/AddPatientView.js";
 import { AddUserView } from "../views/AddUserView.js";
 import { AttendanceView } from "../views/AttendanceView.js";
+import { CreateVisitPopUpView } from "../views/CreateVisitPopUpView.js";
 import { LoaderView } from "../views/LoaderView.js";
 import { SinglePatientView } from "../views/SinglePatientView.js";
 import { StaffListView } from "../views/StaffListView.js";
@@ -23,6 +24,7 @@ class DashboardController {
     viewPatientView = new ViewPatientView();
     addPatientView = new AddPatientView();
     singlePatientView = new SinglePatientView();
+    createVisitPopUpView = new CreateVisitPopUpView();
 
     // Medicine Views
     addMedicineView = new AddMedicineView();
