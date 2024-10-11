@@ -40,9 +40,7 @@ const routes = {
     '/patient': dashboardController.viewPatientView,
     '/patient/viewpatient': dashboardController.viewPatientView,
     '/patient/addpatient': dashboardController.addPatientView,
-    '/patient/createvisit': screenCollection.dashboardScreen,
-    '/patient/dischargepatient': screenCollection.dashboardScreen,
-    '/patient/onprogresspatient': screenCollection.dashboardScreen,
+    '/patient/onprogresspatient': dashboardController.viewOnProgressView,
     '/patient/viewpatient/:id': dashboardController.singlePatientView,
 
 

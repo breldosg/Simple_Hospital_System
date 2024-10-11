@@ -3,7 +3,7 @@ import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class ViewPatientView {
+export class ViewOnProgressView {
     constructor() {
         this.PatientData = [];
         this.batchNumber = 1; // Keep track of current batch
@@ -113,7 +113,7 @@ export class ViewPatientView {
                     if (loader_cont) {
                         loader_cont.remove();  // Directly remove the loader
                     }
-
+                    
                 } else {
                     notify('top_left', checkOut_response.message, 'error');
                 }
@@ -129,6 +129,8 @@ export class ViewPatientView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn(); // Show loader
         const PatientData = await this.fetchData(); // Fetch data with search term and batch number
+        console.log('haha');
+        console.log(PatientData);
 
         this.PatientData = PatientData || [];
         this.render();
@@ -139,7 +141,7 @@ export class ViewPatientView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
-        if (this.PatientData.PatientList && this.PatientData.PatientList.length > 0) {
+        if (this.PatientData.VisitList && this.PatientData.VisitList.length > 0) {
             this.populateTable(this.PatientData);
         } else {
             const show_count = document.querySelector('.show_count');
@@ -163,6 +165,7 @@ export class ViewPatientView {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
+        
 
         show_count.innerText = PatientData.showData;
         total_data.innerText = PatientData.total;
@@ -174,16 +177,17 @@ export class ViewPatientView {
         var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
         var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
         var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
+        
 
-        PatientData.PatientList.forEach((patient, index) => {
+        PatientData.VisitList.forEach((patient, index) => {
             const row = `
-                <div class="tr d_flex flex__c_a" data_src="${patient.id}" title="${patient.name}">
+                <div class="tr d_flex flex__c_a" data_src="${patient.id}" title="${patient.patient_name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-                    <p class="name">${patient.name}</p>
-                    <p class="gender">${patient.gender}</p>
-                    <p class="phone">${patient.phone}</p>
-                    <p class="name">${patient.created_by}</p>
-                    <p class="date">${this.date_formatter(patient.created_at)}</p>
+                    <p class="name">${patient.patient_name}</p>
+                    <p class="gender">${patient.stage}</p>
+                    <p class="name">${patient.doctor_name}</p>
+                    <p class="phone">${patient.created_by}</p>
+                    <p class="date">${patient.department_name}</p>
                     <div class="action d_flex flex__c_c">
                         ${patient.visit_status === 'active' ? view_visit_btn + checkout_btn : create_visit_btn}
                     </div>
@@ -197,7 +201,7 @@ export class ViewPatientView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/patient/search_patient', {
+            const response = await fetch('/api/patient/onprogress_visits', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -230,8 +234,7 @@ export class ViewPatientView {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    patient_id: id,
-                    visit_id: '',
+                    patient_id: id
                 })
             });
 
@@ -266,11 +269,11 @@ export class ViewPatientView {
             <div class="outpatient_table">
                 <div class="table_head tr d_flex flex__c_a">
                     <p class="id">SN</p>
-                    <p class="name">Name</p>
-                    <p class="gender">Gender</p>
-                    <p class="phone">Phone Number</p>
-                    <p class="name">Created By</p>
-                    <p class="date">Created Date</p>
+                    <p class="name">Patient Name</p>
+                    <p class="gender">Stage</p>
+                    <p class="name">Doctor Name</p>
+                    <p class="phone">Created By</p>
+                    <p class="date">Department</p>
                     <div class="action"></div>
                 </div>
                 <div class="table_body d_flex flex__co">
