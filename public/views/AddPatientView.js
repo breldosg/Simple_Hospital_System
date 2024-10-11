@@ -1,5 +1,6 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class AddPatientView {
     constructor() {
@@ -156,6 +157,7 @@ export class AddPatientView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
+                frontRouter.navigate(`/patient/viewpatient/${result.data.patient_file_number}`);
             } else {
                 notify('top_left', result.message, 'warning');
             }

@@ -1,4 +1,5 @@
 
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 
@@ -120,12 +121,17 @@ export class CreateVisitPopUpView {
         });
     }
 
-    async CreateVisit(data) {
+    async CreateVisit(data_old) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
+        var data = {
+            ...data_old,
+            patient_id: this.patient_id
+        }
+
         try {
-            const response = await fetch('/api/users/register_staff', {
+            const response = await fetch('/api/patient/create_visit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -134,18 +140,24 @@ export class CreateVisitPopUpView {
             });
 
             if (!response.ok) {
-                throw new Error('Registration failed. Server Error');
+                throw new Error('failed To create visit. Server Error');
             }
 
             const result = await response.json();
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
+                // After successful creation, clear the popup and close it
+                const popup_cont = document.querySelector('.popup');
+                popup_cont.innerHTML = ''; // Clear the popup and close it
+                popup_cont.classList.remove('active');
+
+                dashboardController.viewPatientView.PreRender();
             } else {
                 notify('top_left', result.message, 'warning');
             }
         } catch (error) {
-            notify('top_left', result.message, 'error');
+            notify('top_left', error.message, 'error');
         }
         finally {
             btn_submit.setAttribute('loading', false);

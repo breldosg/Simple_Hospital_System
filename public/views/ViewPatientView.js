@@ -89,6 +89,39 @@ export class ViewPatientView {
             })
         });
 
+        const checkOut_btn = document.querySelectorAll('#checkOut_btn');
+
+        checkOut_btn.forEach(btn => {
+            btn.addEventListener('click', async (event) => {
+                // disable propagation
+                event.stopPropagation();
+                // Get the btn closest with class tr
+                const btnParent = btn.closest('.tr');
+                const patientId = btnParent.getAttribute('data_src');
+
+                const container = document.querySelector('.update_cont')
+                container.insertAdjacentHTML('beforeend', dashboardController.loaderView.ViewReturn());
+
+                const checkOut_response = await this.checkout_request(patientId);
+
+                if (checkOut_response.success) {
+                    notify('top_left', checkOut_response.message, 'success');
+                    await this.fetchAndRenderData();
+                    const loader_cont = document.querySelector('.loader_cont.overlay')
+
+                    // Check if loader element exists before removing
+                    if (loader_cont) {
+                        loader_cont.remove();  // Directly remove the loader
+                    }
+                    
+                } else {
+                    notify('top_left', checkOut_response.message, 'error');
+                }
+
+
+            })
+        });
+
 
     }
 
@@ -181,6 +214,32 @@ export class ViewPatientView {
 
             const result = await response.json();
             return result.success ? result.data : null;
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
+
+    async checkout_request(id) {
+        try {
+            const response = await fetch('/api/patient/check_out_patient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    patient_id: id
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+            return result;
         } catch (error) {
             console.error('Error:', error);
             notify('top_left', error.message, 'error');

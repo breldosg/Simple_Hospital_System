@@ -86,12 +86,7 @@ router.post('/register_patient', async (req, res) => {
             const { data, status, success } = result;
 
             if (success) {
-
                 res.send(result);
-            }
-            else if (status == 401) {
-
-                res.sendStatus(401);
             }
             else {
                 res.send(result);
@@ -121,7 +116,7 @@ router.post('/search_patient', async (req, res) => {
         if (result.success) {
             return res.status(200).json(result); // Send the success response
         } else {
-            return res.status(400).json(result); // Send an error status with the message
+            return res.status(200).json(result); // Send an error status with the message
         }
     } catch (error) {
         console.error('Error in /search_staff route:', error);
@@ -139,7 +134,7 @@ router.post('/single_patient', async (req, res) => {
         if (result.success) {
             return res.status(200).json(result); // Send the success response
         } else {
-            return res.status(400).json(result); // Send an error status with the message
+            return res.status(200).json(result); // Send an error status with the message
         }
     } catch (error) {
         console.error('Error in /single_patient route:', error);
@@ -157,7 +152,7 @@ router.post('/get_create_visit_open_data', async (req, res) => {
         if (result.success) {
             return res.status(200).json(result); // Send the success response
         } else {
-            return res.status(400).json(result); // Send an error status with the message
+            return res.status(200).json(result); // Send an error status with the message
         }
     } catch (error) {
         console.error('Error in /get open create visit data route:', error);
@@ -170,13 +165,33 @@ router.post('/create_visit', async (req, res) => {
     const body = req.body;
 
     try {
-        var result = await RequestHandler(req, 200, body); // Add `await` since it's an async function
+        var result = await RequestHandler(req, 180, body); // Add `await` since it's an async function
         console.log('get open create visit data Result:', result);
 
         if (result.success) {
             return res.status(200).json(result); // Send the success response
         } else {
-            return res.status(400).json(result); // Send an error status with the message
+            return res.status(200).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /get open create visit data route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+
+router.post('/check_out_patient', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 210, body); // Add `await` since it's an async function
+        console.log('get open create visit data Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(200).json(result); // Send an error status with the message
         }
     } catch (error) {
         console.error('Error in /get open create visit data route:', error);

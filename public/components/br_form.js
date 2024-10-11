@@ -15,6 +15,13 @@ export class BrCustomForm extends HTMLElement {
             event.preventDefault();
             this.handleSubmit();
         });
+
+        // add form submit listener
+        this.formElement.addEventListener('submit', (event) => {
+            event.preventDefault();
+            this.handleSubmit();
+        });
+
         // add event listener for press enter key
         this.formElement.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {

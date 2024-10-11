@@ -1796,6 +1796,11 @@ input {
     z-index: 99999999;
 }
 
+.overlay {
+    position: absolute;
+    background-color: var(--white-op1);
+}
+
 .loader_cont.login {
     background-color: var(--white-op2);
 }
