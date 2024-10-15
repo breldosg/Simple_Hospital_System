@@ -16,7 +16,6 @@ export class ViewMedicineView {
 
     render() {
         const cont = document.querySelector('.update_cont');
-
         cont.innerHTML = this.ViewReturn();
 
     }
@@ -133,5 +132,3 @@ export class ViewMedicineView {
 
 
 }
-
-// export const staffListView = new StaffListView();

@@ -120,6 +120,10 @@ export class BrCustomSelect extends HTMLElement {
                     border: 1px solid #ccc;
                     cursor: pointer;
                     background: #fff;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: inline-block;
                     ${additionalStyles}
 
                 }
@@ -145,6 +149,7 @@ export class BrCustomSelect extends HTMLElement {
                     width: 100%;
                     padding: 10px;
                     box-sizing: border-box;
+                    border: none;
                     border-bottom: 1px solid #ccc;
                     outline: none;
                 }

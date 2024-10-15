@@ -107,15 +107,15 @@ export class ViewOnProgressView {
                 if (checkOut_response.success) {
                     notify('top_left', checkOut_response.message, 'success');
                     await this.fetchAndRenderData();
-                    const loader_cont = document.querySelector('.loader_cont.overlay')
 
-                    // Check if loader element exists before removing
-                    if (loader_cont) {
-                        loader_cont.remove();  // Directly remove the loader
-                    }
-                    
                 } else {
                     notify('top_left', checkOut_response.message, 'error');
+                }
+
+                const loader_cont = document.querySelector('.loader_cont.overlay')
+                // Check if loader element exists before removing
+                if (loader_cont) {
+                    loader_cont.remove();  // Directly remove the loader
                 }
 
 
@@ -129,8 +129,6 @@ export class ViewOnProgressView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn(); // Show loader
         const PatientData = await this.fetchData(); // Fetch data with search term and batch number
-        console.log('haha');
-        console.log(PatientData);
 
         this.PatientData = PatientData || [];
         this.render();
@@ -165,7 +163,7 @@ export class ViewOnProgressView {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
-        
+
 
         show_count.innerText = PatientData.showData;
         total_data.innerText = PatientData.total;
@@ -177,11 +175,11 @@ export class ViewOnProgressView {
         var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
         var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
         var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
-        
+
 
         PatientData.VisitList.forEach((patient, index) => {
             const row = `
-                <div class="tr d_flex flex__c_a" data_src="${patient.id}" title="${patient.patient_name}">
+                <div class="tr d_flex flex__c_a" data_src="${patient.patient_id}" title="${patient.patient_name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.patient_name}</p>
                     <p class="gender">${patient.stage}</p>
@@ -234,7 +232,8 @@ export class ViewOnProgressView {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    patient_id: id
+                    patient_id: '',
+                    visit_id: id
                 })
             });
 
@@ -261,7 +260,7 @@ export class ViewOnProgressView {
         return `
         <div class="main_section outpatient_table_out">
             <div class="in_table_top d_flex flex__u_b">
-                <h4>Patient List</h4>
+                <h4>Active Visit List</h4>
                 <div class="search_cont">
                     <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
                 </div>

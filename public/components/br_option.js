@@ -23,11 +23,11 @@ export class BrCustomOption extends HTMLElement {
                     display: block;
                     cursor: pointer;
                     width: 100%;
+                    padding: 10px !important;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
                     display: inline-block;
-                    padding: 10px !important;
                     ${styles}
                     }
                     :host(:hover) {

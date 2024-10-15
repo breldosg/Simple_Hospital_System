@@ -13,6 +13,7 @@ a {
     text-decoration: none;
 }
 
+
 p {
     font-size: 14px;
 }
@@ -268,7 +269,7 @@ input {
             /* padding-block: 5px; */
             z-index: 999999;
 
-            br-alert{
+            br-alert {
                 position: relative;
                 z-index: 1;
             }
@@ -1074,6 +1075,12 @@ input {
             padding: 50px;
             border-radius: var(--main_border_r);
             background-color: var(--white);
+            position: relative;
+
+            .loader_cont {
+                border-radius: var(--main_border_r);
+                position: absolute;
+            }
 
             .top_bars {
                 display: flex;
