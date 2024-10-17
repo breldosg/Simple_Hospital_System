@@ -1254,6 +1254,23 @@ input {
                 }
             }
 
+            .med_btn_cont {
+                display: flex;
+                width: 100%;
+                justify-content: end;
+                align-items: end;
+
+                .btn_next {
+                    border: none;
+                    background-color: var(--pri_color);
+                    padding: 10px 20px;
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: var(--white);
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+                }
+            }
 
             .main_section {
                 height: 100%;
@@ -1355,26 +1372,16 @@ input {
                         }
 
                         .name {
-                            width: 14%;
+                            width: 32.5%;
                             text-align: left;
                         }
 
-                        .gender {
+                        .status {
                             width: 10%;
-
+                            text-transform: capitalize;
                         }
-
-                        .role {
-                            width: 15%;
-                        }
-
-                        .date {
-                            width: 15%;
-
-                        }
-
-                        .phone {
-                            width: 11%;
+                        .remain {
+                            width: 10%;
                         }
 
                         .action {
@@ -1628,7 +1635,223 @@ input {
 
         }
 
+        /* ------------------------------------------------------- */
+
+        .medicine_table_out {
+
+            .main_btn {
+                border: none;
+                color: var(--white);
+                background-color: var(--pri_color);
+                padding-inline: 15px;
+                height: 35px;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+
+            .main_btn:hover {
+                background-color: var(--btn_hover_color);
+            }
+
+            .d_flex {
+                display: flex;
+            }
+
+            .flex__u_b {
+                justify-content: space-between;
+            }
+
+            .flex__c_a {
+                align-items: center;
+                justify-content: space-around;
+            }
+
+            .flex__c_c {
+                align-items: center;
+                justify-content: center;
+            }
+
+            .flex__e_b {
+                align-items: flex-end;
+                justify-content: space-between;
+            }
+
+            .flex__co {
+                flex-direction: column;
+            }
+
+            .in_table_top {
+                height: 50px;
+
+                .search_cont {
+
+                    input {
+                        border-radius: var(--input_main_border_r);
+                        width: 300px;
+                        padding: 10px;
+                        height: 41px;
+                        background-color: transparent;
+                        border: 2px solid var(--input_border);
+                    }
+
+                }
+
+            }
+
+            .outpatient_table {
+                height: calc(100% - 50px);
+
+                .table_head {
+                    background-color: var(--pri_color);
+                    height: 50px;
+                    border-radius: 5px 5px 0 0;
+
+                    p {
+                        font-weight: 600;
+                        color: var(--white);
+                        font-size: 13px;
+                        cursor: default;
+                    }
+                }
+
+
+                .tr {
+                    gap: 2px;
+
+                    p {
+                        flex: none;
+                        text-align: center;
+                    }
+
+                    .id {
+                        width: 5%;
+                    }
+
+                    .name {
+                        width: 20%;
+                        text-align: left;
+                    }
+
+                    .gender {
+                        width: 10%;
+
+                    }
+
+                    .role {
+                        width: 19%;
+                    }
+
+                    .date {
+                        width: 15%;
+
+                    }
+
+                    .phone {
+                        width: 11%;
+                    }
+
+                    .action {
+                        width: 18%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 15px;
+
+                        .error {
+                            background-color: var(--error_color);
+                        }
+                    }
+                }
+
+                .table_body {
+                    padding-block: 5px;
+                    gap: 5px;
+                    overflow-y: scroll;
+                    height: calc(100% - 130px);
+                    position: relative;
+
+                    .loader_cont {
+                        position: absolute;
+                    }
+
+                    .tr {
+                        flex: none;
+                        height: 40px;
+                        cursor: pointer;
+
+                        p {
+                            font-size: small;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                        }
+
+                        .main_btn {
+                            height: 30px;
+                            padding-inline: 10px;
+                        }
+                    }
+
+                    .tr:hover {
+                        background-color: var(--hover_list_table);
+                    }
+
+                    .start_page {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        p {
+                            font-size: 30px;
+                            color: var(--black-op2);
+                            font-weight: 700;
+                        }
+
+                    }
+
+                    .start_page.deactivate {
+                        display: none;
+                    }
+                }
+
+                .table_footer {
+                    height: 80px;
+
+                    p {
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+
+                    .pagenation {
+                        gap: 10px;
+                        align-self: flex-end;
+
+                        .page_no {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 5px;
+                            border: 1px solid var(--border_color);
+                        }
+
+                        .main_btn {
+                            height: 40px;
+                            width: 62px;
+                            font-weight: bold;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+
     }
+
 
 }
 

@@ -111,7 +111,7 @@ export class AddMedicineView {
                 </br-select>
 
 
-                <br-input required name="price" label="Sale Price" type="number" styles="
+                <br-input required name="price" label="Sale Price (Price/One Unit)" type="number" styles="
                                 border-radius: var(--input_main_border_r);
                                 width: 300px;
                                 padding: 10px;
@@ -120,7 +120,7 @@ export class AddMedicineView {
                                 border: 2px solid var(--input_border);
                                 " labelStyles="font-size: 13px;"></br-input>
 
-                <br-input required name="min_quantity" label="lowest quantity Required" placeholder="Per Week" type="number" styles="
+                <br-input required name="min_quantity" label="Amount To Trigger Low Stock Alert" placeholder="Unit" type="number" styles="
                                 border-radius: var(--input_main_border_r);
                                 width: 300px;
                                 padding: 10px;
@@ -208,5 +208,3 @@ export class AddMedicineView {
     }
 
 }
-
-// export const staffListView = new StaffListView();
