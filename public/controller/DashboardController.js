@@ -1,5 +1,6 @@
 // import { staffListView } from "../views/StaffListView.js";
 
+import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
 import { AddMedicineView } from "../views/AddMedicineView.js";
 import { AddPatientView } from "../views/AddPatientView.js";
 import { AddUserView } from "../views/AddUserView.js";
@@ -8,6 +9,7 @@ import { CreateVisitPopUpView } from "../views/CreateVisitPopUpView.js";
 import { LoaderView } from "../views/LoaderView.js";
 import { SinglePatientView } from "../views/SinglePatientView.js";
 import { StaffListView } from "../views/StaffListView.js";
+import { ViewMedicineCategoryView } from "../views/ViewMedicineCategoryView.js";
 import { ViewMedicineView } from "../views/ViewMedicineView.js";
 import { ViewOnProgressView } from "../views/ViewOnProgressView.js";
 import { ViewPatientView } from "../views/ViewPatientView.js";
@@ -31,6 +33,8 @@ class DashboardController {
     // Medicine Views
     addMedicineView = new AddMedicineView();
     viewMedicineView = new ViewMedicineView();
+    viewMedicineCategoryView = new ViewMedicineCategoryView();
+    addMedicineCategoryView = new AddMedicineCategoryView();
 
 
 

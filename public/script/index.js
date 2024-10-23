@@ -47,6 +47,8 @@ const routes = {
     '/medicine': screenCollection.dashboardScreen,
     '/medicine/viewmedicine': dashboardController.viewMedicineView,
     '/medicine/addmedicine': dashboardController.addMedicineView,
+    '/medicine/viewcategory': dashboardController.viewMedicineCategoryView,
+    '/medicine/addcategory': dashboardController.addMedicineCategoryView,
 
 
     '/notice': screenCollection.dashboardScreen,

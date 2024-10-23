@@ -72,7 +72,7 @@ export class AddMedicineView {
                                 " labelStyles="font-size: 13px;"></br-input>
 
 
-                <br-input required name="name" label="Medicine name" type="text" styles="
+                <br-input required name="name" label="Medicine Name" type="text" styles="
                                 border-radius: var(--input_main_border_r);
                                 width: 300px;
                                 padding: 10px;

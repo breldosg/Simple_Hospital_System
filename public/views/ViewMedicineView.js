@@ -1,26 +1,25 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
 
 export class ViewMedicineView {
     constructor() {
-        window.search_medicine = this.search_medicine.bind(this)
+        window.search_medicine = this.search_medicine.bind(this);
         this.medicineData = [];
-        this.categoryData = [];
-        this.batchNumber = 1; // Keep track of current batch
-        this.total_page_num = 1; // Keep track of current batch
-        this.total_data_num = 0; // Keep track of current batch
-        this.show_count_num = 0; // Keep track of current batch
-        this.searchTerm = '';  // Store the current search term
+        this.batchNumber = 1;
+        this.total_page_num = 1;
+        this.total_data_num = 0;
+        this.show_count_num = 0;
+        this.searchTerm = '';
         this.category_value = '';
-        this.category_elements = '';
+        this.isLoading = false;  // Prevent multiple fetch calls at the same time
     }
 
     async PreRender() {
-
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
@@ -31,170 +30,77 @@ export class ViewMedicineView {
     }
 
     attachEventListeners() {
-        // Search input event listener
-        // const searchInput = document.querySelector('.search_cont input');
-        // searchInput.addEventListener('keydown', async (event) => {
-        //     if (event.key === 'Enter') {
-        //         this.searchTerm = searchInput.value;
-        //         this.batchNumber = 1; // Reset to batch 1 when searching
-        //         await this.fetchAndRenderData();
-        //     }
-        // });
-
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
-            if (this.batchNumber < this.total_page_num) {
+            if (!this.isLoading && this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
                 await this.fetchAndRenderData();
             }
-            // this.batchNumber += 1;
-            // await this.fetchAndRenderData();
         });
 
         document.querySelector('.main_btn.prev').addEventListener('click', async () => {
-            if (this.batchNumber > 1) {
+            if (!this.isLoading && this.batchNumber > 1) {
                 this.batchNumber -= 1;
                 await this.fetchAndRenderData();
             }
         });
     }
 
-    // row_listener() {
-    //     // listeners for each row
-    //     const rows = document.querySelectorAll('.table_body .tr');
-    //     rows.forEach((row) => {
-    //         row.addEventListener('click', async () => {
-    //             const medicineId = row.getAttribute('data_src');
-    //             frontRouter.navigate('/medicine/viewmedicine/' + medicineId);
-    //         })
-    //     });
-
-    //     const createVisit_btn = document.querySelectorAll('#createVisit_btn');
-
-    //     createVisit_btn.forEach(btn => {
-    //         btn.addEventListener('click', async (event) => {
-    //             // disable propagation
-    //             event.stopPropagation();
-
-    //             // get the btn closest with class tr
-    //             const btnParent = btn.closest('.tr');
-    //             const medicineId = btnParent.getAttribute('data_src');
-    //             const medicineName = btnParent.getAttribute('title');
-
-    //             dashboardController.createVisitPopUpView.PreRender(
-    //                 {
-    //                     id: medicineId,
-    //                     p_name: medicineName,
-    //                 })
-
-    //         })
-    //     });
-
-    //     const checkOut_btn = document.querySelectorAll('#checkOut_btn');
-
-    //     checkOut_btn.forEach(btn => {
-    //         btn.addEventListener('click', async (event) => {
-    //             // disable propagation
-    //             event.stopPropagation();
-    //             // Get the btn closest with class tr
-    //             const btnParent = btn.closest('.tr');
-    //             const medicineId = btnParent.getAttribute('data_src');
-
-    //             const container = document.querySelector('.update_cont')
-    //             container.insertAdjacentHTML('beforeend', dashboardController.loaderView.ViewReturn());
-
-    //             const checkOut_response = await this.checkout_request(medicineId);
-
-    //             if (checkOut_response.success) {
-    //                 notify('top_left', checkOut_response.message, 'success');
-    //                 await this.fetchAndRenderData();
-    //                 const loader_cont = document.querySelector('.loader_cont.overlay')
-
-    //                 // Check if loader element exists before removing
-    //                 if (loader_cont) {
-    //                     loader_cont.remove();  // Directly remove the loader
-    //                 }
-
-    //             } else {
-    //                 notify('top_left', checkOut_response.message, 'error');
-    //             }
-
-
-    //         })
-    //     });
-
-
-    // }
-
     async fetchAndRenderData() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn(); // Show loader
-        const medicineData = await this.fetchData(); // Fetch data with search term and batch number
-        const categoryData = await this.fetchCategory(); // Fetch data with search term and batch number
+        if (this.isLoading) return;  // Prevent multiple fetches
+        this.isLoading = true;
 
-        this.medicineData = medicineData || [];
+        const categoryData = await this.fetchCategory(); // Fetch category data only once
         this.categoryData = categoryData || [];
+
+        const medicineData = await this.fetchData(); // Fetch data
+        this.medicineData = medicineData || [];
         this.render();
-        this.attachEventListeners();
+
+        this.isLoading = false;
     }
 
     render() {
 
-        if (this.categoryData == '') {
-            // Create roles elements
-            const roles = (category_raw) => {
-                var rolesElem = "";
-                category_raw.forEach(data => {
-                    rolesElem += `
-                                <br-option type="checkbox" value="${data.id}">${data.name}</br-option>
-                            `;
-                });
-                return rolesElem;
-            };
-            this.category_elements = roles(this.categoryData)
-        }
+        // const roles = (category_raw) => {
+        //     return category_raw.map(data => `<br-option type="checkbox" value="${data.id}">${data.name}</br-option>`).join('');
+        // };
 
-        console.log(this.category_elements);
-        console.log(this.categoryData);
+        const roles = (category_raw) => {
+            var rolesElem = "";
+            category_raw.forEach(data => {
+                rolesElem += `
+                    <br-option type="checkbox" value="${data.id}">${data.name}</br-option>
+                `;
+            });
+            return rolesElem;
+        };
+        this.category_elements = roles(this.categoryData);
+
+        document.querySelector('.search_containers').innerHTML = this.searchMedicineView();
+
+        // clear the variables
+        this.category_elements = '';
+        this.categoryData = '';
 
 
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
 
         if (this.medicineData.medicineList && this.medicineData.medicineList.length > 0) {
             this.populateTable(this.medicineData);
         } else {
-            const show_count = document.querySelector('.show_count');
-            const total_data = document.querySelector('.total_data');
-            const total_page = document.querySelector('.total_page');
-            show_count.innerText = 0;
-            total_data.innerText = 0;
-            total_page.innerText = 1;
-            this.total_page_num = 1;
-            this.show_count_num = 0;
-            this.total_data_num = 0;
-            document.querySelector('.start_page').style.display = 'flex'; // No data message
+            this.displayNoDataMessage();
         }
-        document.querySelector('.loader_cont').classList.remove('active');
+
     }
 
     populateTable(medicineData) {
         const tableBody = document.querySelector('.table_body');
-        tableBody.innerHTML = ''; // Clear table before populating
+        tableBody.innerHTML = '';  // Clear table before populating
 
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
-
-        show_count.innerText = medicineData.showData;
-        total_data.innerText = medicineData.total;
-        total_page.innerText = medicineData.pages;
+        document.querySelector('.show_count').innerText = medicineData.showData;
+        document.querySelector('.total_data').innerText = medicineData.total;
+        document.querySelector('.total_page').innerText = medicineData.pages;
         this.total_page_num = medicineData.pages;
-        this.show_count_num = medicineData.showData;
-        this.total_data_num = medicineData.total;
-
-        var deactivate_btn = '<button type="button" id="deactivate_btn" class="main_btn error">Deactivate</button>';
-        var activate_btn = '<button type="button" id="activate_btn" class="main_btn">Activate</button>';
 
         medicineData.medicineList.forEach((medicine, index) => {
             const row = `
@@ -205,14 +111,113 @@ export class ViewMedicineView {
                     <p class="remain">0</p>
                     <p class="status">${medicine.status}</p>
                     <div class="action d_flex flex__c_c">
-                        ${medicine.status === 'active' ? deactivate_btn : activate_btn}
+                        ${medicine.status === 'active' ? '<button id="deactivate_btn" class="main_btn error">Deactivate</button>' : '<button id="activate_btn" class="main_btn">Activate</button>'}
                     </div>
                 </div>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
         });
 
-        // this.row_listener();
+        // clear variables
+        this.medicineData = [];
+
+        this.row_listener();
+    }
+
+    row_listener() {
+        // listeners for each row
+        const rows = document.querySelectorAll('.table_body .tr');
+        rows.forEach((row) => {
+            row.addEventListener('click', async () => {
+                const medicineId = row.getAttribute('data_src');
+                console.log('medicineId= ', medicineId);
+
+                // frontRouter.navigate('/patient/viewpatient/' + patientId);
+            })
+        });
+
+        const createVisit_btn = document.querySelectorAll('#createVisit_btn');
+
+        createVisit_btn.forEach(btn => {
+            btn.addEventListener('click', async (event) => {
+                // disable propagation
+                event.stopPropagation();
+
+                // get the btn closest with class tr
+                const btnParent = btn.closest('.tr');
+                const patientId = btnParent.getAttribute('data_src');
+                const patientName = btnParent.getAttribute('title');
+
+                dashboardController.createVisitPopUpView.PreRender(
+                    {
+                        id: patientId,
+                        p_name: patientName,
+                    })
+
+            })
+        });
+
+        const row_btn = document.querySelectorAll('#deactivate_btn, #activate_btn');
+
+        row_btn.forEach(btn => {
+            btn.addEventListener('click', async (event) => {
+                // disable propagation
+                event.stopPropagation();
+                // Get the btn closest with class tr
+                const btnParent = btn.closest('.tr');
+                const medicineId = btnParent.getAttribute('data_src');
+
+                const container = document.querySelector('.update_cont')
+                container.insertAdjacentHTML('beforeend', dashboardController.loaderView.ViewReturn());
+
+                const action = btn.id === 'deactivate_btn' ? 'deactivate' : 'activate';
+                const checkOut_response = await this.activate_deactivate(medicineId, action);
+
+                if (checkOut_response.success) {
+                    notify('top_left', checkOut_response.message, 'success');
+                    await this.fetchAndRenderData();
+                    const loader_cont = document.querySelector('.loader_cont.overlay')
+
+                    // Check if loader element exists before removing
+                    if (loader_cont) {
+                        loader_cont.remove();  // Directly remove the loader
+                    }
+
+                } else {
+                    notify('top_left', checkOut_response.message, 'error');
+                }
+
+
+            })
+        });
+
+
+    }
+
+    async activate_deactivate(id, action) {
+        try {
+            const response = await fetch('/api/medicine/change_medicine_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    medicine_id: id,
+                    action: action,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        }
     }
 
     async fetchData() {
@@ -223,8 +228,9 @@ export class ViewMedicineView {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    query: this.searchTerm,  // Send search term
-                    batch: this.batchNumber // Send current batch number
+                    query: this.searchTerm,
+                    batch: this.batchNumber,
+                    category: this.category_value
                 })
             });
 
@@ -247,11 +253,7 @@ export class ViewMedicineView {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    query: this.searchTerm,  // Send search term
-                    batch: this.batchNumber // Send current batch number
-                })
+                }
             });
 
             if (!response.ok) {
@@ -268,57 +270,114 @@ export class ViewMedicineView {
     }
 
     async search_medicine(data) {
+        this.loadingContent();
         this.searchTerm = data.query;
         this.category_value = data.category;
-        this.batchNumber = 1; // Reset to batch 1 when searching
+        this.batchNumber = 1; // Reset to first batch on search
         await this.fetchAndRenderData();
     }
 
-    date_formatter(ymd) {
-        const dateee = new Date(ymd);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(dateee);
+    loadingContent() {
+        const tableBody = document.querySelector('.table_body');
+        tableBody.innerHTML = `
+            <div class="start_page deactivate">
+                <p>No Medicines Found</p>
+            </div>
+            <div class="loader_cont active"><div class="loader"></div></div>
+        `;
+    }
+
+    displayNoDataMessage() {
+        const show_count = document.querySelector('.show_count');
+        const total_data = document.querySelector('.total_data');
+        const total_page = document.querySelector('.total_page');
+        show_count.innerText = 0;
+        total_data.innerText = 0;
+        total_page.innerText = 1;
+        document.querySelector('.start_page').style.display = 'flex';
+    }
+
+    searchMedicineView() {
+        return `
+        <br-form callback="search_medicine">
+            <div class="medicine_content">
+                <br-input label="Medicine Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter medicine name" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 400px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
+
+                
+                <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
+                                    border-radius: var(--input_main_border_r);
+                                    width: 400px;
+                                    padding: 10px;
+                                    height: 41px;
+                                    background-color: transparent;
+                                    border: 2px solid var(--input_border);
+                                    " labelStyles="font-size: 13px;">
+
+                                    ${this.category_elements}
+
+                    </br-select>
+        
+                <div class="med_btn_cont">
+                    <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
+                </div> 
+
+
+            </div>
+        </br-form>
+            `;
     }
 
     ViewReturn() {
         return `
     <div class="medicine_cont">
     
-    <br-form callback="search_medicine" class="medicine_top">
+    <div class="medicine_top">
     
         <h4>Search Medicine</h4>
-    
-        <div class="medicine_content">
-            <br-input label="Medicine Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter medicine name" styles="
-                        border-radius: var(--input_main_border_r);
-                        width: 400px;
-                        padding: 10px;
-                        height: 41px;
-                        background-color: transparent;
-                        border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;"></br-input>
+    <div class="search_containers">
+        <div>
+            <div class="medicine_content">
+                <br-input label="Medicine Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter medicine name" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 400px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
 
-            
-            <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
-                                border-radius: var(--input_main_border_r);
-                                width: 400px;
-                                padding: 10px;
-                                height: 41px;
-                                background-color: transparent;
-                                border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;">
+                
+                <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
+                                    border-radius: var(--input_main_border_r);
+                                    width: 400px;
+                                    padding: 10px;
+                                    height: 41px;
+                                    background-color: transparent;
+                                    border: 2px solid var(--input_border);
+                                    " labelStyles="font-size: 13px;">
 
-                                ${this.category_elements}
+                                    ${this.category_elements}
 
-                </br-select>
-    
-            <div class="med_btn_cont">
-                <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
-            </div> 
+                    </br-select>
+        
+                <div class="med_btn_cont">
+                    <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
+                </div> 
 
+                <div class="loader_cont active"><div class="loader"></div></div>
+
+            </div>
         </div>
+    </div>
     
-    </br-form>
+    </div>
     
     <div class="main_section medicine_table_out">
     
@@ -338,9 +397,9 @@ export class ViewMedicineView {
     
             <div class="table_body d_flex flex__co">
                 <div class="start_page deactivate">
-                    <p>There Is No Any Patient Registered</p>
-                </div>
-                <div class="loader_cont active"><div class="loader"></div></div>
+                <p>No Medicines Found</p>
+            </div>
+            <div class="loader_cont active"><div class="loader"></div></div>
             </div>
     
             <div class="table_footer d_flex flex__e_b">
@@ -357,9 +416,6 @@ export class ViewMedicineView {
     </div>
     
     </div>
-    `;
+        `;
     }
-
 }
-
-

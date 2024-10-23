@@ -213,6 +213,8 @@ export class BrCustomNavigation extends HTMLElement {
 
         <a href="/medicine/viewmedicine" data-link class="choice_item">View All medicine</a>
         <a href="/medicine/addmedicine" data-link class="choice_item">Add medicine</a>
+        <a href="/medicine/viewcategory" data-link class="choice_item">View All category</a>
+        <a href="/medicine/addcategory" data-link class="choice_item">Add category</a>
 
     </div>
 

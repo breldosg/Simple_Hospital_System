@@ -254,7 +254,7 @@ input {
         width: 100%;
         height: 150px;
         position: relative;
-        z-index: 1;
+        z-index: 2;
 
         .alert_collection {
             width: 350px;
@@ -286,6 +286,7 @@ input {
         justify-content: center;
         padding: 30px;
         position: relative;
+        z-index: 1;
 
         .container {
             max-height: 99.9%;
@@ -1250,7 +1251,12 @@ input {
                     margin-top: 20px;
                     display: flex;
                     gap: 30px;
+                    flex-wrap: wrap;
+                    position: relative;
 
+                    .loader_cont {
+                        position: absolute;
+                    }
                 }
             }
 
@@ -1380,6 +1386,7 @@ input {
                             width: 10%;
                             text-transform: capitalize;
                         }
+
                         .remain {
                             width: 10%;
                         }
@@ -1387,7 +1394,7 @@ input {
                         .action {
                             width: 10%;
 
-                            .main_btn {
+                            .error {
                                 background-color: var(--error_color);
                             }
                         }
@@ -1415,6 +1422,7 @@ input {
                             .main_btn {
                                 height: 30px;
                                 padding-inline: 10px;
+                                width: 90px;
                             }
                         }
 
@@ -1849,6 +1857,361 @@ input {
             }
         }
 
+
+        /* ------------------------------------------------------- */
+
+        .outMedicineCategory_table_out {
+
+            .main_btn {
+                border: none;
+                color: var(--white);
+                background-color: var(--pri_color);
+                padding-inline: 15px;
+                height: 35px;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+
+            .main_btn:hover {
+                background-color: var(--btn_hover_color);
+            }
+
+            .d_flex {
+                display: flex;
+            }
+
+            .flex__u_b {
+                justify-content: space-between;
+            }
+
+            .flex__c_a {
+                align-items: center;
+                justify-content: space-around;
+            }
+
+            .flex__c_c {
+                align-items: center;
+                justify-content: center;
+            }
+
+            .flex__e_b {
+                align-items: flex-end;
+                justify-content: space-between;
+            }
+
+            .flex__co {
+                flex-direction: column;
+            }
+
+            .in_table_top {
+                height: 50px;
+
+                .search_cont {
+
+                    input {
+                        border-radius: var(--input_main_border_r);
+                        width: 300px;
+                        padding: 10px;
+                        height: 41px;
+                        background-color: transparent;
+                        border: 2px solid var(--input_border);
+                    }
+
+                }
+
+            }
+
+            .outpatient_table {
+                height: calc(100% - 50px);
+
+                .table_head {
+                    background-color: var(--pri_color);
+                    height: 50px;
+                    border-radius: 5px 5px 0 0;
+
+                    p {
+                        font-weight: 600;
+                        color: var(--white);
+                        font-size: 13px;
+                        cursor: default;
+                    }
+                }
+
+
+                .tr {
+                    gap: 2px;
+
+                    p {
+                        flex: none;
+                        text-align: center;
+                    }
+
+                    .id {
+                        width: 5%;
+                    }
+
+                    .name {
+                        width: 35%;
+                        text-align: left;
+                    }
+
+                    .date {
+                        width: 15%;
+
+                    }
+
+                    .number {
+                        width: 10%;
+                    }
+
+                }
+
+                .table_body {
+                    padding-block: 5px;
+                    gap: 5px;
+                    overflow-y: scroll;
+                    height: calc(100% - 130px);
+                    position: relative;
+
+                    .loader_cont {
+                        position: absolute;
+                    }
+
+                    .tr {
+                        flex: none;
+                        height: 40px;
+                        cursor: pointer;
+
+                        p {
+                            font-size: small;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                        }
+
+                        .main_btn {
+                            height: 30px;
+                            padding-inline: 10px;
+                        }
+                    }
+
+                    .tr:hover {
+                        background-color: var(--hover_list_table);
+                    }
+
+                    .start_page {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        p {
+                            font-size: 30px;
+                            color: var(--black-op2);
+                            font-weight: 700;
+                        }
+
+                    }
+
+                    .start_page.deactivate {
+                        display: none;
+                    }
+                }
+
+                .table_footer {
+                    height: 80px;
+
+                    p {
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+
+                    .pagenation {
+                        gap: 10px;
+                        align-self: flex-end;
+
+                        .page_no {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 5px;
+                            border: 1px solid var(--border_color);
+                        }
+
+                        .main_btn {
+                            height: 40px;
+                            width: 62px;
+                            font-weight: bold;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+
+        /* ------------------------------------------------------- */
+
+        .add_medicine_category {
+            padding: 50px;
+            border-radius: var(--main_border_r);
+            background-color: var(--white);
+            position: relative;
+
+            .loader_cont {
+                border-radius: var(--main_border_r);
+                position: absolute;
+            }
+
+            .top_bars {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+
+                .bar {
+                    display: flex;
+                    gap: 5px;
+                    padding-bottom: 5px;
+                    padding-inline: 2px;
+                    align-items: flex-end;
+                    font-weight: bolder;
+                    border-bottom: 2px solid var(--main_text);
+
+                    .num {
+                        font-size: 20px;
+                        height: 24px;
+                    }
+
+                    .num_word {
+                        font-size: 12px;
+                    }
+                }
+
+                .bar.active {
+
+                    .num,
+                    .num_word {
+                        color: var(--pri_color);
+                    }
+
+                    border-color: var(--pri_color);
+                }
+            }
+
+            .slides {
+                display: flex;
+                width: 440px;
+
+
+
+                .slide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    /* margin-top: 20px; */
+                    padding: 10px;
+                    width: 440px;
+                    flex: none;
+
+                    .heading {
+                        margin-left: 10px;
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+
+                    .input_group {
+
+                        display: flex;
+                        gap: 20px;
+                        flex-wrap: wrap;
+                        width: 100%;
+                        align-items: center;
+                        justify-content: center;
+
+                        .inp_cont {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2px;
+
+                            label {
+                                font-size: 13px;
+                                /* font-weight: bold; */
+                            }
+
+                            input,
+                            select {
+                                border-radius: var(--input_main_border_r);
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                            }
+
+                            .password-container {
+                                border-radius: var(--input_main_border_r);
+                                background-color: var(--input_background);
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                overflow: hidden;
+                                border: 2px solid var(--input_border);
+
+                                .password-input {
+                                    width: calc(100% - 40px);
+                                    padding: 0px;
+                                    height: 100%;
+                                    border: none;
+                                    background: transparent;
+                                    border-radius: 0;
+                                }
+
+                                .toggle-password {
+                                    cursor: pointer;
+                                    font-size: 18px;
+                                    width: 30px;
+                                    height: 41px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    /* background-color: rebeccapurple; */
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    .btn_cont {
+                        display: flex;
+                        width: 100%;
+                        justify-content: center;
+                        padding-top: 20px;
+
+                        .btn_next {
+                            border: none;
+                            background-color: var(--pri_color);
+                            padding: 10px 20px;
+                            font-weight: bold;
+                            font-size: 12px;
+                            color: var(--white);
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+                        }
+
+                    }
+
+                }
+
+            }
+        }
 
     }
 
