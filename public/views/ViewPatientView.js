@@ -171,9 +171,9 @@ export class ViewPatientView {
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
 
-        var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
-        var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
-        var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
+        var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error co_visit">CheckOut</button>';
+        var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn v_visit">View Visit</button>';
+        var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn c_visit">Create Visit</button>';
 
         PatientData.PatientList.forEach((patient, index) => {
             const row = `

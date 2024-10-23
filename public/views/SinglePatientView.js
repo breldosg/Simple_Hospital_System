@@ -56,7 +56,7 @@ export class SinglePatientView {
                 <p class="name">${data == '' ? '' : data.name} (<span>${data == '' ? '' : data.id}</span>)</p>
 
                 <button type="button" data_src="${data == '' ? '' : data.id}" class="edit_btn"><span
-                        class='switch_icon_edit'></span> Edit</button>
+                        class='switch_icon_edit'></span></button>
 
             </div>
             <div class="card">

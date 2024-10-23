@@ -49,12 +49,6 @@ export class AddMedicineView {
     ViewReturn(category, loader = '') {
         return `
 <div class="container add_medicine">
-    <!-- <div class="top_bars">
-                        <div class="bar active">
-                            <p class="num">1</p>
-                            <p class="num_word">Basic information</p>
-                        </div>
-                    </div> -->
 
     <br-form callback="register_medicine" class="slides">
         <div class="slide">
@@ -192,7 +186,7 @@ export class AddMedicineView {
             }
 
             const result = await response.json();
-            console.log('result: ', result);
+ 
 
 
             if (result.success) {

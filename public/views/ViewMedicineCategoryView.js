@@ -58,72 +58,18 @@ export class ViewMedicineCategoryView {
         });
     }
 
-    // row_listener() {
-    //     // listeners for each row
-    //     const rows = document.querySelectorAll('.table_body .tr');
-    //     rows.forEach((row) => {
-    //         row.addEventListener('click', async () => {
-    //             const medicineCategoryId = row.getAttribute('data_src');
-    //             frontRouter.navigate('/medicineCategory/viewmedicineCategory/' + medicineCategoryId);
-    //         })
-    //     });
-
-    //     const createVisit_btn = document.querySelectorAll('#createVisit_btn');
-
-    //     createVisit_btn.forEach(btn => {
-    //         btn.addEventListener('click', async (event) => {
-    //             // disable propagation
-    //             event.stopPropagation();
-
-    //             // get the btn closest with class tr
-    //             const btnParent = btn.closest('.tr');
-    //             const medicineCategoryId = btnParent.getAttribute('data_src');
-    //             const medicineCategoryName = btnParent.getAttribute('title');
-
-    //             dashboardController.createVisitPopUpView.PreRender(
-    //                 {
-    //                     id: medicineCategoryId,
-    //                     p_name: medicineCategoryName,
-    //                 })
-
-    //         })
-    //     });
-
-    //     const checkOut_btn = document.querySelectorAll('#checkOut_btn');
-
-    //     checkOut_btn.forEach(btn => {
-    //         btn.addEventListener('click', async (event) => {
-    //             // disable propagation
-    //             event.stopPropagation();
-    //             // Get the btn closest with class tr
-    //             const btnParent = btn.closest('.tr');
-    //             const medicineCategoryId = btnParent.getAttribute('data_src');
-
-    //             const container = document.querySelector('.update_cont')
-    //             container.insertAdjacentHTML('beforeend', dashboardController.loaderView.ViewReturn());
-
-    //             const checkOut_response = await this.checkout_request(medicineCategoryId);
-
-    //             if (checkOut_response.success) {
-    //                 notify('top_left', checkOut_response.message, 'success');
-    //                 await this.fetchAndRenderData();
-    //                 const loader_cont = document.querySelector('.loader_cont.overlay')
-
-    //                 // Check if loader element exists before removing
-    //                 if (loader_cont) {
-    //                     loader_cont.remove();  // Directly remove the loader
-    //                 }
-
-    //             } else {
-    //                 notify('top_left', checkOut_response.message, 'error');
-    //             }
-
-
-    //         })
-    //     });
-
-
-    // }
+    row_listener() {
+        // listeners for each row
+        const rows = document.querySelectorAll('.table_body .tr');
+        rows.forEach((row) => {
+            row.addEventListener('click', async () => {
+                const medicineCategoryId = row.getAttribute('data_src');
+                console.log('view single medicine category with id '+ medicineCategoryId);
+                
+                frontRouter.navigate('/medicine/viewcategory/' + medicineCategoryId);
+            })
+        });
+    }
 
     async fetchAndRenderData() {
         const cont = document.querySelector('.update_cont');
@@ -184,7 +130,7 @@ export class ViewMedicineCategoryView {
             tableBody.insertAdjacentHTML('beforeend', row);
         });
 
-        // this.row_listener();
+        this.row_listener();
     }
 
     async fetchData() {

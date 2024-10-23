@@ -49,6 +49,7 @@ const routes = {
     '/medicine/addmedicine': dashboardController.addMedicineView,
     '/medicine/viewcategory': dashboardController.viewMedicineCategoryView,
     '/medicine/addcategory': dashboardController.addMedicineCategoryView,
+    '/medicine/viewcategory/:id': dashboardController.singleMedicineCategoryView,
 
 
     '/notice': screenCollection.dashboardScreen,
