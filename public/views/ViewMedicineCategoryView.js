@@ -5,6 +5,8 @@ import { frontRouter } from "../script/route.js";
 
 export class ViewMedicineCategoryView {
     constructor() {
+        window.delete_category = this.delete_category.bind(this);
+        this.row_to_delete = '';
         this.medicineCategoryData = [];
         this.batchNumber = 1; // Keep track of current batch
         this.total_page_num = 1; // Keep track of current batch
@@ -64,11 +66,41 @@ export class ViewMedicineCategoryView {
         rows.forEach((row) => {
             row.addEventListener('click', async () => {
                 const medicineCategoryId = row.getAttribute('data_src');
-                console.log('view single medicine category with id '+ medicineCategoryId);
-                
+                console.log('view single medicine category with id ' + medicineCategoryId);
+
                 frontRouter.navigate('/medicine/viewcategory/' + medicineCategoryId);
             })
         });
+
+        const Delete_btn = document.querySelectorAll('#Delete_btn');
+        Delete_btn.forEach(btn => {
+            btn.addEventListener('click', async (event) => {
+                // disable propagation
+                event.stopPropagation();
+
+                if (btn.classList.contains('delete_active')) {
+                    const btnParent = btn.closest('.tr');
+                    this.row_to_delete = btnParent;
+                    const medicineCategoryId = btnParent.getAttribute('data_src');
+                    const medicineCategoryName = btnParent.getAttribute('title');
+
+                    dashboardController.confirmPopUpView.PreRender(
+                        {
+                            callback: 'delete_category',
+                            data: medicineCategoryName,
+                            title: 'Category',
+                            params: medicineCategoryId
+                        }
+                    );
+                }
+                else if (btn.classList.contains('delete_inactive')) {
+                    notify('top_left', 'Cannot delete category, it has medicines assigned to it.', 'warning');
+                }
+
+
+            })
+        })
+
     }
 
     async fetchAndRenderData() {
@@ -125,6 +157,9 @@ export class ViewMedicineCategoryView {
                     <p class="number">${medicineCategory.medicine}</p>
                     <p class="name">${medicineCategory.created_by}</p>
                     <p class="date">${this.date_formatter(medicineCategory.created_at)}</p>
+                    <div class="action d_flex flex__c_c">
+                        <button type="button" id="Delete_btn" class="main_btn ${medicineCategory.medicine > 0 ? 'delete_inactive' : 'delete_active'}">Delete</button>
+                    </div>
                 </div>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
@@ -160,6 +195,43 @@ export class ViewMedicineCategoryView {
     }
 
 
+    async delete_category(id) {
+
+        dashboardController.loaderView.render();
+        try {
+            const response = await fetch('/api/medicine/delete_medicine_category', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id,  // Send search term
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+            if (result.success) {
+                this.row_to_delete.remove();
+                notify('top_left', result.message, 'success');
+            }
+            else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+
+            dashboardController.loaderView.remove();
+        }
+    }
+
     date_formatter(ymd) {
         const dateee = new Date(ymd);
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -182,6 +254,7 @@ export class ViewMedicineCategoryView {
                     <p class="number">Medicine</p>
                     <p class="name">Created By</p>
                     <p class="date">Created Date</p>
+                    <p class="action"></p>
                 </div>
                 <div class="table_body d_flex flex__co">
                     <div class="start_page deactivate">

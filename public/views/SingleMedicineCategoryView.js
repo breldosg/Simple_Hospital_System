@@ -28,12 +28,12 @@ export class SingleMedicineCategoryView {
 
         this.category_id = params.id;
         // Now call render which will fetch data and populate it
-        this.render(params.id);
+        this.render();
     }
 
-    async render(id) {
+    async render() {
         const cont = document.querySelector('.update_cont');
-        const category_data = await this.fetchData(id); // Wait for fetchData to complete
+        const category_data = await this.fetchData(this.category_id); // Wait for fetchData to complete
 
         this.category_name = category_data.category_detail.name;
         this.category_description = category_data.category_detail.description;
@@ -49,6 +49,8 @@ export class SingleMedicineCategoryView {
             }
         }
         else {
+            this.table_actions = false;
+            this.loadingContent();
             this.populateTable(category_data.medicine_data);
         }
     }
@@ -76,14 +78,14 @@ export class SingleMedicineCategoryView {
                     <p class="remain">0</p>
                     <p class="status">${data.status}</p>
                     <div class="action d_flex flex__c_c">
-                        <button type="button" class="main_btn error">Remove</button>
+                        <button type="button" class="main_btn">Edit</button>
                     </div>
                 </div>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
         });
 
-        this.row_listener();
+        // this.row_listener();
     }
 
 
@@ -148,7 +150,7 @@ export class SingleMedicineCategoryView {
                 <div class="start_page deactivate">
                     <p>No Medicines Found</p>
                 </div>
-                <div class="loader_cont ">
+                <div class="loader_cont ${loader}">
                     <div class="loader"></div>
                 </div>
             </div>
@@ -172,6 +174,17 @@ export class SingleMedicineCategoryView {
 `;
     }
 
+    loadingContent() {
+        const tableBody = document.querySelector('.table_body');
+        tableBody.innerHTML = `
+            <div class="start_page deactivate">
+                <p>No Medicines Found</p>
+            </div>
+            <div class="loader_cont active"><div class="loader"></div></div>
+        `;
+    }
+
+
     attach_listeners() {
 
         const edit_category_btn = document.querySelector('#edit_category');
@@ -180,15 +193,33 @@ export class SingleMedicineCategoryView {
 
                 console.log("edit_category_btn ", this.category_id);
 
-                // CreateVisitPopUpView().PreRender(this.category_id);
-                // dashboardController.createVisitPopUpView.PreRender(
-                //     {
-                //         id: this.category_id,
-                //         p_name: this.patient_name
-                //     });
+                dashboardController.updateCategoryPopUpView.PreRender(
+                    {
+                        c_id: this.category_id,
+                        c_name: this.category_name,
+                        c_description: this.category_description
+                    }
+                );
 
             })
         }
+
+        // Pagination buttons
+        document.querySelector('.main_btn.next').addEventListener('click', async () => {
+            if (this.batchNumber < this.total_page_num) {
+                this.batchNumber += 1;
+                this.table_actions = true;
+                await this.render();
+            }
+        });
+
+        document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+            if (this.batchNumber > 1) {
+                this.batchNumber -= 1;
+                this.table_actions = true;
+                await this.render();
+            }
+        });
 
     }
 

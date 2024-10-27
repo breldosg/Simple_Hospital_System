@@ -33,7 +33,7 @@ export class AddMedicineCategoryView {
 
     <br-form callback="register_medicine_category" class="slides">
         <div class="slide">
-            <p class="heading">Medicine information</p>
+            <p class="heading">Medicine category information</p>
 
             <div class="input_group">
 

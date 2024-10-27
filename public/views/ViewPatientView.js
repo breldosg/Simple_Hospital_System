@@ -99,20 +99,14 @@ export class ViewPatientView {
                 const btnParent = btn.closest('.tr');
                 const patientId = btnParent.getAttribute('data_src');
 
-                const container = document.querySelector('.update_cont')
-                container.insertAdjacentHTML('beforeend', dashboardController.loaderView.ViewReturn());
+                dashboardController.loaderView.render();
 
                 const checkOut_response = await this.checkout_request(patientId);
 
                 if (checkOut_response.success) {
                     notify('top_left', checkOut_response.message, 'success');
                     await this.fetchAndRenderData();
-                    const loader_cont = document.querySelector('.loader_cont.overlay')
-
-                    // Check if loader element exists before removing
-                    if (loader_cont) {
-                        loader_cont.remove();  // Directly remove the loader
-                    }
+                    dashboardController.loaderView.remove();
 
                 } else {
                     notify('top_left', checkOut_response.message, 'error');

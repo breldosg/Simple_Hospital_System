@@ -101,6 +101,9 @@ export class StaffListView {
         this.show_count_num = staffData.showData;
         this.total_data_num = staffData.total;
 
+        const activate_btn = `<button type="button" class="main_btn">Activate</button>`;
+        const deactivate_btn = `<button type="button" class="main_btn error">Deactivate</button>`;
+
 
         staffData.staffList.forEach((staff, index) => {
             const row = `
@@ -111,8 +114,11 @@ export class StaffListView {
                     <p class="phone">${staff.phone}</p>
                     <p class="role">${staff.role_name}</p>
                     <p class="date">${this.date_formatter(staff.created_at)}</p>
+                    <p class="status">${staff.status}</p>
                     <div class="action d_flex flex__c_c">
-                        <button type="button" class="main_btn">Deactivate</button>
+
+                    ${staff.status == 'active' ? deactivate_btn : activate_btn}
+
                     </div>
                 </div>
             `;
@@ -169,6 +175,7 @@ export class StaffListView {
                     <p class="phone">Phone Number</p>
                     <p class="role">Role</p>
                     <p class="date">Created Date</p>
+                    <p class="status">Status</p>
                     <div class="action"></div>
                 </div>
                 <div class="table_body d_flex flex__co">
