@@ -83,8 +83,6 @@ export class ViewMedicineView {
         this.category_elements = '';
         this.categoryData = '';
 
-
-
         if (this.medicineData.medicineList && this.medicineData.medicineList.length > 0) {
             this.populateTable(this.medicineData);
         } else {
@@ -291,6 +289,7 @@ export class ViewMedicineView {
         total_data.innerText = 0;
         total_page.innerText = 1;
         document.querySelector('.start_page').style.display = 'flex';
+        document.querySelector('.table_body .loader_cont').classList.remove('active');
     }
 
     searchMedicineView() {

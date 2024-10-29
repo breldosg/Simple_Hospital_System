@@ -119,7 +119,7 @@ const parseUserAgent = (userAgent) => {
     return clientInfo;
 }
 
-// const ApiHost = `http://192.168.1.102`;
+// const ApiHost = `http://192.168.1.203`;
 const ApiHost = `http://api.simplehospital.com`;
 
 const RequestHandler = async (req, key, body) => {

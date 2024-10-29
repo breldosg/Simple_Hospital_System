@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 
@@ -101,13 +102,13 @@ export class StaffListView {
         this.show_count_num = staffData.showData;
         this.total_data_num = staffData.total;
 
-        const activate_btn = `<button type="button" class="main_btn">Activate</button>`;
-        const deactivate_btn = `<button type="button" class="main_btn error">Deactivate</button>`;
+        const activate_btn = `<button type="button" id="activate_btn" class="main_btn">Activate</button>`;
+        const deactivate_btn = `<button type="button" id="deactivate_btn" class="main_btn error">Deactivate</button>`;
 
 
         staffData.staffList.forEach((staff, index) => {
             const row = `
-                <div class="tr d_flex flex__c_a">
+                <div class="tr d_flex flex__c_a" data_src="${staff.id}" title="${staff.name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${staff.name}</p>
                     <p class="gender">${staff.gender}</p>
@@ -116,15 +117,90 @@ export class StaffListView {
                     <p class="date">${this.date_formatter(staff.created_at)}</p>
                     <p class="status">${staff.status}</p>
                     <div class="action d_flex flex__c_c">
-
-                    ${staff.status == 'active' ? deactivate_btn : activate_btn}
-
+                        ${staff.status == 'active' ? deactivate_btn : activate_btn}
                     </div>
                 </div>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
         });
+
+        this.row_listener();
     }
+
+    row_listener() {
+        // listeners for each row
+        const rows = document.querySelectorAll('.table_body .tr');
+        rows.forEach((row) => {
+            row.addEventListener('click', async () => {
+                const staffId = row.getAttribute('data_src');
+                console.log('staffId= ', staffId);
+
+                // frontRouter.navigate('/patient/viewpatient/' + patientId);
+            })
+        });
+
+
+
+        const row_btn = document.querySelectorAll('#deactivate_btn, #activate_btn');
+
+        row_btn.forEach(btn => {
+            btn.addEventListener('click', async (event) => {
+                // disable propagation
+                event.stopPropagation();
+
+                // Get the btn closest with class tr
+                const btnParent = btn.closest('.tr');
+                const staffId = btnParent.getAttribute('data_src');
+
+
+                dashboardController.loaderView.render();
+
+                const action = btn.id === 'deactivate_btn' ? 'deactivate' : 'activate';
+                const checkOut_response = await this.activate_deactivate(staffId, action);
+
+                if (checkOut_response.success) {
+                    notify('top_left', checkOut_response.message, 'success');
+                    await this.fetchAndRenderData();
+
+                    dashboardController.loaderView.remove();
+
+                } else {
+                    notify('top_left', checkOut_response.message, 'error');
+                }
+
+
+            })
+        });
+
+
+    }
+
+    async activate_deactivate(id, action) {
+        try {
+            const response = await fetch('/api/users/change_user_account_state', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id,
+                    action: action,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
 
     async fetchData() {
         try {
