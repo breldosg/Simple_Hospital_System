@@ -51,7 +51,7 @@ const routes = {
     '/pharmacy/addcategory': dashboardController.addMedicineCategoryView,
     '/pharmacy/viewcategory/:id': dashboardController.singleMedicineCategoryView,
     '/pharmacy/addinatakebatch': dashboardController.addIntakeBatchView,
-    '/pharmacy/viewinatakebatch': screenCollection.dashboardScreen,
+    '/pharmacy/viewinatakebatch': dashboardController.viewIntakeBatchView,
     '/pharmacy/recieveinatakebatch': screenCollection.dashboardScreen,
 
 

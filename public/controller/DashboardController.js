@@ -13,6 +13,7 @@ import { SingleMedicineCategoryView } from "../views/SingleMedicineCategoryView.
 import { SinglePatientView } from "../views/SinglePatientView.js";
 import { StaffListView } from "../views/StaffListView.js";
 import { UpdateCategoryPopUpView } from "../views/UpdateCategoryPopUpView.js";
+import { ViewIntakeBatchView } from "../views/ViewIntakeBatchView.js";
 import { ViewMedicineCategoryView } from "../views/ViewMedicineCategoryView.js";
 import { ViewMedicineView } from "../views/ViewMedicineView.js";
 import { ViewOnProgressView } from "../views/ViewOnProgressView.js";
@@ -43,6 +44,7 @@ class DashboardController {
     singleMedicineCategoryView = new SingleMedicineCategoryView();
     updateCategoryPopUpView = new UpdateCategoryPopUpView();
     addIntakeBatchView = new AddIntakeBatchView();
+    viewIntakeBatchView = new ViewIntakeBatchView();
 
 
 

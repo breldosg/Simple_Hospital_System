@@ -192,6 +192,25 @@ router.post('/register_intake_batch', async (req, res) => {
 });
 
 
+router.post('/search_intake_batch', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 340, body); // Add `await` since it's an async function
+        console.log('search_intake_batch Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /search_intake_batch route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
 
 
 
