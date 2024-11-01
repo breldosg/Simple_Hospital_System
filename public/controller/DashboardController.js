@@ -1,5 +1,6 @@
 // import { staffListView } from "../views/StaffListView.js";
 
+import { AddIntakeBatchView } from "../views/AddIntakeBatchView.js";
 import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
 import { AddMedicineView } from "../views/AddMedicineView.js";
 import { AddPatientView } from "../views/AddPatientView.js";
@@ -41,6 +42,7 @@ class DashboardController {
     addMedicineCategoryView = new AddMedicineCategoryView();
     singleMedicineCategoryView = new SingleMedicineCategoryView();
     updateCategoryPopUpView = new UpdateCategoryPopUpView();
+    addIntakeBatchView = new AddIntakeBatchView();
 
 
 

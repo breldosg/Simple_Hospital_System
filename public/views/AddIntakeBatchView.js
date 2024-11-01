@@ -1,9 +1,9 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 
-export class AddMedicineCategoryView {
+export class AddIntakeBatchView {
     constructor() {
-        window.register_medicine_category = this.register_medicine_category.bind(this)
+        window.register_intake_batch = this.register_intake_batch.bind(this)
     }
 
     async PreRender() {
@@ -15,7 +15,7 @@ export class AddMedicineCategoryView {
 
 
         const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn('', 'active');
+        cont.innerHTML = this.ViewReturn();
 
         // Now call render which will fetch data and populate it
         this.render();
@@ -23,23 +23,22 @@ export class AddMedicineCategoryView {
 
     async render() {
         const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
     }
 
 
-    ViewReturn(loader = '') {
+    ViewReturn() {
         return `
-<div class="container add_medicine_category">
+<div class="container add_intake_batch">
 
-    <br-form callback="register_medicine_category" class="slides">
+    <br-form callback="register_intake_batch" class="slides">
         <div class="slide">
-            <p class="heading">Medicine category information</p>
+            <p class="heading">Batch information</p>
 
             <div class="input_group">
 
-                <br-input required name="name" label="Category Name" type="text" styles="
+                <br-input required name="name" label="Batch Name" type="text" styles="
                                 border-radius: var(--input_main_border_r);
-                                width: 400px;
+                                width: 300px;
                                 padding: 10px;
                                 height: 41px;
                                 background-color: transparent;
@@ -47,11 +46,30 @@ export class AddMedicineCategoryView {
                                 " labelStyles="font-size: 13px;"></br-input>
 
 
-                <br-input required name="description" label="Category Description" type="textarea" styles="
+                <br-input required name="receive_date" label="Receive Date" type="date" styles="
                                 border-radius: var(--input_main_border_r);
-                                width: 400px;
+                                width: 300px;
                                 padding: 10px;
-                                height: 100px;
+                                height: 41px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                                " labelStyles="font-size: 13px;"></br-input>
+
+
+                <br-input required name="provider_name" label="Provider name" type="text" styles="
+                                border-radius: var(--input_main_border_r);
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                                " labelStyles="font-size: 13px;"></br-input>
+
+                <br-input name="invoice_number" label="Invoice Number" type="number" styles="
+                                border-radius: var(--input_main_border_r);
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
                                 " labelStyles="font-size: 13px;"></br-input>
@@ -63,20 +81,17 @@ export class AddMedicineCategoryView {
 
         </div>
     </br-form>
-    <div class="loader_cont ${loader}">
-            <div class="loader"></div>
-    </div>
-
+    
 </div>
 `;
     }
 
-    async register_medicine_category(data) {
+    async register_intake_batch(data) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
         try {
-            const response = await fetch('/api/pharmacy/register_medicine_category', {
+            const response = await fetch('/api/pharmacy/register_intake_batch', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

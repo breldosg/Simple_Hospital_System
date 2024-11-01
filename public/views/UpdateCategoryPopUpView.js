@@ -95,7 +95,7 @@ export class UpdateCategoryPopUpView {
         }
 
         try {
-            const response = await fetch('/api/medicine/update_category', {
+            const response = await fetch('/api/pharmacy/update_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -129,33 +129,6 @@ export class UpdateCategoryPopUpView {
         }
         finally {
             btn_submit.setAttribute('loading', false);
-        }
-    }
-
-    async fetchData() {
-        try {
-            const response = await fetch('/api/patient/get_create_visit_open_data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                return result.data;
-            } else {
-                notify('top_left', result.message, 'warning');
-                return null;
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-            return null;
         }
     }
 }

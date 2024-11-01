@@ -44,12 +44,15 @@ const routes = {
     '/patient/viewpatient/:id': dashboardController.singlePatientView,
 
 
-    '/medicine': screenCollection.dashboardScreen,
-    '/medicine/viewmedicine': dashboardController.viewMedicineView,
-    '/medicine/addmedicine': dashboardController.addMedicineView,
-    '/medicine/viewcategory': dashboardController.viewMedicineCategoryView,
-    '/medicine/addcategory': dashboardController.addMedicineCategoryView,
-    '/medicine/viewcategory/:id': dashboardController.singleMedicineCategoryView,
+    '/pharmacy': screenCollection.dashboardScreen,
+    '/pharmacy/viewmedicine': dashboardController.viewMedicineView,
+    '/pharmacy/addmedicine': dashboardController.addMedicineView,
+    '/pharmacy/viewcategory': dashboardController.viewMedicineCategoryView,
+    '/pharmacy/addcategory': dashboardController.addMedicineCategoryView,
+    '/pharmacy/viewcategory/:id': dashboardController.singleMedicineCategoryView,
+    '/pharmacy/addinatakebatch': dashboardController.addIntakeBatchView,
+    '/pharmacy/viewinatakebatch': screenCollection.dashboardScreen,
+    '/pharmacy/recieveinatakebatch': screenCollection.dashboardScreen,
 
 
     '/notice': screenCollection.dashboardScreen,

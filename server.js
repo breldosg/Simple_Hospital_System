@@ -16,13 +16,13 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 const apiRouterAuth = require('./api_routes/Auth_PostRequests.js');
 const apiRouterUsers = require('./api_routes/Users_PostRequests.js');
 const apiRouterPatient = require('./api_routes/Patient_PostRequests.js');
-const apiRouterMedicine = require('./api_routes/Medicine_PostRequests.js');
+const apiRouterPharmacy = require('./api_routes/Pharmacy_PostRequests.js');
 
 // apiRouter
 app.use('/api/auth', apiRouterAuth);
 app.use('/api/users', apiRouterUsers);
 app.use('/api/patient', apiRouterPatient);
-app.use('/api/medicine', apiRouterMedicine);
+app.use('/api/pharmacy', apiRouterPharmacy);
 
 
 app.get(['/', '/login'], (req, res) => {

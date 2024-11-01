@@ -68,7 +68,7 @@ export class ViewMedicineCategoryView {
                 const medicineCategoryId = row.getAttribute('data_src');
                 console.log('view single medicine category with id ' + medicineCategoryId);
 
-                frontRouter.navigate('/medicine/viewcategory/' + medicineCategoryId);
+                frontRouter.navigate('/pharmacy/viewcategory/' + medicineCategoryId);
             })
         });
 
@@ -170,7 +170,7 @@ export class ViewMedicineCategoryView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/medicine/search_medicine_category', {
+            const response = await fetch('/api/pharmacy/search_medicine_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -199,7 +199,7 @@ export class ViewMedicineCategoryView {
 
         dashboardController.loaderView.render();
         try {
-            const response = await fetch('/api/medicine/delete_medicine_category', {
+            const response = await fetch('/api/pharmacy/delete_medicine_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

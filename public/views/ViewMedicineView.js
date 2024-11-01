@@ -190,7 +190,7 @@ export class ViewMedicineView {
 
     async activate_deactivate(id, action) {
         try {
-            const response = await fetch('/api/medicine/change_medicine_status', {
+            const response = await fetch('/api/pharmacy/change_medicine_status', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -216,7 +216,7 @@ export class ViewMedicineView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/medicine/medicine_list', {
+            const response = await fetch('/api/pharmacy/medicine_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -243,7 +243,7 @@ export class ViewMedicineView {
 
     async fetchCategory() {
         try {
-            const response = await fetch('/api/medicine/get_category', {
+            const response = await fetch('/api/pharmacy/get_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

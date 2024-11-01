@@ -143,7 +143,7 @@ export class AddMedicineView {
         btn_submit.setAttribute('loading', true);
 
         try {
-            const response = await fetch('/api/medicine/register_medicine', {
+            const response = await fetch('/api/pharmacy/register_medicine', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ export class AddMedicineView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/medicine/get_category', {
+            const response = await fetch('/api/pharmacy/get_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

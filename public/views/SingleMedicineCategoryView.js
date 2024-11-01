@@ -225,7 +225,7 @@ export class SingleMedicineCategoryView {
 
     async fetchData(id) {
         try {
-            const response = await fetch('/api/medicine/single_category', {
+            const response = await fetch('/api/pharmacy/single_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

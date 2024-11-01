@@ -145,7 +145,6 @@ const RequestHandler = async (req, key, body) => {
                 body: JSON.stringify(body_data)
             });
 
-            console.log('API Response:', res2);
 
             if (!res2.ok) {
                 console.error('API Error:', res2.statusText);
@@ -155,7 +154,6 @@ const RequestHandler = async (req, key, body) => {
             const result = await res2.json();
             const { data, status, success } = result;
             
-            console.log('API Response Data:', result);
             return result;
 
         } catch (error) {

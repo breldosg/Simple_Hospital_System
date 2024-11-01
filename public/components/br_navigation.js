@@ -19,7 +19,74 @@ export class BrCustomNavigation extends HTMLElement {
 
         this.shadowRoot.innerHTML = `
 <style>
-    @import url('https://cdn.jsdelivr.net/gh/breldosg/Xt-style-pack@main/icons/style.css');
+
+${this.Styles()}
+
+</style>
+
+<div class="top">
+    <div class="nav_cont">
+
+        <div link="/users" class="nav_item active">Users</div>
+        <div link="/patient" class="nav_item">Patients</div>
+        <div link="/pharmacy" class="nav_item">Pharmacy</div>
+        <div link="/notice" class="nav_item">Notice</div>
+
+    </div>
+
+    <div class="staff_cont">
+        <div class="word_cont">
+            <p class="main_name">${staff_name}</p>
+            <p class="sub_name">${staff_role}</p>
+        </div>
+        <div class="imag">
+            <span>${nameInitial.toLocaleUpperCase()}</span>
+        </div>
+    </div>
+</div>
+<div class="choice_collection">
+
+    <div class="nav_collection active" type="/users">
+
+        <a href="/users/userlist" data-link class="choice_item active">User List</a>
+        <a href="/users/adduser" data-link class="choice_item ">Add User</a>
+        <a href="/users/attendance" data-link class="choice_item">Attendance</a>
+
+    </div>
+
+    <div class="nav_collection" type="/patient">
+
+        <a href="/patient/viewpatient" data-link class="choice_item">View Patient</a>
+        <a href="/patient/addpatient" data-link class="choice_item">Add Patient</a>
+        <a href="/patient/onprogresspatient" data-link class="choice_item">On Progress</a>
+
+    </div>
+
+    <div class="nav_collection" type="/pharmacy">
+
+        <a href="/pharmacy/viewmedicine" data-link class="choice_item">View All medicine</a>
+        <a href="/pharmacy/addmedicine" data-link class="choice_item">Add medicine</a>
+        <a href="/pharmacy/viewcategory" data-link class="choice_item">View All category</a>
+        <a href="/pharmacy/addcategory" data-link class="choice_item">Add category</a>
+        <a href="/pharmacy/addinatakebatch" data-link class="choice_item">Add intake batch</a>
+        <a href="/pharmacy/viewinatakebatch" data-link class="choice_item">View All batch</a>
+        <a href="/pharmacy/recieveinatakebatch" data-link class="choice_item">Receive intake batch</a>
+
+    </div>
+
+    <div class="nav_collection " type="/notice">
+
+        <a href="/notice/viewnotice" data-link class="choice_item">View All notice</a>
+        <a href="/notice/addnotice" data-link class="choice_item">Add notice</a>
+
+    </div>
+</div>
+`;
+    }
+
+    Styles() {
+        return `
+            @import url('https://cdn.jsdelivr.net/gh/breldosg/Xt-style-pack@main/icons/style.css');
 
     * {
         padding: 0;
@@ -169,63 +236,7 @@ export class BrCustomNavigation extends HTMLElement {
         }
 
     }
-</style>
-
-<div class="top">
-    <div class="nav_cont">
-
-        <div link="/users" class="nav_item active">Users</div>
-        <div link="/patient" class="nav_item">Patients</div>
-        <div link="/medicine" class="nav_item">Medicine</div>
-        <div link="/notice" class="nav_item">Notice</div>
-
-    </div>
-
-    <div class="staff_cont">
-        <div class="word_cont">
-            <p class="main_name">${staff_name}</p>
-            <p class="sub_name">${staff_role}</p>
-        </div>
-        <div class="imag">
-            <span>${nameInitial.toLocaleUpperCase()}</span>
-        </div>
-    </div>
-</div>
-<div class="choice_collection">
-
-    <div class="nav_collection active" type="/users">
-
-        <a href="/users/userlist" data-link class="choice_item active">User List</a>
-        <a href="/users/adduser" data-link class="choice_item ">Add User</a>
-        <a href="/users/attendance" data-link class="choice_item">Attendance</a>
-
-    </div>
-
-    <div class="nav_collection" type="/patient">
-
-        <a href="/patient/viewpatient" data-link class="choice_item">View Patient</a>
-        <a href="/patient/addpatient" data-link class="choice_item">Add Patient</a>
-        <a href="/patient/onprogresspatient" data-link class="choice_item">On Progress</a>
-
-    </div>
-
-    <div class="nav_collection" type="/medicine">
-
-        <a href="/medicine/viewmedicine" data-link class="choice_item">View All medicine</a>
-        <a href="/medicine/addmedicine" data-link class="choice_item">Add medicine</a>
-        <a href="/medicine/viewcategory" data-link class="choice_item">View All category</a>
-        <a href="/medicine/addcategory" data-link class="choice_item">Add category</a>
-
-    </div>
-
-    <div class="nav_collection " type="/notice">
-
-        <a href="/notice/viewnotice" data-link class="choice_item">View All notice</a>
-        <a href="/notice/addnotice" data-link class="choice_item">Add notice</a>
-
-    </div>
-</div>
-`;
+        `;
     }
 
     listeners() {
@@ -353,7 +364,7 @@ export class BrCustomNavigation extends HTMLElement {
                 activeFound = true;
 
                 if (pathParts.length >= 2) {
-                    
+
                     // remove the other path out of the first two
                     pathParts.splice(2, 1)
                     choiceNavs.forEach(choiceNav => {

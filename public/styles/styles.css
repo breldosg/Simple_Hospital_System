@@ -577,6 +577,7 @@ input {
                         width: 15%;
 
                     }
+
                     .status {
                         width: 5%;
                         text-transform: capitalize;
@@ -2532,6 +2533,167 @@ input {
 
         }
 
+        
+
+        /* ------------------------------------------------------- */
+
+        .add_intake_batch {
+            padding: 50px;
+            border-radius: var(--main_border_r);
+            background-color: var(--white);
+            position: relative;
+
+            .loader_cont {
+                border-radius: var(--main_border_r);
+                position: absolute;
+            }
+
+            .top_bars {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+
+                .bar {
+                    display: flex;
+                    gap: 5px;
+                    padding-bottom: 5px;
+                    padding-inline: 2px;
+                    align-items: flex-end;
+                    font-weight: bolder;
+                    border-bottom: 2px solid var(--main_text);
+
+                    .num {
+                        font-size: 20px;
+                        height: 24px;
+                    }
+
+                    .num_word {
+                        font-size: 12px;
+                    }
+                }
+
+                .bar.active {
+
+                    .num,
+                    .num_word {
+                        color: var(--pri_color);
+                    }
+
+                    border-color: var(--pri_color);
+                }
+            }
+
+            .slides {
+                display: flex;
+                width: 640px;
+
+
+
+                .slide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    /* margin-top: 20px; */
+                    padding: 10px;
+                    width: 640px;
+                    flex: none;
+
+                    .heading {
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+
+                    .input_group {
+
+                        display: flex;
+                        gap: 20px;
+                        flex-wrap: wrap;
+                        width: 100%;
+
+                        .inp_cont {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2px;
+
+                            label {
+                                font-size: 13px;
+                                /* font-weight: bold; */
+                            }
+
+                            input,
+                            select {
+                                border-radius: var(--input_main_border_r);
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                            }
+
+                            .password-container {
+                                border-radius: var(--input_main_border_r);
+                                background-color: var(--input_background);
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                overflow: hidden;
+                                border: 2px solid var(--input_border);
+
+                                .password-input {
+                                    width: calc(100% - 40px);
+                                    padding: 0px;
+                                    height: 100%;
+                                    border: none;
+                                    background: transparent;
+                                    border-radius: 0;
+                                }
+
+                                .toggle-password {
+                                    cursor: pointer;
+                                    font-size: 18px;
+                                    width: 30px;
+                                    height: 41px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    /* background-color: rebeccapurple; */
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    .btn_cont {
+                        display: flex;
+                        width: 100%;
+                        justify-content: end;
+                        padding-top: 20px;
+
+                        .btn_next {
+                            border: none;
+                            background-color: var(--pri_color);
+                            padding: 10px 20px;
+                            font-weight: bold;
+                            font-size: 12px;
+                            color: var(--white);
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+
+
 
     }
 
@@ -2861,7 +3023,7 @@ input {
     .confirm_card {
         width: 500px;
         height: fit-content;
-        background:var(--pure_white_background);
+        background: var(--pure_white_background);
         border-radius: var(--main_border_r);
         display: flex;
         flex-direction: column;
@@ -2881,7 +3043,7 @@ input {
             gap: 5px;
         }
 
-        .heading{
+        .heading {
             font-weight: 600;
             padding-bottom: 5px;
             border-bottom: 1px solid var(--input_border);
@@ -2898,7 +3060,7 @@ input {
             width: 90%;
         }
 
-        .card-description{
+        .card-description {
             font-size: 13px;
         }
 
