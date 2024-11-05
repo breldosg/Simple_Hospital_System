@@ -39,7 +39,6 @@ export class ConfirmPopUpView {
         <button id="confirm_cancel" class="card-button secondary">Cancel</button>
         <button id="confirm_delete" class="card-button primary">Delete</button>
     </div>
-
 </div>
 
 `;

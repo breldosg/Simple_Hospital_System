@@ -9,6 +9,8 @@ import { AttendanceView } from "../views/AttendanceView.js";
 import { ConfirmPopUpView } from "../views/ConfirmPopUpView.js";
 import { CreateVisitPopUpView } from "../views/CreateVisitPopUpView.js";
 import { LoaderView } from "../views/LoaderView.js";
+import { ReceiveIntakeBatchPopUpView } from "../views/ReceiveIntakeBatchPopUpView.js";
+import { SingleIntakeBatchView } from "../views/SingleIntakeBatchView.js";
 import { SingleMedicineCategoryView } from "../views/SingleMedicineCategoryView.js";
 import { SinglePatientView } from "../views/SinglePatientView.js";
 import { StaffListView } from "../views/StaffListView.js";
@@ -45,6 +47,8 @@ class DashboardController {
     updateCategoryPopUpView = new UpdateCategoryPopUpView();
     addIntakeBatchView = new AddIntakeBatchView();
     viewIntakeBatchView = new ViewIntakeBatchView();
+    singleIntakeBatchView = new SingleIntakeBatchView();
+    receiveIntakeBatchPopUpView = new ReceiveIntakeBatchPopUpView();
 
 
 

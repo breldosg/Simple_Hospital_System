@@ -53,6 +53,7 @@ const routes = {
     '/pharmacy/addinatakebatch': dashboardController.addIntakeBatchView,
     '/pharmacy/viewinatakebatch': dashboardController.viewIntakeBatchView,
     '/pharmacy/recieveinatakebatch': screenCollection.dashboardScreen,
+    '/pharmacy/viewinatakebatch/:id': dashboardController.singleIntakeBatchView,
 
 
     '/notice': screenCollection.dashboardScreen,

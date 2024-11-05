@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class ViewIntakeBatchView {
     constructor() {
@@ -105,10 +106,9 @@ export class ViewIntakeBatchView {
         const rows = document.querySelectorAll('.table_body .tr');
         rows.forEach((row) => {
             row.addEventListener('click', async () => {
-                const medicineId = row.getAttribute('data_src');
-                console.log('medicineId= ', medicineId);
+                const batchId = row.getAttribute('data_src');
 
-                // frontRouter.navigate('/patient/viewpatient/' + patientId);
+                frontRouter.navigate('/pharmacy/viewinatakebatch/' + batchId);
             })
         });
 
