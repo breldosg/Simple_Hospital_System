@@ -41,9 +41,7 @@ export class dashboardScreen {
                     
                     <br-navigation name="${this.Staff_name}" role="${this.staff_role}"></br-navigation>
 
-                    <div class="alert_collection">
-                        <!-- -------------------- pop up here ----------------------- -->
-                    </div>
+                    
                 </div>
 
                 <div class="update_cont">
@@ -52,14 +50,19 @@ export class dashboardScreen {
                 </div>
 
             </div>
+            <div class="alert_collection">
+                <!-- -------------------- pop up here ----------------------- -->
+            </div>
 
             <div class="popup">
 
             </div>
-            
+
             <div class="loader_cont active">
                     <div class="loader"></div>
             </div>
+
+            
         </div>
         `;
     }

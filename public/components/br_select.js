@@ -19,7 +19,7 @@ export class BrCustomSelect extends HTMLElement {
 
         // Input filtering (if search is present)
         if (this.inputElement) {
-            this.inputElement.addEventListener('input', () => this.filterOptions());
+            this.inputElement.addEventListener('input', this.debounce(() => this.filterOptions(), 300));
         }
 
         // Handle selection of an option
@@ -27,32 +27,23 @@ export class BrCustomSelect extends HTMLElement {
             const tagName = e.target.tagName.toUpperCase();
             if (tagName === 'OPTION' || tagName === 'BR-OPTION') {
                 this.selectOption(e.target);
-            } else {
-
             }
         });
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
+        this.handleOutsideClick = (e) => {
             if (!this.contains(e.target)) {
                 this.closeDropdown();
             }
+        };
+
+        // Initialize selected option based on default value
+        this.updateSelectedOption(this.slotElement.assignedElements());
+
+        // Listen for slot content changes
+        this.slotElement.addEventListener('slotchange', () => {
+            this.updateSelectedOption(this.slotElement.assignedElements());
         });
-
-        // Handle assigned elements
-        const elements = this.slotElement.assignedElements();
-
-
-        elements.forEach(element => {
-            const value = element.getAttribute('value');
-            if (value == this.default_value) {
-                // Set initial selected value
-                this.selectedElement.textContent = element.textContent;
-                this.selectedElement.setAttribute('value', value);
-            }
-        });
-
-
     }
 
     render() {
@@ -61,22 +52,15 @@ export class BrCustomSelect extends HTMLElement {
         const error = this.hasAttribute('error') ? 'error' : '';
         const placeholder = this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
 
-
         this.shadowRoot.innerHTML = `
             <style>
                 ${this.styles()}
             </style>
-            <label></label>
-            ${label ? `
-                <label>${this.getAttribute("label")}</label>` : ''
-            }
+            ${label ? `<label>${this.getAttribute("label")}</label>` : ''}
             <div class="select-container">
                 <div class="selected-value" value=''>${placeholder}</div>
                 <div class="select-dropdown ${error}">
-                ${search ? `
-                        <input type="text" class="select-search" autofocus placeholder="Search...">
-                    ` : ''
-            }
+                    ${search ? `<input type="text" class="select-search" placeholder="Search...">` : ''}
                     <ul class="select-options">
                         <slot></slot>
                     </ul>
@@ -85,116 +69,46 @@ export class BrCustomSelect extends HTMLElement {
         `;
     }
 
-    // dropdown styles
     styles() {
-
         const additionalStyles = this.getAttribute('styles') || '';
         const labelStyles = this.getAttribute('labelStyles') || '';
         const fontSize = this.getAttribute('fontSize') || '';
 
         return `
-                * {
-                    box-sizing: border-box;
-                    font-size: ${fontSize} !important;
-                    color: currentColor;
-                    font-family: inherit;
-                    padding: 0;
-                    margin: 0;
-                }
-                :host {
-                    display: block;
-                    position: relative;
-                }
-                ::-webkit-scrollbar {
-                    width: 0;
-                    height: 0;
-                }
-                label{
-                    ${labelStyles}
-                }
-                ::-webkit-scrollbar-thumb {
-                    background-color: transparent;
-                }
-                .selected-value {
-                    padding: 10px;
-                    border: 1px solid #ccc;
-                    cursor: pointer;
-                    background: #fff;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    display: inline-block;
-                    ${additionalStyles}
-
-                }
-                .select-dropdown {
-                    display: none;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    border: 1px solid #ccc;
-                    background: #fff;
-                    z-index: 1000;
-                    max-height: 300px;
-                    overflow-y: auto;
-                }
-                .selected-value.error{
-                    border-color:  #EE5D50;
-                }
-                .select-dropdown.open {
-                    display: block;
-                }
-                .select-search {
-                    width: 100%;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border: none;
-                    border-bottom: 1px solid #ccc;
-                    outline: none;
-                }
-                .select-options {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                }
-                .option {
-                    padding: 10px;
-                    cursor: pointer;
-                }
-                .option:hover {
-                    background: #f0f0f0;
-                }`;
+            * { box-sizing: border-box; font-size: ${fontSize} !important; color: currentColor; }
+            :host { display: block; position: relative; }
+            label { ${labelStyles} }
+            .selected-value { padding: 10px; border: 1px solid #ccc; cursor: pointer; background: #fff; ${additionalStyles} }
+            .select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
+            .selected-value.error { border-color: #EE5D50; }
+            .select-dropdown.open { display: block; }
+            .select-search { width: 100%; padding: 10px; border: none; border-bottom: 1px solid #ccc; outline: none; }
+            .select-options { list-style: none; padding: 0; margin: 0; }
+            .option { padding: 10px; cursor: pointer; }
+            .option:hover { background: #f0f0f0; }
+        `;
     }
 
-    // check if atrribute changed
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'error') {
-            this.shadowRoot.querySelector('.selected-value').classList.toggle('error', newValue === 'true');
-        }
+    debounce(func, delay) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
     }
-
-    static get observedAttributes() {
-        return ['error'];
-    }
-
-    // attributeChangedCallback(name, oldValue, newValue) {
-    //     if (name === 'error') {
-    //         const contElem = this.shadowRoot.querySelector('.select-dropdown');
-    //         if (newValue !== null) {
-    //             contElem.classList.add('error');
-    //         } else {
-    //             contElem.classList.remove('error');
-    //         }
-    //     }
-    // }
 
     toggleDropdown() {
         this.dropdownElement.classList.toggle('open');
+        if (this.dropdownElement.classList.contains('open')) {
+            document.addEventListener('click', this.handleOutsideClick);
+        } else {
+            document.removeEventListener('click', this.handleOutsideClick);
+        }
     }
 
     closeDropdown() {
         this.dropdownElement.classList.remove('open');
+        document.removeEventListener('click', this.handleOutsideClick);
     }
 
     filterOptions() {
@@ -208,19 +122,41 @@ export class BrCustomSelect extends HTMLElement {
     }
 
     selectOption(option) {
-        const text_content = option.textContent;   // Get the text inside the selected option
-        this.selectedElement.textContent = text_content;  // Update the display to show the selected text
-        this.selectedElement.setAttribute('value', option.getAttribute('value')); // Set the 'value' attribute based on the selected option's value
-        this.closeDropdown();  // Close the dropdown menu
-
-        // Dispatch a custom 'change' event so external listeners can react to the selection
-        this.dispatchEvent(new CustomEvent('change', { detail: text_content }));
+        const textContent = option.textContent;
+        this.selectedElement.textContent = textContent;
+        this.selectedElement.setAttribute('value', option.getAttribute('value'));
+        this.closeDropdown();
+        this.dispatchEvent(new CustomEvent('change', { detail: textContent }));
     }
 
+    updateSelectedOption(elements) {
+        const matchedElement = elements.find(el => el.getAttribute('value') === this.default_value);
+        if (matchedElement) {
+            this.selectedElement.textContent = matchedElement.textContent;
+            this.selectedElement.setAttribute('value', matchedElement.getAttribute('value'));
+        }
+    }
 
     getValue() {
         return this.selectedElement.getAttribute('value');
     }
+
+    reset() {
+        this.selectedElement.textContent = this.getAttribute('placeholder') || '';
+        this.selectedElement.setAttribute('value', '');
+        if (this.inputElement) {
+            this.inputElement.value = '';
+        }
+        this.filterOptions(); // Reset filtered options if search is enabled
+    }
+
+    static get observedAttributes() {
+        return ['error'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'error') {
+            this.shadowRoot.querySelector('.selected-value').classList.toggle('error', newValue === 'true');
+        }
+    }
 }
-
-

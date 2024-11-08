@@ -16,8 +16,6 @@ export class BrCustomInput extends HTMLElement {
 
         // Add event listener for input validation
         this.inputElement.addEventListener('input', () => {
-
-
             this.validateAndSanitize();
         });
     }
@@ -221,5 +219,14 @@ export class BrCustomInput extends HTMLElement {
         }
         return null;
     }
+
+    // Method to set a value directly
+    reset() {
+        this.inputElement.value = '';  // Set the input's internal value
+        this.removeAttribute('error'); // Reset error state if any
+        
+    }
+
+
 }
 

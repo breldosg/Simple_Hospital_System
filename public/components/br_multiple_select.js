@@ -3,16 +3,15 @@ export class BrCustomMultipleSelect extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.selectedValues = []; // Track selected values
+        this.choiceElements = []; // Track choice elements for easy reset
         this.render();
     }
 
     connectedCallback() {
         this.addEventListeners();
-
     }
 
     render() {
-
         const label = this.hasAttribute('label') ? this.getAttribute('label') : false;
         const search = this.hasAttribute('search');
 
@@ -21,58 +20,38 @@ export class BrCustomMultipleSelect extends HTMLElement {
                 @import url('https://cdn.jsdelivr.net/gh/breldosg/Xt-style-pack@main/icons/style.css');
                 ${this.styles()}
             </style>
-            ${label ? `
-                <label for="">${label}</label>
-                `: ''
-            }
-            <div id="show" class="show">
-                <!-- Selected choices will appear here -->
-            </div>
+            ${label ? `<label>${label}</label>` : ''}
+            <div id="show" class="show"></div>
             <div class="selections_out">
-            ${search ? `
-                <input type="text"  id="search" placeholder="Search...">
-            ` : ''
-            }
+                ${search ? `<input type="text" id="search" placeholder="Search...">` : ''}
                 <div class="options">
-                    <slot></slot> <!-- Slot for options -->
+                    <slot></slot>
                 </div>
             </div>
         `;
     }
 
     addEventListeners() {
-        // Toggle dropdown when the container is clicked
         const showContainer = this.shadowRoot.querySelector('.show');
         showContainer.addEventListener('click', () => this.openDropdown());
 
-        // Handle search functionality
         const searchInput = this.shadowRoot.querySelector('#search');
+        if (searchInput) searchInput.addEventListener('input', (e) => this.filterOptions(e));
 
-
-        searchInput.addEventListener('input', (e) => this.filterOptions(e));
-
-        // Handle slot changes (option elements inside <slot>)
         const slot = this.shadowRoot.querySelector('slot');
-        slot.addEventListener('slotchange', () => {
-            this.initOptions();
-        });
+        slot.addEventListener('slotchange', () => this.initOptions());
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
-            if (!this.contains(e.target)) {
-                this.closeDropdown();
-            }
+            if (!this.contains(e.target)) this.closeDropdown();
         });
     }
 
     openDropdown() {
-        const selectionsOut = this.shadowRoot.querySelector('.selections_out');
-        selectionsOut.classList.add('active');
+        this.shadowRoot.querySelector('.selections_out').classList.add('active');
     }
 
     closeDropdown() {
-        const selectionsOut = this.shadowRoot.querySelector('.selections_out');
-        selectionsOut.classList.remove('active');
+        this.shadowRoot.querySelector('.selections_out').classList.remove('active');
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -87,24 +66,14 @@ export class BrCustomMultipleSelect extends HTMLElement {
 
     filterOptions(event) {
         const searchValue = event.target.value.toLowerCase();
-
-
         const options = this.shadowRoot.querySelector('slot').assignedElements();
-
         options.forEach(option => {
-
-
-            if (option.textContent.toLowerCase().includes(searchValue)) {
-                option.style.display = 'block';
-            } else {
-                option.style.display = 'none';
-            }
+            option.style.display = option.textContent.toLowerCase().includes(searchValue) ? 'block' : 'none';
         });
     }
 
     initOptions() {
         const options = this.shadowRoot.querySelector('slot').assignedElements();
-
         options.forEach(option => {
             option.addEventListener('click', () => this.selectOption(option));
             if (option.hasAttribute('selected') || option.hasAttribute('Selected')) {
@@ -126,17 +95,14 @@ export class BrCustomMultipleSelect extends HTMLElement {
 
     addSelectedChoice(text, value) {
         const showContainer = this.shadowRoot.querySelector('.show');
-
         const choice = document.createElement('div');
         choice.classList.add('choice');
         choice.innerHTML = `
             <p>${text}</p>
-            <div class="close">
-                <span class="switch_icon_close"></span>
-            </div>
+            <div class="close"><span class="switch_icon_close"></span></div>
         `;
+        this.choiceElements.push(choice);
 
-        // Handle removing choice
         choice.querySelector('.close').addEventListener('click', () => {
             this.removeChoice(value, choice);
         });
@@ -148,19 +114,31 @@ export class BrCustomMultipleSelect extends HTMLElement {
         this.selectedValues = this.selectedValues.filter(val => val !== value);
         choiceElement.remove();
 
-
         const options = this.shadowRoot.querySelector('slot').assignedElements();
-
-
         options.forEach(option => {
-            if (option.tagName.toLowerCase() == 'br-option' && option.getAttribute('value') == value) {
+            if (option.getAttribute('value') === value) {
                 option.removeAttribute('selected');
-
             }
-        })
+        });
     }
 
-    // Dropdown styles
+    getValue() {
+        return this.selectedValues;
+    }
+
+    // Method to reset the component
+    reset() {
+        this.selectedValues = [];
+        
+        const options = this.shadowRoot.querySelector('slot').assignedElements();
+        options.forEach(option => option.removeAttribute('selected'));
+
+        const showContainer = this.shadowRoot.querySelector('.show');
+        this.choiceElements.forEach(choiceElement => showContainer.removeChild(choiceElement));
+        
+        this.choiceElements = [];
+    }
+
     styles() {
         return `
             :host {
@@ -168,13 +146,8 @@ export class BrCustomMultipleSelect extends HTMLElement {
                 position: relative;
             }
 
-            ::-webkit-scrollbar{
-                width: 10px;
-            }
-            ::-webkit-scrollbar-thumb{
-                background-color: #dbdbdb;
-                border-radius: 5px;
-            }
+            ::-webkit-scrollbar { width: 10px; }
+            ::-webkit-scrollbar-thumb { background-color: #dbdbdb; border-radius: 5px; }
 
             .show {
                 width: 350px;
@@ -186,9 +159,7 @@ export class BrCustomMultipleSelect extends HTMLElement {
                 gap: 5px;
             }
 
-            .show.error{
-                border-color:  #EE5D50;
-            }
+            .show.error { border-color: #EE5D50; }
 
             .choice {
                 display: flex;
@@ -249,9 +220,4 @@ export class BrCustomMultipleSelect extends HTMLElement {
             }
         `;
     }
-
-    getValue() {
-        return this.selectedValues;
-    }
 }
-

@@ -11,10 +11,13 @@ export class BrCustomForm extends HTMLElement {
         this.submit_btn = this.shadowRoot.host.querySelector('br-button[type="submit"]')
 
         // Fix: Pass a function reference, not an invocation
-        this.submit_btn.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.handleSubmit();
-        });
+        // check if found the add listener
+        if (this.submit_btn) {
+            this.submit_btn.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.handleSubmit();
+            });
+        }
 
         // add form submit listener
         this.formElement.addEventListener('submit', (event) => {
@@ -37,7 +40,6 @@ export class BrCustomForm extends HTMLElement {
 
 
     render() {
-        const btn_class = this.hasAttribute('btn_class') ? this.getAttribute('btn_class') : 'btn_main';
         this.shadowRoot.innerHTML = `
             <style>
                 ${this.styles()}
@@ -69,6 +71,14 @@ export class BrCustomForm extends HTMLElement {
             }
         `;
     }
+
+    reset() {
+        const inputs = this.shadowRoot.host.querySelectorAll('br-input, br-select, br-multiple-select');
+        inputs.forEach(input => {
+            input.reset();
+        });
+    }
+    
 
     handleSubmit() {
         let data = {};

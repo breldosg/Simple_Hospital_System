@@ -50,7 +50,7 @@ export class AddMedicineView {
         return `
 <div class="container add_medicine">
 
-    <br-form callback="register_medicine" class="slides">
+    <br-form callback="register_medicine" id="register_medicine_form" class="slides">
         <div class="slide">
             <p class="heading">Medicine information</p>
 
@@ -186,10 +186,9 @@ export class AddMedicineView {
             }
 
             const result = await response.json();
- 
-
 
             if (result.success) {
+                
                 return result.data;
             } else {
                 notify('top_left', result.message, 'warning');

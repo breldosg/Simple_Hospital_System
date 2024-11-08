@@ -31,7 +31,7 @@ export class AddMedicineCategoryView {
         return `
 <div class="container add_medicine_category">
 
-    <br-form callback="register_medicine_category" class="slides">
+    <br-form callback="register_medicine_category" id="add_category_form" class="slides">
         <div class="slide">
             <p class="heading">Medicine category information</p>
 
@@ -92,6 +92,9 @@ export class AddMedicineCategoryView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
+                const form = document.querySelector('#add_category_form');
+                form.reset();
+
             } else {
                 notify('top_left', result.message, 'warning');
             }
