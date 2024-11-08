@@ -3475,6 +3475,64 @@ input {
 
                 }
 
+
+                .search_cont {
+                    display: flex;
+                    gap: 10px;
+                    width: 100%;
+                    flex-direction: column;
+
+                    .btn {
+                        padding-top: 10px;
+
+                        .btn_next {
+                            border: none;
+                            background-color: var(--pri_color);
+                            padding: 10px 20px;
+                            font-weight: bold;
+                            width: 100%;
+                            font-size: 14px;
+                            color: var(--white);
+                            text-align: center;
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+
+                            span {
+                                color: var(--white);
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+
+                .heading_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .btn_back {
+                        border: none;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+
+                    }
+
+                    .btn_back:hover {
+                        background-color: var(--btn_hover_color);
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
+
+                }
+
             }
 
             .red {

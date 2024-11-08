@@ -3,6 +3,7 @@ export class BrCustomInput extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.render();
+        this.shadow_value = '';
     }
 
     connectedCallback() {
@@ -23,12 +24,13 @@ export class BrCustomInput extends HTMLElement {
     render() {
         let type = this.getAttribute('type') || 'text';
         type = type == 'tel' ? 'number' : type;
-        const value = this.getAttribute('value') || '';
-        const placeholder = this.getAttribute('placeholder') || '';
+        const placeholder = this.hasAttribute('placeholder') ? `placeholder="${this.getAttribute('placeholder')}"` : '';
+        const value = this.hasAttribute('value') ? `value="${this.getAttribute('value')}"` : '';
         const required = this.hasAttribute('required') ? 'required' : '';
         const error = this.hasAttribute('error') ? 'error' : '';
         const focus = this.hasAttribute('focus') ? 'autofocus' : '';
         const label = this.hasAttribute('label');
+        const disable = this.hasAttribute('disable') ? (this.getAttribute('disable') == 'true' ? 'readonly' : '') : '';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -42,7 +44,7 @@ export class BrCustomInput extends HTMLElement {
                 ${type === 'textarea' ? `
                     <textarea placeholder="${placeholder}" ${required}>${value}</textarea>
                 ` : `
-                    <input type="${type}" value="${value}" ${focus} placeholder="${placeholder}" ${required}>
+                    <input type="${type}" ${value} ${focus} ${disable} ${placeholder} ${required}>
                     ${type === 'password' ? '<span class="switch_icon_remove_red_eye toggle-visibility"></span>' : ''}
                 `}
             </div>
@@ -52,7 +54,6 @@ export class BrCustomInput extends HTMLElement {
     styles() {
         const additionalStyles = this.getAttribute('styles') || '';
         const labelStyles = this.getAttribute('labelStyles') || '';
-        const error_color = this.getAttribute('error-color') || '';
 
         return `
             ::-webkit-scrollbar {
@@ -198,7 +199,7 @@ export class BrCustomInput extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['error'];
+        return ['error', 'value', 'shadow_value'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -210,13 +211,25 @@ export class BrCustomInput extends HTMLElement {
                 contElem.classList.remove('error');
             }
         }
+        else if (name == 'value') {
+            this.inputElement.value = newValue;
+        }
+        else if (name == 'shadow_value') {
+            this.shadow_value = newValue;
+        }
     }
 
     // Method to retrieve sanitized and validated value
     getValue() {
+        if (this.shadow_value) {
+            return this.shadow_value;
+        }
+
         if (this.validateAndSanitize()) {
             return this.inputElement.value;
         }
+
+
         return null;
     }
 
@@ -224,7 +237,7 @@ export class BrCustomInput extends HTMLElement {
     reset() {
         this.inputElement.value = '';  // Set the input's internal value
         this.removeAttribute('error'); // Reset error state if any
-        
+
     }
 
 
