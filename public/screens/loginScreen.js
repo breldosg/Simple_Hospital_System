@@ -1,4 +1,3 @@
-import { dashboardController } from "../controller/DashboardController.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
@@ -29,7 +28,7 @@ export class loginScreen {
                     <br-input styles="
                     border-radius: var(--input_border_r);
                     width: 300px;
-                    padding: 15px;
+                    padding: 5px 15px;
                     background-color: var(--input_background);
                     font-weight: 600;
                     height: 47px;" name="username" placeholder="Username" type="text" required></br-input>
@@ -38,7 +37,7 @@ export class loginScreen {
                     <br-input styles="
                     border-radius: var(--input_border_r);
                     width: 300px;
-                    padding: 15px;
+                    padding: 5px 15px;
                     background-color: var(--input_background);
                     font-weight: 600;
                     height: 47px;

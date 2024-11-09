@@ -94,7 +94,7 @@ export class BrCustomInput extends HTMLElement {
                 align-items: center;
                 justify-content: space-between;
                 width: 100px;
-                padding: 10px;
+                padding-block: 5px;
                 border: 1px solid #ccc;
                 overflow: hidden;
                 field-sizing: content;

@@ -22,7 +22,6 @@ export class SingleIntakeBatchView {
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('', 'active');
-        this.popUp_view();
 
         this.patient_id = params.id;
         // Now call render which will fetch data and populate it
@@ -37,7 +36,7 @@ export class SingleIntakeBatchView {
 
         if (patient_data) {
             cont.innerHTML = this.ViewReturn(patient_data);
-            // this.attach_listeners()
+            this.attach_listeners()
         } else {
             // Handle case where no roles were returned, or an error occurred.
             cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
@@ -67,7 +66,7 @@ export class SingleIntakeBatchView {
         <div class="in_table_top d_flex">
             <h4>Product List</h4>
 
-            <div class="add_btn" title="Add Product">
+            <div class="add_btn" title="Add Product" id="open_add_product_popup">
                 <span class='switch_icon_add'></span>
             </div>
         </div>
@@ -113,36 +112,21 @@ export class SingleIntakeBatchView {
 `;
     }
 
-    // attach_listeners() {
+    attach_listeners() {
 
-    // const add_visit_btn = document.querySelector('.create_visit_btn');
-    // if (add_visit_btn) {
-    // add_visit_btn.addEventListener('click', async () => {
+        const open_add_product_popup = document.querySelector('#open_add_product_popup');
 
-    // // CreateVisitPopUpView().PreRender(this.patient_id);
-    // dashboardController.createVisitPopUpView.PreRender(
-    // {
-    // id: this.patient_id,
-    // p_name: this.patient_name
-    // });
-
-    // })
-    // }
-
-    // }
-
-    popUp_view() {
-        console.log('popup view');
-
-        dashboardController.receiveIntakeBatchPopUpView.PreRender(
-            {
-                id: this.patient_id,
-                p_name: this.patient_name
-            }
-        );
+        open_add_product_popup.addEventListener('click', async () => {
+            dashboardController.receiveIntakeBatchPopUpView.PreRender(
+                {
+                    id: this.patient_id
+                }
+            );
+        })
 
 
     }
+
 
     async fetchData(id) {
         try {

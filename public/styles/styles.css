@@ -80,6 +80,8 @@ input {
     --error_background_color: #ad0e0065;
     --warning_color: #ffce20;
 
+    --btn_error_hover_color: #da4538;
+
     --white_op: rgba(255, 255, 255, 0.247);
     --white: white;
     --white-op1: #ffffffb5;
@@ -3530,10 +3532,14 @@ input {
                 width: 100%;
                 height: 100%;
                 padding-top: 15px;
+                display: flex;
+                flex-direction: column;
+
                 .table_head {
                     background-color: var(--pri_color);
                     height: 50px;
                     border-radius: 5px 5px 0 0;
+                    flex: none;
 
                     p {
                         font-weight: 600;
@@ -3552,8 +3558,17 @@ input {
                     }
 
                     .name {
-                        width: 18%;
+                        width: 35%;
+                        padding-inline: 5px;
                         text-align: left;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        display: inline-block;
+                    }
+
+                    .category {
+                        width: 22%;
                     }
 
                     .quantity {
@@ -3576,9 +3591,11 @@ input {
 
                 .table_body {
                     padding-block: 5px;
+                    display: flex;
+                    flex-direction: column;
                     gap: 5px;
                     overflow-y: scroll;
-                    height: calc(100% - 50px);
+                    height: 100%;
                     position: relative;
 
                     .loader_cont {
@@ -3598,9 +3615,23 @@ input {
                             display: inline-block;
                         }
 
-                        .main_btn {
+                        .btn_remove {
                             height: 30px;
                             padding-inline: 10px;
+                            background-color: var(--error_color);
+                            border: none;
+                            color: var(--white);
+                            padding-inline: 15px;
+                            height: 35px;
+                            width: 86px;
+                            cursor: pointer;
+                            border-radius: 5px;
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+
+                        .btn_remove:hover {
+                            background-color: var(--btn_error_hover_color);
                         }
                     }
 
@@ -3627,34 +3658,45 @@ input {
                     }
                 }
 
-            }
+                .btn_cont {
+                    width: 100%;
+                    border-top: 2px solid var(--border_color);
+                    /* background-color: violet; */
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    flex: none;
+                    padding-block: 15px;
 
-            .btn_cont {
-                width: 100%;
-                border-top: 2px solid var(--border_color);
-                /* background-color: violet; */
-                display: flex;
-                align-items: center;
-                gap: 20px;
+                    .btn_next[type="cancel"] {
+                        background-color: var(--error_color);
+                    }
 
+                    .btn_next[type="cancel"]:hover {
+                        background-color: var(--btn_error_hover_color);
+                    }
 
-                .btn_next {
-                    border: none;
-                    background-color: var(--pri_color);
-                    padding: 10px 20px;
-                    font-weight: bold;
-                    font-size: 14px;
-                    color: var(--white);
-                    text-align: center;
-                    cursor: pointer;
-                    border-radius: var(--input_main_border_r);
-
-                    span {
-                        color: var(--white);
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 20px;
+                        font-weight: bold;
                         font-size: 14px;
+                        color: var(--white);
+                        text-align: center;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+
+                        span {
+                            color: var(--white);
+                            font-size: 14px;
+                        }
                     }
                 }
+
             }
+
+
 
 
         }

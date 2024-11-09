@@ -94,3 +94,9 @@ export function notify(type, message, status = success) {
     }
 
 }
+
+export function date_formatter(ymd) {
+    const dateee = new Date(ymd);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(dateee);
+}
