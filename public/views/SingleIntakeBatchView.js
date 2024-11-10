@@ -1,10 +1,10 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 
 export class SingleIntakeBatchView {
     constructor() {
-        this.patient_id = null;
+        this.batch_id = null;
         this.patient_name = null;
         this.batchNumber = 1;
         this.total_page_num = 1;
@@ -21,31 +21,27 @@ export class SingleIntakeBatchView {
 
 
         const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn('', 'active');
+        cont.innerHTML = this.ViewReturn('active');
 
-        this.patient_id = params.id;
+        this.batch_id = params.id;
         // Now call render which will fetch data and populate it
-        this.render(params.id);
+        this.render();
     }
 
-    async render(id) {
-        const cont = document.querySelector('.update_cont');
-        const patient_data = await this.fetchData(id); // Wait for fetchData to complete
+    async render() {
+        const top_cont = document.querySelector('.single_batch_cont .top_card');
+        const batch_data = await this.fetchData(); // Wait for fetchData to complete
 
-        this.patient_name = patient_data.name;
+        console.log(batch_data);
+        
 
-        if (patient_data) {
-            cont.innerHTML = this.ViewReturn(patient_data);
-            this.attach_listeners()
-        } else {
-            // Handle case where no roles were returned, or an error occurred.
-            cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
-        }
+        top_cont.innerHTML = this.top_card_view(batch_data.batch_data);
+
+        this.attach_listeners()
+
     }
 
-    ViewReturn(data, loader = '') {
-
-
+    ViewReturn(loader = '') {
         return `
 <div class="single_batch_cont">
 
@@ -53,12 +49,31 @@ export class SingleIntakeBatchView {
 
         <div class="juu">
             <p class="name">Medium Load</p>
-        </div>
-        <div class="pack">
-            <span class="switch_icon_calendar_check"></span>
-            <p class="date">Oct 10, 2024</p>
-        </div>
 
+        </div>
+        <div class="pack_cont">
+
+            <div class="pack">
+                <span class="switch_icon_calendar_check"></span>
+                <p class="date">Oct 10, 2024</p>
+            </div>
+
+            <div class="pack">
+                <span class='switch_icon_cart_shopping'></span>
+                <p class="date">Unguja Pharmacy</p>
+            </div>
+
+            <div class="pack">
+                <span class='switch_icon_user_pen'></span>
+                <p class="date">Kelvin Godliver</p>
+            </div>
+
+            <div class="btn">
+                <br-button loader_width="23" class="btn_batch_close" type="submit">Close Batch</br-button>
+                <!-- <br-button loader_width="23" class="btn_batch_close inactive" type="submit">Batch Closed</br-button> -->
+            </div>
+        </div>
+<div class="loader_cont active"><div class="loader"></div></div>
     </div>
 
     <div class="main_section batch_table_out">
@@ -112,6 +127,46 @@ export class SingleIntakeBatchView {
 `;
     }
 
+    top_card_view(data) {
+        try {
+            var receive_date = date_formatter(data.receive_date);
+        }
+        catch (e) {
+            var receive_date = '';
+        }
+
+        var close_btn = `<br-button loader_width="23" class="btn_batch_close" type="submit">Close Batch</br-button>`;
+        var closed_btn = '<br-button loader_width="23" class="btn_batch_close inactive" type="submit">Batch Closed</br-button>';
+
+        return `
+        <div class="juu">
+            <p class="name">${data.name}</p>
+
+        </div>
+        <div class="pack_cont">
+
+            <div class="pack">
+                <span class="switch_icon_calendar_check"></span>
+                <p class="date">${receive_date}</p>
+            </div>
+
+            <div class="pack">
+                <span class='switch_icon_cart_shopping'></span>
+                <p class="date">${data.provider}</p>
+            </div>
+
+            <div class="pack">
+                <span class='switch_icon_user_pen'></span>
+                <p class="date">${data.created_by}</p>
+            </div>
+
+            <div class="btn">
+                ${data.status == 'open' ? close_btn : closed_btn}
+            </div>
+        </div>
+        `;
+    }
+
     attach_listeners() {
 
         const open_add_product_popup = document.querySelector('#open_add_product_popup');
@@ -119,7 +174,7 @@ export class SingleIntakeBatchView {
         open_add_product_popup.addEventListener('click', async () => {
             dashboardController.receiveIntakeBatchPopUpView.PreRender(
                 {
-                    id: this.patient_id
+                    id: this.batch_id
                 }
             );
         })
@@ -128,15 +183,15 @@ export class SingleIntakeBatchView {
     }
 
 
-    async fetchData(id) {
+    async fetchData() {
         try {
-            const response = await fetch('/api/patient/single_patient', {
+            const response = await fetch('/api/pharmacy/single_batch_data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    patient_id: id,
+                    id: this.batch_id,
                 })
             });
 
@@ -156,14 +211,6 @@ export class SingleIntakeBatchView {
             notify('top_left', error.message, 'error');
             return null;
         }
-    }
-
-    date_formatter(ymd) {
-        console.log('date', ymd);
-
-        const dateee = new Date(ymd);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(dateee);
     }
 
 }

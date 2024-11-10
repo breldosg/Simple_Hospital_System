@@ -2752,6 +2752,43 @@ input {
                     font-size: 30px;
                 }
 
+                .pack_cont {
+                    width: 100%;
+                    display: flex;
+                    gap: 25px;
+
+                    .btn {
+                        margin-left: auto;
+
+                        .btn_batch_close {
+                            border: none;
+                            background-color: var(--error_color);
+                            padding: 10px 20px;
+                            font-weight: bold;
+                            width: 100%;
+                            font-size: 14px;
+                            color: var(--white);
+                            text-align: center;
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+
+                            span {
+                                color: var(--white);
+                                font-size: 14px;
+                            }
+                        }
+
+                        .btn_batch_close:hover {
+                            background-color: var(--btn_error_hover_color);
+                        }
+                        .inactive{
+                            background-color: var(--error_background_color);
+                            cursor: not-allowed;
+                            pointer-events: none;
+                        }
+                    }
+                }
+
                 .pack {
                     display: flex;
                     align-items: center;

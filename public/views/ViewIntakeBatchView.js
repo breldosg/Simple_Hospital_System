@@ -78,62 +78,66 @@ export class ViewIntakeBatchView {
         document.querySelector('.total_page').innerText = batchData.pages;
         this.total_page_num = batchData.pages;
 
+        // insert data in the table
+
         batchData.batchList.forEach((batch, index) => {
-            const row = `
-                <div class="tr d_flex flex__c_a" data_src="${batch.id}" title="${batch.name}">
-                    <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-                    <p class="name">${batch.name}</p>
-                    <p class="name">${batch.provider}</p>
-                    <p class="date">${this.date_formatter(batch.receive_date)}</p>
-                    <p class="name">${batch.created_by}</p>
-                    <p class="status">${batch.status}</p>
-                    <div class="action d_flex flex__c_c">
-                        ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
-                    </div>
-                </div>
+            const row = document.createElement('tr');
+            row.classList.add('tr')
+            row.classList.add('d_flex')
+            row.classList.add('flex__c_a')
+            row.setAttribute('title', batch.name);
+
+            try {
+                var date = this.date_formatter(batch.receive_date)
+            } catch (error) {
+                var date = '';
+            }
+
+            row.innerHTML = `
+            <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
+            <p class="name">${batch.name}</p>
+            <p class="name">${batch.provider}</p>
+            <p class="date">${date}</p>
+            <p class="name">${batch.created_by}</p>
+            <p class="status">${batch.status}</p>
+            <div class="action d_flex flex__c_c">
+                ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
+            </div>
             `;
-            tableBody.insertAdjacentHTML('beforeend', row);
-        });
+
+            row.addEventListener('click', () => {
+                this.open_single_batch_view(batch.id)
+            });
+
+            tableBody.appendChild(row);
+
+        })
+
+        // batchData.batchList.forEach((batch, index) => {
+        //     const row = `
+        //         <div class="tr d_flex flex__c_a" data_src="${batch.id}" title="${batch.name}">
+        //             <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
+        //             <p class="name">${batch.name}</p>
+        //             <p class="name">${batch.provider}</p>
+        //             <p class="date">${this.date_formatter(batch.receive_date)}</p>
+        //             <p class="name">${batch.created_by}</p>
+        //             <p class="status">${batch.status}</p>
+        //             <div class="action d_flex flex__c_c">
+        //                 ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
+        //             </div>
+        //         </div>
+        //     `;
+        //     tableBody.insertAdjacentHTML('beforeend', row);
+        // });
 
         // clear variables
         this.batchData = [];
 
-        this.row_listener();
     }
 
-    row_listener() {
-        // listeners for each row
-        const rows = document.querySelectorAll('.table_body .tr');
-        rows.forEach((row) => {
-            row.addEventListener('click', async () => {
-                const batchId = row.getAttribute('data_src');
 
-                frontRouter.navigate('/pharmacy/viewinatakebatch/' + batchId);
-            })
-        });
-
-        const createVisit_btn = document.querySelectorAll('#createVisit_btn');
-
-        createVisit_btn.forEach(btn => {
-            btn.addEventListener('click', async (event) => {
-                // disable propagation
-                event.stopPropagation();
-
-                // get the btn closest with class tr
-                const btnParent = btn.closest('.tr');
-                const patientId = btnParent.getAttribute('data_src');
-                const patientName = btnParent.getAttribute('title');
-
-                dashboardController.createVisitPopUpView.PreRender(
-                    {
-                        id: patientId,
-                        p_name: patientName,
-                    })
-
-            })
-        });
-
-
+    open_single_batch_view(batch_id) {
+        frontRouter.navigate('/pharmacy/viewinatakebatch/' + batch_id);
     }
 
     async activate_deactivate(id, action) {

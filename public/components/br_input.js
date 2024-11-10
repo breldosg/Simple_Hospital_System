@@ -211,10 +211,12 @@ export class BrCustomInput extends HTMLElement {
                 contElem.classList.remove('error');
             }
         }
-        else if (name == 'value') {
+        else if (name == 'value' && newValue !== '') {
+            console.log(newValue);
             this.inputElement.value = newValue;
+            
         }
-        else if (name == 'shadow_value') {
+        else if (name == 'shadow_value' && newValue !== '') {
             this.shadow_value = newValue;
         }
     }
