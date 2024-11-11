@@ -64,7 +64,7 @@ ${this.Styles()}
 
     <div class="nav_collection" type="/pharmacy">
 
-        <a href="/pharmacy/viewmedicine" data-link class="choice_item">View All medicine</a>
+        <a href="/pharmacy/viewmedicine" data-link class="choice_item">View All Products</a>
         <a href="/pharmacy/addmedicine" data-link class="choice_item">Add medicine</a>
         <a href="/pharmacy/viewcategory" data-link class="choice_item">View All category</a>
         <a href="/pharmacy/addcategory" data-link class="choice_item">Add category</a>

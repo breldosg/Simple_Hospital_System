@@ -78,7 +78,7 @@ export class BrCustomSelect extends HTMLElement {
             * { box-sizing: border-box; font-size: ${fontSize} !important; color: currentColor; }
             :host { display: block; position: relative; }
             label { ${labelStyles} }
-            .selected-value { padding: 10px; border: 1px solid #ccc; cursor: pointer; background: #fff; ${additionalStyles} }
+            .selected-value { padding: 10px;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; border: 1px solid #ccc; cursor: pointer; background: #fff; ${additionalStyles} }
             .select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
             .selected-value.error { border-color: #EE5D50; }
             .select-dropdown.open { display: block; }

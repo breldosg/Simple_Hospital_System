@@ -188,7 +188,7 @@ export class AddMedicineView {
             const result = await response.json();
 
             if (result.success) {
-                
+
                 return result.data;
             } else {
                 notify('top_left', result.message, 'warning');

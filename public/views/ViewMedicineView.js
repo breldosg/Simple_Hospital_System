@@ -378,6 +378,10 @@ export class ViewMedicineView {
     
         <div class="in_table_top d_flex flex__u_s">
             <h4>Medicine List</h4>
+
+            <div class="add_btn" title="Create Product" id="open_add_product_popup">
+                <span class="switch_icon_add"></span>
+            </div>
         </div>
         <div class="outpatient_table">
     
