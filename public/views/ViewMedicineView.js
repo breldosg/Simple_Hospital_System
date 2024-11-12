@@ -27,9 +27,17 @@ export class ViewMedicineView {
         // Fetch the initial batch of medicine data
         await this.fetchAndRenderData();
         this.attachEventListeners();
+        dashboardController.createProductPopUpView.PreRender();
+
     }
 
     attachEventListeners() {
+
+        // add btn
+        document.querySelector('.add_btn').addEventListener('click', () => {
+            dashboardController.createProductPopUpView.PreRender();
+        });
+
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
@@ -129,8 +137,6 @@ export class ViewMedicineView {
             row.addEventListener('click', async () => {
                 const medicineId = row.getAttribute('data_src');
                 console.log('medicineId= ', medicineId);
-
-                // frontRouter.navigate('/patient/viewpatient/' + patientId);
             })
         });
 
