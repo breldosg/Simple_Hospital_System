@@ -27,7 +27,6 @@ export class ViewMedicineView {
         // Fetch the initial batch of medicine data
         await this.fetchAndRenderData();
         this.attachEventListeners();
-        dashboardController.createProductPopUpView.PreRender();
 
     }
 
@@ -113,7 +112,7 @@ export class ViewMedicineView {
                 <div class="tr d_flex flex__c_a" data_src="${medicine.id}" title="${medicine.name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${medicine.name}</p>
-                    <p class="name">${medicine.category}</p>
+                    <p class="name">${medicine.category == null ? 'No Category' : medicine.category}</p>
                     <p class="remain">0</p>
                     <p class="status">${medicine.status}</p>
                     <div class="action d_flex flex__c_c">

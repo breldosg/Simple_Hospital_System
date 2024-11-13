@@ -6,6 +6,7 @@ export class loginScreen {
     constructor() {
         // globalize the LoginUser function
         window.LoginUser = this.LoginUser.bind(this);
+        this.is_sent = false;
     }
 
     PreRender() {
@@ -60,6 +61,9 @@ export class loginScreen {
 
     async LoginUser(data) {
 
+        if (this.is_sent) return; // prevent sending request twice
+        this.is_sent = true;
+
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
@@ -94,6 +98,7 @@ export class loginScreen {
             notify('login', error.message, 'error');
         }
         finally {
+            this.is_sent = false;  // reset is_sent flag to false for next request
             //remove loader ver on wrapper
             btn_submit.setAttribute('loading', false);
         }
