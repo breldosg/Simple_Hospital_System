@@ -244,5 +244,9 @@ export class BrCustomInput extends HTMLElement {
     }
 
 
+    setValue(value) {
+        this.inputElement.value = value;  // Set the input's internal value
+    }
+
 }
 

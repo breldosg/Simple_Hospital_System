@@ -1325,8 +1325,12 @@ input {
                         }
 
                         .name {
-                            width: 32.5%;
+                            width: 28%;
                             text-align: left;
+                        }
+                        .type {
+                            width: 9%;
+                            text-transform: capitalize;
                         }
 
                         .status {
@@ -3644,6 +3648,9 @@ input {
 
                         .type {
                             font-size: 14px;
+                            text-transform: capitalize;
+                            font-weight: bold;
+                            color: var(--gray_text);
                         }
                     }
 
@@ -3795,6 +3802,7 @@ input {
 
                     .category {
                         width: 22%;
+                        text-transform: capitalize;
                     }
 
                     .quantity {

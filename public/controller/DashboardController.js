@@ -2,20 +2,19 @@
 
 import { AddIntakeBatchView } from "../views/AddIntakeBatchView.js";
 import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
-import { AddMedicineView } from "../views/AddMedicineView.js";
 import { AddPatientView } from "../views/AddPatientView.js";
 import { AddUserView } from "../views/AddUserView.js";
 import { AttendanceView } from "../views/AttendanceView.js";
-import { ConfirmPopUpView } from "../views/ConfirmPopUpView.js";
-import { CreateProductPopUpView } from "../views/CreateProductPopUpView.js";
-import { CreateVisitPopUpView } from "../views/CreateVisitPopUpView.js";
+import { ConfirmPopUpView } from "../popups/ConfirmPopUpView.js";
+import { CreateProductPopUpView } from "../popups/CreateProductPopUpView.js";
+import { CreateVisitPopUpView } from "../popups/CreateVisitPopUpView.js";
 import { LoaderView } from "../views/LoaderView.js";
-import { ReceiveIntakeBatchPopUpView } from "../views/ReceiveIntakeBatchPopUpView.js";
+import { ReceiveIntakeBatchPopUpView } from "../popups/ReceiveIntakeBatchPopUpView.js";
 import { SingleIntakeBatchView } from "../views/SingleIntakeBatchView.js";
 import { SingleMedicineCategoryView } from "../views/SingleMedicineCategoryView.js";
 import { SinglePatientView } from "../views/SinglePatientView.js";
 import { StaffListView } from "../views/StaffListView.js";
-import { UpdateCategoryPopUpView } from "../views/UpdateCategoryPopUpView.js";
+import { UpdateCategoryPopUpView } from "../popups/UpdateCategoryPopUpView.js";
 import { ViewIntakeBatchView } from "../views/ViewIntakeBatchView.js";
 import { ViewMedicineCategoryView } from "../views/ViewMedicineCategoryView.js";
 import { ViewMedicineView } from "../views/ViewMedicineView.js";
@@ -40,7 +39,6 @@ class DashboardController {
     viewOnProgressView = new ViewOnProgressView();
 
     // Medicine Views
-    addMedicineView = new AddMedicineView();
     viewMedicineView = new ViewMedicineView();
     viewMedicineCategoryView = new ViewMedicineCategoryView();
     addMedicineCategoryView = new AddMedicineCategoryView();

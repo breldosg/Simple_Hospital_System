@@ -1,6 +1,6 @@
 
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { date_formatter, decodeHTML, notify } from "../script/index.js";
 
 export class ReceiveIntakeBatchPopUpView {
     constructor() {
@@ -19,6 +19,9 @@ export class ReceiveIntakeBatchPopUpView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+
+        console.log(params);
+        
 
         this.batch_id = params.b_id;
 
@@ -78,7 +81,7 @@ export class ReceiveIntakeBatchPopUpView {
 
             </div>
 
-            <br-form callback="add_to_pending">
+            <br-form id="more_detail_form" callback="add_to_pending">
                 <div class="search_cont">
                     <br-input name="product" label="Product Name" id="product_name_view" type="text" styles="
                     border-radius: var(--input_main_border_r);
@@ -180,53 +183,72 @@ export class ReceiveIntakeBatchPopUpView {
         const back_btn = document.querySelector('#back_btn');
 
         back_btn.addEventListener('click', () => {
-            document.getElementById('search_slide').scrollIntoView({ behavior: 'smooth' });
+            this.back_to_search_view();
         });
 
 
         const submit_btn = document.querySelector('.pending_data_view br-button[type="submit"]');
 
         submit_btn.addEventListener('click', async () => {
-
-            //get all row in table_body_for_pending_data
-            const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
-
-            if (rows.length === 0) {
-                notify('top_left', 'No product added', 'error');
-                return;
-            }
-
-            let data_found = [];
-
-            rows.forEach((row) => {
-                const row_data_src_raw = row.getAttribute('data_src');
-                const row_data_src = row_data_src_raw.split(',');
-                const m_id = row_data_src[0];
-                const quantity = row_data_src[1];
-                const expire_date = row_data_src[2];
-
-                data_found.push({
-                    id: m_id,
-                    quantity: quantity,
-                    expire_date: expire_date
-                })
-
-            })
-
-            //call function to receive the product
-            await this.receive_product(data_found);
+            await this.receive_product();
         })
 
     }
 
-    async receive_product(data_found) {
-        console.log(data_found);
-    }
+    async receive_product() {
 
+        console.log('batch: ', this.batch_id);
+
+
+        //get all row in table_body_for_pending_data
+        const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
+
+        if (rows.length === 0) {
+            notify('top_left', 'No product added', 'error');
+            return;
+        }
+
+        let product_list = [];
+
+        rows.forEach((row) => {
+            const row_data_src_raw = row.getAttribute('data_src');
+
+            product_list.push(JSON.parse(row_data_src_raw));
+
+        })
+
+        //call function to receive the product
+        console.log(product_list);
+
+        try {
+            const response = await fetch('/api/pharmacy/receive_product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    batch_id: 10,
+                    product_list: product_list,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            return result.success;
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
 
     async fetch_data(searchTerm) {
         try {
-            const response = await fetch('/api/pharmacy/medicine_list', {
+            const response = await fetch('/api/pharmacy/product_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -268,14 +290,14 @@ export class ReceiveIntakeBatchPopUpView {
                 const row = document.createElement('div');
                 row.classList.add('row');
                 row.setAttribute('data_src', medicine.id);
-                row.setAttribute('title', medicine.name);
+                row.setAttribute('title', decodeHTML(medicine.name));
                 row.innerHTML = `
                     <div class="name">${medicine.name}</div>
-                    <div class="type">Medicine</div>
+                    <div class="type">${medicine.type}</div>
 `;
                 // Attach click event listener to the row
                 row.addEventListener('click', () => {
-                    this.open_fill_form(medicine.id, medicine.name, 'medicine')
+                    this.open_fill_form(medicine.id, decodeHTML(medicine.name), medicine.type)
                 });
                 tableBody.appendChild(row);
             });
@@ -296,7 +318,9 @@ export class ReceiveIntakeBatchPopUpView {
             id: id,
             category: category
         };
-        product_name_view.setAttribute('value', name);
+        console.log(name);
+
+        product_name_view.setValue(name);
         product_name_view.setAttribute('shadow_value', id);
     }
 
@@ -307,15 +331,38 @@ export class ReceiveIntakeBatchPopUpView {
         // clean the container if is the first row
         if (this.number_pending_data === 0) {
             container.innerHTML = '';
-            console.log('imepita');
+        }
+
+        // check if the data is available to the pending data
+        const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
+
+        if (rows.length >= 1) {
+
+            for (let row of rows) {
+                var parsed_data = JSON.parse(row.getAttribute('data_src'));
+
+                console.log(parsed_data);
+
+
+                const { id, quantity, date } = parsed_data;
+
+                console.log(id, this.selected_product.id);
+
+                if (id == this.selected_product.id && quantity == data.quantity && date == data.expire_date) {
+
+                    notify('top_left', 'Product already added', 'warning');
+                    return;
+                }
+            }
 
         }
+
 
         const row = document.createElement('div');
         row.classList.add('tr');
         row.classList.add('d_flex');
         row.classList.add('flex__c_a');
-        row.setAttribute('data_src', [this.selected_product.id, data.quantity, data.expire_date]);
+        row.setAttribute('data_src', JSON.stringify({ id: this.selected_product.id, quantity: data.quantity, date: data.expire_date }));
         row.setAttribute('title', this.selected_product.name);
 
         try {
@@ -344,8 +391,15 @@ export class ReceiveIntakeBatchPopUpView {
         container.insertBefore(row, container.firstChild);
 
         this.number_pending_data++;
+
+        this.back_to_search_view();
+    }
+
+    back_to_search_view() {
         document.getElementById('search_slide').scrollIntoView({ behavior: 'smooth' });
 
+        var more_detail_form = document.querySelector('#more_detail_form');
+        more_detail_form.reset();
     }
 
     remove_from_pending(row) {

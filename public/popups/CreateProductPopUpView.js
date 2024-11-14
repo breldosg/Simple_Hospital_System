@@ -276,7 +276,7 @@ ${this.category_select_rows}
                 // After successful creation, clear the popup and close it
                 this.close_popup()
 
-                dashboardController.viewMedicineView.PreRender();
+                await dashboardController.viewMedicineView.fetchAndRenderData();
 
             } else {
                 notify('top_left', result.message, 'warning');

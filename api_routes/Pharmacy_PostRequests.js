@@ -22,8 +22,8 @@ router.post('/get_category', async (req, res) => {
     }
 });
 
-
-router.post('/medicine_list', async (req, res) => {
+// product_list
+router.post('/product_list', async (req, res) => {
     const body = req.body;
 
     try {
@@ -36,7 +36,26 @@ router.post('/medicine_list', async (req, res) => {
             return res.status(400).json(result); // Send an error status with the message
         }
     } catch (error) {
-        console.error('Error in /medicine_list route:', error);
+        console.error('Error in /product_list route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+router.post('/receive_product', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 360, body); // Add `await` since it's an async function
+        console.log('receive_product Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /receive_product route:', error);
         return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
     }
 });

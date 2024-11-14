@@ -100,3 +100,12 @@ export function date_formatter(ymd) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Intl.DateTimeFormat('en-US', options).format(dateee);
 }
+
+export function decodeHTML(html) {
+    return html
+        .replace(/&amp;/g, '&')
+        .replace(/&#039;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"');
+}

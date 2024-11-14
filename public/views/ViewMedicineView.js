@@ -113,6 +113,7 @@ export class ViewMedicineView {
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${medicine.name}</p>
                     <p class="name">${medicine.category == null ? 'No Category' : medicine.category}</p>
+                    <p class="type">${medicine.type}</p>
                     <p class="remain">0</p>
                     <p class="status">${medicine.status}</p>
                     <div class="action d_flex flex__c_c">
@@ -221,7 +222,7 @@ export class ViewMedicineView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/pharmacy/medicine_list', {
+            const response = await fetch('/api/pharmacy/product_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -394,6 +395,7 @@ export class ViewMedicineView {
                 <p class="id">SN</p>
                 <p class="name">Name</p>
                 <p class="name">Category</p>
+                <p class="type">Type</p>
                 <p class="remain">Remain Quantity</p>
                 <p class="status">Status</p>
                 <div class="action"></div>
