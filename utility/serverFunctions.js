@@ -165,6 +165,16 @@ const RequestHandler = async (req, key, body) => {
     }
 };
 
+const trailing_slashes=(req,res,next) => {
+    if (req.path !== '/' && req.path.endsWith('/')) {
+        // Redirect to the same URL without the trailing slash
+        const newPath = req.path.slice(0, -1);
+        return res.redirect(301, newPath + req.url.slice(req.path.length));
+    }
+    next();
+
+};
+
 module.exports = {
     set_cookie,
     check_cookie,
@@ -172,5 +182,6 @@ module.exports = {
     user_agent_infos,
     delete_cookie,
     ApiHost,
-    RequestHandler
+    RequestHandler,
+    trailing_slashes
 }

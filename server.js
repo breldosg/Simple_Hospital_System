@@ -2,12 +2,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 4000;
-const { check_cookie, get_cookie, user_agent_infos } = require('./utility/serverFunctions.js');
+const { check_cookie, get_cookie, user_agent_infos, trailing_slashes } = require('./utility/serverFunctions.js');
 const cookieParser = require('cookie-parser');
 
 // Use cookie-parser middleware
+app.use(trailing_slashes)
 app.use(express.json());
 app.use(cookieParser());
+
 
 // Serve static files from the "public" directory
 app.use('/public', express.static(path.join(__dirname, 'public')));

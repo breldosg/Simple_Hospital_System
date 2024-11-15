@@ -20,10 +20,7 @@ export class ReceiveIntakeBatchPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        console.log(params);
-        
-
-        this.batch_id = params.b_id;
+        this.batch_id = params.id;
 
 
         const cont = document.querySelector('.popup');
@@ -197,14 +194,11 @@ export class ReceiveIntakeBatchPopUpView {
 
     async receive_product() {
 
-        console.log('batch: ', this.batch_id);
-
-
         //get all row in table_body_for_pending_data
         const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
 
         if (rows.length === 0) {
-            notify('top_left', 'No product added', 'error');
+            notify('top_left', 'No product added', 'warning');
             return;
         }
 
@@ -227,7 +221,7 @@ export class ReceiveIntakeBatchPopUpView {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    batch_id: 10,
+                    batch_id: this.batch_id,
                     product_list: product_list,
                 })
             });
