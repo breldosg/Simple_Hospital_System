@@ -1,6 +1,6 @@
 
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, decodeHTML, notify } from "../script/index.js";
+import { date_formatter, getCurrentDate, decodeHTML, notify } from "../script/index.js";
 
 export class ReceiveIntakeBatchPopUpView {
     constructor() {
@@ -90,7 +90,7 @@ export class ReceiveIntakeBatchPopUpView {
                     " labelStyles="font-size: 13px;" disable="true"></br-input>
 
 
-                    <br-input required name="expire_date" label="Expire date" type="date" styles="
+                    <br-input required name="expire_date" min="${getCurrentDate()}" label="Expire date" type="date" styles="
                     border-radius: var(--input_main_border_r);
                     width: 400px;
                     padding: 10px;
@@ -232,7 +232,12 @@ export class ReceiveIntakeBatchPopUpView {
 
             const result = await response.json();
 
-            return result.success;
+            if (!result.success) {
+
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+
         } catch (error) {
             console.error('Error:', error);
             notify('top_left', error.message, 'error');

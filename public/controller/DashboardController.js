@@ -1,6 +1,5 @@
 // import { staffListView } from "../views/StaffListView.js";
 
-import { AddIntakeBatchView } from "../views/AddIntakeBatchView.js";
 import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
 import { AddPatientView } from "../views/AddPatientView.js";
 import { AddUserView } from "../views/AddUserView.js";
@@ -20,6 +19,7 @@ import { ViewMedicineCategoryView } from "../views/ViewMedicineCategoryView.js";
 import { ViewMedicineView } from "../views/ViewMedicineView.js";
 import { ViewOnProgressView } from "../views/ViewOnProgressView.js";
 import { ViewPatientView } from "../views/ViewPatientView.js";
+import { CreateBatchPopUpView } from "../popups/CreateBatchPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -44,11 +44,11 @@ class DashboardController {
     addMedicineCategoryView = new AddMedicineCategoryView();
     singleMedicineCategoryView = new SingleMedicineCategoryView();
     updateCategoryPopUpView = new UpdateCategoryPopUpView();
-    addIntakeBatchView = new AddIntakeBatchView();
     viewIntakeBatchView = new ViewIntakeBatchView();
     singleIntakeBatchView = new SingleIntakeBatchView();
     receiveIntakeBatchPopUpView = new ReceiveIntakeBatchPopUpView();
     createProductPopUpView = new CreateProductPopUpView();
+    createBatchPopUpView = new CreateBatchPopUpView();
 
 
 

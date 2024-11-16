@@ -32,6 +32,13 @@ export class ViewIntakeBatchView {
     }
 
     attachEventListeners() {
+
+        // add btn
+        document.querySelector('.add_btn').addEventListener('click', () => {
+            dashboardController.createBatchPopUpView.PreRender();
+        });
+
+
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
@@ -286,6 +293,10 @@ export class ViewIntakeBatchView {
     
         <div class="in_table_top d_flex flex__u_s">
             <h4>Batch List</h4>
+
+            <div class="add_btn" title="Create Product" id="open_add_product_popup">
+                <span class="switch_icon_add"></span>
+            </div>
         </div>
         <div class="outpatient_table">
     

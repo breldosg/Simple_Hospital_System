@@ -1,9 +1,10 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { getCurrentDate, notify } from "../script/index.js";
 
-export class AddIntakeBatchView {
+export class CreateBatchPopUpView {
     constructor() {
-        window.register_intake_batch = this.register_intake_batch.bind(this)
+        window.register_intake_batch = this.register_intake_batch.bind(this);
     }
 
     async PreRender() {
@@ -12,19 +13,13 @@ export class AddIntakeBatchView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-
-
-        const cont = document.querySelector('.update_cont');
+        const cont = document.querySelector('.popup');
+        cont.classList.add('active');
         cont.innerHTML = this.ViewReturn();
 
-        // Now call render which will fetch data and populate it
-        this.render();
-    }
+        this.attachListeners()
 
-    async render() {
-        const cont = document.querySelector('.update_cont');
     }
-
 
     ViewReturn() {
         return `
@@ -32,7 +27,14 @@ export class AddIntakeBatchView {
 
     <br-form callback="register_intake_batch" class="slides">
         <div class="slide">
-            <p class="heading">Batch information</p>
+        <div class="head_cont">
+                <p class="heading">Batch information</p>
+                
+                <div class="close_btn" title="Close PopUp" id="close_create_product_popup">
+                    <span class="switch_icon_close"></span>
+                </div>
+
+            </div>
 
             <div class="input_group">
 
@@ -46,7 +48,7 @@ export class AddIntakeBatchView {
                                 " labelStyles="font-size: 13px;"></br-input>
 
 
-                <br-input required name="receive_date" label="Receive Date" type="date" styles="
+                <br-input required max="${getCurrentDate()}" name="receive_date" label="Receive Date" type="date" styles="
                                 border-radius: var(--input_main_border_r);
                                 width: 300px;
                                 padding: 10px;
@@ -86,6 +88,14 @@ export class AddIntakeBatchView {
 `;
     }
 
+    attachListeners() {
+        const cancel_btn = document.querySelector('#close_create_product_popup');
+
+        cancel_btn.addEventListener('click', () => {
+            this.close_popup()
+        });
+    }
+
     async register_intake_batch(data) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
@@ -107,16 +117,23 @@ export class AddIntakeBatchView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
+                this.close_popup()
+                dashboardController.viewIntakeBatchView.fetchAndRenderData();
             } else {
                 notify('top_left', result.message, 'warning');
             }
         } catch (error) {
-            console.error('Error:', error);
             notify('top_left', error.message, 'error');
         }
         finally {
             btn_submit.setAttribute('loading', false);
         }
+    }
+    close_popup() {
+        this.category_select_rows = '';
+        const cont = document.querySelector('.popup');
+        cont.classList.remove('active');
+        cont.innerHTML = '';
     }
 
 }

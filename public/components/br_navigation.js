@@ -67,10 +67,8 @@ ${this.Styles()}
         <a href="/pharmacy/viewmedicine" data-link class="choice_item">View All Products</a>
         <a href="/pharmacy/viewcategory" data-link class="choice_item">View All category</a>
         <a href="/pharmacy/addcategory" data-link class="choice_item">Add category</a>
-        <a href="/pharmacy/addinatakebatch" data-link class="choice_item">Add intake batch</a>
         <a href="/pharmacy/viewinatakebatch" data-link class="choice_item">View All batch</a>
-        <a href="/pharmacy/recieveinatakebatch" data-link class="choice_item">Receive intake batch</a>
-
+        
     </div>
 
     <div class="nav_collection " type="/notice">

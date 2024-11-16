@@ -30,7 +30,10 @@ export class BrCustomInput extends HTMLElement {
         const error = this.hasAttribute('error') ? 'error' : '';
         const focus = this.hasAttribute('focus') ? 'autofocus' : '';
         const label = this.hasAttribute('label');
+        const min = this.hasAttribute('min') ? `min="${this.getAttribute('min')}"` : '';
+        const max = this.hasAttribute('max') ? `max="${this.getAttribute('max')}"` : '';
         const disable = this.hasAttribute('disable') ? (this.getAttribute('disable') == 'true' ? 'readonly' : '') : '';
+
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -44,7 +47,7 @@ export class BrCustomInput extends HTMLElement {
                 ${type === 'textarea' ? `
                     <textarea placeholder="${placeholder}" ${required}>${value}</textarea>
                 ` : `
-                    <input type="${type}" ${value} ${focus} ${disable} ${placeholder} ${required}>
+                    <input type="${type}" ${value} ${min} ${max} ${focus} ${disable} ${placeholder} ${required}>
                     ${type === 'password' ? '<span class="switch_icon_remove_red_eye toggle-visibility"></span>' : ''}
                 `}
             </div>

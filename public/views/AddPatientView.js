@@ -1,5 +1,5 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { getCurrentDate, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class AddPatientView {
@@ -65,7 +65,7 @@ export class AddPatientView {
                 </br-select>
 
 
-                <br-input required name="dob" label="Date of birth" type="date" styles="
+                <br-input required name="dob" max="${getCurrentDate()}" label="Date of birth" type="date" styles="
                                 border-radius: var(--input_main_border_r);
                                 width: 300px;
                                 padding: 10px;
