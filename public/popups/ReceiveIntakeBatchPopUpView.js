@@ -235,7 +235,7 @@ export class ReceiveIntakeBatchPopUpView {
             if (!result.success) {
 
                 notify('top_left', result.message, 'warning');
-                return;
+                // return;
             }
 
         } catch (error) {

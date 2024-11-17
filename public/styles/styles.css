@@ -1328,6 +1328,7 @@ input {
                             width: 28%;
                             text-align: left;
                         }
+
                         .type {
                             width: 9%;
                             text-transform: capitalize;
@@ -2349,7 +2350,7 @@ input {
             }
         }
 
-      
+
 
         /* ------------------------------------------------------- */
 
@@ -2704,6 +2705,9 @@ input {
             }
 
             .batch_table_out {
+
+                overflow-y: scroll;
+
                 .main_btn {
                     border: none;
                     color: var(--white);
@@ -2810,24 +2814,21 @@ input {
                             text-align: left;
                         }
 
-                        .gender {
-                            width: 10%;
+                        .type {
+                            width: 15%;
+                            text-transform: capitalize;
                         }
 
-                        .role {
-                            width: 19%;
+                        .quantity {
+                            width: 10%;
                         }
 
                         .date {
                             width: 15%;
                         }
 
-                        .phone {
-                            width: 11%;
-                        }
-
                         .action {
-                            width: 18%;
+                            width: 15%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -3901,9 +3902,9 @@ input {
     }
 
 
-      /* ------------------------------------------------------- */
+    /* ------------------------------------------------------- */
 
-      .add_intake_batch {
+    .add_intake_batch {
         padding: 50px;
         border-radius: var(--main_border_r);
         background-color: var(--white);

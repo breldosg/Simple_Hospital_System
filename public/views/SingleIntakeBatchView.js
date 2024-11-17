@@ -5,11 +5,13 @@ import { date_formatter, notify } from "../script/index.js";
 export class SingleIntakeBatchView {
     constructor() {
         this.batch_id = null;
+        this.query = '';
         this.patient_name = null;
         this.batchNumber = 1;
         this.total_page_num = 1;
         this.total_data_num = 0;
         this.show_count_num = 0;
+        this.isLoading = false;
 
     }
     async PreRender(params) {
@@ -32,16 +34,70 @@ export class SingleIntakeBatchView {
         const top_cont = document.querySelector('.single_batch_cont .top_card');
         const batch_data = await this.fetchData(); // Wait for fetchData to complete
 
-        console.log(batch_data);
-        
-
         top_cont.innerHTML = this.top_card_view(batch_data.batch_data);
+        await this.fetch_table_data();
 
-        this.attach_listeners()
-
+        this.attach_listeners();
     }
 
-    ViewReturn(loader = '') {
+    async fetch_table_data() {
+        if (this.isLoading) return;  // Prevent multiple fetches
+        this.isLoading = true;
+        this.loading_and_nodata_view();
+
+        // fetch table data
+        const productData = await this.table_data_fetch(); // Fetch data
+        this.productData = productData || [];
+
+        if (this.productData.productList && this.productData.productList.length > 0) {
+            this.populateTable(this.productData);
+        } else {
+            this.displayNoDataMessage();
+        }
+    }
+
+
+    populateTable(productData) {
+        const tableBody = document.querySelector('.table_body');
+        tableBody.innerHTML = '';  // Clear table before populating
+
+        console.log(productData);
+
+
+
+        document.querySelector('.show_count').innerText = productData.showData;
+        document.querySelector('.total_data').innerText = productData.total;
+        document.querySelector('.total_page').innerText = productData.pages;
+        document.querySelector('.current_page').innerText = productData.batch;
+        this.total_page_num = productData.pages;
+
+        productData.productList.forEach((product, index) => {
+            try {
+                var expireDate = date_formatter(product.expire_date)
+            } catch (error) {
+                var expireDate = '';
+            }
+            const row = `
+                <div class="tr d_flex flex__c_a" data_src="${product.id}" title="${product.name}">
+                    <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
+                    <p class="name">${product.name}</p>
+                    <p class="type">${product.type}</p>
+                    <p class="quantity">${product.quantity}</p>
+                    <p class="name">${product.created_by}</p>
+                    <p class="date">${expireDate}</p>
+                    <div class="action d_flex flex__c_c">
+                        <button id="deactivate_btn" class="main_btn error">Remove</button>
+                    </div>
+                </div>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+
+        // clear variables
+        this.productData = [];
+    }
+
+    ViewReturn() {
         return `
 <div class="single_batch_cont">
 
@@ -55,17 +111,17 @@ export class SingleIntakeBatchView {
 
             <div class="pack">
                 <span class="switch_icon_calendar_check"></span>
-                <p class="date">Oct 10, 2024</p>
+                <p class="date">**************</p>
             </div>
 
             <div class="pack">
                 <span class='switch_icon_cart_shopping'></span>
-                <p class="date">Unguja Pharmacy</p>
+                <p class="date">**************</p>
             </div>
 
             <div class="pack">
                 <span class='switch_icon_user_pen'></span>
-                <p class="date">Kelvin Godliver</p>
+                <p class="date">**************</p>
             </div>
 
             <div class="btn">
@@ -90,10 +146,10 @@ export class SingleIntakeBatchView {
             <div class="table_head tr d_flex flex__c_a">
                 <p class="id">SN</p>
                 <p class="name">Name</p>
-                <p class="name">Provider</p>
-                <p class="date">Receive Date</p>
-                <p class="name">Create By</p>
-                <p class="status">Status</p>
+                <p class="type">Type</p>
+                <p class="quantity">Quantity</p>
+                <p class="name">Received By</p>
+                <p class="date">Expire Date</p>
                 <div class="action"></div>
             </div>
 
@@ -103,7 +159,7 @@ export class SingleIntakeBatchView {
                     <p>No Product Found</p>
                 </div>
 
-                <div class="loader_cont">
+                <div class="loader_cont active">
                     <div class="loader"></div>
                 </div>
             </div>
@@ -113,7 +169,7 @@ export class SingleIntakeBatchView {
                         class="total_data">${this.total_data_num}</span></p>
                 <div class="pagenation d_flex flex__c_c">
                     <button type="button" class="main_btn prev">Prev</button>
-                    <p class="page_no d_flex flex__c_c">${this.batchNumber}/<span
+                    <p class="page_no d_flex flex__c_c"><span class="current_page" >${this.batchNumber}</span>/<span
                             class="total_page">${this.total_page_num}</span></p>
                     <button type="button" class="main_btn next">Next</button>
                 </div>
@@ -180,8 +236,45 @@ export class SingleIntakeBatchView {
         })
 
 
+        // Pagination buttons
+        document.querySelector('.main_btn.next').addEventListener('click', async () => {
+            if (!this.isLoading && this.batchNumber < this.total_page_num) {
+                this.batchNumber += 1;
+                await this.fetch_table_data();
+            }
+        });
+
+        document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+            if (!this.isLoading && this.batchNumber > 1) {
+                this.batchNumber -= 1;
+                await this.fetch_table_data();
+            }
+        });
+
     }
 
+
+    displayNoDataMessage() {
+        const show_count = document.querySelector('.show_count');
+        const total_data = document.querySelector('.total_data');
+        const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
+        show_count.innerText = 0;
+        total_data.innerText = 0;
+        total_page.innerText = 1;
+        current_page.innerText = 1;
+        document.querySelector('.start_page').style.display = 'flex';
+        document.querySelector('.table_body .loader_cont').classList.remove('active');
+    }
+
+    loading_and_nodata_view() {
+        document.querySelector('.single_batch_cont .table_body').innerHTML = `
+        <div class="start_page deactivate">
+            <p>No Product Found</p>
+        </div>
+        <div class="loader_cont active"><div class="loader"></div></div>
+                    `;
+    }
 
     async fetchData() {
         try {
@@ -210,6 +303,42 @@ export class SingleIntakeBatchView {
         } catch (error) {
             notify('top_left', error.message, 'error');
             return null;
+        }
+    }
+
+
+    async table_data_fetch() {
+        try {
+            const response = await fetch('/api/pharmacy/single_batch_product_list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    batch_id: this.batch_id,
+                    query: this.query,
+                    batch: this.batchNumber,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                return result.data;
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+            this.isLoading = false;
         }
     }
 

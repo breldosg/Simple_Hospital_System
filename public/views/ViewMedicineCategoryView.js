@@ -145,6 +145,7 @@ export class ViewMedicineCategoryView {
         show_count.innerText = medicineCategoryData.showData;
         total_data.innerText = medicineCategoryData.total;
         total_page.innerText = medicineCategoryData.pages;
+
         this.total_page_num = medicineCategoryData.pages;
         this.show_count_num = medicineCategoryData.showData;
         this.total_data_num = medicineCategoryData.total;

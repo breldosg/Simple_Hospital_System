@@ -13,6 +13,7 @@ export class ViewMedicineView {
         this.searchTerm = '';
         this.category_value = '';
         this.isLoading = false;  // Prevent multiple fetch calls at the same time
+        this.page_shift = false;  // Prevent multiple fetch calls at the same time
     }
 
     async PreRender() {
@@ -39,8 +40,11 @@ export class ViewMedicineView {
 
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
+            console.log('tt:', this.total_page_num);
+
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
+                this.page_shift = true;
                 await this.fetchAndRenderData();
             }
         });
@@ -48,6 +52,7 @@ export class ViewMedicineView {
         document.querySelector('.main_btn.prev').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber > 1) {
                 this.batchNumber -= 1;
+                this.page_shift = true;
                 await this.fetchAndRenderData();
             }
         });
@@ -56,39 +61,42 @@ export class ViewMedicineView {
     async fetchAndRenderData() {
         if (this.isLoading) return;  // Prevent multiple fetches
         this.isLoading = true;
+        this.loading_and_nodata_view();
 
-        const categoryData = await this.fetchCategory(); // Fetch category data only once
-        this.categoryData = categoryData || [];
+
+        if (!this.page_shift) {
+            const categoryData = await this.fetchCategory(); // Fetch category data only once
+            this.categoryData = categoryData || [];
+
+
+            const roles = (category_raw) => {
+                var rolesElem = "";
+                category_raw.forEach(data => {
+                    rolesElem += `
+                    <br-option type="checkbox" value="${data.id}">${data.name}</br-option>
+                `;
+                });
+                return rolesElem;
+            };
+            this.category_elements = roles(this.categoryData);
+
+            document.querySelector('.search_containers').innerHTML = this.searchMedicineView();
+
+            // clear the variables
+            this.category_elements = '';
+            this.categoryData = '';
+
+        }
 
         const medicineData = await this.fetchData(); // Fetch data
         this.medicineData = medicineData || [];
         this.render();
 
         this.isLoading = false;
+        this.page_shift = false;
     }
 
     render() {
-
-        // const roles = (category_raw) => {
-        //     return category_raw.map(data => `<br-option type="checkbox" value="${data.id}">${data.name}</br-option>`).join('');
-        // };
-
-        const roles = (category_raw) => {
-            var rolesElem = "";
-            category_raw.forEach(data => {
-                rolesElem += `
-                    <br-option type="checkbox" value="${data.id}">${data.name}</br-option>
-                `;
-            });
-            return rolesElem;
-        };
-        this.category_elements = roles(this.categoryData);
-
-        document.querySelector('.search_containers').innerHTML = this.searchMedicineView();
-
-        // clear the variables
-        this.category_elements = '';
-        this.categoryData = '';
 
         if (this.medicineData.medicineList && this.medicineData.medicineList.length > 0) {
             this.populateTable(this.medicineData);
@@ -102,9 +110,21 @@ export class ViewMedicineView {
         const tableBody = document.querySelector('.table_body');
         tableBody.innerHTML = '';  // Clear table before populating
 
-        document.querySelector('.show_count').innerText = medicineData.showData;
-        document.querySelector('.total_data').innerText = medicineData.total;
-        document.querySelector('.total_page').innerText = medicineData.pages;
+        console.log(medicineData);
+
+
+        // document.querySelector('.medicine_cont .show_count').innerText = medicineData.showData;
+        // document.querySelector('.medicine_cont .total_data').innerText = medicineData.total;
+        // document.querySelector('.medicine_cont .total_page').innerText = medicineData.pages;
+        const show_count = document.querySelector('.show_count');
+        const total_data = document.querySelector('.total_data');
+        const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
+
+        show_count.innerText = medicineData.showData;
+        total_data.innerText = medicineData.total;
+        total_page.innerText = medicineData.pages;
+        current_page.innerText = medicineData.batch;
         this.total_page_num = medicineData.pages;
 
         medicineData.medicineList.forEach((medicine, index) => {
@@ -335,13 +355,22 @@ export class ViewMedicineView {
             `;
     }
 
+    loading_and_nodata_view() {
+        document.querySelector('.medicine_cont .table_body').innerHTML = `
+        <div class="start_page deactivate">
+            <p>No Product Found</p>
+        </div>
+        <div class="loader_cont active"><div class="loader"></div></div>
+                    `;
+    }
+
     ViewReturn() {
         return `
     <div class="medicine_cont">
     
     <div class="medicine_top">
     
-        <h4>Search Medicine</h4>
+        <h4>Search Product</h4>
     <div class="search_containers">
         <div>
             <div class="medicine_content">
@@ -383,7 +412,7 @@ export class ViewMedicineView {
     <div class="main_section medicine_table_out">
     
         <div class="in_table_top d_flex flex__u_s">
-            <h4>Medicine List</h4>
+            <h4>Product List</h4>
 
             <div class="add_btn" title="Create Product" id="open_add_product_popup">
                 <span class="switch_icon_add"></span>
@@ -403,7 +432,7 @@ export class ViewMedicineView {
     
             <div class="table_body d_flex flex__co">
                 <div class="start_page deactivate">
-                <p>No Medicines Found</p>
+                <p>No Product Found</p>
             </div>
             <div class="loader_cont active"><div class="loader"></div></div>
             </div>
@@ -412,7 +441,7 @@ export class ViewMedicineView {
                 <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span class="total_data">${this.total_data_num}</span></p>
                 <div class="pagenation d_flex flex__c_c">
                     <button type="button" class="main_btn prev">Prev</button>
-                    <p class="page_no d_flex flex__c_c">${this.batchNumber}/<span class="total_page" >${this.total_page_num}</span></p>
+                    <p class="page_no d_flex flex__c_c"><span class="current_page" >${this.batchNumber}</span>/<span class="total_page" >${this.total_page_num}</span></p>
                     <button type="button" class="main_btn next">Next</button>
                 </div>
             </div>
