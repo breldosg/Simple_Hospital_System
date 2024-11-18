@@ -1,6 +1,8 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
 
-export class ConfirmPopUpView {
+export class ConfirmDeletePopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
@@ -28,14 +30,14 @@ export class ConfirmPopUpView {
         return `
 <div class="confirm_card">
     <div class="card-content">
-        <p class="heading">${params.action} ${params.title}</p>
+        <p class="heading">Delete ${params.title}</p>
         <p class="card-heading">${params.title} name: ${params.data}?</p>
-        <p class="card-description">Are sure you want to ${params.action} this ${params.title}?</p>
+        <p class="card-description">Are sure you want to permanently delete this ${params.title}?</p>
         
     </div>
     <div class="card-button-wrapper">
         <button id="confirm_cancel" class="card-button secondary">Cancel</button>
-        <button id="confirm_delete" class="card-button primary">Remove</button>
+        <button id="confirm_delete" class="card-button primary">Delete</button>
     </div>
 </div>
 

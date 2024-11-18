@@ -4,7 +4,7 @@ import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
 import { AddPatientView } from "../views/AddPatientView.js";
 import { AddUserView } from "../views/AddUserView.js";
 import { AttendanceView } from "../views/AttendanceView.js";
-import { ConfirmPopUpView } from "../popups/ConfirmPopUpView.js";
+import { ConfirmDeletePopUpView } from "../popups/ConfirmDeletePopUpView.js";
 import { CreateProductPopUpView } from "../popups/CreateProductPopUpView.js";
 import { CreateVisitPopUpView } from "../popups/CreateVisitPopUpView.js";
 import { LoaderView } from "../views/LoaderView.js";
@@ -20,10 +20,12 @@ import { ViewMedicineView } from "../views/ViewMedicineView.js";
 import { ViewOnProgressView } from "../views/ViewOnProgressView.js";
 import { ViewPatientView } from "../views/ViewPatientView.js";
 import { CreateBatchPopUpView } from "../popups/CreateBatchPopUpView.js";
+import { ConfirmPopUpView } from "../popups/ConfirmPopUpView.js";
 
 class DashboardController {
     // Loader View
     loaderView = new LoaderView();
+    confirmDeletePopUpView = new ConfirmDeletePopUpView();
     confirmPopUpView = new ConfirmPopUpView();
 
     // Staff Views

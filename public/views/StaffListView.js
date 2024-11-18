@@ -57,19 +57,16 @@ export class StaffListView {
     }
 
     async fetchAndRenderData() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn(); // Show loader
+
+        this.loadingContent();
+
         const staffData = await this.fetchData(); // Fetch data with search term and batch number
 
         this.staffData = staffData || [];
         this.render();
-        this.attachEventListeners();
     }
 
     render() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
-
         if (this.staffData.staffList && this.staffData.staffList.length > 0) {
             this.populateTable(this.staffData);
         } else {
@@ -94,10 +91,12 @@ export class StaffListView {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
 
         show_count.innerText = staffData.showData;
         total_data.innerText = staffData.total;
         total_page.innerText = staffData.pages;
+        current_page.innerText = staffData.batch;
         this.total_page_num = staffData.pages;
         this.show_count_num = staffData.showData;
         this.total_data_num = staffData.total;
@@ -233,6 +232,16 @@ export class StaffListView {
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return new Intl.DateTimeFormat('en-US', options).format(dateee);
     }
+    loadingContent() {
+        const tableBody = document.querySelector('.outpatient_table_out .table_body');
+        tableBody.innerHTML = `
+            <div class="start_page deactivate">
+                <p>No Staff Found</p>
+            </div>
+            <div class="loader_cont active"><div class="loader"></div></div>
+        `;
+    }
+
 
     ViewReturn() {
         return `
@@ -256,7 +265,7 @@ export class StaffListView {
                 </div>
                 <div class="table_body d_flex flex__co">
                     <div class="start_page deactivate">
-                        <p>There Is No Any Staff Registered</p>
+                        <p>No Staff Found</p>
                     </div>
                     <div class="loader_cont active"><div class="loader"></div></div>
                 </div>
@@ -264,7 +273,7 @@ export class StaffListView {
                     <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span class="total_data">${this.total_data_num}</span></p>
                     <div class="pagenation d_flex flex__c_c">
                         <button type="button" class="main_btn prev">Prev</button>
-                        <p class="page_no d_flex flex__c_c">${this.batchNumber}/<span class="total_page" >${this.total_page_num}</span></p>
+                        <p class="page_no d_flex flex__c_c"><span class="current_page" >${this.batchNumber}</span>/<span class="total_page" >${this.total_page_num}</span></p>
                         <button type="button" class="main_btn next">Next</button>
                     </div>
                 </div>

@@ -84,7 +84,7 @@ export class ViewMedicineCategoryView {
                     const medicineCategoryId = btnParent.getAttribute('data_src');
                     const medicineCategoryName = btnParent.getAttribute('title');
 
-                    dashboardController.confirmPopUpView.PreRender(
+                    dashboardController.confirmDeletePopUpView.PreRender(
                         {
                             callback: 'delete_category',
                             data: medicineCategoryName,
@@ -104,18 +104,14 @@ export class ViewMedicineCategoryView {
     }
 
     async fetchAndRenderData() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn(); // Show loader
+        this.loadingContent();
         const medicineCategoryData = await this.fetchData(); // Fetch data with search term and batch number
 
         this.medicineCategoryData = medicineCategoryData || [];
         this.render();
-        this.attachEventListeners();
     }
 
     render() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
 
         if (this.medicineCategoryData.categoryList && this.medicineCategoryData.categoryList.length > 0) {
             this.populateTable(this.medicineCategoryData);
@@ -141,10 +137,12 @@ export class ViewMedicineCategoryView {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
 
         show_count.innerText = medicineCategoryData.showData;
         total_data.innerText = medicineCategoryData.total;
         total_page.innerText = medicineCategoryData.pages;
+        current_page.innerText = medicineCategoryData.batch;
 
         this.total_page_num = medicineCategoryData.pages;
         this.show_count_num = medicineCategoryData.showData;
@@ -233,6 +231,17 @@ export class ViewMedicineCategoryView {
         }
     }
 
+    loadingContent() {
+        const tableBody = document.querySelector('.outMedicineCategory_table_out .table_body');
+        tableBody.innerHTML = `
+            <div class="start_page deactivate">
+                <p>No Patient Found</p>
+            </div>
+            <div class="loader_cont active"><div class="loader"></div></div>
+        `;
+    }
+
+
     date_formatter(ymd) {
         const dateee = new Date(ymd);
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -259,7 +268,7 @@ export class ViewMedicineCategoryView {
                 </div>
                 <div class="table_body d_flex flex__co">
                     <div class="start_page deactivate">
-                        <p>There Is No Any Patient Registered</p>
+                        <p>No Patient Found</p>
                     </div>
                     <div class="loader_cont active"><div class="loader"></div></div>
                 </div>
@@ -267,7 +276,7 @@ export class ViewMedicineCategoryView {
                     <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span class="total_data">${this.total_data_num}</span></p>
                     <div class="pagenation d_flex flex__c_c">
                         <button type="button" class="main_btn prev">Prev</button>
-                        <p class="page_no d_flex flex__c_c">${this.batchNumber}/<span class="total_page" >${this.total_page_num}</span></p>
+                        <p class="page_no d_flex flex__c_c"><span class="current_page" >${this.batchNumber}</span>/<span class="total_page" >${this.total_page_num}</span></p>
                         <button type="button" class="main_btn next">Next</button>
                     </div>
                 </div>

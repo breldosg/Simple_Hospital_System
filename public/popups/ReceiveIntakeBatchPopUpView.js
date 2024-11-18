@@ -1,4 +1,5 @@
 
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, getCurrentDate, decodeHTML, notify } from "../script/index.js";
 
@@ -10,6 +11,7 @@ export class ReceiveIntakeBatchPopUpView {
         this.batchNumber = 1; // Keep track of current batch
         this.selected_product = '';
         this.number_pending_data = 0;
+        this.load_more_btn = null;
 
     }
 
@@ -169,11 +171,7 @@ export class ReceiveIntakeBatchPopUpView {
         const cancel_btn = document.querySelector('.pending_data_view br-button[type="cancel"]');
 
         cancel_btn.addEventListener('click', () => {
-            const cont = document.querySelector('.popup');
-            cont.classList.remove('active');
-            cont.innerHTML = '';
-
-
+            this.close_pop_up();
         });
 
 
@@ -187,18 +185,21 @@ export class ReceiveIntakeBatchPopUpView {
         const submit_btn = document.querySelector('.pending_data_view br-button[type="submit"]');
 
         submit_btn.addEventListener('click', async () => {
-            await this.receive_product();
+            await this.receive_product(submit_btn);
         })
 
     }
 
-    async receive_product() {
+    async receive_product(btn) {
+
+        btn.setAttribute('loading', true);
 
         //get all row in table_body_for_pending_data
         const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
 
         if (rows.length === 0) {
-            notify('top_left', 'No product added', 'warning');
+            notify('top_left', 'No Product Added', 'warning');
+            btn.removeAttribute('loading');
             return;
         }
 
@@ -210,9 +211,6 @@ export class ReceiveIntakeBatchPopUpView {
             product_list.push(JSON.parse(row_data_src_raw));
 
         })
-
-        //call function to receive the product
-        console.log(product_list);
 
         try {
             const response = await fetch('/api/pharmacy/receive_product', {
@@ -233,15 +231,20 @@ export class ReceiveIntakeBatchPopUpView {
             const result = await response.json();
 
             if (!result.success) {
-
                 notify('top_left', result.message, 'warning');
-                // return;
+                return;
             }
+            notify('top_left', 'Product Received Successfully.', 'success');
+            this.close_pop_up();
+            dashboardController.singleIntakeBatchView.fetch_table_data();
 
         } catch (error) {
             console.error('Error:', error);
-            notify('top_left', error.message, 'error');
+            notify('top_left', 'Fail To Receive Products.', 'error');
             return null;
+        }
+        finally {
+            btn.removeAttribute('loading');
         }
     }
 
@@ -273,10 +276,14 @@ export class ReceiveIntakeBatchPopUpView {
     }
 
     async Search_medicine_and_consumable(query) {
+        if (this.load_more_btn == null) this.batchNumber = 1;
         const data = await this.fetch_data(query.query);
 
         const tableBody = document.querySelector('.result_cont');
         if (!tableBody) {
+            this.PreRender({
+                id: this.batch_id
+            });
             return;
         }
         // check if the batch number is 1
@@ -285,6 +292,10 @@ export class ReceiveIntakeBatchPopUpView {
         }
 
         if (data.medicineList.length > 0) {
+            if (this.load_more_btn) { this.load_more_btn.remove(); }
+            this.load_more_btn = null;
+
+
             data.medicineList.forEach((medicine) => {
                 const row = document.createElement('div');
                 row.classList.add('row');
@@ -293,19 +304,40 @@ export class ReceiveIntakeBatchPopUpView {
                 row.innerHTML = `
                     <div class="name">${medicine.name}</div>
                     <div class="type">${medicine.type}</div>
-`;
+                                `;
                 // Attach click event listener to the row
                 row.addEventListener('click', () => {
                     this.open_fill_form(medicine.id, decodeHTML(medicine.name), medicine.type)
                 });
                 tableBody.appendChild(row);
             });
+
+            if (data.pages > this.batchNumber) {
+
+                const btn_cont = document.createElement('div');
+                btn_cont.classList.add('more_btn_cont');
+
+                btn_cont.innerHTML = `
+            <br-button loader_width="22" class="more_btn" title="Load More">Load More</br-button>
+            `;
+                const btn = btn_cont.querySelector('.more_btn');
+                btn.addEventListener('click', () => {
+                    this.batchNumber += 1;
+                    btn.setAttribute('loading', 'true');
+                    this.load_more_btn = btn_cont;
+                    this.Search_medicine_and_consumable(query);
+                });
+                
+
+                tableBody.appendChild(btn_cont);
+            }
+
         } else {
             tableBody.innerHTML = `
                     <div class="start_view">
                         <p class="start_view_overlay">No Results Found</p>
                     </div>
-`;
+                                `;
         }
     }
 
@@ -408,6 +440,12 @@ export class ReceiveIntakeBatchPopUpView {
         if (this.number_pending_data <= 0) {
             document.getElementById('table_body_for_pending_data').innerHTML = this.no_data_view();
         }
+    }
+
+    close_pop_up() {
+        const cont = document.querySelector('.popup');
+        cont.classList.remove('active');
+        cont.innerHTML = '';
     }
 
 }
