@@ -5,7 +5,7 @@ import { date_formatter, notify } from "../script/index.js";
 export class SingleIntakeBatchView {
     constructor() {
         this.batch_id = null;
-        this.batch_name = null;
+        this.batch_date = null;
         this.query = '';
         this.batchNumber = 1;
         this.total_page_num = 1;
@@ -37,11 +37,12 @@ export class SingleIntakeBatchView {
     async render() {
         const top_cont = document.querySelector('.single_batch_cont .top_card');
         const batch_data = await this.fetchData(); // Wait for fetchData to complete
-
-        this.batch_name = batch_data.batch_data.name;
+        await this.fetch_table_data();
 
         top_cont.innerHTML = this.top_card_view(batch_data.batch_data);
-        await this.fetch_table_data();
+
+        // const open_add_product_btn=document.querySelector('#open_add_product_popup').remove();
+
 
         this.attach_listeners();
     }
@@ -106,10 +107,12 @@ export class SingleIntakeBatchView {
             row_remove_btn.addEventListener('click', () => {
                 dashboardController.confirmPopUpView.PreRender({
                     callback: 'remove_product_on_batch',
-                    params: product.id,
-                    data: product.name,
-                    title: 'Product',
-                    action: 'remove'
+                    parameter: product.id,
+                    title: 'Remove Product',
+                    sub_heading: `Product Name: ${product.name}?`,
+                    description: 'Are sure you want to remove this product?',
+                    ok_btn: 'Remove',
+                    cancel_btn: 'Cancel'
                 });
             });
 
@@ -162,9 +165,7 @@ export class SingleIntakeBatchView {
         <div class="in_table_top d_flex">
             <h4>Product List</h4>
 
-            <div class="add_btn" title="Add Product" id="open_add_product_popup">
-                <span class='switch_icon_add'></span>
-            </div>
+            
         </div>
         <div class="outpatient_table">
 
@@ -209,8 +210,45 @@ export class SingleIntakeBatchView {
     }
 
     top_card_view(data) {
+        this.top_card_data = data;
+
+        console.log(data.status);
+
+        if (data.status == 'open') {
+            const open_add_product_popup = document.querySelector('#open_add_product_popup');
+            if (!open_add_product_popup) {
+                const in_table_top = document.querySelector('.single_batch_cont .in_table_top');
+                if (in_table_top) {
+                    const add_btn = document.createElement('div');
+                    add_btn.classList.add('add_btn');
+                    add_btn.title = 'Add Product';
+                    add_btn.setAttribute('id', 'open_add_product_popup');
+                    add_btn.innerHTML = `<span class='switch_icon_add'></span>`;
+
+                    add_btn.addEventListener('click', async () => {
+                        dashboardController.receiveIntakeBatchPopUpView.PreRender(
+                            {
+                                id: data.id
+                            }
+                        );
+                    })
+                    in_table_top.appendChild(add_btn);
+                }
+            };
+        }
+        else {
+            const close_add_product_popup = document.querySelector('#open_add_product_popup');
+            console.log(close_add_product_popup);
+
+            if (close_add_product_popup) {
+                close_add_product_popup.remove();
+            }
+        }
+
+
         try {
             var receive_date = date_formatter(data.receive_date);
+            this.batch_date = receive_date;
         }
         catch (e) {
             var receive_date = '';
@@ -221,24 +259,28 @@ export class SingleIntakeBatchView {
 
         return `
         <div class="juu">
-            <p class="name">${data.name}</p>
+            <p class="name">${receive_date}</p>
 
         </div>
         <div class="pack_cont">
 
             <div class="pack">
-                <span class="switch_icon_calendar_check"></span>
-                <p class="date">${receive_date}</p>
-            </div>
-
-            <div class="pack">
-                <span class='switch_icon_cart_shopping'></span>
+                <span class='switch_icon_truck'></span>
                 <p class="date">${data.provider}</p>
             </div>
 
             <div class="pack">
                 <span class='switch_icon_user_pen'></span>
                 <p class="date">${data.created_by}</p>
+            </div>
+
+            <div class="pack">
+                <span class='switch_icon_pills'></span>
+                <p class="date">${data.products}</p>
+            </div>
+            <div class="pack">
+                <span class='switch_icon_file_invoice_dollar'></span>
+                <p class="date">${data.invoice}</p>
             </div>
 
             <div class="btn">
@@ -250,26 +292,21 @@ export class SingleIntakeBatchView {
 
     attach_listeners() {
 
-        const open_add_product_popup = document.querySelector('#open_add_product_popup');
-
-        open_add_product_popup.addEventListener('click', async () => {
-            dashboardController.receiveIntakeBatchPopUpView.PreRender(
-                {
-                    id: this.batch_id
-                }
-            );
-        })
-
         const close_batch_btn = document.querySelector('.btn_batch_close[type="close"]');
-        close_batch_btn.addEventListener('click', () => {
-            dashboardController.confirmPopUpView.PreRender({
-                callback: 'close_batch',
-                params: this.batch_id,
-                data: this.batch_name,
-                title: 'Batch',
-                action: 'close'
+        if (close_batch_btn) {
+            close_batch_btn.addEventListener('click', () => {
+                dashboardController.confirmPopUpView.PreRender({
+                    callback: 'close_batch',
+                    parameter: { id: this.batch_id, where: 'single_batch_view' },
+                    title: 'Close Batch',
+                    sub_heading: `Batch Date: ${this.batch_date}`,
+                    description: 'Are sure you want to close this Batch?',
+                    ok_btn: 'Close',
+                    cancel_btn: 'Cancel'
+
+                });
             });
-        });
+        }
 
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
@@ -380,7 +417,7 @@ export class SingleIntakeBatchView {
 
     remove_product_on_batch(data) {
         console.log(data);
-        console.log('ffsfs');
+        console.log('ffsfsddcscsdcsdcs');
 
 
         // try {
@@ -418,43 +455,47 @@ export class SingleIntakeBatchView {
     }
 
 
-    close_batch(data) {
-        console.log(data);
-        console.log('ffsfs');
+    async close_batch(data) {
+        dashboardController.loaderView.render();
 
+        try {
+            const response = await fetch('/api/pharmacy/close_batch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    batch_id: data.id,
+                })
+            });
 
-        // try {
-        //     const response = await fetch('/api/pharmacy/single_batch_product_list', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             batch_id: this.batch_id,
-        //             query: this.query,
-        //             batch: this.batchNumber,
-        //         })
-        //     });
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
 
-        //     if (!response.ok) {
-        //         throw new Error('Server Error');
-        //     }
+            const result = await response.json();
 
-        //     const result = await response.json();
-
-        //     if (result.success) {
-        //         return result.data;
-        //     } else {
-        //         notify('top_left', result.message, 'warning');
-        //         return null;
-        //     }
-        // } catch (error) {
-        //     notify('top_left', error.message, 'error');
-        //     return null;
-        // }
-        // finally {
-        //     this.isLoading = false;
-        // }
+            if (result.success) {
+                if (data.where == 'single_batch_view') {
+                    this.top_card_data.status = 'close'
+                    const top_cont = document.querySelector('.single_batch_cont .top_card');
+                    top_cont.innerHTML = this.top_card_view(this.top_card_data);
+                }
+                else if (data.where == 'view_all_batch') {
+                    dashboardController.viewIntakeBatchView.after_success_close_batch_action();
+                }
+                notify('top_left', result.message, 'success');
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+            dashboardController.loaderView.remove();
+        }
     }
 
 

@@ -37,17 +37,6 @@ export class CreateBatchPopUpView {
             </div>
 
             <div class="input_group">
-
-                <br-input required name="name" label="Batch Name" type="text" styles="
-                                border-radius: var(--input_main_border_r);
-                                width: 300px;
-                                padding: 10px;
-                                height: 41px;
-                                background-color: transparent;
-                                border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
-
-
                 <br-input required max="${getCurrentDate()}" name="receive_date" label="Receive Date" type="date" styles="
                                 border-radius: var(--input_main_border_r);
                                 width: 300px;

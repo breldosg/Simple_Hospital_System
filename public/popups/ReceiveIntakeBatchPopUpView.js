@@ -286,6 +286,7 @@ export class ReceiveIntakeBatchPopUpView {
             });
             return;
         }
+
         // check if the batch number is 1
         if (this.batchNumber === 1) {
             tableBody.innerHTML = '';
@@ -327,7 +328,7 @@ export class ReceiveIntakeBatchPopUpView {
                     this.load_more_btn = btn_cont;
                     this.Search_medicine_and_consumable(query);
                 });
-                
+
 
                 tableBody.appendChild(btn_cont);
             }
@@ -363,6 +364,9 @@ export class ReceiveIntakeBatchPopUpView {
         if (this.number_pending_data === 0) {
             container.innerHTML = '';
         }
+
+        console.log('p_data: ', this.number_pending_data);
+
 
         // check if the data is available to the pending data
         const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
@@ -443,6 +447,7 @@ export class ReceiveIntakeBatchPopUpView {
     }
 
     close_pop_up() {
+        this.number_pending_data = 0;
         const cont = document.querySelector('.popup');
         cont.classList.remove('active');
         cont.innerHTML = '';

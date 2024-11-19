@@ -13,29 +13,33 @@ export class ConfirmPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.callback = params.callback;
-        this.parameter = params.params;
-        this.data = params.data;
+        this.heading = params.title ? params.title : null;
+        this.sub_heading = params.sub_heading ? params.sub_heading : null;
+        this.description = params.description ? params.description : null;
+        this.ok_btn = params.ok_btn ? params.ok_btn : "Ok";
+        this.cancel_btn = params.cancel_btn ? params.cancel_btn : 'Cancel';
+        this.callback = params.callback ? params.callback : null;
+        this.parameter = params.parameter ? params.parameter : null;
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
-        cont.innerHTML = this.ViewReturn(params);
+        cont.innerHTML = this.ViewReturn();
 
         this.attachListeners()
     }
 
-    ViewReturn(params) {
+    ViewReturn() {
         return `
 <div class="confirm_card">
     <div class="card-content">
-        <p class="heading">${params.action} ${params.title}</p>
-        <p class="card-heading">${params.title} name: ${params.data}?</p>
-        <p class="card-description">Are sure you want to ${params.action} this ${params.title}?</p>
+        <p class="heading">${this.heading}</p>
+        <p class="card-heading">${this.sub_heading}</p>
+        <p class="card-description">${this.description}</p>
         
     </div>
     <div class="card-button-wrapper">
-        <button id="confirm_cancel" class="card-button secondary">Cancel</button>
-        <button id="confirm_delete" class="card-button primary">Remove</button>
+        <button id="confirm_cancel" class="card-button secondary">${this.cancel_btn}</button>
+        <button id="confirm_delete" class="card-button primary">${this.ok_btn}</button>
     </div>
 </div>
 

@@ -15,6 +15,7 @@ export class ViewIntakeBatchView {
         this.from_value = '';
         this.to_value = '';
         this.isLoading = false;  // Prevent multiple fetch calls at the same time
+        this.clicked_to_close = null; // the batch row clicked to be closed
     }
 
     async PreRender() {
@@ -88,11 +89,6 @@ export class ViewIntakeBatchView {
         // insert data in the table
 
         batchData.batchList.forEach((batch, index) => {
-            const row = document.createElement('tr');
-            row.classList.add('tr')
-            row.classList.add('d_flex')
-            row.classList.add('flex__c_a')
-            row.setAttribute('title', batch.name);
 
             try {
                 var date = this.date_formatter(batch.receive_date)
@@ -100,11 +96,19 @@ export class ViewIntakeBatchView {
                 var date = '';
             }
 
+
+            const row = document.createElement('tr');
+            row.classList.add('tr')
+            row.classList.add('d_flex')
+            row.classList.add('flex__c_a')
+            row.setAttribute('title', date);
+
+
             row.innerHTML = `
             <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-            <p class="name">${batch.name}</p>
-            <p class="name">${batch.provider}</p>
             <p class="date">${date}</p>
+            <p class="name">${batch.provider}</p>
+            <p class="number">${batch.products}</p>
             <p class="name">${batch.created_by}</p>
             <p class="status">${batch.status}</p>
             <div class="action d_flex flex__c_c">
@@ -116,26 +120,29 @@ export class ViewIntakeBatchView {
                 this.open_single_batch_view(batch.id)
             });
 
+            var close_btn = row.querySelector('#deactivate_btn');
+            if (close_btn) {
+                close_btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'close_batch',
+                        parameter: { id: batch.id, where: 'view_all_batch' },
+                        title: 'Close Batch',
+                        sub_heading: `Batch Date: ${date}`,
+                        description: 'Are sure you want to close this Batch?',
+                        ok_btn: 'Close',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.clicked_to_close = row;
+                });
+            }
+
             tableBody.appendChild(row);
 
         })
 
-        // batchData.batchList.forEach((batch, index) => {
-        //     const row = `
-        //         <div class="tr d_flex flex__c_a" data_src="${batch.id}" title="${batch.name}">
-        //             <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-        //             <p class="name">${batch.name}</p>
-        //             <p class="name">${batch.provider}</p>
-        //             <p class="date">${this.date_formatter(batch.receive_date)}</p>
-        //             <p class="name">${batch.created_by}</p>
-        //             <p class="status">${batch.status}</p>
-        //             <div class="action d_flex flex__c_c">
-        //                 ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
-        //             </div>
-        //         </div>
-        //     `;
-        //     tableBody.insertAdjacentHTML('beforeend', row);
-        // });
 
         // clear variables
         this.batchData = [];
@@ -193,7 +200,7 @@ export class ViewIntakeBatchView {
             }
 
             const result = await response.json();
-            return result.success ? result.data : null;
+            return result.data;
         } catch (error) {
             console.error('Error:', error);
             notify('top_left', error.message, 'error');
@@ -250,7 +257,7 @@ export class ViewIntakeBatchView {
         <h4>Search Batch</h4>
         <br-form callback="search_intake_batch">
             <div class="intake_batch_content">
-                <br-input label="Batch Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter batch name" styles="
+                <br-input label="Provider Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter provider name" styles="
                             border-radius: var(--input_main_border_r);
                             width: 400px;
                             padding: 10px;
@@ -302,9 +309,9 @@ export class ViewIntakeBatchView {
     
             <div class="table_head tr d_flex flex__c_a">
                 <p class="id">SN</p>
-                <p class="name">Name</p>
-                <p class="name">Provider</p>
                 <p class="date">Receive Date</p>
+                <p class="name">Provider</p>
+                <p class="number">Products</p>
                 <p class="name">Create By</p>
                 <p class="status">Status</p>
                 <div class="action"></div>
@@ -338,6 +345,14 @@ export class ViewIntakeBatchView {
         const dateee = new Date(ymd);
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return new Intl.DateTimeFormat('en-US', options).format(dateee);
+    }
+
+    after_success_close_batch_action() {
+        this.clicked_to_close.querySelector('.action').innerHTML = 'Closed';
+        this.clicked_to_close.querySelector('.status').innerHTML = 'Closed';
+
+        this.clicked_to_close = null;
+
     }
 }
 

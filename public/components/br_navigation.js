@@ -30,6 +30,7 @@ ${this.Styles()}
         <div link="/users" class="nav_item active">Users</div>
         <div link="/patient" class="nav_item">Patients</div>
         <div link="/pharmacy" class="nav_item">Pharmacy</div>
+        <div link="/store" class="nav_item">Store</div>
         <div link="/notice" class="nav_item">Notice</div>
 
     </div>
@@ -63,12 +64,16 @@ ${this.Styles()}
     </div>
 
     <div class="nav_collection" type="/pharmacy">
-
-        <a href="/pharmacy/viewmedicine" data-link class="choice_item">View All Products</a>
+        <a href="/pharmacy/viewpharmacyproducts" data-link class="choice_item">View All Products</a>
         <a href="/pharmacy/viewcategory" data-link class="choice_item">View All category</a>
         <a href="/pharmacy/addcategory" data-link class="choice_item">Add category</a>
-        <a href="/pharmacy/viewinatakebatch" data-link class="choice_item">View All batch</a>
-        
+    </div>
+
+    <div class="nav_collection" type="/store">
+        <a href="/store/viewpharmacyproducts" data-link class="choice_item">View All Products</a>
+        <a href="/store/viewcategory" data-link class="choice_item">View All category</a>
+        <a href="/store/addcategory" data-link class="choice_item">Add category</a>
+        <a href="/store/viewinatakebatch" data-link class="choice_item">View All batch</a>
     </div>
 
     <div class="nav_collection " type="/notice">
