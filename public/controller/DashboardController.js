@@ -21,6 +21,8 @@ import { ViewOnProgressView } from "../views/ViewOnProgressView.js";
 import { ViewPatientView } from "../views/ViewPatientView.js";
 import { CreateBatchPopUpView } from "../popups/CreateBatchPopUpView.js";
 import { ConfirmPopUpView } from "../popups/ConfirmPopUpView.js";
+import { ViewOrderListView } from "../views/ViewOrderListView.js";
+import { PlaceOrderPopUpView } from "../popups/PlaceOrderPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -40,7 +42,7 @@ class DashboardController {
     createVisitPopUpView = new CreateVisitPopUpView();
     viewOnProgressView = new ViewOnProgressView();
 
-    // Medicine Views
+    // Pharmacy And Store Views
     viewMedicineView = new ViewMedicineView();
     viewMedicineCategoryView = new ViewMedicineCategoryView();
     addMedicineCategoryView = new AddMedicineCategoryView();
@@ -51,6 +53,8 @@ class DashboardController {
     receiveIntakeBatchPopUpView = new ReceiveIntakeBatchPopUpView();
     createProductPopUpView = new CreateProductPopUpView();
     createBatchPopUpView = new CreateBatchPopUpView();
+    viewOrderListView = new ViewOrderListView();
+    placeOrderPopUpView = new PlaceOrderPopUpView();
 
 
 

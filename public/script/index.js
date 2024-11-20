@@ -49,7 +49,8 @@ const routes = {
     '/pharmacy/viewcategory': dashboardController.viewMedicineCategoryView,
     '/pharmacy/addcategory': dashboardController.addMedicineCategoryView,
     '/pharmacy/viewcategory/:id': dashboardController.singleMedicineCategoryView,
-    
+    '/pharmacy/orderlist': dashboardController.viewOrderListView,
+
     '/store': dashboardController.viewMedicineView,
     '/store/viewpharmacyproducts': dashboardController.viewMedicineView,
     '/store/viewcategory': dashboardController.viewMedicineCategoryView,
@@ -57,7 +58,7 @@ const routes = {
     '/store/viewcategory/:id': dashboardController.singleMedicineCategoryView,
     '/store/viewinatakebatch': dashboardController.viewIntakeBatchView,
     '/store/viewinatakebatch/:id': dashboardController.singleIntakeBatchView,
-    
+
 
 
     '/notice': screenCollection.dashboardScreen,

@@ -67,6 +67,7 @@ ${this.Styles()}
         <a href="/pharmacy/viewpharmacyproducts" data-link class="choice_item">View All Products</a>
         <a href="/pharmacy/viewcategory" data-link class="choice_item">View All category</a>
         <a href="/pharmacy/addcategory" data-link class="choice_item">Add category</a>
+        <a href="/pharmacy/orderlist" data-link class="choice_item">Order List</a>
     </div>
 
     <div class="nav_collection" type="/store">
@@ -83,7 +84,7 @@ ${this.Styles()}
 
     </div>
 </div>
-`;
+            `;
     }
 
     Styles() {

@@ -1,9 +1,9 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class ViewIntakeBatchView {
+export class ViewOrderListView {
     constructor() {
         window.search_intake_batch = this.search_intake_batch.bind(this);
         this.medicineData = [];
@@ -27,6 +27,10 @@ export class ViewIntakeBatchView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
+        
+
+        dashboardController.placeOrderPopUpView.PreRender();
+
         // Fetch the initial batch of medicine data
         await this.fetchAndRenderData();
         this.attachEventListeners();
@@ -35,8 +39,8 @@ export class ViewIntakeBatchView {
     attachEventListeners() {
 
         // add btn
-        document.querySelector('.add_btn').addEventListener('click', () => {
-            dashboardController.createBatchPopUpView.PreRender();
+        document.querySelector('#open_add_order_popup').addEventListener('click', () => {
+            dashboardController.placeOrderPopUpView.PreRender();
         });
 
 
@@ -89,9 +93,8 @@ export class ViewIntakeBatchView {
         // insert data in the table
 
         batchData.batchList.forEach((batch, index) => {
-
             try {
-                var date = this.date_formatter(batch.receive_date)
+                var date = date_formatter(batch.receive_date)
             } catch (error) {
                 var date = '';
             }
@@ -106,8 +109,8 @@ export class ViewIntakeBatchView {
 
             row.innerHTML = `
             <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-            <p class="date">${date}</p>
             <p class="name">${batch.provider}</p>
+            <p class="date">${date}</p>
             <p class="number">${batch.products}</p>
             <p class="name">${batch.created_by}</p>
             <p class="status">${batch.status}</p>
@@ -254,10 +257,10 @@ export class ViewIntakeBatchView {
     
     <div class="intake_batch_top">
     
-        <h4>Search Batch</h4>
+        <h4>Search Order</h4>
         <br-form callback="search_intake_batch">
             <div class="intake_batch_content">
-                <br-input label="Provider Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter provider name" styles="
+                <br-input label="Product Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name" styles="
                             border-radius: var(--input_main_border_r);
                             width: 400px;
                             padding: 10px;
@@ -290,7 +293,6 @@ export class ViewIntakeBatchView {
                     <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
                 </div> 
 
-
             </div>
         </br-form>
     
@@ -299,9 +301,9 @@ export class ViewIntakeBatchView {
     <div class="main_section medicine_table_out">
     
         <div class="in_table_top d_flex flex__u_s">
-            <h4>Batch List</h4>
+            <h4>Order List</h4>
 
-            <div class="add_btn" title="Create Product" id="open_add_product_popup">
+            <div class="add_btn" title="Create Orders" id="open_add_order_popup">
                 <span class="switch_icon_add"></span>
             </div>
         </div>
@@ -309,8 +311,8 @@ export class ViewIntakeBatchView {
     
             <div class="table_head tr d_flex flex__c_a">
                 <p class="id">SN</p>
+                <p class="name">Product</p>
                 <p class="date">Receive Date</p>
-                <p class="name">Provider</p>
                 <p class="number">Products</p>
                 <p class="name">Create By</p>
                 <p class="status">Status</p>
@@ -341,11 +343,6 @@ export class ViewIntakeBatchView {
         `;
     }
 
-    date_formatter(ymd) {
-        const dateee = new Date(ymd);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(dateee);
-    }
 
     after_success_close_batch_action() {
         this.clicked_to_close.querySelector('.action').innerHTML = 'Closed';

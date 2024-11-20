@@ -25,6 +25,11 @@ export class ViewMedicineView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
+        // Get the current path, default to '/users' if on '/dashboard'
+        const rawPath = window.location.pathname.toLowerCase();
+
+        this.side_fetched = rawPath.split('/')[1];
+
         // Fetch the initial batch of medicine data
         await this.fetchAndRenderData();
         this.attachEventListeners();
@@ -127,14 +132,16 @@ export class ViewMedicineView {
         current_page.innerText = medicineData.batch;
         this.total_page_num = medicineData.pages;
 
+
         medicineData.medicineList.forEach((medicine, index) => {
+            var remains = this.side_fetched == 'pharmacy' ? medicine.pharmacy_quantity : medicine.store_quantity;
             const row = `
                 <div class="tr d_flex flex__c_a" data_src="${medicine.id}" title="${medicine.name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${medicine.name}</p>
                     <p class="name">${medicine.category == null ? 'No Category' : medicine.category}</p>
                     <p class="type">${medicine.type}</p>
-                    <p class="remain">0</p>
+                    <p class="remain">${remains}</p>
                     <p class="status">${medicine.status}</p>
                     <div class="action d_flex flex__c_c">
                         ${medicine.status === 'active' ? '<button id="deactivate_btn" class="main_btn error">Deactivate</button>' : '<button id="activate_btn" class="main_btn">Activate</button>'}
