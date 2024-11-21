@@ -9,17 +9,13 @@ class FrontRouter {
 
     // Function to navigate to a specific route
     navigate(path) {
-        console.log(path);
-
         history.pushState(null, null, path);
-
         this.handleRoute();  // Handle the route after navigating
     }
 
     // Function to handle the current route
     handleRoute() {
         const path = window.location.pathname.toLowerCase();
-        console.log(`Navigated to ${path}`);
 
         // Find a matching route or return 404
         const matchingRoute = this.matchRoute(path);

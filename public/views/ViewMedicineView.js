@@ -115,12 +115,7 @@ export class ViewMedicineView {
         const tableBody = document.querySelector('.table_body');
         tableBody.innerHTML = '';  // Clear table before populating
 
-        console.log(medicineData);
 
-
-        // document.querySelector('.medicine_cont .show_count').innerText = medicineData.showData;
-        // document.querySelector('.medicine_cont .total_data').innerText = medicineData.total;
-        // document.querySelector('.medicine_cont .total_page').innerText = medicineData.pages;
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');

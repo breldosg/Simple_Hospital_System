@@ -27,9 +27,6 @@ export class ViewOrderListView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
-        
-
-        dashboardController.placeOrderPopUpView.PreRender();
 
         // Fetch the initial batch of medicine data
         await this.fetchAndRenderData();
@@ -73,7 +70,7 @@ export class ViewOrderListView {
 
     render() {
 
-        if (this.batchData.batchList && this.batchData.batchList.length > 0) {
+        if (this.batchData.orderList && this.batchData.orderList.length > 0) {
             this.populateTable(this.batchData);
         } else {
             this.displayNoDataMessage();
@@ -87,14 +84,14 @@ export class ViewOrderListView {
 
         document.querySelector('.show_count').innerText = batchData.showData;
         document.querySelector('.total_data').innerText = batchData.total;
-        document.querySelector('.total_page').innerText = batchData.pages;
+        document.querySelector('.total_page').innerText = batchData.pages; 
+        document.querySelector('.current_page').innerText=batchData.batch;
         this.total_page_num = batchData.pages;
 
         // insert data in the table
-
-        batchData.batchList.forEach((batch, index) => {
+        batchData.orderList.forEach((batch, index) => {
             try {
-                var date = date_formatter(batch.receive_date)
+                var date = date_formatter(batch.created_at)
             } catch (error) {
                 var date = '';
             }
@@ -104,18 +101,18 @@ export class ViewOrderListView {
             row.classList.add('tr')
             row.classList.add('d_flex')
             row.classList.add('flex__c_a')
-            row.setAttribute('title', date);
+            row.setAttribute('title', batch.name);
 
 
             row.innerHTML = `
             <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-            <p class="name">${batch.provider}</p>
+            <p class="name">${batch.name}</p>
+            <p class="number">${batch.quantity}</p>
+            <p class="name">${batch.staff_name}</p>
             <p class="date">${date}</p>
-            <p class="number">${batch.products}</p>
-            <p class="name">${batch.created_by}</p>
             <p class="status">${batch.status}</p>
             <div class="action d_flex flex__c_c">
-                ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
+                ${batch.status === 'pending' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
             </div>
             `;
 
@@ -153,10 +150,6 @@ export class ViewOrderListView {
     }
 
 
-    open_single_batch_view(batch_id) {
-        frontRouter.navigate('/store/viewinatakebatch/' + batch_id);
-    }
-
     async activate_deactivate(id, action) {
         try {
             const response = await fetch('/api/pharmacy/change_medicine_status', {
@@ -185,7 +178,7 @@ export class ViewOrderListView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/pharmacy/search_intake_batch', {
+            const response = await fetch('/api/pharmacy/search_order_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -253,11 +246,11 @@ export class ViewOrderListView {
 
     ViewReturn() {
         return `
-    <div class="intake_batch_cont">
+    <div class="order_view_list">
     
     <div class="intake_batch_top">
     
-        <h4>Search Order</h4>
+        <h4>Search Product</h4>
         <br-form callback="search_intake_batch">
             <div class="intake_batch_content">
                 <br-input label="Product Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name" styles="
@@ -311,10 +304,10 @@ export class ViewOrderListView {
     
             <div class="table_head tr d_flex flex__c_a">
                 <p class="id">SN</p>
-                <p class="name">Product</p>
-                <p class="date">Receive Date</p>
-                <p class="number">Products</p>
+                <p class="name">Name</p>
+                <p class="number">Quantity</p>
                 <p class="name">Create By</p>
+                <p class="date">Created Date</p>
                 <p class="status">Status</p>
                 <div class="action"></div>
             </div>
@@ -330,7 +323,7 @@ export class ViewOrderListView {
                 <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span class="total_data">${this.total_data_num}</span></p>
                 <div class="pagenation d_flex flex__c_c">
                     <button type="button" class="main_btn prev">Prev</button>
-                    <p class="page_no d_flex flex__c_c">${this.batchNumber}/<span class="total_page" >${this.total_page_num}</span></p>
+                    <p class="page_no d_flex flex__c_c"><span class="current_page" >${this.batchNumber}</span>/<span class="total_page" >${this.total_page_num}</span></p>
                     <button type="button" class="main_btn next">Next</button>
                 </div>
             </div>
@@ -343,14 +336,6 @@ export class ViewOrderListView {
         `;
     }
 
-
-    after_success_close_batch_action() {
-        this.clicked_to_close.querySelector('.action').innerHTML = 'Closed';
-        this.clicked_to_close.querySelector('.status').innerHTML = 'Closed';
-
-        this.clicked_to_close = null;
-
-    }
 }
 
 

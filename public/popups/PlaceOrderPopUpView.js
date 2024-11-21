@@ -139,55 +139,54 @@ export class PlaceOrderPopUpView {
         //get all row in table_body_for_pending_data
         const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
 
-        // if (rows.length === 0) {
-        // notify('top_left', 'No Product Added', 'warning');
-        // btn.removeAttribute('loading');
-        // return;
-        // }
+        if (rows.length === 0) {
+            notify('top_left', 'No Product Added', 'warning');
+            btn.removeAttribute('loading');
+            return;
+        }
 
-        // let product_list = [];
+        let product_list = [];
 
-        // rows.forEach((row) => {
-        // const row_data_src_raw = row.getAttribute('data_src');
+        rows.forEach((row) => {
+            const row_data_src_raw = row.getAttribute('data_src');
 
-        // product_list.push(JSON.parse(row_data_src_raw));
+            product_list.push(JSON.parse(row_data_src_raw));
 
-        // })
+        })
 
-        // try {
-        // const response = await fetch('/api/pharmacy/receive_produfct', {
-        // method: 'POST',
-        // headers: {
-        // 'Content-Type': 'application/json'
-        // },
-        // body: JSON.stringify({
-        // batch_id: this.batch_id,
-        // product_list: product_list,
-        // })
-        // });
+        try {
+            const response = await fetch('/api/pharmacy/receive_order_list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    product_list: product_list,
+                })
+            });
 
-        // if (!response.ok) {
-        // throw new Error('Server Error');
-        // }
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
 
-        // const result = await response.json();
+            const result = await response.json();
 
-        // if (!result.success) {
-        // notify('top_left', result.message, 'warning');
-        // return;
-        // }
-        // notify('top_left', 'Product Received Successfully.', 'success');
-        // this.close_pop_up();
-        // dashboardController.singleIntakeBatchView.fetch_table_data();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            notify('top_left', 'Product Received Successfully.', 'success');
+            this.close_pop_up();
+            dashboardController.viewOrderListView.fetchAndRenderData();
 
-        // } catch (error) {
-        // console.error('Error:', error);
-        // notify('top_left', 'Fail To Receive Products.', 'error');
-        // return null;
-        // }
-        // finally {
-        // btn.removeAttribute('loading');
-        // }
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', 'Fail To Receive Products.', 'error');
+            return null;
+        }
+        finally {
+            btn.removeAttribute('loading');
+        }
     }
 
     async fetch_data(searchTerm) {
@@ -275,7 +274,7 @@ export class PlaceOrderPopUpView {
                     this.batchNumber += 1;
                     btn.setAttribute('loading', 'true');
                     this.load_more_btn = btn_cont;
-                    this.Search_medicine_and_consumable(query);
+                    this.Search_medicine_and_consumable_on_place_order_popup(query);
                 });
 
 

@@ -304,6 +304,44 @@ router.post('/close_batch', async (req, res) => {
 
 
 
+router.post('/receive_order_list', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 390, body); // Add `await` since it's an async function
+        console.log('receive_order_list Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /receive_order_list route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+router.post('/search_order_list', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 400, body); // Add `await` since it's an async function
+        console.log('search_order_list Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /search_order_list route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
 
 
 module.exports = router
