@@ -119,6 +119,9 @@ export class ViewMedicineCategoryView {
             const show_count = document.querySelector('.show_count');
             const total_data = document.querySelector('.total_data');
             const total_page = document.querySelector('.total_page');
+            const current_page = document.querySelector('.current_page');
+            
+            current_page.innerText = 1;
             show_count.innerText = 0;
             total_data.innerText = 0;
             total_page.innerText = 1;
@@ -235,7 +238,7 @@ export class ViewMedicineCategoryView {
         const tableBody = document.querySelector('.outMedicineCategory_table_out .table_body');
         tableBody.innerHTML = `
             <div class="start_page deactivate">
-                <p>No Patient Found</p>
+                <p>No Category Found</p>
             </div>
             <div class="loader_cont active"><div class="loader"></div></div>
         `;
@@ -268,7 +271,7 @@ export class ViewMedicineCategoryView {
                 </div>
                 <div class="table_body d_flex flex__co">
                     <div class="start_page deactivate">
-                        <p>No Patient Found</p>
+                        <p>No Category Found</p>
                     </div>
                     <div class="loader_cont active"><div class="loader"></div></div>
                 </div>

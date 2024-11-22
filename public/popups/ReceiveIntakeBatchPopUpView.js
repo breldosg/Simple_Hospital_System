@@ -6,7 +6,7 @@ import { date_formatter, getCurrentDate, decodeHTML, notify } from "../script/in
 export class ReceiveIntakeBatchPopUpView {
     constructor() {
         window.Search_medicine_and_consumable = this.Search_medicine_and_consumable.bind(this);
-        window.add_to_pending = this.add_to_pending.bind(this);
+        window.add_to_receive_product_pending = this.add_to_receive_product_pending.bind(this);
         this.batch_id = null;
         this.batchNumber = 1; // Keep track of current batch
         this.selected_product = '';
@@ -80,7 +80,7 @@ export class ReceiveIntakeBatchPopUpView {
 
             </div>
 
-            <br-form id="more_detail_form" callback="add_to_pending">
+            <br-form id="more_detail_form" callback="add_to_receive_product_pending">
                 <div class="search_cont">
                     <br-input name="product" label="Product Name" id="product_name_view" type="text" styles="
                     border-radius: var(--input_main_border_r);
@@ -133,7 +133,7 @@ export class ReceiveIntakeBatchPopUpView {
         <div class="pending_data_view">
             <div class="table_head tr d_flex flex__c_a">
                 <p class="name">Name</p>
-                <p class="category">Category</p>
+                <p class="category">Type</p>
                 <p class="quantity">Quantity</p>
                 <p class="date">Expire Date</p>
                 <div class="action"></div>
@@ -356,7 +356,7 @@ export class ReceiveIntakeBatchPopUpView {
         product_name_view.setAttribute('shadow_value', id);
     }
 
-    add_to_pending(data) {
+    add_to_receive_product_pending(data) {
 
         const container = document.getElementById('table_body_for_pending_data');
 

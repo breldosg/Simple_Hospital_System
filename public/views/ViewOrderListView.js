@@ -5,7 +5,10 @@ import { frontRouter } from "../script/route.js";
 
 export class ViewOrderListView {
     constructor() {
-        window.search_intake_batch = this.search_intake_batch.bind(this);
+        window.search_order_list = this.search_order_list.bind(this);
+        window.remove_order_request = this.remove_order_request.bind(this);
+        window.receive_order_request = this.receive_order_request.bind(this);
+        window.deny_order_request = this.deny_order_request.bind(this);
         this.medicineData = [];
         this.batchNumber = 1;
         this.total_page_num = 1;
@@ -14,8 +17,8 @@ export class ViewOrderListView {
         this.searchTerm = '';
         this.from_value = '';
         this.to_value = '';
-        this.isLoading = false;  // Prevent multiple fetch calls at the same time
-        this.clicked_to_close = null; // the batch row clicked to be closed
+        this.isLoading = false; // Prevent multiple fetch calls at the same time
+        this.row_to_remove = null; // the batch row clicked to be closed
     }
 
     async PreRender() {
@@ -26,6 +29,9 @@ export class ViewOrderListView {
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
+
+        const rawPath = window.location.pathname.toLowerCase();
+        this.side_fetched = rawPath.split('/')[1];
 
 
         // Fetch the initial batch of medicine data
@@ -41,15 +47,33 @@ export class ViewOrderListView {
         });
 
 
+        // Open Close Filter Section buttons
+        var open_close = document.querySelector('.order_view_list .heading_cont');
+        open_close.addEventListener('click', () => {
+            const filter_section = document.querySelector('.order_view_list .intake_batch_top');
+            var open_close_btn = document.querySelector('.order_view_list #open_close_search');
+
+            if (open_close_btn.classList.contains('closed')) {
+                open_close_btn.classList.remove('closed');
+                filter_section.classList.remove('closed');
+            }
+            else {
+                open_close_btn.classList.add('closed');
+                filter_section.classList.add('closed');
+            }
+
+        });
+
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
+
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
-                this.batchNumber += 1;
-                await this.fetchAndRenderData();
+                this.batchNumber += 1; await this.fetchAndRenderData();
             }
         });
 
         document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+
             if (!this.isLoading && this.batchNumber > 1) {
                 this.batchNumber -= 1;
                 await this.fetchAndRenderData();
@@ -58,8 +82,10 @@ export class ViewOrderListView {
     }
 
     async fetchAndRenderData() {
-        if (this.isLoading) return;  // Prevent multiple fetches
+        if (this.isLoading) return; // Prevent multiple fetches
         this.isLoading = true;
+
+        this.loadingContent();
 
         const batchData = await this.fetchData(); // Fetch data
         this.batchData = batchData || [];
@@ -78,20 +104,20 @@ export class ViewOrderListView {
 
     }
 
-    populateTable(batchData) {
+    populateTable(rowRequestData) {
         const tableBody = document.querySelector('.table_body');
-        tableBody.innerHTML = '';  // Clear table before populating
+        tableBody.innerHTML = ''; // Clear table before populating
 
-        document.querySelector('.show_count').innerText = batchData.showData;
-        document.querySelector('.total_data').innerText = batchData.total;
-        document.querySelector('.total_page').innerText = batchData.pages; 
-        document.querySelector('.current_page').innerText=batchData.batch;
-        this.total_page_num = batchData.pages;
+        document.querySelector('.show_count').innerText = rowRequestData.showData;
+        document.querySelector('.total_data').innerText = rowRequestData.total;
+        document.querySelector('.total_page').innerText = rowRequestData.pages;
+        document.querySelector('.current_page').innerText = rowRequestData.batch;
+        this.total_page_num = rowRequestData.pages;
 
         // insert data in the table
-        batchData.orderList.forEach((batch, index) => {
+        rowRequestData.orderList.forEach((rowRequest, index) => {
             try {
-                var date = date_formatter(batch.created_at)
+                var date = date_formatter(rowRequest.created_at)
             } catch (error) {
                 var date = '';
             }
@@ -101,41 +127,102 @@ export class ViewOrderListView {
             row.classList.add('tr')
             row.classList.add('d_flex')
             row.classList.add('flex__c_a')
-            row.setAttribute('title', batch.name);
+            row.setAttribute('title', rowRequest.name);
 
+            // pharmacy btn
+            var removeBtn = '<button id="remove_order_btn" class="main_btn error">Remove</button>';
+            var receiveBtn = '<button id="receive_order_btn" class="main_btn">Receive</button>';
+
+
+            // store btn
+            var approveBtn = '<button id="approve_order_btn" class="main_btn ">Approve</button>';
+            var denyBtn = '<button id="deny_order_btn" class="main_btn error" >Deny</button>';
+            var deniedBtn = '<button id="deny_order_btn" class="main_btn denied full_btn no_click" >Denied</button>';
+            var approvedBtn = `<button id="approved_order_btn" class="main_btn received full_btn no_click">${rowRequest.status}</button>`;
+
+            var action_btn = '';
+
+            if (this.side_fetched == 'pharmacy') {
+                action_btn = rowRequest.status === 'pending' ? removeBtn : (rowRequest.status === 'approved' ? receiveBtn : rowRequest.status);
+            }
+            else if (this.side_fetched == 'store') {
+
+                if (rowRequest.status === 'pending') {
+                    action_btn = approveBtn + denyBtn;
+                }
+                else {
+                    action_btn = rowRequest.status === 'denied' ? deniedBtn : approvedBtn;
+                }
+
+            }
 
             row.innerHTML = `
-            <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-            <p class="name">${batch.name}</p>
-            <p class="number">${batch.quantity}</p>
-            <p class="name">${batch.staff_name}</p>
-            <p class="date">${date}</p>
-            <p class="status">${batch.status}</p>
-            <div class="action d_flex flex__c_c">
-                ${batch.status === 'pending' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
-            </div>
-            `;
+    <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
+    <p class="name">${rowRequest.name}</p>
+    <p class="number">${rowRequest.quantity}</p>
+    <p class="name">${rowRequest.staff_name}</p>
+    <p class="date">${date}</p>
+    <p class="status">${rowRequest.status}</p>
+    <div class="action ${this.side_fetched} d_flex flex__c_c">
+        ${action_btn}
+    </div>
+    `;
 
-            row.addEventListener('click', () => {
-                this.open_single_batch_view(batch.id)
-            });
-
-            var close_btn = row.querySelector('#deactivate_btn');
+            var close_btn = row.querySelector('#remove_order_btn');
             if (close_btn) {
                 close_btn.addEventListener('click', (e) => {
                     e.stopPropagation();
 
                     dashboardController.confirmPopUpView.PreRender({
-                        callback: 'close_batch',
-                        parameter: { id: batch.id, where: 'view_all_batch' },
-                        title: 'Close Batch',
-                        sub_heading: `Batch Date: ${date}`,
-                        description: 'Are sure you want to close this Batch?',
-                        ok_btn: 'Close',
+                        callback: 'remove_order_request',
+                        parameter: rowRequest.id,
+                        title: 'Remove Order Request',
+                        sub_heading: `Order For: ${rowRequest.name}`,
+                        description: 'Are sure you want to remove this order?',
+                        ok_btn: 'Remove',
                         cancel_btn: 'Cancel'
                     });
 
-                    this.clicked_to_close = row;
+                    this.row_to_remove = row;
+                });
+            }
+
+            var receive_order_btn = row.querySelector('#receive_order_btn');
+            if (receive_order_btn) {
+                receive_order_btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'receive_order_request',
+                        parameter: rowRequest.id,
+                        title: 'Receive Order Request',
+                        sub_heading: `Order For: ${rowRequest.name}`,
+                        description: 'Are sure you want to receive this order?',
+                        ok_btn: 'Receive',
+                        condition: 'success',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.row_to_remove = row;
+                });
+            }
+
+            var deny_order_btn = row.querySelector('#deny_order_btn');
+            if (deny_order_btn) {
+                deny_order_btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'deny_order_request',
+                        parameter: rowRequest.id,
+                        title: 'Deny Order Request',
+                        sub_heading: `Order For: ${rowRequest.name}`,
+                        description: 'Are sure you want to deny this order?',
+                        ok_btn: 'Deny',
+                        cancel_btn: 'Cancel',
+                    });
+
+                    this.row_to_remove = row;
                 });
             }
 
@@ -150,32 +237,6 @@ export class ViewOrderListView {
     }
 
 
-    async activate_deactivate(id, action) {
-        try {
-            const response = await fetch('/api/pharmacy/change_medicine_status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    medicine_id: id,
-                    action: action,
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            console.error('Error:', error);
-            notify('top_left', error.message, 'error');
-            return null;
-        }
-    }
-
     async fetchData() {
         try {
             const response = await fetch('/api/pharmacy/search_order_list', {
@@ -187,7 +248,8 @@ export class ViewOrderListView {
                     query: this.searchTerm,
                     batch: this.batchNumber,
                     from: this.from_value,
-                    to: this.to_value
+                    to: this.to_value,
+                    side_fetched: this.side_fetched
                 })
             });
 
@@ -204,7 +266,111 @@ export class ViewOrderListView {
         }
     }
 
-    async search_intake_batch(data) {
+    async remove_order_request(order_id) {
+        dashboardController.loaderView.render();
+        try {
+            const response = await fetch('/api/pharmacy/remove_order_request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_id: order_id
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            this.row_to_remove.remove(); // Remove the removed row from the DOM
+            notify('top_left', result.message, 'success');
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+            dashboardController.loaderView.remove();
+        }
+    }
+
+
+    async deny_order_request(order_id) {
+        console.log(order_id);
+
+        // dashboardController.loaderView.render();
+        // try {
+        //     const response = await fetch('/api/pharmacy/remove_order_request', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             order_id: order_id
+        //         })
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error('Server Error');
+        //     }
+
+        //     const result = await response.json();
+        //     if (!result.success) {
+        //         notify('top_left', result.message, 'warning');
+        //         return;
+        //     }
+        //     this.row_to_remove.remove(); // Remove the removed row from the DOM
+        //     notify('top_left', result.message, 'success');
+        // } catch (error) {
+        //     notify('top_left', error.message, 'error');
+        //     return null;
+        // }
+        // finally {
+        //     dashboardController.loaderView.remove();
+        // }
+    }
+
+    async receive_order_request(order_id) {
+        console.log(order_id);
+
+        // dashboardController.loaderView.render();
+        // try {
+        //     const response = await fetch('/api/pharmacy/remove_order_request', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             order_id: order_id
+        //         })
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error('Server Error');
+        //     }
+
+        //     const result = await response.json();
+        //     if (!result.success) {
+        //         notify('top_left', result.message, 'warning');
+        //         return;
+        //     }
+        //     this.row_to_remove.remove(); // Remove the removed row from the DOM
+        //     notify('top_left', result.message, 'success');
+        // } catch (error) {
+        //     notify('top_left', error.message, 'error');
+        //     return null;
+        // }
+        // finally {
+        //     dashboardController.loaderView.remove();
+        // }
+    }
+
+    async search_order_list(data) {
         var from_v = data.from;
         var to_v = data.to;
         if (from_v > to_v) {
@@ -215,7 +381,6 @@ export class ViewOrderListView {
             return;
         }
 
-        this.loadingContent();
         this.searchTerm = data.query;
         this.from_value = data.from;
         this.to_value = data.to;
@@ -223,121 +388,138 @@ export class ViewOrderListView {
         await this.fetchAndRenderData();
     }
 
-    loadingContent() {
-        const tableBody = document.querySelector('.table_body');
-        tableBody.innerHTML = `
-            <div class="start_page deactivate">
-                <p>No Medicines Found</p>
-            </div>
-            <div class="loader_cont active"><div class="loader"></div></div>
-        `;
-    }
-
     displayNoDataMessage() {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
+
+        current_page.innerText = 1;
         show_count.innerText = 0;
         total_data.innerText = 0;
         total_page.innerText = 1;
+        this.total_page_num = 1;
         document.querySelector('.start_page').style.display = 'flex';
         document.querySelector('.table_body .loader_cont').classList.remove('active');
+    }
+
+    loadingContent() {
+        const tableBody = document.querySelector('.order_view_list .table_body');
+        tableBody.innerHTML = `
+    <div class="start_page deactivate">
+        <p>No Order Found</p>
+    </div>
+    <div class="loader_cont active">
+        <div class="loader"></div>
+    </div>
+    `;
     }
 
     ViewReturn() {
         return `
     <div class="order_view_list">
-    
-    <div class="intake_batch_top">
-    
-        <h4>Search Product</h4>
-        <br-form callback="search_intake_batch">
-            <div class="intake_batch_content">
-                <br-input label="Product Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 400px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
 
-                <br-input label="From Date" id="from_inp" name="from" type="date" value="${this.searchTerm == null ? '' : this.searchTerm}" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 400px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+        <div class="intake_batch_top closed">
 
+            <div class="heading_cont">
+                <h4>Search Product</h4>
 
-                <br-input label="To Date" name="to" id="to_inp" type="date" value="${this.searchTerm == null ? '' : this.searchTerm}"styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 400px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
-
-        
-                <div class="med_btn_cont">
-                    <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
-                </div> 
+                <div class="open_close_filter closed" title="Open Filter" id="open_close_search">
+                    <span class='switch_icon_keyboard_arrow_up'></span>
+                </div>
 
             </div>
-        </br-form>
-    
-    </div>
-    
-    <div class="main_section medicine_table_out">
-    
-        <div class="in_table_top d_flex flex__u_s">
-            <h4>Order List</h4>
+            <br-form callback="search_order_list" class="intake_batch_content_container">
+                <div class="intake_batch_content">
+                    <br-input label="Product Name" name="query" type="text"
+                        value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name"
+                        styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 400px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
 
-            <div class="add_btn" title="Create Orders" id="open_add_order_popup">
-                <span class="switch_icon_add"></span>
-            </div>
+                    <br-input label="From Date" id="from_inp" name="from" type="date"
+                        value="${this.searchTerm == null ? '' : this.searchTerm}" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 400px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
+
+
+                    <br-input label="To Date" name="to" id="to_inp" type="date"
+                        value="${this.searchTerm == null ? '' : this.searchTerm}" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 400px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
+
+
+                    <div class="med_btn_cont">
+                        <br-button loader_width="23" class="btn_next" type="submit">Search</br-button>
+                    </div>
+
+                </div>
+            </br-form>
+
         </div>
-        <div class="outpatient_table">
-    
-            <div class="table_head tr d_flex flex__c_a">
-                <p class="id">SN</p>
-                <p class="name">Name</p>
-                <p class="number">Quantity</p>
-                <p class="name">Create By</p>
-                <p class="date">Created Date</p>
-                <p class="status">Status</p>
-                <div class="action"></div>
-            </div>
-    
-            <div class="table_body d_flex flex__co">
-                <div class="start_page deactivate">
-                <p>No Intake Batch Found</p>
-            </div>
-            <div class="loader_cont active"><div class="loader"></div></div>
-            </div>
-    
-            <div class="table_footer d_flex flex__e_b">
-                <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span class="total_data">${this.total_data_num}</span></p>
-                <div class="pagenation d_flex flex__c_c">
-                    <button type="button" class="main_btn prev">Prev</button>
-                    <p class="page_no d_flex flex__c_c"><span class="current_page" >${this.batchNumber}</span>/<span class="total_page" >${this.total_page_num}</span></p>
-                    <button type="button" class="main_btn next">Next</button>
+
+        <div class="main_section medicine_table_out">
+
+            <div class="in_table_top d_flex flex__u_s">
+                <h4>Order List</h4>
+
+                <div class="add_btn" title="Create Orders" id="open_add_order_popup">
+                    <span class="switch_icon_add"></span>
                 </div>
             </div>
-    
+            <div class="outpatient_table">
+
+                <div class="table_head tr d_flex flex__c_a">
+                    <p class="id">SN</p>
+                    <p class="name">Name</p>
+                    <p class="number">Quantity</p>
+                    <p class="name">Create By</p>
+                    <p class="date">Created Date</p>
+                    <p class="status">Status</p>
+                    <div class="action"></div>
+                </div>
+
+                <div class="table_body d_flex flex__co">
+                    <div class="start_page deactivate">
+                        <p>No Order Found</p>
+                    </div>
+                    <div class="loader_cont active">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+
+                <div class="table_footer d_flex flex__e_b">
+                    <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span
+                            class="total_data">${this.total_data_num}</span></p>
+                    <div class="pagenation d_flex flex__c_c">
+                        <button type="button" class="main_btn prev">Prev</button>
+                        <p class="page_no d_flex flex__c_c"><span class="current_page">${this.batchNumber}</span>/<span
+                                class="total_page">${this.total_page_num}</span></p>
+                        <button type="button" class="main_btn next">Next</button>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-    
+
     </div>
-    
-    </div>
-        `;
+    `;
     }
 
 }
-
-
-
-

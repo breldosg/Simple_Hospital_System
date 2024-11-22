@@ -38,6 +38,24 @@ export class ViewMedicineView {
 
     attachEventListeners() {
 
+        // Open Close Filter Section buttons
+        var open_close = document.querySelector('.medicine_cont .heading_cont');
+        open_close.addEventListener('click', () => {
+            const filter_section = document.querySelector('.medicine_cont .medicine_top');
+            var open_close_btn = document.querySelector('.medicine_cont #open_close_search');
+
+            if (open_close_btn.classList.contains('closed')) {
+                open_close_btn.classList.remove('closed');
+                filter_section.classList.remove('closed');
+            }
+            else {
+                open_close_btn.classList.add('closed');
+                filter_section.classList.add('closed');
+            }
+
+        });
+
+
         // add btn
         document.querySelector('.add_btn').addEventListener('click', () => {
             dashboardController.createProductPopUpView.PreRender();
@@ -45,7 +63,7 @@ export class ViewMedicineView {
 
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
-            console.log('tt:', this.total_page_num);
+            
 
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
@@ -75,7 +93,9 @@ export class ViewMedicineView {
 
 
             const roles = (category_raw) => {
-                var rolesElem = "";
+                var rolesElem = `
+                <br-option type="checkbox" value=" ">Select Category</br-option>
+                `;
                 category_raw.forEach(data => {
                     rolesElem += `
                     <br-option type="checkbox" value="${data.id}">${data.name}</br-option>
@@ -296,6 +316,7 @@ export class ViewMedicineView {
         this.searchTerm = data.query;
         this.category_value = data.category;
         this.batchNumber = 1; // Reset to first batch on search
+        this.page_shift = true;
         await this.fetchAndRenderData();
     }
 
@@ -303,7 +324,7 @@ export class ViewMedicineView {
         const tableBody = document.querySelector('.table_body');
         tableBody.innerHTML = `
             <div class="start_page deactivate">
-                <p>No Medicines Found</p>
+                <p>No Product Found</p>
             </div>
             <div class="loader_cont active"><div class="loader"></div></div>
         `;
@@ -313,18 +334,22 @@ export class ViewMedicineView {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
+
+        current_page.innerText = 1;
         show_count.innerText = 0;
         total_data.innerText = 0;
         total_page.innerText = 1;
         document.querySelector('.start_page').style.display = 'flex';
         document.querySelector('.table_body .loader_cont').classList.remove('active');
+        this.total_page_num = 1;
     }
 
     searchMedicineView() {
         return `
         <br-form callback="search_medicine">
             <div class="medicine_content">
-                <br-input label="Medicine Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter medicine name" styles="
+                <br-input label="Product Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name" styles="
                             border-radius: var(--input_main_border_r);
                             width: 400px;
                             padding: 10px;
@@ -370,13 +395,19 @@ export class ViewMedicineView {
         return `
     <div class="medicine_cont">
     
-    <div class="medicine_top">
-    
-        <h4>Search Product</h4>
+    <div class="medicine_top closed">
+    <div class="heading_cont">
+                <h4>Search Product</h4>
+
+                <div class="open_close_filter closed" title="Open Filter" id="open_close_search">
+                    <span class='switch_icon_keyboard_arrow_up'></span>
+                </div>
+
+            </div>
     <div class="search_containers">
         <div>
             <div class="medicine_content">
-                <br-input label="Medicine Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter medicine name" styles="
+                <br-input label="Product Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name" styles="
                             border-radius: var(--input_main_border_r);
                             width: 400px;
                             padding: 10px;

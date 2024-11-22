@@ -86,6 +86,8 @@ export class BrCustomSelect extends HTMLElement {
             .select-options { list-style: none; padding: 0; margin: 0; }
             .option { padding: 10px; cursor: pointer; }
             .option:hover { background: #f0f0f0; }
+            .select-dropdown::-webkit-scrollbar-thumb { background-color: var(--gray_text); border-radius: var(--input_main_border_r);}
+            .select-dropdown::-webkit-scrollbar { width: 5px; }
         `;
     }
 

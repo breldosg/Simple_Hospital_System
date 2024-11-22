@@ -39,6 +39,23 @@ export class ViewIntakeBatchView {
             dashboardController.createBatchPopUpView.PreRender();
         });
 
+        // Open Close Filter Section buttons
+        var open_close = document.querySelector('.intake_batch_cont .heading_cont');
+        open_close.addEventListener('click', () => {
+            const filter_section = document.querySelector('.intake_batch_cont .intake_batch_top');
+            var open_close_btn = document.querySelector('.intake_batch_cont #open_close_search');
+
+            if (open_close_btn.classList.contains('closed')) {
+                open_close_btn.classList.remove('closed');
+                filter_section.classList.remove('closed');
+            }
+            else {
+                open_close_btn.classList.add('closed');
+                filter_section.classList.add('closed');
+            }
+
+        });
+
 
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
@@ -252,10 +269,17 @@ export class ViewIntakeBatchView {
         return `
     <div class="intake_batch_cont">
     
-    <div class="intake_batch_top">
+    <div class="intake_batch_top closed">
     
-        <h4>Search Batch</h4>
-        <br-form callback="search_intake_batch">
+        <div class="heading_cont">
+                <h4>Search Batch</h4>
+
+                <div class="open_close_filter closed" title="Open Filter" id="open_close_search">
+                    <span class='switch_icon_keyboard_arrow_up'></span>
+                </div>
+
+            </div>
+        <br-form callback="search_intake_batch" class="intake_batch_content_container">
             <div class="intake_batch_content">
                 <br-input label="Provider Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter provider name" styles="
                             border-radius: var(--input_main_border_r);

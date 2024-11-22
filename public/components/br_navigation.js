@@ -75,6 +75,8 @@ ${this.Styles()}
         <a href="/store/viewcategory" data-link class="choice_item">View All category</a>
         <a href="/store/addcategory" data-link class="choice_item">Add category</a>
         <a href="/store/viewinatakebatch" data-link class="choice_item">View All batch</a>
+        <a href="/store/orderlist" data-link class="choice_item">Pharmacy Orders</a>
+
     </div>
 
     <div class="nav_collection " type="/notice">
@@ -292,53 +294,6 @@ ${this.Styles()}
         //split path that found by /
         const pathParts = rawPath.split('/');
         pathParts.shift(); // remove empty string at the beginning
-
-
-        // nav_collection.forEach(nav => {
-        //     if (nav.getAttribute('type') === '/' + pathParts[0]) {
-        //         nav.classList.add('active');
-        //         activeFound = true;
-        //         choiceNavs.forEach(choiceNav => {
-        //             if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {
-        //                 choiceNav.classList.add('active');
-        //             } else {
-        //                 choiceNav.classList.remove('active');
-        //             }
-        //         })
-        //     }
-        //     else {
-        //         nav.classList.remove('active');
-        //     }
-        // });
-
-        // navs.forEach(nav => {
-        //     const navPath = nav.getAttribute('link').toLowerCase();
-
-        //     if (navPath === '/' + pathParts[0]) {
-        //         nav.classList.add('active');
-        //         activeFound = true;
-
-        //         if (pathParts.length == 2) {
-        //             choiceNavs.forEach(choiceNav => {
-        //                 if (choiceNav.getAttribute('href') === '/' + pathParts.join('/')) {
-        //                     choiceNav.classList.add('active');
-        //                 } else {
-        //                     choiceNav.classList.remove('active');
-        //                 }
-        //             })
-        //         }
-
-        //     } else {
-        //         nav.classList.remove('active');
-        //     }
-
-        // });
-
-        // // If no matching nav item was found, set the first item as active
-        // if (!activeFound && navs.length > 0) {
-        //     navs[0].classList.add('active');
-        //     nav_collection[0].classList.add('active');
-        // }
 
         navs.forEach(nav => {
             const navPath = nav.getAttribute('link').toLowerCase();

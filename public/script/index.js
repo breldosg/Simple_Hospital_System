@@ -58,6 +58,8 @@ const routes = {
     '/store/viewcategory/:id': dashboardController.singleMedicineCategoryView,
     '/store/viewinatakebatch': dashboardController.viewIntakeBatchView,
     '/store/viewinatakebatch/:id': dashboardController.singleIntakeBatchView,
+    '/store/orderlist': dashboardController.viewOrderListView,
+
 
 
 

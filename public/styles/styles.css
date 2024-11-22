@@ -69,7 +69,12 @@ input {
     --input_main_border_r: 7px;
 
     --btn_color: #23989e;
+    --btn_color_light: #20b8c0;
+    --btn_hover_color_1: #03979f;
     --btn_hover_color: #19b9c2;
+    
+    --inactive_btn_color_good: #23989eb8;
+    --inactive_btn_color_error: #ad0e0065;
 
     --active_color: #a5eef665;
     --click_btn: #005059;
@@ -98,6 +103,7 @@ input {
     --gray_text: #8f8f8f;
 
     --main_border_r: 10px;
+    --btn_border_r: 5px;
     --input_border_r: 30px;
 }
 
@@ -1180,6 +1186,34 @@ input {
                 border-radius: 10px;
                 padding: 20px;
 
+                .heading_cont {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    cursor: pointer;
+
+                    .open_close_filter {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        flex: none;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+                    }
+
+
+                    .open_close_filter.closed {
+                        transform: rotate(180deg);
+                    }
+
+                }
+
                 .medicine_content {
                     margin-top: 20px;
                     display: flex;
@@ -1191,6 +1225,14 @@ input {
                         position: absolute;
                     }
                 }
+            }
+
+            .medicine_top.closed {
+
+                .search_containers {
+                    display: none;
+                }
+
             }
 
             .med_btn_cont {
@@ -2371,6 +2413,35 @@ input {
                 border-radius: 10px;
                 padding: 20px;
 
+                .heading_cont {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    cursor: pointer;
+
+                    .open_close_filter {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        flex: none;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+                    }
+
+
+                    .open_close_filter.closed {
+                        transform: rotate(180deg);
+                    }
+
+                }
+
+
                 .intake_batch_content {
                     margin-top: 20px;
                     display: flex;
@@ -2382,6 +2453,14 @@ input {
                         position: absolute;
                     }
                 }
+            }
+
+            .intake_batch_top.closed {
+
+                .intake_batch_content_container {
+                    display: none;
+                }
+
             }
 
             .med_btn_cont {
@@ -2648,6 +2727,34 @@ input {
                 border-radius: 10px;
                 padding: 20px;
 
+                .heading_cont {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    cursor: pointer;
+
+                    .open_close_filter {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        flex: none;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+                    }
+
+
+                    .open_close_filter.closed {
+                        transform: rotate(180deg);
+                    }
+
+                }
+
                 .intake_batch_content {
                     margin-top: 20px;
                     display: flex;
@@ -2659,6 +2766,14 @@ input {
                         position: absolute;
                     }
                 }
+            }
+
+            .intake_batch_top.closed {
+
+                .intake_batch_content_container {
+                    display: none;
+                }
+
             }
 
             .med_btn_cont {
@@ -2824,10 +2939,24 @@ input {
 
                         .action {
                             width: 18%;
+                            text-transform: capitalize;
 
                             .error {
                                 background-color: var(--error_color);
                             }
+
+                            .full_btn{
+                                width: 195px !important;
+                                text-transform: capitalize;
+                            }
+
+                            .denied{
+                                background-color: var(--inactive_btn_color_error);
+                            }
+                            .received{
+                                background-color: var(--inactive_btn_color_good);
+                            }
+
                         }
                     }
 
@@ -4616,19 +4745,28 @@ input {
         .card-button {
             width: 86px;
             height: 35px;
-            border-radius: var(--main_border_r);
+            border-radius: var(--btn_border_r);
             border: none;
             cursor: pointer;
             font-weight: 600;
         }
 
-        .primary {
+        .error {
             background-color: rgb(255, 114, 109);
             color: var(--white);
         }
 
-        .primary:hover {
+        .error:hover {
             background-color: rgb(255, 73, 66);
+        }
+
+        .success {
+            background-color: var(--btn_color_light);
+            color: var(--white);
+        }
+
+        .success:hover {
+            background-color: var(--btn_color);
         }
 
         .secondary {

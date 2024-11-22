@@ -20,6 +20,7 @@ export class ConfirmPopUpView {
         this.cancel_btn = params.cancel_btn ? params.cancel_btn : 'Cancel';
         this.callback = params.callback ? params.callback : null;
         this.parameter = params.parameter ? params.parameter : null;
+        this.condition = params.condition ? params.condition : 'error';
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -39,7 +40,7 @@ export class ConfirmPopUpView {
     </div>
     <div class="card-button-wrapper">
         <button id="confirm_cancel" class="card-button secondary">${this.cancel_btn}</button>
-        <button id="confirm_delete" class="card-button primary">${this.ok_btn}</button>
+        <button id="confirm_delete" class="card-button ${this.condition}">${this.ok_btn}</button>
     </div>
 </div>
 
