@@ -363,6 +363,102 @@ router.post('/remove_order_request', async (req, res) => {
 });
 
 
+router.post('/deny_approve_pharmacy_order', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 420, body); // Add `await` since it's an async function
+        console.log('deny_approve_pharmacy_order Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /deny_approve_pharmacy_order route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+router.post('/approve_order', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 420, body); // Add `await` since it's an async function
+        console.log('approve_order Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /approve_order route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+router.post('/update_order', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 440, body); // Add `await` since it's an async function
+        console.log('update_order Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /update_order route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+router.post('/receive_order_request', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 430, body); // Add `await` since it's an async function
+        console.log('receive_order_request Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /receive_order_request route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+
+
+router.post('/remove_product_to_batch', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 450, body); // Add `await` since it's an async function
+        console.log('remove_product_to_batch Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /remove_product_to_batch route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
 
 
 

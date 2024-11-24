@@ -23,6 +23,7 @@ import { CreateBatchPopUpView } from "../popups/CreateBatchPopUpView.js";
 import { ConfirmPopUpView } from "../popups/ConfirmPopUpView.js";
 import { ViewOrderListView } from "../views/ViewOrderListView.js";
 import { PlaceOrderPopUpView } from "../popups/PlaceOrderPopUpView.js";
+import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -55,6 +56,7 @@ class DashboardController {
     createBatchPopUpView = new CreateBatchPopUpView();
     viewOrderListView = new ViewOrderListView();
     placeOrderPopUpView = new PlaceOrderPopUpView();
+    approvePharmacyOrderPopUpView = new ApprovePharmacyOrderPopUpView();
 
 
 

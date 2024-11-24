@@ -132,24 +132,29 @@ export class SingleIntakeBatchView {
     <div class="top_card">
 
         <div class="juu">
-            <p class="name">Medium Load</p>
+            <p class="name">****************************</p>
 
         </div>
         <div class="pack_cont">
 
             <div class="pack">
-                <span class="switch_icon_calendar_check"></span>
-                <p class="date">**************</p>
+                <p class="title">Provider</p>
+                <p class="description">**************</p>
             </div>
 
             <div class="pack">
-                <span class='switch_icon_cart_shopping'></span>
-                <p class="date">**************</p>
+                <p class="title">Received By</p>
+                <p class="description">**************</p>
             </div>
 
             <div class="pack">
-                <span class='switch_icon_user_pen'></span>
-                <p class="date">**************</p>
+                <p class="title">Product</p>
+                <p class="description">**************</p>
+            </div>
+            
+            <div class="pack">
+                <p class="title">Invoice</p>
+                <p class="description">**************</p>
             </div>
 
             <div class="btn">
@@ -260,27 +265,22 @@ export class SingleIntakeBatchView {
         return `
         <div class="juu">
             <p class="name">${receive_date}</p>
-
+            <p class="provider"><span class="title">Provider:</span> <span class="description">${data.provider}</span></p>
         </div>
+
         <div class="pack_cont">
-
             <div class="pack">
-                <span class='switch_icon_truck'></span>
-                <p class="date">${data.provider}</p>
+                <p class="title">Received By</p>
+                <p class="description">${data.created_by}</p>
             </div>
 
             <div class="pack">
-                <span class='switch_icon_user_pen'></span>
-                <p class="date">${data.created_by}</p>
-            </div>
-
-            <div class="pack">
-                <span class='switch_icon_pills'></span>
-                <p class="date">${data.products}</p>
+                <p class="title">Product</p>
+                <p class="description">${data.products}</p>
             </div>
             <div class="pack">
-                <span class='switch_icon_file_invoice_dollar'></span>
-                <p class="date">${data.invoice}</p>
+                <p class="title">Invoice</p>
+                <p class="description">${data.invoice}</p>
             </div>
 
             <div class="btn">
@@ -415,43 +415,41 @@ export class SingleIntakeBatchView {
     }
 
 
-    remove_product_on_batch(data) {
-        console.log(data);
-        console.log('ffsfsddcscsdcsdcs');
+    async remove_product_on_batch(data) {
+        dashboardController.loaderView.render();
+        try {
+            const response = await fetch('/api/pharmacy/remove_product_to_batch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    batch_id: this.batch_id,
+                    id:data
+                })
+            });
 
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
 
-        // try {
-        //     const response = await fetch('/api/pharmacy/single_batch_product_list', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             batch_id: this.batch_id,
-        //             query: this.query,
-        //             batch: this.batchNumber,
-        //         })
-        //     });
+            const result = await response.json();
 
-        //     if (!response.ok) {
-        //         throw new Error('Server Error');
-        //     }
-
-        //     const result = await response.json();
-
-        //     if (result.success) {
-        //         return result.data;
-        //     } else {
-        //         notify('top_left', result.message, 'warning');
-        //         return null;
-        //     }
-        // } catch (error) {
-        //     notify('top_left', error.message, 'error');
-        //     return null;
-        // }
-        // finally {
-        //     this.isLoading = false;
-        // }
+            if (result.success) {
+                notify('top_left', result.message,'success');
+                this.query = '';
+                await this.fetch_table_data();
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+            dashboardController.loaderView.remove();
+        }
     }
 
 

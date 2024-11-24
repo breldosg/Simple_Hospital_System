@@ -18,7 +18,7 @@ export class ViewOrderListView {
         this.from_value = '';
         this.to_value = '';
         this.isLoading = false; // Prevent multiple fetch calls at the same time
-        this.row_to_remove = null; // the batch row clicked to be closed
+
     }
 
     async PreRender() {
@@ -28,10 +28,11 @@ export class ViewOrderListView {
         }
 
         const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
 
         const rawPath = window.location.pathname.toLowerCase();
         this.side_fetched = rawPath.split('/')[1];
+
+        cont.innerHTML = this.ViewReturn();
 
 
         // Fetch the initial batch of medicine data
@@ -136,41 +137,54 @@ export class ViewOrderListView {
 
             // store btn
             var approveBtn = '<button id="approve_order_btn" class="main_btn ">Approve</button>';
+            var updateBtn = '<button id="update_order_btn" class="main_btn full_btn">Update</button>';
             var denyBtn = '<button id="deny_order_btn" class="main_btn error" >Deny</button>';
-            var deniedBtn = '<button id="deny_order_btn" class="main_btn denied full_btn no_click" >Denied</button>';
+            var deniedBtn = '<button id="denied_order_btn" class="main_btn denied full_btn no_click" >Denied</button>';
             var approvedBtn = `<button id="approved_order_btn" class="main_btn received full_btn no_click">${rowRequest.status}</button>`;
 
             var action_btn = '';
+            var validQuantity = '';
 
             if (this.side_fetched == 'pharmacy') {
                 action_btn = rowRequest.status === 'pending' ? removeBtn : (rowRequest.status === 'approved' ? receiveBtn : rowRequest.status);
+                validQuantity = rowRequest.pharmacy_total_quantity;
             }
             else if (this.side_fetched == 'store') {
+                validQuantity = rowRequest.store_total_quantity;
 
                 if (rowRequest.status === 'pending') {
                     action_btn = approveBtn + denyBtn;
+                }
+                else if (rowRequest.status === 'approved') {
+                    action_btn = updateBtn;
                 }
                 else {
                     action_btn = rowRequest.status === 'denied' ? deniedBtn : approvedBtn;
                 }
 
+                console.log(rowRequest.status);
+
+
             }
 
-            row.innerHTML = `
-    <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-    <p class="name">${rowRequest.name}</p>
-    <p class="number">${rowRequest.quantity}</p>
-    <p class="name">${rowRequest.staff_name}</p>
-    <p class="date">${date}</p>
-    <p class="status">${rowRequest.status}</p>
-    <div class="action ${this.side_fetched} d_flex flex__c_c">
-        ${action_btn}
-    </div>
-    `;
 
-            var close_btn = row.querySelector('#remove_order_btn');
-            if (close_btn) {
-                close_btn.addEventListener('click', (e) => {
+
+            row.innerHTML = `
+                        <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
+                        <p class="name">${rowRequest.name}</p>
+                        <p class="number">${rowRequest.quantity}</p>
+                        <p class="number">${validQuantity}</p>
+                        <p class="name">${rowRequest.staff_name}</p>
+                        <p class="date">${date}</p>
+                        <p class="status">${rowRequest.status}</p>
+                        <div class="action ${this.side_fetched} d_flex flex__c_c">
+                            ${action_btn}
+                        </div>
+                        `;
+
+            var remove_order_btn = row.querySelector('#remove_order_btn');
+            if (remove_order_btn) {
+                remove_order_btn.addEventListener('click', (e) => {
                     e.stopPropagation();
 
                     dashboardController.confirmPopUpView.PreRender({
@@ -178,7 +192,7 @@ export class ViewOrderListView {
                         parameter: rowRequest.id,
                         title: 'Remove Order Request',
                         sub_heading: `Order For: ${rowRequest.name}`,
-                        description: 'Are sure you want to remove this order?',
+                        description: 'Are you sure you want to remove this order?',
                         ok_btn: 'Remove',
                         cancel_btn: 'Cancel'
                     });
@@ -197,13 +211,12 @@ export class ViewOrderListView {
                         parameter: rowRequest.id,
                         title: 'Receive Order Request',
                         sub_heading: `Order For: ${rowRequest.name}`,
-                        description: 'Are sure you want to receive this order?',
+                        description: `Are you sure you receive ${rowRequest.quantity} product?`,
                         ok_btn: 'Receive',
                         condition: 'success',
                         cancel_btn: 'Cancel'
                     });
 
-                    this.row_to_remove = row;
                 });
             }
 
@@ -217,12 +230,41 @@ export class ViewOrderListView {
                         parameter: rowRequest.id,
                         title: 'Deny Order Request',
                         sub_heading: `Order For: ${rowRequest.name}`,
-                        description: 'Are sure you want to deny this order?',
+                        description: 'Are you sure you want to deny this order?',
                         ok_btn: 'Deny',
                         cancel_btn: 'Cancel',
                     });
 
                     this.row_to_remove = row;
+                });
+            }
+
+            var approve_btn = row.querySelector('#approve_order_btn');
+            if (approve_btn) {
+                approve_btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dashboardController.approvePharmacyOrderPopUpView.PreRender({
+                        order_id: rowRequest.id,
+                        order_name: rowRequest.name,
+                        store_quantity: rowRequest.store_total_quantity,
+                        pharmacy_quantity: rowRequest.pharmacy_total_quantity,
+                        action: 'approve'
+                    });
+                });
+            }
+
+            var approvedBtn = row.querySelector('#update_order_btn');
+            if (approvedBtn) {
+                approvedBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dashboardController.approvePharmacyOrderPopUpView.PreRender({
+                        order_id: rowRequest.id,
+                        order_name: rowRequest.name,
+                        store_quantity: rowRequest.store_total_quantity,
+                        pharmacy_quantity: rowRequest.pharmacy_total_quantity,
+                        quantity: rowRequest.quantity,
+                        action: 'update'
+                    });
                 });
             }
 
@@ -288,7 +330,7 @@ export class ViewOrderListView {
                 notify('top_left', result.message, 'warning');
                 return;
             }
-            this.row_to_remove.remove(); // Remove the removed row from the DOM
+            this.fetchAndRenderData();
             notify('top_left', result.message, 'success');
         } catch (error) {
             notify('top_left', error.message, 'error');
@@ -301,73 +343,71 @@ export class ViewOrderListView {
 
 
     async deny_order_request(order_id) {
-        console.log(order_id);
 
-        // dashboardController.loaderView.render();
-        // try {
-        //     const response = await fetch('/api/pharmacy/remove_order_request', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             order_id: order_id
-        //         })
-        //     });
+        dashboardController.loaderView.render();
+        try {
+            const response = await fetch('/api/pharmacy/deny_approve_pharmacy_order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_id: order_id,
+                    action: 'deny'
+                })
+            });
 
-        //     if (!response.ok) {
-        //         throw new Error('Server Error');
-        //     }
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
 
-        //     const result = await response.json();
-        //     if (!result.success) {
-        //         notify('top_left', result.message, 'warning');
-        //         return;
-        //     }
-        //     this.row_to_remove.remove(); // Remove the removed row from the DOM
-        //     notify('top_left', result.message, 'success');
-        // } catch (error) {
-        //     notify('top_left', error.message, 'error');
-        //     return null;
-        // }
-        // finally {
-        //     dashboardController.loaderView.remove();
-        // }
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            this.fetchAndRenderData();
+            notify('top_left', result.message, 'success');
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+            dashboardController.loaderView.remove();
+        }
     }
 
     async receive_order_request(order_id) {
-        console.log(order_id);
+        dashboardController.loaderView.render();
+        try {
+            const response = await fetch('/api/pharmacy/receive_order_request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_id: order_id
+                })
+            });
 
-        // dashboardController.loaderView.render();
-        // try {
-        //     const response = await fetch('/api/pharmacy/remove_order_request', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             order_id: order_id
-        //         })
-        //     });
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
 
-        //     if (!response.ok) {
-        //         throw new Error('Server Error');
-        //     }
-
-        //     const result = await response.json();
-        //     if (!result.success) {
-        //         notify('top_left', result.message, 'warning');
-        //         return;
-        //     }
-        //     this.row_to_remove.remove(); // Remove the removed row from the DOM
-        //     notify('top_left', result.message, 'success');
-        // } catch (error) {
-        //     notify('top_left', error.message, 'error');
-        //     return null;
-        // }
-        // finally {
-        //     dashboardController.loaderView.remove();
-        // }
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            this.fetchAndRenderData();
+            notify('top_left', result.message, 'success');
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+        finally {
+            dashboardController.loaderView.remove();
+        }
     }
 
     async search_order_list(data) {
@@ -488,6 +528,7 @@ export class ViewOrderListView {
                     <p class="id">SN</p>
                     <p class="name">Name</p>
                     <p class="number">Quantity</p>
+                    <p class="number">${this.side_fetched} Quantity</p>
                     <p class="name">Create By</p>
                     <p class="date">Created Date</p>
                     <p class="status">Status</p>
