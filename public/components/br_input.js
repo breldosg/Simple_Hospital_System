@@ -34,6 +34,7 @@ export class BrCustomInput extends HTMLElement {
         const max = this.hasAttribute('max') ? `max="${this.getAttribute('max')}"` : '';
         const disable = this.hasAttribute('disable') ? (this.getAttribute('disable') == 'true' ? 'readonly' : '') : '';
 
+        var textarea_value=this.hasAttribute('value') ? this.getAttribute('value') : '';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -45,7 +46,7 @@ export class BrCustomInput extends HTMLElement {
             }
             <div class="cont ${error}">
                 ${type === 'textarea' ? `
-                    <textarea placeholder="${placeholder}" ${required}>${value}</textarea>
+                    <textarea placeholder="${placeholder}" ${required}>${textarea_value}</textarea>
                 ` : `
                     <input type="${type}" ${value} ${min} ${max} ${focus} ${disable} ${placeholder} ${required}>
                     ${type === 'password' ? '<span class="switch_icon_remove_red_eye toggle-visibility"></span>' : ''}

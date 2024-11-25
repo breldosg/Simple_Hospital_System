@@ -483,6 +483,10 @@ input {
                 height: 50px;
 
                 .search_cont {
+                    display: flex;
+                    gap: 25px;
+                    align-items: center;
+
                     input {
                         border-radius: var(--input_main_border_r);
                         width: 300px;
@@ -491,6 +495,59 @@ input {
                         background-color: transparent;
                         border: 2px solid var(--input_border);
                     }
+
+                    .add_btn {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 5px;
+                        flex: none;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+
+                    }
+
+                    .input_search {
+                        display: flex;
+                        gap: 5px;
+                        align-items: center;
+                        position: relative;
+                    }
+
+                    .add_btn:hover {
+                        background-color: var(--pri_op);
+                        cursor: pointer;
+                    }
+
+                    .input_search.close{
+                        width: 50px;
+                        overflow: hidden;
+                    }
+
+                    .btn_search {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        border: none;
+                        background-color: var(--pri_color);
+                        width: 50px;
+                        height: 40px;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
+
                 }
             }
 
@@ -523,7 +580,7 @@ input {
                     }
 
                     .name {
-                        width: 18%;
+                        width: 22%;
                         text-align: left;
                     }
 
@@ -531,17 +588,8 @@ input {
                         width: 10%;
                     }
 
-                    .role {
-                        width: 19%;
-                    }
-
                     .date {
                         width: 15%;
-                    }
-
-                    .status {
-                        width: 5%;
-                        text-transform: capitalize;
                     }
 
                     .phone {
@@ -3128,7 +3176,7 @@ input {
                             font-weight: 500;
                             font-size: 15px;
                         }
-                        
+
                         .title {
                             font-size: 16px;
                             font-weight: 900;

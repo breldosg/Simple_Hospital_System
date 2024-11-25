@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class ViewPatientView {
@@ -120,18 +120,14 @@ export class ViewPatientView {
     }
 
     async fetchAndRenderData() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn(); // Show loader
+        this.loadingContent();
         const PatientData = await this.fetchData(); // Fetch data with search term and batch number
 
         this.PatientData = PatientData || [];
         this.render();
-        this.attachEventListeners();
     }
 
     render() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
 
         if (this.PatientData.PatientList && this.PatientData.PatientList.length > 0) {
             this.populateTable(this.PatientData);
@@ -157,10 +153,12 @@ export class ViewPatientView {
         const show_count = document.querySelector('.show_count');
         const total_data = document.querySelector('.total_data');
         const total_page = document.querySelector('.total_page');
+        const current_page = document.querySelector('.current_page');
 
         show_count.innerText = PatientData.showData;
         total_data.innerText = PatientData.total;
         total_page.innerText = PatientData.pages;
+        current_page.innerText = PatientData.batch;
         this.total_page_num = PatientData.pages;
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
@@ -177,7 +175,7 @@ export class ViewPatientView {
                     <p class="gender">${patient.gender}</p>
                     <p class="phone">${patient.phone}</p>
                     <p class="name">${patient.created_by}</p>
-                    <p class="date">${this.date_formatter(patient.created_at)}</p>
+                    <p class="date">${date_formatter(patient.created_at)}</p>
                     <div class="action d_flex flex__c_c">
                         ${patient.visit_status === 'active' ? view_visit_btn + checkout_btn : create_visit_btn}
                     </div>
@@ -215,6 +213,17 @@ export class ViewPatientView {
         }
     }
 
+    loadingContent() {
+        const tableBody = document.querySelector('.outpatient_table_out .table_body');
+        tableBody.innerHTML = `
+    <div class="start_page deactivate">
+        <p>No Patient Found</p>
+    </div>
+    <div class="loader_cont active">
+        <div class="loader"></div>
+    </div>
+    `;
+    }
 
     async checkout_request(id) {
         try {
@@ -242,11 +251,6 @@ export class ViewPatientView {
         }
     }
 
-    date_formatter(ymd) {
-        const dateee = new Date(ymd);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(dateee);
-    }
 
     ViewReturn() {
         return `
@@ -254,7 +258,14 @@ export class ViewPatientView {
             <div class="in_table_top d_flex flex__u_b">
                 <h4>Patient List</h4>
                 <div class="search_cont">
-                    <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+
+                            <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+    
+    
+    
+                    <div class="add_btn" title="Create Patient" id="open_add_patient_popup">
+                        <span class="switch_icon_add"></span>
+                    </div>
                 </div>
             </div>
             <div class="outpatient_table">
@@ -269,20 +280,95 @@ export class ViewPatientView {
                 </div>
                 <div class="table_body d_flex flex__co">
                     <div class="start_page deactivate">
-                        <p>There Is No Any Patient Registered</p>
+                        <p>No Patient Found</p>
                     </div>
-                    <div class="loader_cont active"><div class="loader"></div></div>
+                    <div class="loader_cont active">
+                        <div class="loader"></div>
+                    </div>
                 </div>
                 <div class="table_footer d_flex flex__e_b">
-                    <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span class="total_data">${this.total_data_num}</span></p>
+                    <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span
+                            class="total_data">${this.total_data_num}</span></p>
                     <div class="pagenation d_flex flex__c_c">
                         <button type="button" class="main_btn prev">Prev</button>
-                        <p class="page_no d_flex flex__c_c">${this.batchNumber}/<span class="total_page" >${this.total_page_num}</span></p>
+                        <p class="page_no d_flex flex__c_c"><span class="current_page">${this.batchNumber}</span>/<span
+                                class="total_page">${this.total_page_num}</span></p>
                         <button type="button" class="main_btn next">Next</button>
                     </div>
                 </div>
             </div>
-        </div>`;
-    }
+        </div>
+        `;
+        }
 }
 
+
+// ViewReturn() {
+//     return `
+//     <div class="main_section outpatient_table_out">
+//         <div class="in_table_top d_flex flex__u_b">
+//             <h4>Patient List</h4>
+//             <div class="search_cont">
+//                 <!-- <div class="input_search">
+//                         <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+
+//                     </div> -->
+
+//                 <br-form  callback="Search_medicine_and_consumable_on_place_order_popupo">
+//                     <div class="input_search close">
+//                         <br-input placeholder="Search by name or id" name="query" type="text" styles="
+//                     border-radius: var(--input_main_border_r);
+//                     width: 350px;
+//                     padding: 10px;
+//                     height: 41px;
+//                     background-color: transparent;
+//                     border: 2px solid var(--input_border);
+//                     margin
+//                     " labelStyles="font-size: 13px;"></br-input>
+
+
+//                         <br-button title="Search Patient" loader_width="23" class="btn_search" type="submit">
+//                             <span class='switch_icon_magnifying_glass'></span>
+//                         </br-button>
+
+
+//                     </div>
+//                 </br-form>
+
+//                 <div class="add_btn" title="Create Patient" id="open_add_patient_popup">
+//                     <span class="switch_icon_add"></span>
+//                 </div>
+//             </div>
+//         </div>
+//         <div class="outpatient_table">
+//             <div class="table_head tr d_flex flex__c_a">
+//                 <p class="id">SN</p>
+//                 <p class="name">Name</p>
+//                 <p class="gender">Gender</p>
+//                 <p class="phone">Phone Number</p>
+//                 <p class="name">Created By</p>
+//                 <p class="date">Created Date</p>
+//                 <div class="action"></div>
+//             </div>
+//             <div class="table_body d_flex flex__co">
+//                 <div class="start_page deactivate">
+//                     <p>No Patient Found</p>
+//                 </div>
+//                 <div class="loader_cont active">
+//                     <div class="loader"></div>
+//                 </div>
+//             </div>
+//             <div class="table_footer d_flex flex__e_b">
+//                 <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span
+//                         class="total_data">${this.total_data_num}</span></p>
+//                 <div class="pagenation d_flex flex__c_c">
+//                     <button type="button" class="main_btn prev">Prev</button>
+//                     <p class="page_no d_flex flex__c_c"><span class="current_page">${this.batchNumber}</span>/<span
+//                             class="total_page">${this.total_page_num}</span></p>
+//                     <button type="button" class="main_btn next">Next</button>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+//     `;
+//     }
