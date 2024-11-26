@@ -233,7 +233,7 @@ export class StaffListView {
         return new Intl.DateTimeFormat('en-US', options).format(dateee);
     }
     loadingContent() {
-        const tableBody = document.querySelector('.outpatient_table_out .table_body');
+        const tableBody = document.querySelector('.staffList_table_out .table_body');
         tableBody.innerHTML = `
             <div class="start_page deactivate">
                 <p>No Staff Found</p>
@@ -245,7 +245,7 @@ export class StaffListView {
 
     ViewReturn() {
         return `
-        <div class="main_section outpatient_table_out">
+        <div class="main_section staffList_table_out">
             <div class="in_table_top d_flex flex__u_b">
                 <h4>Staff List</h4>
                 <div class="search_cont">

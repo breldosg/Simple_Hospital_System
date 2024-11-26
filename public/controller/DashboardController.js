@@ -24,6 +24,7 @@ import { ConfirmPopUpView } from "../popups/ConfirmPopUpView.js";
 import { ViewOrderListView } from "../views/ViewOrderListView.js";
 import { PlaceOrderPopUpView } from "../popups/PlaceOrderPopUpView.js";
 import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPopUpView.js";
+import { SingleVisitView } from "../views/SingleVisitView.js";
 
 class DashboardController {
     // Loader View
@@ -57,6 +58,7 @@ class DashboardController {
     viewOrderListView = new ViewOrderListView();
     placeOrderPopUpView = new PlaceOrderPopUpView();
     approvePharmacyOrderPopUpView = new ApprovePharmacyOrderPopUpView();
+    singleVisitView = new SingleVisitView();
 
 
 

@@ -59,7 +59,7 @@ ${this.Styles()}
 
         <a href="/patient/viewpatient" data-link class="choice_item">View Patient</a>
         <a href="/patient/addpatient" data-link class="choice_item">Add Patient</a>
-        <a href="/patient/onprogresspatient" data-link class="choice_item">On Progress</a>
+        <a href="/patient/activevisit" data-link class="choice_item">On Progress Visits</a>
 
     </div>
 

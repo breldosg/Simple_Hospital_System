@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { date_formatter, decodeHTML, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class ViewPatientView {
@@ -11,6 +11,7 @@ export class ViewPatientView {
         this.total_data_num = 0; // Keep track of current batch
         this.show_count_num = 0; // Keep track of current batch
         this.searchTerm = '';  // Store the current search term
+        window.checkout_request = this.checkout_request.bind(this);
     }
 
     async PreRender() {
@@ -58,66 +59,6 @@ export class ViewPatientView {
         });
     }
 
-    row_listener() {
-        // listeners for each row
-        const rows = document.querySelectorAll('.table_body .tr');
-        rows.forEach((row) => {
-            row.addEventListener('click', async () => {
-                const patientId = row.getAttribute('data_src');
-                frontRouter.navigate('/patient/viewpatient/' + patientId);
-            })
-        });
-
-        const createVisit_btn = document.querySelectorAll('#createVisit_btn');
-
-        createVisit_btn.forEach(btn => {
-            btn.addEventListener('click', async (event) => {
-                // disable propagation
-                event.stopPropagation();
-
-                // get the btn closest with class tr
-                const btnParent = btn.closest('.tr');
-                const patientId = btnParent.getAttribute('data_src');
-                const patientName = btnParent.getAttribute('title');
-
-                dashboardController.createVisitPopUpView.PreRender(
-                    {
-                        id: patientId,
-                        p_name: patientName,
-                    })
-
-            })
-        });
-
-        const checkOut_btn = document.querySelectorAll('#checkOut_btn');
-
-        checkOut_btn.forEach(btn => {
-            btn.addEventListener('click', async (event) => {
-                // disable propagation
-                event.stopPropagation();
-                // Get the btn closest with class tr
-                const btnParent = btn.closest('.tr');
-                const patientId = btnParent.getAttribute('data_src');
-
-                dashboardController.loaderView.render();
-
-                const checkOut_response = await this.checkout_request(patientId);
-
-                if (checkOut_response.success) {
-                    notify('top_left', checkOut_response.message, 'success');
-                    await this.fetchAndRenderData();
-                    dashboardController.loaderView.remove();
-
-                } else {
-                    notify('top_left', checkOut_response.message, 'error');
-                }
-
-
-            })
-        });
-
-
-    }
 
     async fetchAndRenderData() {
         this.loadingContent();
@@ -168,23 +109,81 @@ export class ViewPatientView {
         var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn c_visit">Create Visit</button>';
 
         PatientData.PatientList.forEach((patient, index) => {
-            const row = `
-                <div class="tr d_flex flex__c_a" data_src="${patient.id}" title="${patient.name}">
+            const row = document.createElement('div');
+            row.classList.add('tr');
+            row.classList.add('d_flex');
+            row.classList.add('flex__c_a');
+
+            row.setAttribute('title', decodeHTML(patient.name));
+
+            try {
+                var date = date_formatter(patient.created_at);
+            } catch (error) {
+                var date = '';
+            }
+
+            row.innerHTML = `
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.name}</p>
                     <p class="gender">${patient.gender}</p>
                     <p class="phone">${patient.phone}</p>
                     <p class="name">${patient.created_by}</p>
-                    <p class="date">${date_formatter(patient.created_at)}</p>
+                    <p class="date">${date}</p>
                     <div class="action d_flex flex__c_c">
                         ${patient.visit_status === 'active' ? view_visit_btn + checkout_btn : create_visit_btn}
                     </div>
-                </div>
             `;
-            tableBody.insertAdjacentHTML('beforeend', row);
+
+            // set listeners
+            if (row.querySelector('#checkOut_btn')) {
+                row.querySelector('#checkOut_btn').addEventListener('click', async (event) => {
+                    event.stopPropagation();
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'checkout_request',
+                        parameter: patient.latest_visit_id,
+                        title: 'CheckOut Patient',
+                        sub_heading: `CheckOut : ${patient.name}`,
+                        description: 'Are you sure you want to checkout this patient?',
+                        ok_btn: 'CheckOut',
+                        cancel_btn: 'Cancel',
+                    });
+
+
+                });
+            }
+
+            if (row.querySelector('#viewVisit_btn')) {
+                row.querySelector('#viewVisit_btn').addEventListener('click', async (event) => {
+                    event.stopPropagation();
+                    frontRouter.navigate('/patient/activevisit/' + patient.latest_visit_id);
+                });
+            }
+
+            if (row.querySelector('#createVisit_btn')) {
+                row.querySelector('#createVisit_btn').addEventListener('click', async (event) => {
+                    event.stopPropagation();
+
+                    dashboardController.createVisitPopUpView.PreRender(
+                        {
+                            id: patient.id,
+                            p_name: patient.name,
+                        })
+
+                });
+
+
+            }
+            row.addEventListener('click', () => {
+                frontRouter.navigate('/patient/viewpatient/' + patient.id);
+            })
+
+            tableBody.appendChild(row);
+
         });
 
-        this.row_listener();
+
+        // this.row_listener();
     }
 
     async fetchData() {
@@ -225,7 +224,9 @@ export class ViewPatientView {
     `;
     }
 
-    async checkout_request(id) {
+    async checkout_request(visit_id) {
+        dashboardController.loaderView.render();
+
         try {
             const response = await fetch('/api/patient/check_out_patient', {
                 method: 'POST',
@@ -233,8 +234,8 @@ export class ViewPatientView {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    patient_id: id,
-                    visit_id: '',
+                    patient_id: '',
+                    visit_id: visit_id,
                 })
             });
 
@@ -242,12 +243,21 @@ export class ViewPatientView {
                 throw new Error('Server Error');
             }
 
-            const result = await response.json();
-            return result;
+            const checkOut_response = await response.json();
+            if (checkOut_response.success) {
+                notify('top_left', checkOut_response.message, 'success');
+                await this.fetchAndRenderData();
+
+            } else {
+                notify('top_left', checkOut_response.message, 'error');
+            }
         } catch (error) {
             console.error('Error:', error);
             notify('top_left', error.message, 'error');
             return null;
+        }
+        finally {
+            dashboardController.loaderView.remove();
         }
     }
 
@@ -299,7 +309,7 @@ export class ViewPatientView {
             </div>
         </div>
         `;
-        }
+    }
 }
 
 

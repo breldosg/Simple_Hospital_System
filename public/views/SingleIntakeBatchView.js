@@ -425,7 +425,7 @@ export class SingleIntakeBatchView {
                 },
                 body: JSON.stringify({
                     batch_id: this.batch_id,
-                    id:data
+                    id: data
                 })
             });
 
@@ -436,7 +436,7 @@ export class SingleIntakeBatchView {
             const result = await response.json();
 
             if (result.success) {
-                notify('top_left', result.message,'success');
+                notify('top_left', result.message, 'success');
                 this.query = '';
                 await this.fetch_table_data();
             } else {
