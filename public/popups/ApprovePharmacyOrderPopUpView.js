@@ -22,10 +22,10 @@ export class ApprovePharmacyOrderPopUpView {
 
         this.order_id = params.order_id;
         this.orderName = params.order_name;
-        this.storeQuantity = params.store_quantity;
         this.pharmacyQuantity = params.pharmacy_quantity;
         this.action = params.action;
         this.quantity = params.quantity ? params.quantity : '';
+        this.storeQuantity = this.action == 'update' ? params.store_quantity + this.quantity : params.store_quantity;
 
 
         cont.classList.add('active');
@@ -104,6 +104,7 @@ export class ApprovePharmacyOrderPopUpView {
     async approve_order(data) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
+
 
         if (data.quantity > this.storeQuantity) {
             notify('top_left', 'Quantity should not exceed store quantity', 'warning');

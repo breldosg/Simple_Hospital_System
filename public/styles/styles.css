@@ -2234,6 +2234,7 @@ input {
                     }
 
                     .body_part {
+                        margin-top: 10px;
                         display: flex;
                         flex-direction: column;
                         gap: 10px;
@@ -2254,87 +2255,152 @@ input {
 
                 }
 
-            }
+                .add_card_btn {
+                    background-color: var(--pure_white_background);
+                    border-radius: var(--main_border_r);
+                    cursor: pointer;
+                    flex: none;
+                    min-height: 75px;
+                    position: relative;
 
-            .add_card_btn {
-                background-color: var(--pure_white_background);
-                border-radius: var(--main_border_r);
-                cursor: pointer;
-                overflow: hidden;
-                flex: none;
-                min-height: 75px;
+                    .add_card_btn_in {
+                        border-radius: var(--main_border_r);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
 
-                .add_card_btn_in {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+                        width: 100%;
+                        height: 100%;
+                        background-color: var(--hover_list_table);
 
-                    width: 100%;
-                    height: 100%;
-                    background-color: var(--hover_list_table);
+                        span {
+                            font-size: 20px;
+                            color: var(--pri_color);
+                        }
+                    }
 
-                    span {
-                        font-size: 20px;
-                        color: var(--pri_color);
+                    .option_cont {
+                        display: none;
                     }
                 }
-            }
 
-            .add_card_btn:hover {
-                .add_card_btn_in {
-                    transform: scale(1.05);
-                }
-            }
+                .add_card_btn.option {
+                    .add_card_btn_in {
+                        display: none;
+                    }
 
-            .patient_note_cards_cont_cont {
-                grid-column-start: 1;
-                grid-column-end: 4;
-
-
-                .patient_note_cards_cont {
-                    display: flex;
-                    flex-direction: row !important;
-                    flex-wrap: wrap;
-                    overflow: hidden;
-                    height: 220px;
-
-                    .note_card {
-                        /* background-color: var(--hover_list_table); */
-                        border: 2px solid var(--black-op3);
-                        border-radius: var(--main_border_r);
-                        padding: var(--main_padding);
+                    .option_cont {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
                         display: flex;
                         flex-direction: column;
-                        gap: 10px;
-                        max-width: 350px;
-                        height: 220px;
-                        overflow: hidden;
-                        flex: none;
-                        flex-grow: 1;
+                        gap: 5px;
+                        background-color: var(--pure_white_background);
+                        border-radius: var(--main_border_r);
+                        padding: var(--main_padding);
+                        box-shadow: 0 0 4px 0px #00000069;
 
-                        .title {
-                            font-size: 16px;
-                            font-weight: 700;
+                        .option {
+                            padding-left: var(--main_padding);
+                            cursor: pointer;
+                            border-radius: var(--btn_border_r);
+                            width: 100%;
+                            height: 40px;
+                            display: flex;
+                            align-items: center;
+
                         }
 
-                        .date {
-                            font-size: 12px;
-                        }
-
-                        .detail {
-                            font-size: 14px;
-                            display: -webkit-box;
-                            -webkit-box-orient: vertical;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            -webkit-line-clamp: 7;
+                        .option:hover {
+                            background-color: var(--pri_op);
+                            color: var(--pri_color);
                         }
 
                     }
 
                 }
 
+                .patient_note_cards_cont_cont {
+                    grid-column-start: 2;
+                    grid-column-end: 4;
+
+
+                    .patient_note_cards_cont {
+                        display: flex;
+                        flex-direction: row !important;
+                        flex-wrap: wrap;
+                        overflow: hidden;
+                        height: 220px;
+
+                        .note_card {
+                            /* background-color: var(--hover_list_table); */
+                            border: 2px solid var(--black-op3);
+                            border-radius: var(--main_border_r);
+                            padding: var(--main_padding);
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                            max-width: 350px;
+                            height: 220px;
+                            overflow: hidden;
+                            flex: none;
+                            flex-grow: 1;
+
+                            .title {
+                                font-size: 16px;
+                                font-weight: 700;
+                            }
+
+                            .date {
+                                font-size: 12px;
+                            }
+
+                            .detail {
+                                font-size: 14px;
+                                display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                -webkit-line-clamp: 7;
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                .vital_card_cont {
+                    .vital_card {
+                        display: flex;
+                        flex-direction: column;
+                        /* justify-content: space-around; */
+                        height: calc(100% - 35px);
+                        gap: 0;
+
+                        .value_cont {
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            .name {
+                                font-weight: 500;
+                            }
+
+                            .value {
+                                width: 30%;
+                            }
+                        }
+                    }
+                }
+
             }
+
+
 
         }
 
@@ -5518,6 +5584,62 @@ input {
         .secondary:hover {
             background-color: #7a7979;
         }
+    }
+
+    /* ------------------------------------------------------- */
+
+    .chief_complain_add_popUp {
+        width: 500px;
+        height: fit-content;
+        background: var(--pure_white_background);
+        border-radius: var(--main_border_r);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        padding: 50px;
+        position: relative;
+        z-index: 1;
+
+        .cont_heading {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .heading {
+                font-size: 17px;
+                font-weight: bold;
+            }
+        }
+
+        .btn_wrapper{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 10px;
+            margin-top: 30px;
+
+            .card-button {
+                width: 86px;
+                height: 35px;
+                border-radius: var(--btn_border_r);
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                background-color: var(--btn_color);
+                color: var(--white);
+            }
+
+            .secondary {
+                background-color: var(--gray_text);
+                color: var(--white);
+            }
+
+        }
+
     }
 
 
