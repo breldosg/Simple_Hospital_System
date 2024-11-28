@@ -220,6 +220,26 @@ router.post('/onprogress_visits', async (req, res) => {
 
 
 
+router.post('/single_visit_detail', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 460, body); // Add `await` since it's an async function
+        console.log('single_visit_detail Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /single_visit_detail route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+
 
 
 module.exports = router

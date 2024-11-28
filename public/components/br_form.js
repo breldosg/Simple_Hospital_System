@@ -37,8 +37,6 @@ export class BrCustomForm extends HTMLElement {
         });
     }
 
-
-
     render() {
         this.shadowRoot.innerHTML = `
             <style>
@@ -78,7 +76,7 @@ export class BrCustomForm extends HTMLElement {
             input.reset();
         });
     }
-    
+
 
     handleSubmit() {
         let data = {};

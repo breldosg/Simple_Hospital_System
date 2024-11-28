@@ -5,7 +5,6 @@ import { date_formatter, notify } from "../script/index.js";
 export class SingleVisitView {
     constructor() {
         this.visit_id = null;
-        this.patient_name = null;
         this.is_add_card_open = false;
     }
     async PreRender(params) {
@@ -28,17 +27,15 @@ export class SingleVisitView {
             window.removeEventListener('click', handleWindowClick);
         }
 
-        dashboardController.chiefComplainPopUpView.PreRender();
+        dashboardController.patientIllnessNotePopUpView.PreRender();
 
     }
 
-    async render(id) {
-        const patient_data = await this.fetchData(500); // Wait for fetchData to complete
+    async render() {
+        const visit_data = await this.fetchData(); // Wait for fetchData to complete
 
-        this.patient_name = patient_data.name;
-
-        if (patient_data) {
-            this.top_card_view(patient_data);
+        if (visit_data) {
+            this.top_card_view(visit_data.patient_data);
         } else {
             cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
         }
@@ -455,15 +452,15 @@ export class SingleVisitView {
 
     }
 
-    async fetchData(id) {
+    async fetchData() {
         try {
-            const response = await fetch('/api/patient/single_patient', {
+            const response = await fetch('/api/patient/single_visit_detail', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    patient_id: id,
+                    visit_id: this.visit_id,
                 })
             });
 
@@ -484,7 +481,4 @@ export class SingleVisitView {
             return null;
         }
     }
-
-
-
 }

@@ -25,7 +25,7 @@ import { ViewOrderListView } from "../views/ViewOrderListView.js";
 import { PlaceOrderPopUpView } from "../popups/PlaceOrderPopUpView.js";
 import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPopUpView.js";
 import { SingleVisitView } from "../views/SingleVisitView.js";
-import { ChiefComplainPopUpView } from "../popups/ChiefComplainPopUpView.js";
+import { PatientIllnessNotePopUpView } from "../popups/PatientIllnessNotePopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -46,7 +46,7 @@ class DashboardController {
     viewOnProgressView = new ViewOnProgressView();
     
     //Patient Visit
-    chiefComplainPopUpView = new ChiefComplainPopUpView();
+    patientIllnessNotePopUpView = new PatientIllnessNotePopUpView();
     
 
     // Pharmacy And Store Views
