@@ -4470,6 +4470,101 @@ input {
         }
     }
 
+
+    .add_vital_data_pop {
+        padding: 50px;
+        border-radius: var(--main_border_r);
+        background-color: var(--white);
+        position: relative;
+
+        .loader_cont {
+            border-radius: var(--main_border_r);
+            position: absolute;
+        }
+
+        .top_bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            .bar {
+                display: flex;
+                gap: 5px;
+                padding-bottom: 5px;
+                padding-inline: 2px;
+                align-items: flex-end;
+                font-weight: bolder;
+                border-bottom: 2px solid var(--main_text);
+
+                .num {
+                    font-size: 20px;
+                    height: 24px;
+                }
+
+                .num_word {
+                    font-size: 12px;
+                }
+            }
+
+            .bar.active {
+
+                .num,
+                .num_word {
+                    color: var(--pri_color);
+                }
+
+                border-color: var(--pri_color);
+            }
+        }
+
+            .slide {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding: 10px;
+                width: 640px;
+                flex: none;
+
+                .heading {
+                    font-size: 17px;
+                    font-weight: bold;
+                }
+
+                .input_group {
+                    display: flex;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                    width: 100%;
+
+                }
+
+                .btn_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    padding-top: 20px;
+                    gap: 20px;
+
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 35px;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+
+                    .cancel {
+                        background-color: var(--error_color);
+                    }
+                }
+            }
+
+    }
+
     .create_product_popup {
         padding: 50px;
         border-radius: var(--main_border_r);
@@ -5614,7 +5709,7 @@ input {
             }
         }
 
-        .btn_wrapper{
+        .btn_wrapper {
             width: 100%;
             display: flex;
             align-items: center;

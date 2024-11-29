@@ -29,28 +29,48 @@ export class PatientIllnessNotePopUpView {
 <div class="chief_complain_add_popUp">
 
     <div class="cont_heading">
-        <p class="heading">Chief Complain</p>
+        <p class="heading">Patient Illness Note</p>
     </div>
 
     <div class="cont_form">
         <br-form callback="register_chief_complain">
 
 
-            <br-input required name="description" label="Description" type="text" styles="
+            <!-- <br-input required name="description" label="Description" type="text" styles="
                 border-radius: var(--input_main_border_r);
                 width: 400px;
                 padding: 10px;
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 13px;"></br-input> -->
 
 
-            <br-input required name="note" label="Note" type="textarea" styles="
+            <br-input required name="chief_complain" label="Chief Complaints" type="textarea" styles="
                 border-radius: var(--input_main_border_r);
                 width: 400px;
                 padding: 10px;
-                height: 100px;
+                height: 90px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+                " labelStyles="font-size: 13px;"></br-input>
+
+
+            <br-input required name="presented_illness" label="Presented Illness" type="textarea" styles="
+                border-radius: var(--input_main_border_r);
+                width: 400px;
+                padding: 10px;
+                height: 90px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+                " labelStyles="font-size: 13px;"></br-input>
+
+
+            <br-input required name="other_system_review" label="Review Of Other System" type="textarea" styles="
+                border-radius: var(--input_main_border_r);
+                width: 400px;
+                padding: 10px;
+                height: 90px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
                 " labelStyles="font-size: 13px;"></br-input>
@@ -81,18 +101,18 @@ export class PatientIllnessNotePopUpView {
 
         // const delete_btn = document.querySelector('#confirm_delete');
         // delete_btn.addEventListener('click', () => {
-        //     const cont = document.querySelector('.popup');
-        //     cont.classList.remove('active');
-        //     cont.innerHTML = '';
+        // const cont = document.querySelector('.popup');
+        // cont.classList.remove('active');
+        // cont.innerHTML = '';
 
-        //     const callbackName = this.callback;
-        //     const data = this.parameter;
+        // const callbackName = this.callback;
+        // const data = this.parameter;
 
-        //     if (callbackName && typeof window[callbackName] === 'function') {
-        //         window[callbackName](data);
-        //     } else {
-        //         console.warn(`Callback function ${callbackName} is not defined or not a function`);
-        //     }
+        // if (callbackName && typeof window[callbackName] === 'function') {
+        // window[callbackName](data);
+        // } else {
+        // console.warn(`Callback function ${callbackName} is not defined or not a function`);
+        // }
         // });
     }
 

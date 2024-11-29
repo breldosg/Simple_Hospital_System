@@ -27,7 +27,7 @@ export class SingleVisitView {
             window.removeEventListener('click', handleWindowClick);
         }
 
-        dashboardController.patientIllnessNotePopUpView.PreRender();
+        dashboardController.addVitalPopUpView.PreRender();
 
     }
 
