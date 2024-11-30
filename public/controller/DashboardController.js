@@ -27,6 +27,8 @@ import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPop
 import { SingleVisitView } from "../views/SingleVisitView.js";
 import { PatientIllnessNotePopUpView } from "../popups/PatientIllnessNotePopUpView.js";
 import { AddVitalPopUpView } from "../popups/AddVitalPopUpView.js";
+import { VisitVitalCardView } from "../cards/VisitVitalCardView.js";
+import { VisitPatientNoteCardView } from "../cards/VisitPatientNoteCardView.js";
 
 class DashboardController {
     // Loader View
@@ -49,6 +51,8 @@ class DashboardController {
     //Patient Visit
     patientIllnessNotePopUpView = new PatientIllnessNotePopUpView();
     addVitalPopUpView = new AddVitalPopUpView();
+    visitVitalCardView = new VisitVitalCardView();
+    visitPatientNoteCardView = new VisitPatientNoteCardView();
 
 
     // Pharmacy And Store Views

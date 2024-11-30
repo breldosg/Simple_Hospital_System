@@ -4,19 +4,22 @@ import { notify } from "../script/index.js";
 
 export class AddVitalPopUpView {
     constructor() {
-        window.AddVital = this.AddVital.bind(this);
         this.visit_id = null;
     }
 
-    async PreRender(data) {
+    async PreRender(params_json) {
         // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        // this.visit_id = params.c_id;
-        this.params = data;
+        this.visit_id = params_json.visit_id;
+        this.params = params_json;
+        this.vitalData = params_json.vital_data ? params_json.vital_data : [];
+
+ 
+
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -36,7 +39,7 @@ export class AddVitalPopUpView {
 
             <div class="input_group">
 
-                <br-input required name="temp" label="Temperature (deg C)" value="" type="number" styles="
+                <br-input required name="temperature" label="Temperature (deg C)" value="${this.vitalData.temperature ? this.vitalData.temperature : '0'}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -47,7 +50,7 @@ export class AddVitalPopUpView {
 
                                         
 
-                <br-input required name="bpm" label="Pulse (bpm)" value="" type="number" styles="
+                <br-input required name="pulse" label="Pulse (bpm)" value="${this.vitalData.pulse ? this.vitalData.pulse : '0'}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -58,7 +61,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="weight" label="Weight (Kg)" value="" type="number" styles="
+                <br-input required name="weight" label="Weight (Kg)" value="${this.vitalData.weight ? this.vitalData.weight : '0'}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -69,7 +72,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="o2" label="O2 Saturation (%)" value="" type="number" styles="
+                <br-input required name="o2_saturation" label="O2 Saturation (%)" value="${this.vitalData.o2_saturation ? this.vitalData.o2_saturation : '0'}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -80,7 +83,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="blood_pressure" label="Blood Pressure (mmHg)" value="" type="text" styles="
+                <br-input required name="blood_pressure" label="Blood Pressure (mmHg)" value="${this.vitalData.blood_pressure ? this.vitalData.blood_pressure : '0'}" type="text" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -91,7 +94,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="respiration" label="Respiration (RR)" value="" type="number" styles="
+                <br-input required name="respiration" label="Respiration (RR)" value="${this.vitalData.respiration ? this.vitalData.respiration : '0'}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -102,7 +105,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="height" label="Height (cm)" value="" type="number" styles="
+                <br-input required name="height" label="Height (cm)" value="${this.vitalData.height ? this.vitalData.height : '0'}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -136,59 +139,5 @@ export class AddVitalPopUpView {
         const cont = document.querySelector('.popup');
         cont.classList.remove('active');
         cont.innerHTML = '';
-    }
-
-    async AddVital(data_old) {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
-        btn_submit.setAttribute('loading', true);
-
-
-        var data = {
-            ...data_old,
-            visit_id: 5
-        }
-        // var data = {
-        //     ...data_old,
-        //     visit_id: this.visit_id
-        // }
-
-
-
-        try {
-            const response = await fetch('/api/patient/save_vital', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) {
-                throw new Error('failed To create visit. Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                notify('top_left', result.message, 'success');
-                // After successful creation, clear the popup and close it
-                const popup_cont = document.querySelector('.popup');
-                popup_cont.innerHTML = ''; // Clear the popup and close it
-                popup_cont.classList.remove('active');
-
-                dashboardController.singleMedicineCategoryView.PreRender(
-                    {
-                        id: this.visit_id
-                    });
-
-            } else {
-                notify('top_left', result.message, 'warning');
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-        }
-        finally {
-            btn_submit.setAttribute('loading', false);
-        }
     }
 }

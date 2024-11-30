@@ -16,9 +16,11 @@ export class SingleVisitView {
 
 
         const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn('', 'active');
+        cont.innerHTML = this.ViewReturn('active');
 
         this.visit_id = params.id;
+
+
         // Now call render which will fetch data and populate it
         this.render(params.id);
         this.attach_listeners()
@@ -27,8 +29,6 @@ export class SingleVisitView {
             window.removeEventListener('click', handleWindowClick);
         }
 
-        dashboardController.addVitalPopUpView.PreRender();
-
     }
 
     async render() {
@@ -36,12 +36,26 @@ export class SingleVisitView {
 
         if (visit_data) {
             this.top_card_view(visit_data.patient_data);
+
+            if (!visit_data.vital_sign.success) {
+                dashboardController.visitVitalCardView.PreRender({
+                    data: '',
+                    visit_id: this.visit_id,
+                });
+            }
+            else {
+                dashboardController.visitVitalCardView.PreRender({
+                    data: visit_data.vital_sign,
+                    visit_id: this.visit_id,
+                });
+            }
+
         } else {
             cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
         }
     }
 
-    ViewReturn(data, loader = '') {
+    ViewReturn(loader = '') {
 
 
         return `
@@ -50,18 +64,18 @@ export class SingleVisitView {
     <div class="top_card">
 
         <div class="Patient_imag">
-            <img src="${data == '' ? '' : data.Patient_img}" alt="">
+            <img src="" alt="">
         </div>
 
         <div class="patient_detail">
 
             <div class="card name_card">
                 <div class="dit_group">
-                    <p class="name">${data == '' ? '' : data.name}</p>
-                    <p class="description"> Patient id: <span>${data == '' ? '' : data.id}</span></p>
+                    <p class="name"></p>
+                    <p class="description"> Patient id: <span></span></p>
                 </div>
 
-                <button type="button" data_src="${data == '' ? '' : data.id}" class="edit_btn">
+                <button type="button" data_src="" class="edit_btn">
                     <span class='switch_icon_edit'></span>
                 </button>
 
@@ -70,28 +84,27 @@ export class SingleVisitView {
             <div class="card">
                 <div class="icon_card">
                     <span class='switch_icon_user'></span>
-                    <p>${data == '' ? '' : data.gender}</p>
+                    <p></p>
                 </div>
 
                 <div class="icon_card">
                     <span class='switch_icon_calendar_check'></span>
-                    <p>${date_formatter(data == '' ? '2001-02-01' : data.dob)} (${data == '' ? '' : data.age}
-                        years)</p>
+                    <p>years</p>
                 </div>
 
                 <div class="icon_card">
                     <span class='switch_icon_location_dot'></span>
-                    <p>${data == '' ? '' : data.address} (<span>${data == '' ? '' : data.nationality}</span>)</p>
+                    <p><span></span>)</p>
                 </div>
 
                 <div class="icon_card">
                     <span class='switch_icon_phone'></span>
-                    <p>${data == '' ? '' : data.phone} <span>/</span> ${data == '' ? '' : data.alt_phone}</p>
+                    <p><span>/</span> </p>
                 </div>
 
                 <div class="icon_card">
                     <span class='switch_icon_briefcase'></span>
-                    <p>${data == '' ? '' : data.occupation}</p>
+                    <p></p>
                 </div>
 
             </div>
@@ -104,51 +117,52 @@ export class SingleVisitView {
     </div>
 
     <div class="more_visit_detail">
+    
+    </div>
 
-        <div class="more_visit_detail_card vital_card_cont">
-            <div class="head_part">
-                <h4 class="heading">Vital Sign</h4>
+    <div class="more_visit_cards">
+    </div>
 
-                <div class="add_btn">
-                    <span class='switch_icon_mode_edit'></span>
-                </div>
+
+</div>
+`;
+    }
+
+
+    visit_cards_view() {
+        const body = document.querySelector('.single_visit_cont');
+
+        const cards_cont = document.createElement('div');
+        cards_cont.className = 'more_visit_cards';
+
+        cards_cont.innerHTML = `
+        <div class="add_card_btn" id="add_card_btn">
+            <div class="add_card_btn_in">
+                <span class='switch_icon_add'></span>
             </div>
-
-            <div class="body_part vital_card">
-
-                <div class="value_cont">
-                    <p class="name">Temperature:</p>
-                    <p class="value">36.2 deg C</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Pulse:</p>
-                    <p class="value">91 bpm</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Weight:</p>
-                    <p class="value">77 Kg</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">O2 Saturation:</p>
-                    <p class="value">98 %</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Blood Pressure:</p>
-                    <p class="value">136/84 mmHg</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Respiration:</p>
-                    <p class="value">20 RR</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Height:</p>
-                    <p class="value">36.2 cm</p>
-                </div>
-
+            <div class="option_cont">
+                <div data_src="vital" class="option">Vital Sign</div>
+                <div data_src="complain" class="option">Chief Complain</div>
+                <div data_src="illness" class="option">Presented Illness</div>
+                <div data_src="reviewSystem" class="option">Review of Other System</div>
+                <div data_src="generalExam" class="option">General Exam</div>
+                <div data_src="systemicExam" class="option">Systemic Exam</div>
+                <div data_src="preliminaryDiagnosis" class="option">Preliminary Diagnosis</div>
+                <div data_src="radiologyExam" class="option">Radiology Exam</div>
+                <div data_src="labExam" class="option">Laboratory Exam</div>
+                <div data_src="labExam" class="option">Laboratory Exam</div>
+                <div data_src="prescription" class="option">Prescription</div>
             </div>
-
         </div>
+        `;
 
+        body.appendChild(cards_cont);
+
+    }
+
+    more_visit_detail_view() {
+        const more_visit_detail = document.querySelector('.single_visit_cont .more_visit_detail');
+        const view = `
 
         <div class="more_visit_detail_card patient_note_cards_cont_cont">
             <div class="head_part">
@@ -256,37 +270,58 @@ export class SingleVisitView {
 
         </div>
 
-        <div class="more_visit_detail_card" type="complain">
-        <div class="head_part">
-                <h4 class="heading">Chief Complain</h4>
+    `;
 
-                <div class="add_btn">
-                    <span class="switch_icon_add"></span>
-                </div>
-            </div>
+        more_visit_detail.innerHTML = view;
+    }
 
-            <div class="body_part patient_note_cards_cont">
+    top_card_view(data) {
 
+        const body = document.querySelector('.single_visit_cont .top_card');
+        body.innerHTML = `
+<div class="Patient_imag">
+    <img src="${data == '' ? '' : data.Patient_img}" alt="">
+</div>
 
-            </div></div>
+<div class="patient_detail">
 
-        <div class="add_card_btn" id="add_card_btn">
-            <div class="add_card_btn_in">
-                <span class='switch_icon_add'></span>
-            </div>
-            <div class="option_cont">
-                <div data_src="vital" class="option">Vital Sign</div>
-                <div data_src="complain" class="option">Chief Complain</div>
-                <div data_src="illness" class="option">Presented Illness</div>
-                <div data_src="reviewSystem" class="option">Review of Other System</div>
-                <div data_src="generalExam" class="option">General Exam</div>
-                <div data_src="systemicExam" class="option">Systemic Exam</div>
-                <div data_src="preliminaryDiagnosis" class="option">Preliminary Diagnosis</div>
-                <div data_src="radiologyExam" class="option">Radiology Exam</div>
-                <div data_src="labExam" class="option">Laboratory Exam</div>
-                <div data_src="labExam" class="option">Laboratory Exam</div>
-                <div data_src="prescription" class="option">Prescription</div>
-            </div>
+    <div class="card name_card">
+        <div class="dit_group">
+            <p class="name">${data == '' ? '' : data.name}</p>
+            <p class="description"> Patient id: <span>${data == '' ? '' : data.id}</span></p>
+        </div>
+
+        <button type="button" data_src="${data == '' ? '' : data.id}" class="edit_btn">
+            <span class='switch_icon_edit'></span>
+        </button>
+
+    </div>
+
+    <div class="card">
+        <div class="icon_card">
+            <span class='switch_icon_user'></span>
+            <p>${data == '' ? '' : data.gender}</p>
+        </div>
+
+        <div class="icon_card">
+            <span class='switch_icon_calendar_check'></span>
+            <p>${date_formatter(data == '' ? '2001-02-01' : data.dob)} (${data == '' ? '' : data.age}
+                years)</p>
+        </div>
+
+        <div class="icon_card">
+            <span class='switch_icon_location_dot'></span>
+            <p>${data == '' ? '' : data.address} (<span>${data == '' ? '' : data.nationality}</span>)</p>
+        </div>
+
+        <div class="icon_card">
+            <span class='switch_icon_phone'></span>
+            <p>${data == '' ? '' : data.phone} <span>/</span> ${data == '' ? '' : data.alt_phone}</p>
+        </div>
+
+        <div class="icon_card">
+            <span class='switch_icon_briefcase'></span>
+            <p>${data == '' ? '' : data.occupation}</p>
         </div>
 
     </div>
@@ -295,98 +330,43 @@ export class SingleVisitView {
 `;
     }
 
-    top_card_view(data) {
-
-        const body = document.querySelector('.single_visit_cont .top_card');
-        body.innerHTML = `
-        <div class="Patient_imag">
-            <img src="${data == '' ? '' : data.Patient_img}" alt="">
-        </div>
-
-        <div class="patient_detail">
-
-            <div class="card name_card">
-                <div class="dit_group">
-                    <p class="name">${data == '' ? '' : data.name}</p>
-                    <p class="description"> Patient id: <span>${data == '' ? '' : data.id}</span></p>
-                </div>
-
-                <button type="button" data_src="${data == '' ? '' : data.id}" class="edit_btn">
-                    <span class='switch_icon_edit'></span>
-                </button>
-
-            </div>
-
-            <div class="card">
-                <div class="icon_card">
-                    <span class='switch_icon_user'></span>
-                    <p>${data == '' ? '' : data.gender}</p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_calendar_check'></span>
-                    <p>${date_formatter(data == '' ? '2001-02-01' : data.dob)} (${data == '' ? '' : data.age}
-                        years)</p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_location_dot'></span>
-                    <p>${data == '' ? '' : data.address} (<span>${data == '' ? '' : data.nationality}</span>)</p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_phone'></span>
-                    <p>${data == '' ? '' : data.phone} <span>/</span> ${data == '' ? '' : data.alt_phone}</p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_briefcase'></span>
-                    <p>${data == '' ? '' : data.occupation}</p>
-                </div>
-
-            </div>
-
-        </div>
-            `;
-    }
-
     attach_listeners() {
-        const add_card_btn = document.querySelector('.add_card_btn');
+        // const add_card_btn = document.querySelector('.add_card_btn');
 
-        const handleWindowClick = (e) => {
-            if (this.is_add_card_open) {
-                if (!add_card_btn.contains(e.target)) {
-                    add_card_btn.classList.remove('option');
-                    this.is_add_card_open = false;
+        // const handleWindowClick = (e) => {
+        //     if (this.is_add_card_open) {
+        //         if (!add_card_btn.contains(e.target)) {
+        //             add_card_btn.classList.remove('option');
+        //             this.is_add_card_open = false;
 
-                    // Remove the event listener once the state is reset
-                    window.removeEventListener('click', handleWindowClick);
-                }
-            }
-        };
+        //             // Remove the event listener once the state is reset
+        //             window.removeEventListener('click', handleWindowClick);
+        //         }
+        //     }
+        // };
 
-        add_card_btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            add_card_btn.classList.add('option');
-            this.is_add_card_open = true;
+        // add_card_btn.addEventListener('click', (e) => {
+        //     e.stopPropagation();
+        //     add_card_btn.classList.add('option');
+        //     this.is_add_card_open = true;
 
-            // Add the window click listener
-            window.addEventListener('click', handleWindowClick);
-        });
+        //     // Add the window click listener
+        //     window.addEventListener('click', handleWindowClick);
+        // });
 
-        const oprions = document.querySelectorAll('.option_cont .option');
-        oprions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
+        // const oprions = document.querySelectorAll('.option_cont .option');
+        // oprions.forEach(option => {
+        //     option.addEventListener('click', (e) => {
+        //         e.stopPropagation();
 
-                const tab_name = option.getAttribute('data_src');
+        //         const tab_name = option.getAttribute('data_src');
 
-                add_card_btn.insertAdjacentElement('beforebegin', this.card_view(tab_name));
+        //         add_card_btn.insertAdjacentElement('beforebegin', this.card_view(tab_name));
 
-                add_card_btn.classList.remove('option');
-                this.is_add_card_open = false;
-            })
-        });
+        //         add_card_btn.classList.remove('option');
+        //         this.is_add_card_open = false;
+        //     })
+        // });
 
     }
 
@@ -435,18 +415,19 @@ export class SingleVisitView {
         card.setAttribute('type', type);
 
         card.innerHTML = `
-        <div class="head_part">
-                <h4 class="heading">${title}</h4>
+<div class="head_part">
+    <h4 class="heading">${title}</h4>
 
-                <div class="add_btn">
-                    <span class='switch_icon_add'></span>
-                </div>
-            </div>
+    <div class="add_btn">
+        <span class='switch_icon_add'></span>
+    </div>
+</div>
 
-            <div class="body_part patient_note_cards_cont">
+<div class="body_part patient_note_cards_cont">
 
 
-            </div>`;
+</div>
+                        `;
 
         return card;
 
