@@ -29,6 +29,7 @@ export class SingleVisitView {
             window.removeEventListener('click', handleWindowClick);
         }
 
+
     }
 
     async render() {
@@ -37,18 +38,17 @@ export class SingleVisitView {
         if (visit_data) {
             this.top_card_view(visit_data.patient_data);
 
-            if (!visit_data.vital_sign.success) {
-                dashboardController.visitVitalCardView.PreRender({
-                    data: '',
-                    visit_id: this.visit_id,
-                });
-            }
-            else {
-                dashboardController.visitVitalCardView.PreRender({
-                    data: visit_data.vital_sign,
-                    visit_id: this.visit_id,
-                });
-            }
+
+            dashboardController.visitVitalCardView.PreRender({
+                data: visit_data.vital_sign,
+                visit_id: this.visit_id,
+            });
+            dashboardController.visitPatientNoteCardView.PreRender({
+                data: visit_data.patient_note,
+                visit_id: this.visit_id,
+            })
+
+            this.Add_visit_cards_view();
 
         } else {
             cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
@@ -129,14 +129,14 @@ export class SingleVisitView {
     }
 
 
-    visit_cards_view() {
-        const body = document.querySelector('.single_visit_cont');
+    Add_visit_cards_view() {
+        const body = document.querySelector('.single_visit_cont .more_visit_cards');
 
         const cards_cont = document.createElement('div');
-        cards_cont.className = 'more_visit_cards';
+        cards_cont.className = 'add_card_btn';
+        cards_cont.setAttribute('id', 'add_card_btn')
 
         cards_cont.innerHTML = `
-        <div class="add_card_btn" id="add_card_btn">
             <div class="add_card_btn_in">
                 <span class='switch_icon_add'></span>
             </div>
@@ -153,127 +153,36 @@ export class SingleVisitView {
                 <div data_src="labExam" class="option">Laboratory Exam</div>
                 <div data_src="prescription" class="option">Prescription</div>
             </div>
-        </div>
         `;
+
+        cards_cont.addEventListener('click', (e) => {
+            e.stopPropagation();
+            add_card_btn.classList.add('option');
+            this.is_add_card_open = true;
+
+            // Add the window click listener
+            window.addEventListener('click', this.handleWindowClick);
+
+        })
+
+        const oprions = cards_cont.querySelectorAll('.option_cont .option');
+        oprions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                const tab_name = option.getAttribute('data_src');
+
+                add_card_btn.insertAdjacentElement('beforebegin', this.card_view(tab_name));
+
+                add_card_btn.classList.remove('option');
+                this.is_add_card_open = false;
+            })
+        });
 
         body.appendChild(cards_cont);
 
     }
 
-    more_visit_detail_view() {
-        const more_visit_detail = document.querySelector('.single_visit_cont .more_visit_detail');
-        const view = `
-
-        <div class="more_visit_detail_card patient_note_cards_cont_cont">
-            <div class="head_part">
-                <h4 class="heading">Patient Note</h4>
-
-                <div class="add_btn">
-                    <span class='switch_icon_add'></span>
-                </div>
-            </div>
-
-            <div class="body_part patient_note_cards_cont">
-
-                <!-- no note show -->
-                <!-- <div class="start_cont">
-                    <p class="start_view_overlay">No Note Found</p>
-                </div> -->
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-            </div>
-
-        </div>
-
-    `;
-
-        more_visit_detail.innerHTML = view;
-    }
 
     top_card_view(data) {
 
@@ -331,42 +240,19 @@ export class SingleVisitView {
     }
 
     attach_listeners() {
-        // const add_card_btn = document.querySelector('.add_card_btn');
+        const add_card_btn = document.querySelector('.add_card_btn');
 
-        // const handleWindowClick = (e) => {
-        //     if (this.is_add_card_open) {
-        //         if (!add_card_btn.contains(e.target)) {
-        //             add_card_btn.classList.remove('option');
-        //             this.is_add_card_open = false;
+        this.handleWindowClick = (e) => {
+            if (this.is_add_card_open) {
+                if (!add_card_btn.contains(e.target)) {
+                    add_card_btn.classList.remove('option');
+                    this.is_add_card_open = false;
 
-        //             // Remove the event listener once the state is reset
-        //             window.removeEventListener('click', handleWindowClick);
-        //         }
-        //     }
-        // };
-
-        // add_card_btn.addEventListener('click', (e) => {
-        //     e.stopPropagation();
-        //     add_card_btn.classList.add('option');
-        //     this.is_add_card_open = true;
-
-        //     // Add the window click listener
-        //     window.addEventListener('click', handleWindowClick);
-        // });
-
-        // const oprions = document.querySelectorAll('.option_cont .option');
-        // oprions.forEach(option => {
-        //     option.addEventListener('click', (e) => {
-        //         e.stopPropagation();
-
-        //         const tab_name = option.getAttribute('data_src');
-
-        //         add_card_btn.insertAdjacentElement('beforebegin', this.card_view(tab_name));
-
-        //         add_card_btn.classList.remove('option');
-        //         this.is_add_card_open = false;
-        //     })
-        // });
+                    // Remove the event listener once the state is reset
+                    window.removeEventListener('click', handleWindowClick);
+                }
+            }
+        };
 
     }
 

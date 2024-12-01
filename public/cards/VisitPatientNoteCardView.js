@@ -1,12 +1,12 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 
 export class VisitPatientNoteCardView {
     constructor() {
-        window.AddVital = this.AddVital.bind(this);
+        window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
-        this.data = [];
+        this.datas = [];
     }
 
     async PreRender(params) {
@@ -16,50 +16,51 @@ export class VisitPatientNoteCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.data = params.data.vital_data ? params.data.vital_data : [];
+        this.datas = params.data.note_data ? params.data.note_data : [];
         this.visit_id = params.visit_id;
 
         const cont = document.querySelector('.single_visit_cont .more_visit_detail');
         cont.classList.add('active');
-        cont.prepend(this.ViewReturn());
+        cont.appendChild(this.ViewReturn());
 
-        this.updateVitalView();
+
+        this.renderNoteCards();
     }
 
-    updateVitalView() {
+    renderNoteCards() {
 
-        const container = document.querySelector('.vital_card_cont .vital_card')
+        const container = document.querySelector('.patient_note_cards_cont_cont .body_part')
 
-        container.innerHTML = `
-                <div class="value_cont">
-                    <p class="name">Temperature:</p>
-                    <p class="value">${this.data.temperature ? this.data.temperature : '0'} deg C</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Pulse:</p>
-                    <p class="value">${this.data.pulse ? this.data.pulse : '0'} bpm</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Weight:</p>
-                    <p class="value">${this.data.weight ? this.data.weight : '0'} Kg</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">O2 Saturation:</p>
-                    <p class="value">${this.data.o2_saturation ? this.data.o2_saturation : '0'} %</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Blood Pressure:</p>
-                    <p class="value">${this.data.blood_pressure ? this.data.blood_pressure : '0'} mmHg</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Respiration:</p>
-                    <p class="value">${this.data.respiration ? this.data.respiration : '0'}  RR</p>
-                </div>
-                <div class="value_cont">
-                    <p class="name">Height:</p>
-                    <p class="value">${this.data.height ? this.data.height : '0'}  cm</p> 
-                </div>
-                `;
+        const start_cont = container.querySelector('.start_cont');
+
+        // console.log();
+
+
+        if (this.datas.length < 0) {
+
+            if (start_cont) {
+                start_cont.remove();
+            }
+        }
+
+        this.datas.forEach((data) => {
+            const card = document.createElement('div');
+            card.className = 'note_card';
+
+            card.innerHTML = `
+                        <div class="card_head">
+                            <p class="title">${data.created_by}</p>
+                            <p class="date">${date_formatter(data.created_at)}</p>
+                        </div>
+                        <p class="detail">
+                            ${data.note}
+                        </p>
+                    `;
+
+            container.prepend(card);
+        })
+
+        this.datas = [];
 
     }
 
@@ -67,29 +68,120 @@ export class VisitPatientNoteCardView {
 
         const card = document.createElement('div');
         card.className = 'more_visit_detail_card';
-        card.classList.add('vital_card_cont');
+        card.classList.add('patient_note_cards_cont_cont');
 
         card.innerHTML = `
             <div class="head_part">
-                <h4 class="heading">Vital Sign</h4>
+                <h4 class="heading">Patient Note</h4>
 
-                <div class="add_btn" id="edit_vital_sign">
-                    <span class='switch_icon_mode_edit'></span>
+                <div class="add_btn" id="add_patient_note_btn" >
+                    <span class='switch_icon_add'></span>
                 </div>
             </div>
 
-            <div class="body_part vital_card">
+            <div class="body_part patient_note_cards_cont">
 
-                
+                <!-- no note show -->
+                <div class="start_cont">
+                    <p class="start_view_overlay">No Patient Note Found</p>
+                </div>
+
+                <!-- <div class="note_card">
+                    <div class="card_head">
+                        <p class="title">ABDILAH KHATIB MAKAME</p>
+                        <p class="date">${date_formatter(new Date())}</p>
+                    </div>
+                    <p class="detail">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
+                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
+                        incidunt magni explicabo nulla perferendis, aut similique.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
+                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
+                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
+
+                    </p>
+                </div>
+
+
+                <div class="note_card">
+                    <div class="card_head">
+                        <p class="title">ABDILAH KHATIB MAKAME</p>
+                        <p class="date">${date_formatter(new Date())}</p>
+                    </div>
+                    <p class="detail">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
+                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
+                        incidunt magni explicabo nulla perferendis, aut similique.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
+                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
+                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
+
+                    </p>
+                </div>
+
+
+                <div class="note_card">
+                    <div class="card_head">
+                        <p class="title">ABDILAH KHATIB MAKAME</p>
+                        <p class="date">${date_formatter(new Date())}</p>
+                    </div>
+                    <p class="detail">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
+                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
+                        incidunt magni explicabo nulla perferendis, aut similique.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
+                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
+                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
+
+                    </p>
+                </div>
+
+
+                <div class="note_card">
+                    <div class="card_head">
+                        <p class="title">ABDILAH KHATIB MAKAME</p>
+                        <p class="date">${date_formatter(new Date())}</p>
+                    </div>
+                    <p class="detail">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
+                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
+                        incidunt magni explicabo nulla perferendis, aut similique.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
+                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
+                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
+
+                    </p>
+                </div>
+
+
+
+                <div class="note_card">
+                    <div class="card_head">
+                        <p class="title">ABDILAH KHATIB MAKAME</p>
+                        <p class="date">${date_formatter(new Date())}</p>
+                    </div>
+                    <p class="detail">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
+                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
+                        incidunt magni explicabo nulla perferendis, aut similique.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
+                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
+                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
+
+                    </p>
+                </div>
+
+                -->
+
+
             </div>
             `;
 
-        const edit_btn = card.querySelector('#edit_vital_sign');
+
+        const edit_btn = card.querySelector('#add_patient_note_btn');
         edit_btn.addEventListener('click', () => {
-            dashboardController.addVitalPopUpView.PreRender({
-                visit_id: this.visit_id,
-                vital_data: this.data
-            })
+            console.log('add Note Btn');
+            dashboardController.addPatientNotePopUpView.PreRender();
         })
 
         return card;
@@ -97,26 +189,27 @@ export class VisitPatientNoteCardView {
     }
 
     attachListeners() {
-        const cancel_btn = document.querySelector('br-button[type="cancel"]');
+        //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
 
-        cancel_btn.addEventListener('click', () => {
-            this.close();
-        });
+        //     cancel_btn.addEventListener('click', () => {
+        //         this.close();
+        //     });
     }
 
-    async AddVital(data_old) {
+    async save_patient_note(data_old) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
 
         var formData = {
             ...data_old,
-            visit_id: this.visit_id
+            visit_id: this.visit_id,
+            action: 'create',
         }
 
 
         try {
-            const response = await fetch('/api/patient/save_vital', {
+            const response = await fetch('/api/patient/save_update_delete_patient_note', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -133,9 +226,12 @@ export class VisitPatientNoteCardView {
             if (result.success) {
                 notify('top_left', result.message, 'success');
                 // After successful creation, clear the popup and close it
-                dashboardController.addVitalPopUpView.close();
-                this.data = data_old;
-                this.updateVitalView();
+                dashboardController.addPatientNotePopUpView.close();
+
+                this.datas = [];
+                this.datas.push(result.data);
+
+                this.renderNoteCards()
 
             } else {
                 notify('top_left', result.message, 'warning');

@@ -2195,6 +2195,8 @@ input {
                 gap: 20px;
 
                 .more_visit_detail_card {
+                    -webkit-animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                    animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
                     flex: none;
                     background-color: var(--pure_white_background);
                     border-radius: var(--main_border_r);
@@ -2243,6 +2245,7 @@ input {
                             display: flex;
                             align-items: center;
                             justify-content: center;
+                            width: 100%;
 
 
                             p {
@@ -2336,6 +2339,8 @@ input {
 
                         .note_card {
                             /* background-color: var(--hover_list_table); */
+                            -webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                            animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
                             border: 2px solid var(--black-op3);
                             border-radius: var(--main_border_r);
                             padding: var(--main_padding);
@@ -2343,6 +2348,8 @@ input {
                             flex-direction: column;
                             gap: 10px;
                             max-width: 350px;
+                            width: 25%;
+                            min-width: 280px;
                             height: 220px;
                             overflow: hidden;
                             flex: none;
@@ -2411,6 +2418,8 @@ input {
                 gap: 20px;
 
                 .more_visit_detail_card {
+                    -webkit-animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                    animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
                     flex: none;
                     background-color: var(--pure_white_background);
                     border-radius: var(--main_border_r);
@@ -2459,7 +2468,6 @@ input {
                             display: flex;
                             align-items: center;
                             justify-content: center;
-
 
                             p {
                                 font-size: 30px;
@@ -2538,81 +2546,6 @@ input {
 
                 }
 
-                .patient_note_cards_cont_cont {
-                    grid-column-start: 2;
-                    grid-column-end: 4;
-
-
-                    .patient_note_cards_cont {
-                        display: flex;
-                        flex-direction: row !important;
-                        flex-wrap: wrap;
-                        overflow: hidden;
-                        height: 220px;
-
-                        .note_card {
-                            /* background-color: var(--hover_list_table); */
-                            border: 2px solid var(--black-op3);
-                            border-radius: var(--main_border_r);
-                            padding: var(--main_padding);
-                            display: flex;
-                            flex-direction: column;
-                            gap: 10px;
-                            max-width: 350px;
-                            height: 220px;
-                            overflow: hidden;
-                            flex: none;
-                            flex-grow: 1;
-
-                            .title {
-                                font-size: 16px;
-                                font-weight: 700;
-                            }
-
-                            .date {
-                                font-size: 12px;
-                            }
-
-                            .detail {
-                                font-size: 14px;
-                                display: -webkit-box;
-                                -webkit-box-orient: vertical;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                -webkit-line-clamp: 7;
-                            }
-
-                        }
-
-                    }
-
-                }
-
-                .vital_card_cont {
-                    .vital_card {
-                        display: flex;
-                        flex-direction: column;
-                        /* justify-content: space-around; */
-                        height: calc(100% - 35px);
-                        gap: 0;
-
-                        .value_cont {
-                            width: 100%;
-                            height: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-
-                            .name {
-                                font-weight: 500;
-                            }
-
-                            .value {
-                                width: 30%;
-                            }
-                        }
-                    }
-                }
 
             }
 
@@ -4414,7 +4347,7 @@ input {
     align-items: center;
     z-index: 100;
 
-    .container{
+    .container {
         -webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
         animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
     }
@@ -4690,9 +4623,164 @@ input {
         }
     }
 
+    .add_patient_note_popup {
+        padding: 50px;
+        border-radius: var(--main_border_r);
+        background-color: var(--white);
+        position: relative;
+
+        .loader_cont {
+            border-radius: var(--main_border_r);
+            position: absolute;
+        }
+
+        .top_bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            .bar {
+                display: flex;
+                gap: 5px;
+                padding-bottom: 5px;
+                padding-inline: 2px;
+                align-items: flex-end;
+                font-weight: bolder;
+                border-bottom: 2px solid var(--main_text);
+
+                .num {
+                    font-size: 20px;
+                    height: 24px;
+                }
+
+                .num_word {
+                    font-size: 12px;
+                }
+            }
+
+            .bar.active {
+
+                .num,
+                .num_word {
+                    color: var(--pri_color);
+                }
+
+                border-color: var(--pri_color);
+            }
+        }
+
+        .slides {
+            display: flex;
+            width: 440px;
+
+            .slide {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                /* margin-top: 20px; */
+                padding: 10px;
+                width: 440px;
+                flex: none;
+
+                .heading {
+                    margin-left: 10px;
+                    font-size: 17px;
+                    font-weight: bold;
+                }
+
+                .input_group {
+                    display: flex;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                    width: 100%;
+                    align-items: center;
+                    justify-content: center;
+
+                    .inp_cont {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+
+                        label {
+                            font-size: 13px;
+                            /* font-weight: bold; */
+                        }
+
+                        input,
+                        select {
+                            border-radius: var(--input_main_border_r);
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                        }
+
+                        .password-container {
+                            border-radius: var(--input_main_border_r);
+                            background-color: var(--input_background);
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            overflow: hidden;
+                            border: 2px solid var(--input_border);
+
+                            .password-input {
+                                width: calc(100% - 40px);
+                                padding: 0px;
+                                height: 100%;
+                                border: none;
+                                background: transparent;
+                                border-radius: 0;
+                            }
+
+                            .toggle-password {
+                                cursor: pointer;
+                                font-size: 18px;
+                                width: 30px;
+                                height: 41px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                /* background-color: rebeccapurple; */
+                            }
+                        }
+                    }
+                }
+
+                .btn_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    padding-top: 20px;
+                    gap: 20px;
+
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 35px;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+
+                    .cancel {
+                        background-color: var(--error_color);
+                    }
+                }
+            }
+        }
+    }
+
 
     .add_vital_data_pop {
-       
+
         padding: 50px;
         border-radius: var(--main_border_r);
         background-color: var(--white);
