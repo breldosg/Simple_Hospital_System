@@ -2195,8 +2195,6 @@ input {
                 gap: 20px;
 
                 .more_visit_detail_card {
-                    -webkit-animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                    animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
                     flex: none;
                     background-color: var(--pure_white_background);
                     border-radius: var(--main_border_r);
@@ -2328,6 +2326,7 @@ input {
                 .patient_note_cards_cont_cont {
                     grid-column-start: 2;
                     grid-column-end: 4;
+                    height: 305px;
 
 
                     .patient_note_cards_cont {
@@ -2336,13 +2335,15 @@ input {
                         flex-wrap: wrap;
                         overflow: hidden;
                         height: 220px;
+                        padding: 5px;
 
                         .note_card {
                             /* background-color: var(--hover_list_table); */
                             -webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
                             animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            border: 2px solid var(--black-op3);
+                            /* border: 2px solid var(--black-op3); */
                             border-radius: var(--main_border_r);
+                            background-color: var(--pure_white_background);
                             padding: var(--main_padding);
                             display: flex;
                             flex-direction: column;
@@ -2350,10 +2351,11 @@ input {
                             max-width: 350px;
                             width: 25%;
                             min-width: 280px;
-                            height: 220px;
+                            height: 100%;
                             overflow: hidden;
                             flex: none;
                             flex-grow: 1;
+                            box-shadow: 0 0 5px 0 #0000001d;
 
                             .title {
                                 font-size: 16px;
@@ -2375,7 +2377,54 @@ input {
 
                         }
 
+                        .note_card:hover {
+                            box-shadow: 0 0 5px 0 #0000003e;
+                        }
+
                     }
+
+                    .full_screen_overlay {
+                        width: auto;
+                        height: 220px;
+
+                        .full_screen {
+                            background-color: var(--pure_white_background);
+                        }
+                    }
+
+                    .full_screen_overlay.active {
+                        animation: overlay_show 0.5s both;
+                        animation-delay: 0.3s;
+                        position: absolute;
+                        transform: translate(-50%, -50%);
+                        left: 50%;
+                        top: 50%;
+                        z-index: 1000;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: var(--black-op2);
+                        opacity: 1;
+
+
+
+                        .full_screen {
+                            border-radius: var(--main_border_r);
+                            padding: var(--main_padding);
+                            background-color: var(--pure_white_background);
+                            height: 90%;
+                            width: 90%;
+                            max-width: 1300px;
+                            max-height: 650px;
+                            /* box-shadow: 0 0 5px 0 #00000036; */
+                            -webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+                            animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+                        }
+
+                    }
+
 
                 }
 
@@ -2417,134 +2466,156 @@ input {
                 grid-template-columns: repeat(3, minmax(300px, 1fr));
                 gap: 20px;
 
-                .more_visit_detail_card {
-                    -webkit-animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                    animation: scale-in-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                    flex: none;
-                    background-color: var(--pure_white_background);
-                    border-radius: var(--main_border_r);
-                    padding: var(--main_padding);
+                .card_group_cont_cont {
 
-                    .head_part {
+
+                    .card_group_cont {
+                        padding-block: 10px;
                         display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        width: 100%;
+                        flex-direction: column;
+                        gap: 20px;
 
-
-                        .add_btn {
-                            width: 35px;
-                            height: 35px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            border-radius: 5px;
+                        .more_visit_detail_card {
                             flex: none;
-                            cursor: pointer;
+                            background-color: var(--pure_white_background);
+                            border-radius: var(--main_border_r);
+                            padding: var(--main_padding);
+                            height: fit-content;
 
-                            span {
-                                font-size: 20px;
+                            .head_part {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                width: 100%;
+
+
+                                .add_btn {
+                                    width: 35px;
+                                    height: 35px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border-radius: 5px;
+                                    flex: none;
+                                    cursor: pointer;
+
+                                    span {
+                                        font-size: 20px;
+                                    }
+                                }
+
+                                .add_btn:hover {
+                                    background-color: var(--pri_op);
+                                    cursor: pointer;
+
+                                    span {
+                                        color: var(--pri_color);
+                                    }
+                                }
+
+                            }
+
+                            .body_part {
+                                margin-top: 10px;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 10px;
+
+                                .start_cont {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    p {
+                                        font-size: 30px;
+                                        color: var(--black-op2);
+                                        font-weight: 700;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        .add_card_btn {
+                            background-color: var(--pure_white_background);
+                            border-radius: var(--main_border_r);
+                            cursor: pointer;
+                            flex: none;
+                            height: 75px;
+                            position: relative;
+
+                            .add_card_btn_in {
+                                border-radius: var(--main_border_r);
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                width: 100%;
+                                height: 100%;
+                                background-color: var(--hover_list_table);
+
+                                span {
+                                    font-size: 20px;
+                                    color: var(--pri_color);
+                                }
+                            }
+
+                            .option_cont {
+                                display: none;
                             }
                         }
 
-                        .add_btn:hover {
-                            background-color: var(--pri_op);
-                            cursor: pointer;
+                        .add_card_btn.option {
 
-                            span {
-                                color: var(--pri_color);
+                            .add_card_btn_in {
+                                display: none;
                             }
-                        }
 
-                    }
+                            .option_cont {
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                width: 100%;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 5px;
+                                background-color: var(--pure_white_background);
+                                border-radius: var(--main_border_r);
+                                padding: var(--main_padding);
+                                box-shadow: 0 0 4px 0px #00000069;
+                                -webkit-animation: scale-in-ver-bottom 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                                animation: scale-in-ver-bottom 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 
-                    .body_part {
-                        margin-top: 10px;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 10px;
+                                .option {
 
-                        .start_cont {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
+                                    padding-left: var(--main_padding);
+                                    cursor: pointer;
+                                    border-radius: var(--btn_border_r);
+                                    width: 100%;
+                                    height: 40px;
+                                    display: flex;
+                                    align-items: center;
 
-                            p {
-                                font-size: 30px;
-                                color: var(--black-op2);
-                                font-weight: 700;
+                                }
+
+                                .option.disabled {
+                                    cursor: not-allowed;
+                                    pointer-events: none;
+                                    opacity: 0.5;
+                                }
+
+                                .option:hover {
+                                    background-color: var(--pri_op);
+                                    color: var(--pri_color);
+                                }
+
                             }
+
                         }
-                    }
-
-                }
-
-                .add_card_btn {
-                    background-color: var(--pure_white_background);
-                    border-radius: var(--main_border_r);
-                    cursor: pointer;
-                    flex: none;
-                    min-height: 75px;
-                    position: relative;
-
-                    .add_card_btn_in {
-                        border-radius: var(--main_border_r);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-
-                        width: 100%;
-                        height: 100%;
-                        background-color: var(--hover_list_table);
-
-                        span {
-                            font-size: 20px;
-                            color: var(--pri_color);
-                        }
-                    }
-
-                    .option_cont {
-                        display: none;
                     }
                 }
 
-                .add_card_btn.option {
-                    .add_card_btn_in {
-                        display: none;
-                    }
 
-                    .option_cont {
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        width: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 5px;
-                        background-color: var(--pure_white_background);
-                        border-radius: var(--main_border_r);
-                        padding: var(--main_padding);
-                        box-shadow: 0 0 4px 0px #00000069;
-
-                        .option {
-                            padding-left: var(--main_padding);
-                            cursor: pointer;
-                            border-radius: var(--btn_border_r);
-                            width: 100%;
-                            height: 40px;
-                            display: flex;
-                            align-items: center;
-
-                        }
-
-                        .option:hover {
-                            background-color: var(--pri_op);
-                            color: var(--pri_color);
-                        }
-
-                    }
-
-                }
 
 
             }

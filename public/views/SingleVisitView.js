@@ -6,6 +6,9 @@ export class SingleVisitView {
     constructor() {
         this.visit_id = null;
         this.is_add_card_open = false;
+        this.card_rendered = [];
+        this.add_card_deleted = '';
+        this.rendered_card = [];
     }
     async PreRender(params) {
         // Render the initial structure with the loader
@@ -23,10 +26,10 @@ export class SingleVisitView {
 
         // Now call render which will fetch data and populate it
         this.render(params.id);
-        this.attach_listeners()
+        // this.attach_listeners()
 
         if (this.is_add_card_open) {
-            window.removeEventListener('click', handleWindowClick);
+            window.removeEventListener('click', this.handleWindowClick);
         }
 
 
@@ -43,12 +46,17 @@ export class SingleVisitView {
                 data: visit_data.vital_sign,
                 visit_id: this.visit_id,
             });
+
             dashboardController.visitPatientNoteCardView.PreRender({
                 data: visit_data.patient_note,
                 visit_id: this.visit_id,
             })
 
-            this.Add_visit_cards_view();
+
+            // this.Add_visit_cards_view();
+
+            this.render_add_btn()
+
 
         } else {
             cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
@@ -117,10 +125,38 @@ export class SingleVisitView {
     </div>
 
     <div class="more_visit_detail">
-    
+
     </div>
 
     <div class="more_visit_cards">
+
+        <div class="card_group_cont_cont" id="clinical_group">
+
+            <h4>Clinical Notes</h4>
+            <div class="card_group_cont">
+
+            </div>
+
+        </div>
+
+        <div class="card_group_cont_cont" id="diagnosis_group">
+
+            <h4>Diagnosis</h4>
+            <div class="card_group_cont">
+
+            </div>
+
+        </div>
+
+        <div class="card_group_cont_cont" id="treatment_group">
+
+            <h4>Treatment Plan</h4>
+            <div class="card_group_cont">
+
+            </div>
+
+        </div>
+
     </div>
 
 
@@ -129,58 +165,149 @@ export class SingleVisitView {
     }
 
 
-    Add_visit_cards_view() {
-        const body = document.querySelector('.single_visit_cont .more_visit_cards');
+    render_add_btn() {
+        const add_btns = [
+            {
+                body_container_id: 'clinical_group',
+                cards: [
+                    {
+                        component: 'visitClinicalEvaluationCardView',
+                        title: 'Clinical Evaluation'
+                    },
+                    {
+                        component: 'visitFinalDiagnosisCardView',
+                        title: 'Final Diagnosis'
+                    },
+                    {
+                        component: 'visitAllergyCardView',
+                        title: 'Allergy'
+                    },
+                    {
+                        component: 'visitPlanForNextVisitCardView',
+                        title: 'Plan for Next Visit'
+                    },
+                ],
+            },
+            {
+                body_container_id: 'diagnosis_group',
+                cards: [
+                    {
+                        component: 'visitRadiologyExamCardView',
+                        title: 'Radiology Exam'
+                    },
+                    {
+                        component: 'visitLabExamCardView',
+                        title: 'Laboratory Test'
+                    },
+                ],
+            },
+            {
+                body_container_id: 'treatment_group',
+                cards: [
+                    {
+                        component: 'visitPrescriptionsCardView',
+                        title: 'Prescriptions'
+                    },
+                    {
+                        component: 'visitProceduresCardView',
+                        title: 'Procedures'
+                    },
+                    {
+                        component: 'visitVaccineCardView',
+                        title: 'Vaccine'
+                    },
+                    {
+                        component: 'visitImplantableDevicesCardView',
+                        title: 'Implantable Devices'
+                    },
+                ],
+            },
+        ];
 
-        const cards_cont = document.createElement('div');
-        cards_cont.className = 'add_card_btn';
-        cards_cont.setAttribute('id', 'add_card_btn')
+        add_btns.forEach((btn) => {
 
-        cards_cont.innerHTML = `
-            <div class="add_card_btn_in">
-                <span class='switch_icon_add'></span>
-            </div>
-            <div class="option_cont">
-                <div data_src="vital" class="option">Vital Sign</div>
-                <div data_src="complain" class="option">Chief Complain</div>
-                <div data_src="illness" class="option">Presented Illness</div>
-                <div data_src="reviewSystem" class="option">Review of Other System</div>
-                <div data_src="generalExam" class="option">General Exam</div>
-                <div data_src="systemicExam" class="option">Systemic Exam</div>
-                <div data_src="preliminaryDiagnosis" class="option">Preliminary Diagnosis</div>
-                <div data_src="radiologyExam" class="option">Radiology Exam</div>
-                <div data_src="labExam" class="option">Laboratory Exam</div>
-                <div data_src="labExam" class="option">Laboratory Exam</div>
-                <div data_src="prescription" class="option">Prescription</div>
-            </div>
-        `;
+            const body = document.querySelector(`.single_visit_cont #${btn.body_container_id} .card_group_cont`);
+            if (body) {
+                const cards_cont = document.createElement('div');
+                cards_cont.className = 'add_card_btn';
+                cards_cont.setAttribute('id', 'add_card_btn');
 
-        cards_cont.addEventListener('click', (e) => {
-            e.stopPropagation();
-            add_card_btn.classList.add('option');
-            this.is_add_card_open = true;
+                const add_card_btn_in = document.createElement('div');
+                add_card_btn_in.className = 'add_card_btn_in';
+                add_card_btn_in.innerHTML = `<span class='switch_icon_add'></span>`;
+                cards_cont.appendChild(add_card_btn_in);
 
-            // Add the window click listener
-            window.addEventListener('click', this.handleWindowClick);
+                const option_cont = document.createElement('div');
+                option_cont.className = 'option_cont';
+
+                btn.cards.forEach(card => {
+                    const option = document.createElement('div');
+                    option.className = 'option';
+                    option.innerText = card.title;
+
+                    if (this.rendered_card.includes(card.title)) {
+                        option.classList.add('disabled');
+                    } else {
+                        const handleClick = (e) => {
+                            e.stopPropagation();
+
+                            // Dynamically call the PreRender method for the component
+                            const controllerMethod = dashboardController[card.component];
+                            if (controllerMethod && typeof controllerMethod.PreRender === 'function') {
+                                controllerMethod.PreRender({
+                                    data: [],
+                                    visit_id: this.visit_id,
+                                });
+                            } else {
+                                console.error(`PreRender method not found for component: ${card.component}`);
+                            }
+
+                            // Add the card title to the rendered cards list
+                            this.rendered_card.push(card.title);
+
+                            // Mark option as disabled
+                            option.classList.add('disabled');
+
+                            // Remove the click listener on this option
+                            option.removeEventListener('click', handleClick);
+
+                            // Close the options menu
+                            cards_cont.classList.remove('option');
+                            this.is_add_card_open = false;
+                            this.add_card_deleted = '';
+
+                            // Remove the event listener once the state is reset
+                            window.removeEventListener('click', this.handleWindowClick);
+                        };
+
+                        // Attach the named click listener
+                        option.addEventListener('click', handleClick);
+                    }
+
+                    option_cont.appendChild(option);
+                });
+
+                cards_cont.appendChild(option_cont);
+
+                cards_cont.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering window click
+                    if (this.is_add_card_open) {
+                        this.add_card_deleted.classList.remove('option');
+                        this.is_add_card_open = false;
+
+                        // Remove the event listener once the state is reset
+                        window.removeEventListener('click', this.handleWindowClick);
+                    }
+                    cards_cont.classList.add('option');
+                    this.is_add_card_open = true;
+                    this.add_card_deleted = cards_cont;
+                    window.addEventListener('click', this.handleWindowClick);
+                });
+
+                body.appendChild(cards_cont);
+            }
 
         })
-
-        const oprions = cards_cont.querySelectorAll('.option_cont .option');
-        oprions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-
-                const tab_name = option.getAttribute('data_src');
-
-                add_card_btn.insertAdjacentElement('beforebegin', this.card_view(tab_name));
-
-                add_card_btn.classList.remove('option');
-                this.is_add_card_open = false;
-            })
-        });
-
-        body.appendChild(cards_cont);
-
     }
 
 
@@ -239,22 +366,22 @@ export class SingleVisitView {
 `;
     }
 
-    attach_listeners() {
-        const add_card_btn = document.querySelector('.add_card_btn');
 
-        this.handleWindowClick = (e) => {
-            if (this.is_add_card_open) {
-                if (!add_card_btn.contains(e.target)) {
-                    add_card_btn.classList.remove('option');
-                    this.is_add_card_open = false;
+    handleWindowClick = (e) => {
+        // const add_card_btn = document.querySelector('.add_card_btn');
+        const add_card_btn = this.add_card_deleted == '' ? false : this.add_card_deleted;
 
-                    // Remove the event listener once the state is reset
-                    window.removeEventListener('click', handleWindowClick);
-                }
+        if (this.is_add_card_open) {
+            if (!add_card_btn.contains(e.target)) {
+                add_card_btn.classList.remove('option');
+                this.is_add_card_open = false;
+
+                // Remove the event listener once the state is reset
+                window.removeEventListener('click', this.handleWindowClick);
+                this.add_card_deleted = '';
             }
-        };
-
-    }
+        }
+    };
 
     card_view(type) {
 
@@ -313,7 +440,7 @@ export class SingleVisitView {
 
 
 </div>
-                        `;
+`;
 
         return card;
 

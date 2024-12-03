@@ -33,11 +33,8 @@ export class VisitPatientNoteCardView {
 
         const start_cont = container.querySelector('.start_cont');
 
-        // console.log();
 
-
-        if (this.datas.length < 0) {
-
+        if (this.datas.length < 1) {
             if (start_cont) {
                 start_cont.remove();
             }
@@ -71,6 +68,9 @@ export class VisitPatientNoteCardView {
         card.classList.add('patient_note_cards_cont_cont');
 
         card.innerHTML = `
+        <!-- add active to open full screen -->
+    <div class="full_screen_overlay ">
+        <div class="full_screen">
             <div class="head_part">
                 <h4 class="heading">Patient Note</h4>
 
@@ -86,95 +86,11 @@ export class VisitPatientNoteCardView {
                     <p class="start_view_overlay">No Patient Note Found</p>
                 </div>
 
-                <!-- <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-
-
-                <div class="note_card">
-                    <div class="card_head">
-                        <p class="title">ABDILAH KHATIB MAKAME</p>
-                        <p class="date">${date_formatter(new Date())}</p>
-                    </div>
-                    <p class="detail">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti quidem inventore, nihil et
-                        voluptate corporis. Omnis, assumenda explicabo. Aliquid placeat officiis asperiores suscipit
-                        incidunt magni explicabo nulla perferendis, aut similique.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias minus rerum itaque
-                        dignissimos? Modi, aliquam quaerat! Labore, cupiditate iure culpa cumque libero optio minima
-                        earum porro. Voluptate eos numquam iusto? Ratione iusto praesentium alias tempora porro commodi
-
-                    </p>
-                </div>
-
-                -->
-
-
             </div>
+
+        </div>
+    </div>
+        
             `;
 
 
@@ -244,3 +160,5 @@ export class VisitPatientNoteCardView {
         }
     }
 }
+
+// P/SP/0024

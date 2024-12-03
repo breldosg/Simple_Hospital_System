@@ -30,6 +30,7 @@ import { AddVitalPopUpView } from "../popups/AddVitalPopUpView.js";
 import { VisitVitalCardView } from "../cards/VisitVitalCardView.js";
 import { VisitPatientNoteCardView } from "../cards/VisitPatientNoteCardView.js";
 import { AddPatientNotePopUpView } from "../popups/AddPatientNotePopUpView.js";
+import { VisitClinicalEvaluationCardView } from "../cards/VisitClinicalEvaluationCardView.js";
 
 class DashboardController {
     // Loader View
@@ -55,6 +56,7 @@ class DashboardController {
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();
     visitPatientNoteCardView = new VisitPatientNoteCardView();
+    visitClinicalEvaluationCardView = new VisitClinicalEvaluationCardView();
     
     
     // Patient PopUp
