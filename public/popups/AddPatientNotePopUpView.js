@@ -8,7 +8,7 @@ export class AddPatientNotePopUpView {
         this.category_id = null;
     }
 
-    async PreRender(params) {
+    async PreRender() {
         // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {

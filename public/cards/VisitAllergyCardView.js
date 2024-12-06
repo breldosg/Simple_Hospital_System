@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 
-export class VisitClinicalEvaluationCardView {
+export class VisitAllergyCardView {
 
     constructor() {
         // window.save_patient_note = this.save_patient_note.bind(this);
@@ -9,15 +9,17 @@ export class VisitClinicalEvaluationCardView {
         this.datas = [];
     }
 
-    async PreRender(params) {
+    async PreRender(params = []) {
         // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.datas = params.data.note_data ? params.data.note_data : [];
-        this.visit_id = params.visit_id;
+        if (params.length > 0) {
+            this.datas = params.data.note_data ? params.data.note_data : [];
+            this.visit_id = params.visit_id;
+        }
 
         const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
         const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
@@ -27,7 +29,7 @@ export class VisitClinicalEvaluationCardView {
         else {
             cont.appendChild(this.ViewReturn());
         }
-        
+
 
         // this.renderNoteCards();
     }
@@ -73,18 +75,18 @@ export class VisitClinicalEvaluationCardView {
 
         const card = document.createElement('div');
         card.className = 'more_visit_detail_card';
-        card.classList.add('clinical_evaluation_cont_cont');
+        card.classList.add('allergy_card_cont_cont');
 
         card.innerHTML = `
             <div class="head_part">
-                <h4 class="heading">Clinical Evaluation</h4>
+                <h4 class="heading">Allergy</h4>
 
-                <div class="add_btn" id="add_patient_clinical_note" >
+                <div class="add_btn" id="add_patient_allergy" >
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
 
-            <div class="body_part clinical_evaluation_cont">
+            <div class="body_part allergy_card_cont">
 
                 <!-- no note show -->
                 <!-- <div class="start_cont">
@@ -97,7 +99,7 @@ export class VisitClinicalEvaluationCardView {
             `;
 
 
-        const edit_btn = card.querySelector('.clinical_evaluation_cont_cont #add_patient_clinical_note');
+        const edit_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
         edit_btn.addEventListener('click', () => {
             dashboardController.visitsClinicalNotePopUpView.PreRender();
         })

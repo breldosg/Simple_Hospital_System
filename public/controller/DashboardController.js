@@ -25,12 +25,14 @@ import { ViewOrderListView } from "../views/ViewOrderListView.js";
 import { PlaceOrderPopUpView } from "../popups/PlaceOrderPopUpView.js";
 import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPopUpView.js";
 import { SingleVisitView } from "../views/SingleVisitView.js";
-import { PatientIllnessNotePopUpView } from "../popups/PatientIllnessNotePopUpView.js";
+import { VisitsClinicalNotePopUpView } from "../popups/VisitsClinicalNotePopUpView.js";
 import { AddVitalPopUpView } from "../popups/AddVitalPopUpView.js";
 import { VisitVitalCardView } from "../cards/VisitVitalCardView.js";
 import { VisitPatientNoteCardView } from "../cards/VisitPatientNoteCardView.js";
 import { AddPatientNotePopUpView } from "../popups/AddPatientNotePopUpView.js";
 import { VisitClinicalEvaluationCardView } from "../cards/VisitClinicalEvaluationCardView.js";
+import { VisitAllergyCardView } from "../cards/visitAllergyCardView.js";
+import { VisitAllergyPopUpView } from "../popups/VisitAllergyPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -51,12 +53,14 @@ class DashboardController {
     viewOnProgressView = new ViewOnProgressView();
 
     //Patient Visit
-    patientIllnessNotePopUpView = new PatientIllnessNotePopUpView();
+    visitsClinicalNotePopUpView = new VisitsClinicalNotePopUpView();
+    visitAllergyPopUpView = new VisitAllergyPopUpView();
     
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();
     visitPatientNoteCardView = new VisitPatientNoteCardView();
     visitClinicalEvaluationCardView = new VisitClinicalEvaluationCardView();
+    visitAllergyCardView = new VisitAllergyCardView();
     
     
     // Patient PopUp

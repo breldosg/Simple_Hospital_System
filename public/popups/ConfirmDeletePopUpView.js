@@ -28,7 +28,7 @@ export class ConfirmDeletePopUpView {
 
     ViewReturn(params) {
         return `
-<div class="confirm_card">
+<div class="container confirm_card">
     <div class="card-content">
         <p class="heading">Delete ${params.title}</p>
         <p class="card-heading">${params.title} name: ${params.data}?</p>
@@ -37,7 +37,7 @@ export class ConfirmDeletePopUpView {
     </div>
     <div class="card-button-wrapper">
         <button id="confirm_cancel" class="card-button secondary">Cancel</button>
-        <button id="confirm_delete" class="card-button primary">Delete</button>
+        <button id="confirm_delete" class="card-button error">Delete</button>
     </div>
 </div>
 

@@ -72,6 +72,18 @@
 }
 
 
+@keyframes opacity_overlay {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
 @-webkit-keyframes scale-in-ver-bottom {
     0% {
         -webkit-transform: scaleY(0);

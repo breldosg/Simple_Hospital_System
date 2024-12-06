@@ -56,7 +56,7 @@ export class CreateVisitPopUpView {
 
     ViewReturn(departments, doctors, loader = '') {
         return `
-        <div class="create_visit_popup">
+        <div class="container create_visit_popup">
 
     <br-form class="slides" callback="CreateVisit">
         <div class="slide">

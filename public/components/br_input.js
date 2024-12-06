@@ -46,7 +46,7 @@ export class BrCustomInput extends HTMLElement {
             }
             <div class="cont ${error}">
                 ${type === 'textarea' ? `
-                    <textarea placeholder="${placeholder}" ${required}>${textarea_value}</textarea>
+                    <textarea ${placeholder} ${required}>${textarea_value}</textarea>
                 ` : `
                     <input type="${type}" ${value} ${min} ${max} ${focus} ${disable} ${placeholder} ${required}>
                     ${type === 'password' ? '<span class="switch_icon_remove_red_eye toggle-visibility"></span>' : ''}

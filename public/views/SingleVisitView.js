@@ -1,4 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
+import { visit_add_card_btn } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify } from "../script/index.js";
 
@@ -31,6 +32,8 @@ export class SingleVisitView {
         if (this.is_add_card_open) {
             window.removeEventListener('click', this.handleWindowClick);
         }
+
+        dashboardController.visitAllergyPopUpView.PreRender();
 
 
     }
@@ -166,65 +169,65 @@ export class SingleVisitView {
 
 
     render_add_btn() {
-        const add_btns = [
-            {
-                body_container_id: 'clinical_group',
-                cards: [
-                    {
-                        component: 'visitClinicalEvaluationCardView',
-                        title: 'Clinical Evaluation'
-                    },
-                    {
-                        component: 'visitFinalDiagnosisCardView',
-                        title: 'Final Diagnosis'
-                    },
-                    {
-                        component: 'visitAllergyCardView',
-                        title: 'Allergy'
-                    },
-                    {
-                        component: 'visitPlanForNextVisitCardView',
-                        title: 'Plan for Next Visit'
-                    },
-                ],
-            },
-            {
-                body_container_id: 'diagnosis_group',
-                cards: [
-                    {
-                        component: 'visitRadiologyExamCardView',
-                        title: 'Radiology Exam'
-                    },
-                    {
-                        component: 'visitLabExamCardView',
-                        title: 'Laboratory Test'
-                    },
-                ],
-            },
-            {
-                body_container_id: 'treatment_group',
-                cards: [
-                    {
-                        component: 'visitPrescriptionsCardView',
-                        title: 'Prescriptions'
-                    },
-                    {
-                        component: 'visitProceduresCardView',
-                        title: 'Procedures'
-                    },
-                    {
-                        component: 'visitVaccineCardView',
-                        title: 'Vaccine'
-                    },
-                    {
-                        component: 'visitImplantableDevicesCardView',
-                        title: 'Implantable Devices'
-                    },
-                ],
-            },
-        ];
+        // const add_btns = [
+        //     {
+        //         body_container_id: 'clinical_group',
+        //         cards: [
+        //             {
+        //                 component: 'visitClinicalEvaluationCardView',
+        //                 title: 'Clinical Evaluation'
+        //             },
+        //             {
+        //                 component: 'visitFinalDiagnosisCardView',
+        //                 title: 'Final Diagnosis'
+        //             },
+        //             {
+        //                 component: 'visitAllergyCardView',
+        //                 title: 'Allergy'
+        //             },
+        //             {
+        //                 component: 'visitPlanForNextVisitCardView',
+        //                 title: 'Plan for Next Visit'
+        //             },
+        //         ],
+        //     },
+        //     {
+        //         body_container_id: 'diagnosis_group',
+        //         cards: [
+        //             {
+        //                 component: 'visitRadiologyExamCardView',
+        //                 title: 'Radiology Exam'
+        //             },
+        //             {
+        //                 component: 'visitLabExamCardView',
+        //                 title: 'Laboratory Test'
+        //             },
+        //         ],
+        //     },
+        //     {
+        //         body_container_id: 'treatment_group',
+        //         cards: [
+        //             {
+        //                 component: 'visitPrescriptionsCardView',
+        //                 title: 'Prescriptions'
+        //             },
+        //             {
+        //                 component: 'visitProceduresCardView',
+        //                 title: 'Procedures'
+        //             },
+        //             {
+        //                 component: 'visitVaccineCardView',
+        //                 title: 'Vaccine'
+        //             },
+        //             {
+        //                 component: 'visitImplantableDevicesCardView',
+        //                 title: 'Implantable Devices'
+        //             },
+        //         ],
+        //     },
+        // ];
 
-        add_btns.forEach((btn) => {
+        visit_add_card_btn.forEach((btn) => {
 
             const body = document.querySelector(`.single_visit_cont #${btn.body_container_id} .card_group_cont`);
             if (body) {
@@ -341,8 +344,7 @@ export class SingleVisitView {
 
         <div class="icon_card">
             <span class='switch_icon_calendar_check'></span>
-            <p>${date_formatter(data == '' ? '2001-02-01' : data.dob)} (${data == '' ? '' : data.age}
-                years)</p>
+            <p>${date_formatter(data == '' ? '' : data.dob)} (${data == '' ? '' : data.age.amount} ${data == '' ? '' : data.age.unit} )</p>
         </div>
 
         <div class="icon_card">

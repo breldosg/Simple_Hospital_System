@@ -4842,7 +4842,7 @@ input {
                     }
 
                     .cancel {
-                        background-color: var(--error_color);
+                        background-color: var(--gray_text);
                     }
                 }
             }
@@ -4938,7 +4938,7 @@ input {
                 }
 
                 .cancel {
-                    background-color: var(--error_color);
+                    background-color: var(--gray_text);
                 }
             }
         }
@@ -6063,8 +6063,8 @@ input {
 
     /* ------------------------------------------------------- */
 
-    .chief_complain_add_popUp {
-        width: 500px;
+    .allergy_add_popUp {
+        width: 1300px;
         height: fit-content;
         background: var(--pure_white_background);
         border-radius: var(--main_border_r);
@@ -6089,6 +6089,34 @@ input {
             }
         }
 
+        .cont_form {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            row-gap: 50px;
+
+            .section_group {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                h4 {
+                    color: var(--pri_color);
+                    padding-bottom: 10px;
+                    border-bottom: 1px var(--active_color) solid;
+                }
+
+                .input_groups {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+
+        }
+
         .btn_wrapper {
             width: 100%;
             display: flex;
@@ -6098,14 +6126,99 @@ input {
             margin-top: 30px;
 
             .card-button {
-                width: 86px;
-                height: 35px;
-                border-radius: var(--btn_border_r);
                 border: none;
-                cursor: pointer;
-                font-weight: 600;
-                background-color: var(--btn_color);
+                background-color: var(--pri_color);
+                padding: 10px 35px;
+                font-weight: bold;
+                font-size: 12px;
                 color: var(--white);
+                cursor: pointer;
+                border-radius: var(--input_main_border_r);
+            }
+
+            .secondary {
+                background-color: var(--gray_text);
+                color: var(--white);
+            }
+
+        }
+
+    }
+
+
+    /* ------------------------------------------------------- */
+
+    .clinical_note_add_popUp {
+        width: 1300px;
+        height: fit-content;
+        background: var(--pure_white_background);
+        border-radius: var(--main_border_r);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        padding: 50px;
+        position: relative;
+        z-index: 1;
+
+        .cont_heading {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .heading {
+                font-size: 17px;
+                font-weight: bold;
+            }
+        }
+
+        .cont_form {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            row-gap: 50px;
+
+            .section_group {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                h4 {
+                    color: var(--pri_color);
+                    padding-bottom: 10px;
+                    border-bottom: 1px var(--active_color) solid;
+                }
+
+                .input_groups {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+
+        }
+
+        .btn_wrapper {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 10px;
+            margin-top: 30px;
+
+            .card-button {
+                border: none;
+                background-color: var(--pri_color);
+                padding: 10px 35px;
+                font-weight: bold;
+                font-size: 12px;
+                color: var(--white);
+                cursor: pointer;
+                border-radius: var(--input_main_border_r);
             }
 
             .secondary {
@@ -6370,6 +6483,7 @@ input {
 
 .popup.active {
     display: flex;
+    animation: opacity_overlay 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 
 .loader_cont {

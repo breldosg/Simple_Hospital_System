@@ -31,7 +31,7 @@ export class ConfirmPopUpView {
 
     ViewReturn() {
         return `
-<div class="confirm_card">
+<div class=" container confirm_card">
     <div class="card-content">
         <p class="heading">${this.heading}</p>
         <p class="card-heading">${this.sub_heading}</p>
