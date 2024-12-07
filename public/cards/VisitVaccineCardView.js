@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 
-export class VisitAllergyCardView {
+export class VisitVaccineCardView {
 
     constructor() {
         // window.save_patient_note = this.save_patient_note.bind(this);
@@ -21,8 +21,8 @@ export class VisitAllergyCardView {
             this.visit_id = params.visit_id;
         }
 
-        const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
+        const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
+        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont .add_card_btn');
         if (add_btn) {
             add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
         }
@@ -75,18 +75,18 @@ export class VisitAllergyCardView {
 
         const card = document.createElement('div');
         card.className = 'more_visit_detail_card';
-        card.classList.add('allergy_card_cont_cont');
+        card.classList.add('vaccine_cont_cont');
 
         card.innerHTML = `
             <div class="head_part">
-                <h4 class="heading">Allergy</h4>
+                <h4 class="heading">Vaccine</h4>
 
-                <div class="add_btn" id="add_patient_allergy" >
+                <div class="add_btn" id="add_vaccine" >
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
 
-            <div class="body_part allergy_card_cont">
+            <div class="body_part vaccine_cont">
 
                 <!-- no note show -->
                 <!-- <div class="start_cont">
@@ -99,9 +99,11 @@ export class VisitAllergyCardView {
             `;
 
 
-        const edit_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
+        const edit_btn = card.querySelector('.vaccine_cont_cont #add_vaccine');
         edit_btn.addEventListener('click', () => {
-            dashboardController.visitAllergyPopUpView.PreRender();
+            // dashboardController.visitPlanForNextVisitPopUpView.PreRender();
+            console.log('add_vaccine not yet');
+            
         })
 
         return card;

@@ -33,6 +33,16 @@ import { AddPatientNotePopUpView } from "../popups/AddPatientNotePopUpView.js";
 import { VisitClinicalEvaluationCardView } from "../cards/VisitClinicalEvaluationCardView.js";
 import { VisitAllergyCardView } from "../cards/visitAllergyCardView.js";
 import { VisitAllergyPopUpView } from "../popups/VisitAllergyPopUpView.js";
+import { VisitFinalDiagnosisCardView } from "../cards/VisitFinalDiagnosisCardView.js";
+import { VisitFinalDiagnosisPopUpView } from "../popups/VisitFinalDiagnosisPopUpView.js";
+import { VisitPlanForNextVisitCardView } from "../cards/VisitPlanForNextVisitCardView.js";
+import { VisitPlanForNextVisitPopUpView } from "../popups/VisitPlanForNextVisitPopUpView.js";
+import { VisitRadiologyExamCardView } from "../cards/VisitRadiologyExamCardView.js";
+import { VisitLabExamCardView } from "../cards/VisitLabExamCardView.js";
+import { VisitPrescriptionsCardView } from "../cards/VisitPrescriptionsCardView.js";
+import { VisitProceduresCardView } from "../cards/VisitProceduresCardView.js";
+import { VisitVaccineCardView } from "../cards/VisitVaccineCardView.js";
+import { VisitImplantableDevicesCardView } from "../cards/VisitImplantableDevicesCardView.js";
 
 class DashboardController {
     // Loader View
@@ -55,12 +65,22 @@ class DashboardController {
     //Patient Visit
     visitsClinicalNotePopUpView = new VisitsClinicalNotePopUpView();
     visitAllergyPopUpView = new VisitAllergyPopUpView();
+    visitFinalDiagnosisPopUpView = new VisitFinalDiagnosisPopUpView();
+    visitPlanForNextVisitPopUpView = new VisitPlanForNextVisitPopUpView();
     
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();
     visitPatientNoteCardView = new VisitPatientNoteCardView();
     visitClinicalEvaluationCardView = new VisitClinicalEvaluationCardView();
     visitAllergyCardView = new VisitAllergyCardView();
+    visitFinalDiagnosisCardView = new VisitFinalDiagnosisCardView();
+    visitPlanForNextVisitCardView = new VisitPlanForNextVisitCardView();
+    visitRadiologyExamCardView = new VisitRadiologyExamCardView();
+    visitLabExamCardView = new VisitLabExamCardView();
+    visitPrescriptionsCardView = new VisitPrescriptionsCardView();
+    visitProceduresCardView = new VisitProceduresCardView();
+    visitVaccineCardView = new VisitVaccineCardView();
+    visitImplantableDevicesCardView = new VisitImplantableDevicesCardView();
     
     
     // Patient PopUp

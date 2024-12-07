@@ -68,6 +68,36 @@ export class CreateVisitPopUpView {
             <div class="input_group">
 
 
+                <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
+                    styles="
+                border-radius: var(--input_main_border_r);
+                width: 300px;
+                padding: 10px;
+                height: 41px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+            " labelStyles="font-size: 13px;">
+                    <br-option type="checkbox" value="out_patient">Out Patient</br-option>
+                    <br-option type="checkbox" value="in_patient">In Patient</br-option>
+                    <br-option type="checkbox" value="emergency">Emergency</br-option>
+                    <br-option type="checkbox" value="waking">Waking</br-option>
+                </br-select>
+                
+                
+                <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Type"
+                    styles="
+                border-radius: var(--input_main_border_r);
+                width: 300px;
+                padding: 10px;
+                height: 41px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+            " labelStyles="font-size: 13px;">
+                    <br-option type="checkbox" value="normal">Normal</br-option>
+                    <br-option type="checkbox" value="fast">Fast</br-option>
+                </br-select>
+
+                
                 <br-select required fontSize="13px" label="Department" name="department" placeholder="Select Department"
                     styles="
                 border-radius: var(--input_main_border_r);

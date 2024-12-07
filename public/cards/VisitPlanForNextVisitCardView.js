@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 
-export class VisitAllergyCardView {
+export class VisitPlanForNextVisitCardView {
 
     constructor() {
         // window.save_patient_note = this.save_patient_note.bind(this);
@@ -75,18 +75,18 @@ export class VisitAllergyCardView {
 
         const card = document.createElement('div');
         card.className = 'more_visit_detail_card';
-        card.classList.add('allergy_card_cont_cont');
+        card.classList.add('next_visit_plan_cont_cont');
 
         card.innerHTML = `
             <div class="head_part">
-                <h4 class="heading">Allergy</h4>
+                <h4 class="heading">Plan for Next Visit</h4>
 
-                <div class="add_btn" id="add_patient_allergy" >
+                <div class="add_btn" id="add_next_visit_plan" >
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
 
-            <div class="body_part allergy_card_cont">
+            <div class="body_part next_visit_plan_cont">
 
                 <!-- no note show -->
                 <!-- <div class="start_cont">
@@ -99,9 +99,9 @@ export class VisitAllergyCardView {
             `;
 
 
-        const edit_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
+        const edit_btn = card.querySelector('.next_visit_plan_cont_cont #add_next_visit_plan');
         edit_btn.addEventListener('click', () => {
-            dashboardController.visitAllergyPopUpView.PreRender();
+            dashboardController.visitPlanForNextVisitPopUpView.PreRender();
         })
 
         return card;

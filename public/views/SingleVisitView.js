@@ -33,7 +33,7 @@ export class SingleVisitView {
             window.removeEventListener('click', this.handleWindowClick);
         }
 
-        dashboardController.visitAllergyPopUpView.PreRender();
+        // dashboardController.visitPlanForNextVisitPopUpView.PreRender();
 
 
     }
@@ -169,63 +169,6 @@ export class SingleVisitView {
 
 
     render_add_btn() {
-        // const add_btns = [
-        //     {
-        //         body_container_id: 'clinical_group',
-        //         cards: [
-        //             {
-        //                 component: 'visitClinicalEvaluationCardView',
-        //                 title: 'Clinical Evaluation'
-        //             },
-        //             {
-        //                 component: 'visitFinalDiagnosisCardView',
-        //                 title: 'Final Diagnosis'
-        //             },
-        //             {
-        //                 component: 'visitAllergyCardView',
-        //                 title: 'Allergy'
-        //             },
-        //             {
-        //                 component: 'visitPlanForNextVisitCardView',
-        //                 title: 'Plan for Next Visit'
-        //             },
-        //         ],
-        //     },
-        //     {
-        //         body_container_id: 'diagnosis_group',
-        //         cards: [
-        //             {
-        //                 component: 'visitRadiologyExamCardView',
-        //                 title: 'Radiology Exam'
-        //             },
-        //             {
-        //                 component: 'visitLabExamCardView',
-        //                 title: 'Laboratory Test'
-        //             },
-        //         ],
-        //     },
-        //     {
-        //         body_container_id: 'treatment_group',
-        //         cards: [
-        //             {
-        //                 component: 'visitPrescriptionsCardView',
-        //                 title: 'Prescriptions'
-        //             },
-        //             {
-        //                 component: 'visitProceduresCardView',
-        //                 title: 'Procedures'
-        //             },
-        //             {
-        //                 component: 'visitVaccineCardView',
-        //                 title: 'Vaccine'
-        //             },
-        //             {
-        //                 component: 'visitImplantableDevicesCardView',
-        //                 title: 'Implantable Devices'
-        //             },
-        //         ],
-        //     },
-        // ];
 
         visit_add_card_btn.forEach((btn) => {
 
@@ -261,6 +204,7 @@ export class SingleVisitView {
                                     data: [],
                                     visit_id: this.visit_id,
                                 });
+
                             } else {
                                 console.error(`PreRender method not found for component: ${card.component}`);
                             }
