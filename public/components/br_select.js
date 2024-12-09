@@ -9,7 +9,9 @@ export class BrCustomSelect extends HTMLElement {
         // Cache DOM elements
         this.selectElement = this.shadowRoot.querySelector('.select-options');
         this.inputElement = this.shadowRoot.querySelector('.select-search');
+        this.arrow = this.shadowRoot.querySelector('.arrow');
         this.selectedElement = this.shadowRoot.querySelector('.selected-value');
+        this.update_input = this.shadowRoot.querySelector('.selected-value_in');
         this.dropdownElement = this.shadowRoot.querySelector('.select-dropdown');
         this.slotElement = this.shadowRoot.querySelector('slot');
         this.default_value = this.hasAttribute('value') ? this.getAttribute('value') : '';
@@ -54,11 +56,13 @@ export class BrCustomSelect extends HTMLElement {
 
         this.shadowRoot.innerHTML = `
             <style>
+                @import './assets/icons/style.css';
+                @import url('https://cdn.jsdelivr.net/gh/breldosg/Xt-style-pack@main/icons/style.css');
                 ${this.styles()}
             </style>
             ${label ? `<label>${this.getAttribute("label")}</label>` : ''}
             <div class="select-container">
-                <div class="selected-value" value=''>${placeholder}</div>
+                <div class="selected-value" value=''><div class="selected-value_in">${placeholder}</div><span class="switch_icon_keyboard_arrow_down arrow"></span></div>
                 <div class="select-dropdown ${error}">
                     ${search ? `<input type="text" class="select-search" placeholder="Search...">` : ''}
                     <ul class="select-options">
@@ -72,13 +76,13 @@ export class BrCustomSelect extends HTMLElement {
     styles() {
         const additionalStyles = this.getAttribute('styles') || '';
         const labelStyles = this.getAttribute('labelStyles') || '';
-        const fontSize = this.getAttribute('fontSize') || '';
 
         return `
-            * { box-sizing: border-box; font-size: ${fontSize} !important; color: currentColor; }
+            * { box-sizing: border-box; color: currentColor; }
             :host { display: block; position: relative; }
             label { ${labelStyles} }
-            .selected-value { padding: 10px;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; border: 1px solid #ccc; cursor: pointer; background: #fff; ${additionalStyles} }
+            .selected-value {  border: 1px solid #ccc; cursor: pointer; background: #fff; display: flex; justify-content: space-between; align-items: center; ${additionalStyles} }
+            .selected-value_in {padding: 10px;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
             .select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
             .selected-value.error { border-color: #EE5D50; }
             .select-dropdown.open { display: block; }
@@ -88,6 +92,8 @@ export class BrCustomSelect extends HTMLElement {
             .option:hover { background: #f0f0f0; }
             .select-dropdown::-webkit-scrollbar-thumb { background-color: var(--gray_text); border-radius: var(--input_main_border_r);}
             .select-dropdown::-webkit-scrollbar { width: 5px; }
+            .arrow{ transition:all 0.3s ease}
+            .arrow.open{ position: relative; transform: rotate(180deg); }
         `;
     }
 
@@ -101,6 +107,7 @@ export class BrCustomSelect extends HTMLElement {
 
     toggleDropdown() {
         this.dropdownElement.classList.toggle('open');
+        this.arrow.classList.toggle('open');
         if (this.dropdownElement.classList.contains('open')) {
             document.addEventListener('click', this.handleOutsideClick);
         } else {
@@ -109,6 +116,7 @@ export class BrCustomSelect extends HTMLElement {
     }
 
     closeDropdown() {
+        this.arrow.classList.toggle('open');
         this.dropdownElement.classList.remove('open');
         document.removeEventListener('click', this.handleOutsideClick);
     }
@@ -125,7 +133,7 @@ export class BrCustomSelect extends HTMLElement {
 
     selectOption(option) {
         const textContent = option.textContent;
-        this.selectedElement.textContent = textContent;
+        this.update_input.textContent = textContent;
         this.selectedElement.setAttribute('value', option.getAttribute('value'));
         this.closeDropdown();
         this.dispatchEvent(new CustomEvent('change', { detail: textContent }));
