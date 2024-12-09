@@ -66,6 +66,13 @@ export class ViewOnProgressView {
                 const patientId = row.getAttribute('data_src');
                 frontRouter.navigate('/patient/viewpatient/' + patientId);
             })
+
+            row.querySelector('#viewVisit_btn').addEventListener('click', async (event) => {
+                event.stopPropagation();
+                const v_Id = row.getAttribute('data_src_v');
+
+                frontRouter.navigate('/patient/activevisit/' + v_Id);
+            });
         });
 
         const createVisit_btn = document.querySelectorAll('#createVisit_btn');
@@ -100,7 +107,7 @@ export class ViewOnProgressView {
                 const patientId = btnParent.getAttribute('data_src');
 
                 dashboardController.loaderView.render();
-                
+
                 const checkOut_response = await this.checkout_request(patientId);
 
                 if (checkOut_response.success) {
@@ -117,6 +124,7 @@ export class ViewOnProgressView {
             })
         });
 
+        
 
     }
 
@@ -174,7 +182,7 @@ export class ViewOnProgressView {
 
         PatientData.VisitList.forEach((patient, index) => {
             const row = `
-                <div class="tr d_flex flex__c_a" data_src="${patient.patient_id}" title="${patient.patient_name}">
+                <div class="tr d_flex flex__c_a" data_src="${patient.patient_id}" data_src_v="${patient.id}"" title="${patient.patient_name}">
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.patient_name}</p>
                     <p class="gender">${patient.stage}</p>
@@ -245,11 +253,6 @@ export class ViewOnProgressView {
         }
     }
 
-    date_formatter(ymd) {
-        const dateee = new Date(ymd);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(dateee);
-    }
 
     ViewReturn() {
         return `
