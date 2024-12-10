@@ -8,8 +8,6 @@ export class BrCustomInput extends HTMLElement {
 
     connectedCallback() {
         this.inputElement = this.shadowRoot.querySelector('input, textarea');
-        this.cont = this.shadowRoot.querySelector('.cont');
-
 
         // If type is password, add event listener for the eye icon
         if (this.getAttribute('type') === 'password') {
@@ -21,23 +19,6 @@ export class BrCustomInput extends HTMLElement {
         this.inputElement.addEventListener('input', () => {
             this.validateAndSanitize();
         });
-
-        if (this.hasAttribute('option') && this.getAttribute('option') == 'true') {
-
-            this.inputElement.addEventListener('blur', () => {
-                this.closeOption();
-            })
-
-            this.inputElement.addEventListener('focus', () => {
-                this.openOption();
-            })
-
-            this.inputElement.addEventListener('input', () => {
-                this.filterOptions();
-            })
-
-
-        }
     }
 
     render() {
@@ -52,9 +33,8 @@ export class BrCustomInput extends HTMLElement {
         const min = this.hasAttribute('min') ? `min="${this.getAttribute('min')}"` : '';
         const max = this.hasAttribute('max') ? `max="${this.getAttribute('max')}"` : '';
         const disable = this.hasAttribute('disable') ? (this.getAttribute('disable') == 'true' ? 'readonly' : '') : '';
-        const disable_class = this.hasAttribute('disable') ? 'readonly' : '';
 
-        var textarea_value = this.hasAttribute('value') ? this.getAttribute('value') : '';
+        var textarea_value=this.hasAttribute('value') ? this.getAttribute('value') : '';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -64,53 +44,15 @@ export class BrCustomInput extends HTMLElement {
             ${label ? `
                 <label>${this.getAttribute("label")}</label>` : ''
             }
-            <div class="cont ${error, " ", disable_class}">
+            <div class="cont ${error}">
                 ${type === 'textarea' ? `
                     <textarea ${placeholder} ${required}>${textarea_value}</textarea>
                 ` : `
                     <input type="${type}" ${value} ${min} ${max} ${focus} ${disable} ${placeholder} ${required}>
                     ${type === 'password' ? '<span class="switch_icon_remove_red_eye toggle-visibility"></span>' : ''}
                 `}
-
-                <div class="drop_option_cont">
-                    <hr/>
-                    <div class="drop_option">
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibsssi</div>                    
-                    </div>
-                </div>
-
             </div>
         `;
-
     }
 
     styles() {
@@ -156,19 +98,12 @@ export class BrCustomInput extends HTMLElement {
                 align-items: center;
                 justify-content: space-between;
                 width: 100px;
+                padding-block: 5px;
                 border: 1px solid #ccc;
-                <!-- overflow: hidden; -->
+                overflow: hidden;
                 field-sizing: content;
-                position: relative;
-
                 ${additionalStyles}
             }
-
-            .readonly{
-                opacity:0.6;
-                pointer-events: none;
-            }
-            
             .cont.error{
                 border-color:  #EE5D50;
             }
@@ -192,57 +127,6 @@ export class BrCustomInput extends HTMLElement {
             .toggle-visibility {
                 cursor: pointer;
                 margin-left: 10px;
-            }
-
-            .cont.option{
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-                .drop_option_cont{
-                    display: flex;
-                }
-            }
-
-            .drop_option_cont{
-                display: none;
-                flex-direction: column;
-                align-items: center;
-                left: 50%;
-                top: 100%;
-                transform: translateX(-50%);
-                position: absolute;
-                background-color: white;
-                z-index: 1;
-                max-height: 150px;
-                overflow-y: auto;
-                width: 100%;
-
-                hr{
-                    width: 98%;
-                    height: 1px;
-                    border-color: #f3f5f6;
-                    opacity:0.2;
-                }
-
-                .drop_option{
-                    width: 100%;
-                    
-                    .option {
-                        width: 100%;
-                        height:37px;
-                        padding-inline: 10px;
-                        cursor: pointer;
-                        font-size:small;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                        display: flex;
-                        align-items: center;
-                    }
-                    
-                    .option:hover {
-                        background-color: #f3f5f6;
-                    }
-                }
             }
             
         `;
@@ -367,52 +251,6 @@ export class BrCustomInput extends HTMLElement {
     setValue(value) {
         this.inputElement.value = value;  // Set the input's internal value
     }
-
-    updateOption(data = []) {
-        if (this.hasAttribute('option') && this.getAttribute('option') == 'true') {
-            const drop_option = this.cont.querySelector('.drop_option');
-            if (drop_option) {
-                drop_option.innerHTML = '';
-                data.forEach(item => {
-                    const option = document.createElement('div');
-                    option.classList.add('option');
-                    option.textContent = item;
-                    option.addEventListener('click', () => {
-                        this.inputElement.value = item;
-                        this.closeOption();
-                    });
-                    drop_option.appendChild(option);
-                });
-            }
-        }
-
-    }
-
-    // Method to show/hide option drop down
-    openOption() {
-        this.cont.classList.add('option');
-
-    }
-
-    closeOption() {
-        this.cont.classList.remove('option');
-    }
-
-    filterOptions() {
-        const filter = this.inputElement.value.toLowerCase();
-        const divs = this.cont.querySelectorAll('.drop_option .option');
-
-        // const divs = options.getElementsByTagName('div');
-        for (let i = 0; i < divs.length; i++) {
-            const txtValue = divs[i].textContent || divs[i].innerText;
-            if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                divs[i].style.display = '';
-            } else {
-                divs[i].style.display = 'none';
-            }
-        }
-    }
-
 
 }
 

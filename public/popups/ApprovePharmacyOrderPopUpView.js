@@ -112,6 +112,12 @@ export class ApprovePharmacyOrderPopUpView {
             return;
         }
 
+        if (data.quantity <= 0) {
+            notify('top_left', 'Quantity should not be zero', 'warning');
+            btn_submit.setAttribute('loading', false);
+            return;
+        }
+
         try {
 
             const response = await fetch('/api/pharmacy/approve_order', {
@@ -156,6 +162,12 @@ export class ApprovePharmacyOrderPopUpView {
 
         if (data.quantity > this.storeQuantity) {
             notify('top_left', 'Quantity should not exceed store quantity', 'warning');
+            btn_submit.setAttribute('loading', false);
+            return;
+        }
+
+        if (data.quantity <= 0) {
+            notify('top_left', 'Quantity should not be zero', 'warning');
             btn_submit.setAttribute('loading', false);
             return;
         }

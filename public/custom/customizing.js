@@ -1,4 +1,4 @@
-// export default
+// Visit View Add Card
 export const visit_add_card_btn = [
     {
         body_container_id: 'clinical_group',
@@ -57,3 +57,5 @@ export const visit_add_card_btn = [
         ],
     },
 ];
+
+
