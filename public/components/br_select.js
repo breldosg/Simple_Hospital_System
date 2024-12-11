@@ -78,12 +78,12 @@ export class BrCustomSelect extends HTMLElement {
         const labelStyles = this.getAttribute('labelStyles') || '';
 
         return `
-            * { box-sizing: border-box; color: currentColor; }
+            * { box-sizing: border-box; color: currentColor; font-family: inherit; font-size: 14px;}
             :host { display: block; position: relative; }
             label { ${labelStyles} }
             .selected-value {  border: 1px solid #ccc; cursor: pointer; background: #fff; display: flex; justify-content: space-between; align-items: center; ${additionalStyles} }
-            .selected-value_in {padding: 10px;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
-            .select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
+            .selected-value_in {font-size: 14px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
+            .select-dropdown { display: none; position: absolute; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
             .selected-value.error { border-color: #EE5D50; }
             .select-dropdown.open { display: block; }
             .select-search { width: 100%; padding: 10px; border: none; border-bottom: 1px solid #ccc; outline: none; }

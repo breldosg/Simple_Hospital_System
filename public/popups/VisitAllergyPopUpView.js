@@ -1,3 +1,4 @@
+import { allergySeverity, allergyTypes } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 
 export class VisitAllergyPopUpView {
@@ -45,16 +46,8 @@ export class VisitAllergyPopUpView {
                         border: 2px solid var(--input_border);
                         " labelStyles="font-size: 14px !important;">
 
-                <br-option type="checkbox" value="Medication">Medication</br-option>
-                <br-option type="checkbox" value="Food">Food</br-option>
-                <br-option type="checkbox" value="Vaccines/Injectables">Vaccines/Injectables</br-option>
-                <br-option type="checkbox" value="Insect Venom">Insect Venom</br-option>
-                <br-option type="checkbox" value="Chemical/Industrial Allergens">Chemical/Industrial
-                    Allergens</br-option>
-                <br-option type="checkbox" value="Environmental">Environmental</br-option>
-                <br-option type="checkbox" value="Plants">Plants</br-option>
-                <br-option type="checkbox" value="Occupational">Occupational</br-option>
-                <br-option type="checkbox" value="Other">Other</br-option>
+                        ${allergyTypes.map((type) => { return `<br-option type="checkbox" value="${type}">${type}</br-option>` }).join('')}
+
 
             </br-select>
 
@@ -68,16 +61,8 @@ export class VisitAllergyPopUpView {
                         border: 2px solid var(--input_border);
                         " labelStyles="font-size: 14px !important;">
 
-                <br-option type="checkbox" value="Medication">Medication</br-option>
-                <br-option type="checkbox" value="Food">Food</br-option>
-                <br-option type="checkbox" value="Vaccines/Injectables">Vaccines/Injectables</br-option>
-                <br-option type="checkbox" value="Insect Venom">Insect Venom</br-option>
-                <br-option type="checkbox" value="Chemical/Industrial Allergens">Chemical/Industrial
-                    Allergens</br-option>
-                <br-option type="checkbox" value="Environmental">Environmental</br-option>
-                <br-option type="checkbox" value="Plants">Plants</br-option>
-                <br-option type="checkbox" value="Occupational">Occupational</br-option>
-                <br-option type="checkbox" value="Other">Other</br-option>
+                        ${allergyTypes.map((type) => { return `<br-option type="checkbox" value="${type}">${type}</br-option>` }).join('')}
+
 
             </br-select>
 
@@ -96,7 +81,7 @@ export class VisitAllergyPopUpView {
 
 
                 
-            <br-select required name="type" fontSize="13px" label="Severity"
+            <br-select placeholder="Select allergy severity" required name="type" fontSize="13px" label="Severity"
             styles="
             border-radius: var(--input_main_border_r);
             width: 300px;
@@ -105,11 +90,9 @@ export class VisitAllergyPopUpView {
             background-color: transparent;
             border: 2px solid var(--input_border);
             " labelStyles="font-size: 14px !important;">
+            
+                        ${allergySeverity.map((type) => { return `<br-option type="checkbox" value="${type}">${type}</br-option>` }).join('')}
 
-            <br-option type="checkbox" value="Mild">Mild</br-option>
-            <br-option type="checkbox" value="Moderate">Moderate</br-option>
-            <br-option type="checkbox" value="Severe">Severe</br-option>
-            <br-option type="checkbox" value="Life-Threatening">Life-Threatening</br-option>
         </br-select>
 
 
@@ -125,7 +108,7 @@ export class VisitAllergyPopUpView {
 
 
 
-            <br-select required name="type" fontSize="13px" label="Is Active" placeholder="Check if the allergy is currently active."
+            <br-select required name="type" fontSize="13px" label="Is Active" placeholder="Select allergy condition"
                 styles="
                 border-radius: var(--input_main_border_r);
                 width: 300px;

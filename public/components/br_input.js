@@ -24,17 +24,23 @@ export class BrCustomInput extends HTMLElement {
 
         if (this.hasAttribute('option') && this.getAttribute('option') == 'true') {
 
-            this.inputElement.addEventListener('blur', () => {
-                this.closeOption();
+            this.inputElement.addEventListener('blur', (e) => {
+                console.log(e);
+                // if (!this.shadowRoot.contains(e.target)) {
+                    this.closeOption();
+                // }
+
             })
+
+            this.inputElement.addEventListener('focus', () => {});
 
             this.inputElement.addEventListener('focus', () => {
                 this.openOption();
             })
 
-            this.inputElement.addEventListener('input', () => {
-                this.filterOptions();
-            })
+            // this.inputElement.addEventListener('input', () => {
+            //     this.filterOptions();
+            // })
 
 
         }
@@ -74,37 +80,7 @@ export class BrCustomInput extends HTMLElement {
 
                 <div class="drop_option_cont">
                     <hr/>
-                    <div class="drop_option">
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibi</div>                    
-                        <div class="option">kuku</div>
-                        <div class="option">data</div>
-                        <div class="option">bibsssi</div>                    
+                    <div class="drop_option">              
                     </div>
                 </div>
 
@@ -116,6 +92,8 @@ export class BrCustomInput extends HTMLElement {
     styles() {
         const additionalStyles = this.getAttribute('styles') || '';
         const labelStyles = this.getAttribute('labelStyles') || '';
+        const dropDownStyles = this.getAttribute('dropDownStyles') || '';
+        const dropDownBorder_radius = this.getAttribute('dropDownBorder_radius') || '0';
 
         return `
             ::-webkit-scrollbar {
@@ -197,6 +175,8 @@ export class BrCustomInput extends HTMLElement {
             .cont.option{
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
+                border-bottom: none;
+
                 .drop_option_cont{
                     display: flex;
                 }
@@ -214,7 +194,11 @@ export class BrCustomInput extends HTMLElement {
                 z-index: 1;
                 max-height: 150px;
                 overflow-y: auto;
-                width: 100%;
+                width: 101%;
+                ${dropDownStyles}
+                border-top: none !important;
+                border-bottom-left-radius: ${dropDownBorder_radius};
+                border-bottom-right-radius: ${dropDownBorder_radius};
 
                 hr{
                     width: 98%;
@@ -377,9 +361,13 @@ export class BrCustomInput extends HTMLElement {
                     const option = document.createElement('div');
                     option.classList.add('option');
                     option.textContent = item;
-                    option.addEventListener('click', () => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        console.log('cal');
+                        console.log(item);
+
                         this.inputElement.value = item;
-                        this.closeOption();
+                        // this.closeOption();
                     });
                     drop_option.appendChild(option);
                 });
@@ -391,7 +379,6 @@ export class BrCustomInput extends HTMLElement {
     // Method to show/hide option drop down
     openOption() {
         this.cont.classList.add('option');
-
     }
 
     closeOption() {

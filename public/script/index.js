@@ -126,3 +126,67 @@ export function decodeHTML(html) {
         .replace(/&gt;/g, '>')
         .replace(/&quot;/g, '"');
 }
+
+
+/**
+ * Searches an array for a term and returns an array with the matched elements, up to a specified limit.
+ * @param {Array} data - The array to search.
+ * @param {string} searchTerm - The term to search for.
+ * @param {string} [key] - Optional key to search within objects.
+ * @param {number} [limit] - Optional limit for the number of results.
+ * @returns {Array} - An array of matched elements.
+ */
+export function searchInArray(data, searchTerm, key, limit = Infinity) {
+    if (!Array.isArray(data) || !searchTerm) {
+        // throw new Error("Invalid arguments: 'data' must be an array and 'searchTerm' must be a string.");
+        console.error("Invalid arguments: 'data' must be an array and 'searchTerm' must be a string.");
+    }
+
+    // Convert search term to lowercase for case-insensitive comparison
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    const results = [];
+
+    for (const item of data) {
+        if (key && typeof item === "object") {
+            // If key is provided, search within objects
+            if (item[key]?.toLowerCase().includes(lowerSearchTerm)) {
+                results.push(item);
+            }
+        } else if (typeof item === "string") {
+            // For array of strings
+            if (item.toLowerCase().includes(lowerSearchTerm)) {
+                results.push(item);
+            }
+        }
+
+        // Stop if the limit is reached
+        if (results.length >= limit) {
+            break;
+        }
+    }
+
+    return results;
+}
+
+/**
+ * Creates a debounce function to limit how often a function can be executed.
+ * @param {Function} func - The function to debounce.
+ * @param {number} delay - The delay in milliseconds.
+ * @returns {Function} - The debounced function.
+ */
+export function debounce(func, delay) {
+    let timeout;
+
+    return function (...args) {
+        // Capture the context of the function
+        const context = this;
+
+        // Clear any existing timeout to reset the delay
+        clearTimeout(timeout);
+
+        // Set a new timeout
+        timeout = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    };
+}
