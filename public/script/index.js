@@ -137,10 +137,6 @@ export function decodeHTML(html) {
  * @returns {Array} - An array of matched elements.
  */
 export function searchInArray(data, searchTerm, key, limit = Infinity) {
-    if (!Array.isArray(data) || !searchTerm) {
-        // throw new Error("Invalid arguments: 'data' must be an array and 'searchTerm' must be a string.");
-        console.error("Invalid arguments: 'data' must be an array and 'searchTerm' must be a string.");
-    }
 
     // Convert search term to lowercase for case-insensitive comparison
     const lowerSearchTerm = searchTerm.toLowerCase();

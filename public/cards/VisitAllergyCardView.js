@@ -16,10 +16,11 @@ export class VisitAllergyCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        if (params.length > 0) {
             this.datas = params.data.note_data ? params.data.note_data : [];
             this.visit_id = params.visit_id;
-        }
+
+
+        
 
         const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
         const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
@@ -101,7 +102,11 @@ export class VisitAllergyCardView {
 
         const edit_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
         edit_btn.addEventListener('click', () => {
-            dashboardController.visitAllergyPopUpView.PreRender();
+            dashboardController.visitAllergyPopUpView.PreRender(
+                {
+                    visit_id: this.visit_id,
+                }
+            );
         })
 
         return card;

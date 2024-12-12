@@ -14327,3 +14327,11 @@ export const diagnosisArray = [
     "Z99.3 Dependence on wheelchair",
     "Z99.8 Dependence on other enabling machines and devices"
 ];
+
+
+export const duration_unit = [
+    'days',
+    'months',
+    'weeks',
+    'years',
+];

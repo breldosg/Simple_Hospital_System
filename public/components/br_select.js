@@ -52,7 +52,8 @@ export class BrCustomSelect extends HTMLElement {
         const search = this.hasAttribute('search');
         const label = this.hasAttribute('label');
         const error = this.hasAttribute('error') ? 'error' : '';
-        const placeholder = this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
+        // const placeholder = this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
+        const placeholder = this.hasAttribute('placeholder') ? `<span class="custom_placeholder">${this.getAttribute('placeholder')}</span>` : '';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -81,6 +82,7 @@ export class BrCustomSelect extends HTMLElement {
             * { box-sizing: border-box; color: currentColor; font-family: inherit; font-size: 14px;}
             :host { display: block; position: relative; }
             label { ${labelStyles} }
+            .custom_placeholder{opacity: 0.8}
             .selected-value {  border: 1px solid #ccc; cursor: pointer; background: #fff; display: flex; justify-content: space-between; align-items: center; ${additionalStyles} }
             .selected-value_in {font-size: 14px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
             .select-dropdown { display: none; position: absolute; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
@@ -142,7 +144,7 @@ export class BrCustomSelect extends HTMLElement {
     updateSelectedOption(elements) {
         const matchedElement = elements.find(el => el.getAttribute('value') === this.default_value);
         if (matchedElement) {
-            this.selectedElement.textContent = matchedElement.textContent;
+            this.update_input.textContent = matchedElement.textContent;
             this.selectedElement.setAttribute('value', matchedElement.getAttribute('value'));
         }
     }
@@ -152,7 +154,7 @@ export class BrCustomSelect extends HTMLElement {
     }
 
     reset() {
-        this.selectedElement.textContent = this.getAttribute('placeholder') || '';
+        this.update_input.innerHTML = `<span class="custom_placeholder">${this.getAttribute('placeholder')}</span>` || '';
         this.selectedElement.setAttribute('value', '');
         if (this.inputElement) {
             this.inputElement.value = '';

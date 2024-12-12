@@ -27,7 +27,7 @@ export class VisitClinicalEvaluationCardView {
         else {
             cont.appendChild(this.ViewReturn());
         }
-        
+
 
         // this.renderNoteCards();
     }
@@ -99,7 +99,11 @@ export class VisitClinicalEvaluationCardView {
 
         const edit_btn = card.querySelector('.clinical_evaluation_cont_cont #add_patient_clinical_note');
         edit_btn.addEventListener('click', () => {
-            dashboardController.visitsClinicalNotePopUpView.PreRender();
+            dashboardController.visitsClinicalNotePopUpView.PreRender(
+                {
+                    visit_id: this.visit_id,
+                }
+            );
         })
 
         return card;

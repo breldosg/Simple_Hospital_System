@@ -1,11 +1,12 @@
-import { diagnosisArray } from "../custom/customizing.js";
+import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, searchInArray } from "../script/index.js";
+import { debounce, notify, searchInArray } from "../script/index.js";
 
 export class VisitsClinicalNotePopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
+        window.save_clinical_note = this.save_clinical_note.bind(this);
     }
 
     async PreRender(params = '') {
@@ -15,8 +16,7 @@ export class VisitsClinicalNotePopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.heading = params.title ? params.title : null;
-
+        this.visit_id = params.visit_id ? params.visit_id : '';
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -34,7 +34,7 @@ export class VisitsClinicalNotePopUpView {
         <p class="heading">Clinical Note</p>
     </div>
 
-    <br-form callback="register_chief_complainsss">
+    <br-form callback="save_clinical_note">
         <div class="cont_form">
 
 
@@ -43,7 +43,7 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Briefly describe the main issue..." name="chief_complain"
+                    <br-input placeholder="Briefly describe the main issue" name="cc_description"
                         label="Complaint Description" required type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -53,15 +53,37 @@ export class VisitsClinicalNotePopUpView {
                             border: 2px solid var(--input_border);
                             " labelStyles="font-size: 13px;"></br-input>
 
-                    <br-input label="Duration" name="query" placeholder="How long has this been happening?"
+
+                    <div class="input_group_group">
+
+                        <br-input required label="Duration(days/weeks/months)" name="cc_duration" placeholder="How long has this been happening?"
                         type="number" styles="
                                 border-radius: var(--input_main_border_r);
-                                width: 350px;
+                                width: 225px;
                                 padding: 10px;
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
                                 " labelStyles="font-size: 13px;"></br-input>
+
+                        <br-select required name="cc_unit" value="days" fontSize="13px" label="Unit" placeholder="Unit"
+                        styles="
+                                    border-radius: var(--input_main_border_r);
+                                    width: 100px;
+                                    padding: 10px;
+                                    height: 41px;
+                                    text-transform:capitalize;
+                                    background-color: transparent;
+                                    border: 2px solid var(--input_border);
+                                    " labelStyles="font-size: 14px !important;">
+
+                        ${duration_unit.map((unit) => {
+            return `<br-option style="text-transform:capitalize;" value="${unit}">${unit}</br-option>`
+        }).join("")
+            }
+
+                    </br-select>
+                    </div>
                 </div>
 
 
@@ -73,7 +95,7 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Briefly describe the main issue..." name="chief_complain" label="Onset Date"
+                    <br-input placeholder="Briefly describe the main issue" name="hpi_date" label="Onset Date"
                         required type="date" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -83,7 +105,7 @@ export class VisitsClinicalNotePopUpView {
                             border: 2px solid var(--input_border);
                             " labelStyles="font-size: 13px;"></br-input>
 
-                    <br-select required name="type" fontSize="13px" label="Progression" placeholder="Select condition"
+                    <br-select required name="hpi_progression" fontSize="13px" label="Progression" placeholder="Select condition"
                         styles="
                                     border-radius: var(--input_main_border_r);
                                     width: 350px;
@@ -93,9 +115,9 @@ export class VisitsClinicalNotePopUpView {
                                     border: 2px solid var(--input_border);
                                     " labelStyles="font-size: 14px !important;">
 
-                        <br-option type="checkbox" value="consumable">Improving</br-option>
-                        <br-option type="checkbox" value="medicine">Worsening</br-option>
-                        <br-option type="checkbox" value="medicine">Unchanged</br-option>
+                        <br-option type="checkbox" value="improving">Improving</br-option>
+                        <br-option type="checkbox" value="worsening">Worsening</br-option>
+                        <br-option type="checkbox" value="unchanged">Unchanged</br-option>
 
                     </br-select>
                 </div>
@@ -108,7 +130,7 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Select related symptoms" name="chief_complain" label="Related Symptoms"
+                    <br-input placeholder="Explain related symptoms" name="ros_symptoms" label="Related Symptoms"
                         type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -130,7 +152,7 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Any visible or notable physical findings..." name="chief_complain"
+                    <br-input placeholder="Any visible or notable physical findings" name="ge_observation"
                         label="Physical Observations" type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -152,7 +174,7 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Enter initial diagnosis..." option="true" name="chief_complain"
+                    <br-input placeholder="Enter initial diagnosis..." option="true" name="dx_diagnosis"
                         required label="Provisional Diagnosis" require type="text" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -165,7 +187,7 @@ export class VisitsClinicalNotePopUpView {
                             labelStyles="font-size: 13px;" id="preliminary_diagnosis_input"></br-input>
 
 
-                    <br-input placeholder="Any additional notes or observations..." name="chief_complain"
+                    <br-input placeholder="Any additional notes or observations..." name="dx_note"
                         label="Doctor's Notes" require type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -187,7 +209,7 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Key findings in specific systems..." name="chief_complain"
+                    <br-input placeholder="Key findings in specific systems..." name="se_findings"
                         label="Focused Findings" require type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -234,15 +256,19 @@ export class VisitsClinicalNotePopUpView {
         const preliminary_diagnosis_input = document.querySelector('#preliminary_diagnosis_input');
 
         const debouncedFunction = debounce(() => {
-            const value = preliminary_diagnosis_input.getValue();
+            let value = preliminary_diagnosis_input.getValue();
+
+            if (value == null) {
+                value = '';
+            }
 
             // Call your search function here
             const found_options = searchInArray(diagnosisArray, value, null, 5);
             // console.log(found_options);
 
-            preliminary_diagnosis_input.updateOption(found_options);
-            // if (found_options.length >= 1) {
-            // }
+            if (found_options.length >= 1) {
+                preliminary_diagnosis_input.updateOption(found_options);
+            }
 
         }, 800);
 
@@ -252,22 +278,6 @@ export class VisitsClinicalNotePopUpView {
 
         });
 
-
-        // const delete_btn = document.querySelector('#confirm_delete');
-        // delete_btn.addEventListener('click', () => {
-        // const cont = document.querySelector('.popup');
-        // cont.classList.remove('active');
-        // cont.innerHTML = '';
-
-        // const callbackName = this.callback;
-        // const data = this.parameter;
-
-        // if (callbackName && typeof window[callbackName] === 'function') {
-        // window[callbackName](data);
-        // } else {
-        // console.warn(`Callback function ${callbackName} is not defined or not a function`);
-        // }
-        // });
     }
 
     close() {
@@ -276,7 +286,45 @@ export class VisitsClinicalNotePopUpView {
         cont.innerHTML = '';
     }
 
+    async save_clinical_note(data) {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
 
+        data = {
+            ...data,
+            visit_id: this.visit_id
+        };
+        // console.log(data);
 
+        // add visit_id in data json
 
+        try {
+            const response = await fetch('/api/patient/save_clinical_note', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Fail to Save Note. Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                this.close();
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
+        }
+    }
 }
+

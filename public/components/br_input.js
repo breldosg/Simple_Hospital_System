@@ -24,27 +24,26 @@ export class BrCustomInput extends HTMLElement {
 
         if (this.hasAttribute('option') && this.getAttribute('option') == 'true') {
 
-            this.inputElement.addEventListener('blur', (e) => {
-                console.log(e);
-                // if (!this.shadowRoot.contains(e.target)) {
-                    this.closeOption();
-                // }
-
-            })
-
-            this.inputElement.addEventListener('focus', () => {});
 
             this.inputElement.addEventListener('focus', () => {
                 this.openOption();
             })
 
-            // this.inputElement.addEventListener('input', () => {
-            //     this.filterOptions();
-            // })
+            this.inputElement.addEventListener('input', () => {
+                this.filterOptions();
+            })
 
 
         }
+
+
     }
+
+    handleBrInputWindowClick = (e) => {
+        if (!this.contains(e.target)) {
+            this.closeOption();
+        }
+    };
 
     render() {
         let type = this.getAttribute('type') || 'text';
@@ -363,11 +362,8 @@ export class BrCustomInput extends HTMLElement {
                     option.textContent = item;
                     option.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        console.log('cal');
-                        console.log(item);
-
                         this.inputElement.value = item;
-                        // this.closeOption();
+                        this.closeOption();
                     });
                     drop_option.appendChild(option);
                 });
@@ -379,10 +375,13 @@ export class BrCustomInput extends HTMLElement {
     // Method to show/hide option drop down
     openOption() {
         this.cont.classList.add('option');
+        window.addEventListener('click', this.handleBrInputWindowClick);
     }
 
     closeOption() {
         this.cont.classList.remove('option');
+        window.removeEventListener('click', this.handleBrInputWindowClick);
+
     }
 
     filterOptions() {

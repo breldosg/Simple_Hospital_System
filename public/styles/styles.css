@@ -6310,6 +6310,13 @@ input {
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
+
+                    .input_group_group{
+                        display: flex;
+                        align-items: center;
+                        /* justify-content: space-between; */
+                        gap: 20px;
+                    }
                 }
             }
 

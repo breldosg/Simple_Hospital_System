@@ -1,10 +1,12 @@
 import { allergySeverity, allergyTypes } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
 
 export class VisitAllergyPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
+        window.save_allergy = this.save_allergy.bind(this);
     }
 
     async PreRender(params = '') {
@@ -14,7 +16,8 @@ export class VisitAllergyPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.heading = params.title ? params.title : null;
+        this.visit_id = params.visit_id ? params.visit_id : '';
+
 
 
         const cont = document.querySelector('.popup');
@@ -33,10 +36,10 @@ export class VisitAllergyPopUpView {
         <p class="heading">Allergy Form</p>
     </div>
 
-    <br-form callback="register_chief_complainsss">
+    <br-form callback="save_allergy">
         <div class="cont_form">
 
-            <br-select required name="type" fontSize="13px" label="Allergen Type" placeholder="Select allergen type"
+            <br-select required name="allergy_type" fontSize="13px" label="Allergen Type" placeholder="Select allergen type"
                 styles="
                         border-radius: var(--input_main_border_r);
                         width: 300px;
@@ -52,7 +55,7 @@ export class VisitAllergyPopUpView {
             </br-select>
 
 
-            <br-select required name="type" fontSize="13px" label="Reaction Type" placeholder="Select condition" styles="
+            <br-select required name="allergy_reaction" fontSize="13px" label="Reaction Type" placeholder="Select condition" styles="
                         border-radius: var(--input_main_border_r);
                         width: 300px;
                         padding: 10px;
@@ -69,7 +72,7 @@ export class VisitAllergyPopUpView {
 
 
 
-            <br-input placeholder="Enter the specific allergen" name="chief_complain"
+            <br-input placeholder="Enter the specific allergen" name="allergy_specific"
                 label="Specific Allergen" required type="text" styles="
                 border-radius: var(--input_main_border_r);
                 width: 300px;
@@ -81,7 +84,7 @@ export class VisitAllergyPopUpView {
 
 
                 
-            <br-select placeholder="Select allergy severity" required name="type" fontSize="13px" label="Severity"
+            <br-select placeholder="Select allergy severity" required name="allergy_severity" fontSize="13px" label="Allergy Severity"
             styles="
             border-radius: var(--input_main_border_r);
             width: 300px;
@@ -96,19 +99,11 @@ export class VisitAllergyPopUpView {
         </br-select>
 
 
-            <br-input label="Reaction Type" placeholder="Select the type of reaction" name="chief_complain" required
-                type="textarea" styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 60px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
 
 
 
-            <br-select required name="type" fontSize="13px" label="Is Active" placeholder="Select allergy condition"
+
+            <br-select required name="allergy_condition" fontSize="13px" label="Allergy Condition" placeholder="Select condition"
                 styles="
                 border-radius: var(--input_main_border_r);
                 width: 300px;
@@ -172,4 +167,43 @@ export class VisitAllergyPopUpView {
         cont.classList.remove('active');
         cont.innerHTML = '';
     }
+
+    async save_allergy(data) {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
+
+        data = {
+            ...data,
+            visit_id: this.visit_id
+        };
+
+        try {
+            const response = await fetch('/api/patient/save_allergy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Fail to Save Note. Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                this.close();
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
+        }
+    }
 }
+

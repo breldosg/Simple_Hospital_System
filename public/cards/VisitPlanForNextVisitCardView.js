@@ -16,10 +16,8 @@ export class VisitPlanForNextVisitCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        if (params.length > 0) {
-            this.datas = params.data.note_data ? params.data.note_data : [];
-            this.visit_id = params.visit_id;
-        }
+        this.datas = params.data.note_data ? params.data.note_data : [];
+        this.visit_id = params.visit_id;
 
         const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
         const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
@@ -101,7 +99,11 @@ export class VisitPlanForNextVisitCardView {
 
         const edit_btn = card.querySelector('.next_visit_plan_cont_cont #add_next_visit_plan');
         edit_btn.addEventListener('click', () => {
-            dashboardController.visitPlanForNextVisitPopUpView.PreRender();
+            dashboardController.visitPlanForNextVisitPopUpView.PreRender(
+                {
+                    visit_id: this.visit_id,
+                }
+            );
         })
 
         return card;

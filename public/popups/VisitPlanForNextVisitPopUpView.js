@@ -1,9 +1,11 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { notify } from "../script/index.js";
 
 export class VisitPlanForNextVisitPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
+        window.save_next_visit_plan = this.save_next_visit_plan.bind(this);
     }
 
     async PreRender(params = '') {
@@ -13,7 +15,7 @@ export class VisitPlanForNextVisitPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.heading = params.title ? params.title : null;
+        this.visit_id = params.visit_id ? params.visit_id : '';
 
 
         const cont = document.querySelector('.popup');
@@ -32,11 +34,11 @@ export class VisitPlanForNextVisitPopUpView {
         <p class="heading">Plan for Next Visit</p>
     </div>
 
-    <br-form callback="register_chief_complainsss">
+    <br-form callback="save_next_visit_plan">
         <div class="cont_form">
 
 
-            <br-input name="chief_complain" label="Next Visit Date" required
+            <br-input name="plan_date" label="Next Visit Date" required
                 type="date" styles="
                 border-radius: var(--input_main_border_r);
                 width: 440px;
@@ -47,7 +49,7 @@ export class VisitPlanForNextVisitPopUpView {
                 " labelStyles="font-size: 13px;"></br-input>
 
 
-            <br-input placeholder="Enter the purpose of the next visit (e.g., Follow-up, Lab Results, Check-Up)" name="chief_complain" label="Purpose of Next Visit" required
+            <br-input placeholder="Enter the purpose of the next visit (e.g., Follow-up, Lab Results, Check-Up)" name="plan_purpose" label="Purpose of Next Visit" required
                 type="textarea" styles="
                 border-radius: var(--input_main_border_r);
                 width: 440px;
@@ -59,7 +61,7 @@ export class VisitPlanForNextVisitPopUpView {
 
 
 
-            <br-input placeholder="Enter any instructions for the patient (e.g., fasting, tests to bring)" name="chief_complain" label="Instructions for Patient"
+            <br-input placeholder="Enter any instructions for the patient (e.g., fasting, tests to bring)" name="plan_instruction" label="Instructions for Patient"
                 type="textarea" styles="
                 border-radius: var(--input_main_border_r);
                 width: 440px;
@@ -97,22 +99,6 @@ export class VisitPlanForNextVisitPopUpView {
 
         });
 
-
-        // const delete_btn = document.querySelector('#confirm_delete');
-        // delete_btn.addEventListener('click', () => {
-        // const cont = document.querySelector('.popup');
-        // cont.classList.remove('active');
-        // cont.innerHTML = '';
-
-        // const callbackName = this.callback;
-        // const data = this.parameter;
-
-        // if (callbackName && typeof window[callbackName] === 'function') {
-        // window[callbackName](data);
-        // } else {
-        // console.warn(`Callback function ${callbackName} is not defined or not a function`);
-        // }
-        // });
     }
 
     close() {
@@ -120,4 +106,44 @@ export class VisitPlanForNextVisitPopUpView {
         cont.classList.remove('active');
         cont.innerHTML = '';
     }
+    
+
+    async save_next_visit_plan(data) {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
+
+        data = {
+            ...data,
+            visit_id: this.visit_id
+        };
+
+        try {
+            const response = await fetch('/api/patient/save_next_visit_plan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Fail to Save Note. Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                this.close();
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
+        }
+    }
+
 }

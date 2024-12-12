@@ -279,6 +279,66 @@ router.post('/save_update_delete_patient_note', async (req, res) => {
 
 
 
+router.post('/save_clinical_note', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 500, body); // Add `await` since it's an async function
+        console.log('save_clinical_note Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /save_clinical_note route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+router.post('/save_allergy', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 510, body); // Add `await` since it's an async function
+        console.log('save_allergy Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /save_allergy route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+
+
+
+router.post('/save_next_visit_plan', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 520, body); // Add `await` since it's an async function
+        console.log('save_next_visit_plan Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /save_next_visit_plan route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
 
 
 module.exports = router
