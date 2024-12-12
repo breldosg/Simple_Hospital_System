@@ -46,8 +46,8 @@ export class VisitPatientNoteCardView {
 
             card.innerHTML = `
                         <div class="card_head">
-                            <p class="title">${data.created_by}</p>
-                            <p class="date">${date_formatter(data.created_at)}</p>
+                        <p class="date">${date_formatter(data.created_at)}</p>
+                        <p class="title">${data.created_by}</p>
                         </div>
                         <p class="detail">
                             ${data.note}

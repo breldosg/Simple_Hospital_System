@@ -287,6 +287,8 @@ input {
         width: 100%;
         height: calc(100% - 150px);
         background-color: var(--white_background);
+        /* background: rgb(255, 255, 255); */
+        /* background: linear-gradient(151deg, rgba(35, 152, 158, 0.266) 0%, rgba(218, 218, 218, 1) 31%, rgba(218, 218, 218, 1) 92%); */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2358,12 +2360,12 @@ input {
                             box-shadow: 0 0 5px 0 #0000001d;
 
                             .title {
-                                font-size: 16px;
-                                font-weight: 700;
+                                font-size: 12px;
                             }
 
                             .date {
-                                font-size: 12px;
+                                font-size: 20px;
+                                font-weight: 900;
                             }
 
                             .detail {
@@ -2475,67 +2477,6 @@ input {
                         flex-direction: column;
                         gap: 20px;
 
-                        .more_visit_detail_card {
-                            flex: none;
-                            background-color: var(--pure_white_background);
-                            border-radius: var(--main_border_r);
-                            padding: var(--main_padding);
-                            height: fit-content;
-
-                            .head_part {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                width: 100%;
-
-
-                                .add_btn {
-                                    width: 35px;
-                                    height: 35px;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    border-radius: 5px;
-                                    flex: none;
-                                    cursor: pointer;
-
-                                    span {
-                                        font-size: 20px;
-                                    }
-                                }
-
-                                .add_btn:hover {
-                                    background-color: var(--pri_op);
-                                    cursor: pointer;
-
-                                    span {
-                                        color: var(--pri_color);
-                                    }
-                                }
-
-                            }
-
-                            .body_part {
-                                margin-top: 10px;
-                                display: flex;
-                                flex-direction: column;
-                                gap: 10px;
-
-                                .start_cont {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-
-                                    p {
-                                        font-size: 30px;
-                                        color: var(--black-op2);
-                                        font-weight: 700;
-                                    }
-                                }
-                            }
-
-                        }
-
                         .add_card_btn {
                             background-color: var(--pure_white_background);
                             border-radius: var(--main_border_r);
@@ -2612,6 +2553,144 @@ input {
                             }
 
                         }
+
+
+                        /* ----------------------------------------------------------- */
+
+                        .more_visit_detail_card {
+                            flex: none;
+                            background-color: var(--pure_white_background);
+                            border-radius: var(--main_border_r);
+                            padding: var(--main_padding);
+                            height: fit-content;
+
+                            .head_part {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                width: 100%;
+
+
+                                .add_btn {
+                                    width: 35px;
+                                    height: 35px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border-radius: 5px;
+                                    flex: none;
+                                    cursor: pointer;
+
+                                    span {
+                                        font-size: 20px;
+                                    }
+                                }
+
+                                .add_btn:hover {
+                                    background-color: var(--pri_op);
+                                    cursor: pointer;
+
+                                    span {
+                                        color: var(--pri_color);
+                                    }
+                                }
+
+                            }
+
+                            .body_part {
+                                margin-top: 10px;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 10px;
+
+                                .start_cont {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    p {
+                                        font-size: 30px;
+                                        color: var(--black-op2);
+                                        font-weight: 700;
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                        /* ----------------------------------------------------------- */
+
+                        .allergy_card_cont_cont {
+
+                            .allergy_card_cont {
+                                display: flex;
+                                flex-direction: column;
+                                flex: none;
+                                gap: 20px;
+
+                                .allergy_card {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 10px;
+                                    width: 100%;
+                                    padding: 20px;
+                                    border-radius: var(--main_border_r);
+                                    border: 2px solid var(--input_border);
+
+                                    .top {
+                                        border: none;
+
+                                        .date {
+                                            font-size: 20px;
+                                            font-weight: 900;
+                                        }
+
+                                        .created_by {
+                                            font-size: 13px;
+                                        }
+                                    }
+
+                                    .data {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        min-height: 40px;
+                                        padding-block: 5px;
+                                        border-bottom: 1px solid var(--input_border);
+
+                                        .head {
+                                            font-weight: 500;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+
+                                        .description {
+                                            width: 40%;
+                                            font-weight: 600;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+                                    }
+
+                                    .data:last-child {
+                                        border: none;
+                                    }
+
+                                }
+
+                                .allergy_card:hover {
+                                    box-shadow: 0 0 5px 0 #0000003e;
+                                }
+                            }
+
+                        }
+
+
                     }
                 }
 
@@ -4428,10 +4507,16 @@ input {
         border-radius: var(--main_border_r);
         background-color: var(--white);
         position: relative;
+        min-width: 500px;
+        min-height: 200px;
 
         .loader_cont {
             border-radius: var(--main_border_r);
             position: absolute;
+        }
+
+        .slides.anima {
+            animation: text-focus-in 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
         }
 
         .slides {
@@ -6311,7 +6396,7 @@ input {
                     flex-direction: column;
                     gap: 10px;
 
-                    .input_group_group{
+                    .input_group_group {
                         display: flex;
                         align-items: center;
                         /* justify-content: space-between; */

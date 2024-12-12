@@ -55,6 +55,20 @@ export class SingleVisitView {
                 visit_id: this.visit_id,
             })
 
+            console.log(visit_data);
+            
+            if(visit_data.allergy_data.success){
+                dashboardController.visitAllergyCardView.PreRender(
+                    {
+                        data: visit_data.allergy_data,
+                        visit_id: this.visit_id,
+                    }
+                );
+
+                // push word allergy in array rendered card
+                this.rendered_card.push('visitAllergyCardView');
+
+            }
 
             // this.Add_visit_cards_view();
 
@@ -68,6 +82,7 @@ export class SingleVisitView {
 
     ViewReturn(loader = '') {
 
+        
 
         return `
 <div class="single_visit_cont">
@@ -187,11 +202,12 @@ export class SingleVisitView {
                 option_cont.className = 'option_cont';
 
                 btn.cards.forEach(card => {
+
                     const option = document.createElement('div');
                     option.className = 'option';
                     option.innerText = card.title;
 
-                    if (this.rendered_card.includes(card.title)) {
+                    if (this.rendered_card.includes(card.component)) {
                         option.classList.add('disabled');
                     } else {
                         const handleClick = (e) => {

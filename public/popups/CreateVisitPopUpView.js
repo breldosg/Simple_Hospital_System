@@ -21,7 +21,7 @@ export class CreateVisitPopUpView {
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
-        cont.innerHTML = this.ViewReturn('', '', 'active');
+        cont.innerHTML = this.ViewReturn('active');
 
         // Now call render which will fetch data and populate it
         this.render();
@@ -46,7 +46,7 @@ export class CreateVisitPopUpView {
             var doctors_data = data.doctors;
 
             // Replace loader and insert the content
-            cont.innerHTML = this.ViewReturn(options_elements(departments_data), options_elements(doctors_data), '');
+            cont.querySelector('.create_visit_popup').innerHTML = this.update_view_after_loading(options_elements(departments_data), options_elements(doctors_data), '');
             this.attachListeners()
         } else {
             // Handle case where no roles were returned, or an error occurred.
@@ -54,11 +54,95 @@ export class CreateVisitPopUpView {
         }
     }
 
-    ViewReturn(departments, doctors, loader = '') {
+    ViewReturn(loader = '') {
         return `
         <div class="container create_visit_popup">
 
-    <br-form class="slides" callback="CreateVisit">
+        <br-form class="slides" callback="CreateVisit">
+        <div class="slide">
+            <div>
+                <p class="heading">Create Visit</p>
+                <p class="subHead">${this.patient_name}</p>
+
+            </div>
+            <div class="input_group">
+
+
+                <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
+                    styles="
+                border-radius: var(--input_main_border_r);
+                width: 300px;
+                padding: 10px;
+                height: 41px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+            " labelStyles="font-size: 13px;">
+                    <br-option type="checkbox" value="out_patient">Out Patient</br-option>
+                    <br-option type="checkbox" value="in_patient">In Patient</br-option>
+                    <br-option type="checkbox" value="emergency">Emergency</br-option>
+                    <br-option type="checkbox" value="waking">Waking</br-option>
+                </br-select>
+                
+                
+                <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Type"
+                    styles="
+                border-radius: var(--input_main_border_r);
+                width: 300px;
+                padding: 10px;
+                height: 41px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+            " labelStyles="font-size: 13px;">
+                    <br-option type="checkbox" value="normal">Normal</br-option>
+                    <br-option type="checkbox" value="fast">Fast</br-option>
+                </br-select>
+
+                
+                <br-select required fontSize="13px" label="Department" name="department" placeholder="Select Department"
+                    styles="
+                border-radius: var(--input_main_border_r);
+                width: 300px;
+                padding: 10px;
+                height: 41px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+            " labelStyles="font-size: 13px;">
+                </br-select>
+
+
+                <br-select required fontSize="13px" label="Doctors" name="doctors" placeholder="Select Doctors" styles="
+                border-radius: var(--input_main_border_r);
+                width: 300px;
+                padding: 10px;
+                height: 41px;
+                background-color: transparent;
+                border: 2px solid var(--input_border);
+            " labelStyles="font-size: 13px;">
+                </br-select>
+
+
+                <div class="btn_cont">
+                    <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
+                    <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
+                </div>
+
+
+            </div>
+        </div>
+    </br-form>
+
+    <div class="loader_cont ${loader}">
+        <div class="loader"></div>
+    </div>
+
+</div>
+        `;
+    }
+
+    update_view_after_loading(departments, doctors) {
+
+        return `
+        <br-form class="slides anima" callback="CreateVisit">
         <div class="slide">
             <div>
                 <p class="heading">Create Visit</p>
@@ -131,13 +215,8 @@ export class CreateVisitPopUpView {
 
             </div>
         </div>
-    </br-form>
-    <div class="loader_cont ${loader}">
-        <div class="loader"></div>
-    </div>
+    </br-form>`;
 
-</div>
-        `;
     }
 
     attachListeners() {
