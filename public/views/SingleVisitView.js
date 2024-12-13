@@ -7,406 +7,299 @@ export class SingleVisitView {
     constructor() {
         this.visit_id = null;
         this.is_add_card_open = false;
-        this.card_rendered = [];
-        this.add_card_deleted = '';
         this.rendered_card = [];
+        this.add_card_deleted = null;
     }
+
+    // Card type mapping to improve readability and reduce switch statement complexity
+    // static CARD_TYPES = {
+    //     'complain': 'Chief Complain',
+    //     'illness': 'Presented Illness',
+    //     'reviewSystem': 'Review of Other System',
+    //     'generalExam': 'General Exam',
+    //     'systemicExam': 'Systemic Exam',
+    //     'preliminaryDiagnosis': 'Preliminary Diagnosis',
+    //     'radiologyExam': 'Radiology Exam',
+    //     'labExam': 'Laboratory Exam',
+    //     'vital': 'Vital Sign',
+    //     'prescription': 'Prescription'
+    // };
+
     async PreRender(params) {
-        // Render the initial structure with the loader
+        // Ensure dashboard is rendered
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-
+        // Render initial structure
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('active');
 
         this.visit_id = params.id;
-
-
-        // Now call render which will fetch data and populate it
         this.render(params.id);
-        // this.attach_listeners()
 
+        // Remove any existing window click listener
         if (this.is_add_card_open) {
             window.removeEventListener('click', this.handleWindowClick);
         }
-
-        // dashboardController.visitPlanForNextVisitPopUpView.PreRender();
-
-
     }
 
     async render() {
-        const visit_data = await this.fetchData(); // Wait for fetchData to complete
+        const visit_data = await this.fetchData();
 
-        if (visit_data) {
-            this.top_card_view(visit_data.patient_data);
+        if (!visit_data) return;
 
+        // Render top patient card
+        this.top_card_view(visit_data.patient_data);
 
-            dashboardController.visitVitalCardView.PreRender({
-                data: visit_data.vital_sign,
+        // Render various card views
+        const cardRenderConfig = [
+            {
+                method: dashboardController.visitVitalCardView,
+                dataKey: 'vital_sign'
+            },
+            {
+                method: dashboardController.visitPatientNoteCardView,
+                dataKey: 'patient_note'
+            },
+            {
+                method: dashboardController.visitClinicalEvaluationCardView,
+                dataKey: null
+            },
+            {
+                method: dashboardController.visitAllergyCardView,
+                dataKey: 'allergy_data',
+                condition: (data) => data.success,
+                afterRender: () => this.rendered_card.push('visitAllergyCardView')
+            }
+        ];
+
+        cardRenderConfig.forEach(config => {
+            if (config.condition && !config.condition(visit_data[config.dataKey])) return;
+
+            config.method.PreRender({
+                data: config.dataKey ? visit_data[config.dataKey] : undefined,
                 visit_id: this.visit_id,
             });
 
-            dashboardController.visitPatientNoteCardView.PreRender({
-                data: visit_data.patient_note,
-                visit_id: this.visit_id,
-            })
+            if (config.afterRender) config.afterRender();
+        });
 
-            console.log(visit_data);
-            
-            if(visit_data.allergy_data.success){
-                dashboardController.visitAllergyCardView.PreRender(
-                    {
-                        data: visit_data.allergy_data,
-                        visit_id: this.visit_id,
-                    }
-                );
-
-                // push word allergy in array rendered card
-                this.rendered_card.push('visitAllergyCardView');
-
-            }
-
-            // this.Add_visit_cards_view();
-
-            this.render_add_btn()
-
-
-        } else {
-            cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
-        }
+        // Render add buttons
+        this.render_add_btn();
     }
 
     ViewReturn(loader = '') {
-
-        
-
         return `
 <div class="single_visit_cont">
-
     <div class="top_card">
-
         <div class="Patient_imag">
             <img src="" alt="">
         </div>
-
         <div class="patient_detail">
-
             <div class="card name_card">
                 <div class="dit_group">
                     <p class="name"></p>
                     <p class="description"> Patient id: <span></span></p>
                 </div>
-
                 <button type="button" data_src="" class="edit_btn">
                     <span class='switch_icon_edit'></span>
                 </button>
-
             </div>
-
             <div class="card">
+                ${['user', 'calendar_check', 'location_dot', 'phone', 'briefcase']
+                .map(icon => `
                 <div class="icon_card">
-                    <span class='switch_icon_user'></span>
+                    <span class='switch_icon_${icon}'></span>
                     <p></p>
                 </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_calendar_check'></span>
-                    <p>years</p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_location_dot'></span>
-                    <p><span></span>)</p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_phone'></span>
-                    <p><span>/</span> </p>
-                </div>
-
-                <div class="icon_card">
-                    <span class='switch_icon_briefcase'></span>
-                    <p></p>
-                </div>
-
+                `).join('')}
             </div>
-
         </div>
-
         <div class="loader_cont ${loader}">
             <div class="loader"></div>
         </div>
     </div>
-
-    <div class="more_visit_detail">
-
-    </div>
-
+    <div class="more_visit_detail"></div>
     <div class="more_visit_cards">
-
-        <div class="card_group_cont_cont" id="clinical_group">
-
-            <h4>Clinical Notes</h4>
-            <div class="card_group_cont">
-
-            </div>
-
+        ${['Clinical Notes', 'Diagnosis', 'Treatment Plan']
+                .map((title, index) => `
+        <div class="card_group_cont_cont" id="${['clinical', 'diagnosis', 'treatment'][index]}_group">
+            <h4>${title}</h4>
+            <div class="card_group_cont"></div>
         </div>
-
-        <div class="card_group_cont_cont" id="diagnosis_group">
-
-            <h4>Diagnosis</h4>
-            <div class="card_group_cont">
-
-            </div>
-
-        </div>
-
-        <div class="card_group_cont_cont" id="treatment_group">
-
-            <h4>Treatment Plan</h4>
-            <div class="card_group_cont">
-
-            </div>
-
-        </div>
-
+        `).join('')}
     </div>
-
-
 </div>
 `;
     }
 
-
     render_add_btn() {
-
-        visit_add_card_btn.forEach((btn) => {
-
+        visit_add_card_btn.forEach(btn => {
             const body = document.querySelector(`.single_visit_cont #${btn.body_container_id} .card_group_cont`);
-            if (body) {
-                const cards_cont = document.createElement('div');
-                cards_cont.className = 'add_card_btn';
-                cards_cont.setAttribute('id', 'add_card_btn');
+            if (!body) return;
 
-                const add_card_btn_in = document.createElement('div');
-                add_card_btn_in.className = 'add_card_btn_in';
-                add_card_btn_in.innerHTML = `<span class='switch_icon_add'></span>`;
-                cards_cont.appendChild(add_card_btn_in);
-
-                const option_cont = document.createElement('div');
-                option_cont.className = 'option_cont';
-
-                btn.cards.forEach(card => {
-
-                    const option = document.createElement('div');
-                    option.className = 'option';
-                    option.innerText = card.title;
-
-                    if (this.rendered_card.includes(card.component)) {
-                        option.classList.add('disabled');
-                    } else {
-                        const handleClick = (e) => {
-                            e.stopPropagation();
-
-                            // Dynamically call the PreRender method for the component
-                            const controllerMethod = dashboardController[card.component];
-                            if (controllerMethod && typeof controllerMethod.PreRender === 'function') {
-                                controllerMethod.PreRender({
-                                    data: [],
-                                    visit_id: this.visit_id,
-                                });
-
-                            } else {
-                                console.error(`PreRender method not found for component: ${card.component}`);
-                            }
-
-                            // Add the card title to the rendered cards list
-                            this.rendered_card.push(card.title);
-
-                            // Mark option as disabled
-                            option.classList.add('disabled');
-
-                            // Remove the click listener on this option
-                            option.removeEventListener('click', handleClick);
-
-                            // Close the options menu
-                            cards_cont.classList.remove('option');
-                            this.is_add_card_open = false;
-                            this.add_card_deleted = '';
-
-                            // Remove the event listener once the state is reset
-                            window.removeEventListener('click', this.handleWindowClick);
-                        };
-
-                        // Attach the named click listener
-                        option.addEventListener('click', handleClick);
-                    }
-
-                    option_cont.appendChild(option);
-                });
-
-                cards_cont.appendChild(option_cont);
-
-                cards_cont.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent triggering window click
-                    if (this.is_add_card_open) {
-                        this.add_card_deleted.classList.remove('option');
-                        this.is_add_card_open = false;
-
-                        // Remove the event listener once the state is reset
-                        window.removeEventListener('click', this.handleWindowClick);
-                    }
-                    cards_cont.classList.add('option');
-                    this.is_add_card_open = true;
-                    this.add_card_deleted = cards_cont;
-                    window.addEventListener('click', this.handleWindowClick);
-                });
-
-                body.appendChild(cards_cont);
-            }
-
-        })
+            const cards_cont = this.createAddCardButton(btn);
+            body.appendChild(cards_cont);
+        });
     }
 
+    createAddCardButton(btn) {
+        const cards_cont = document.createElement('div');
+        cards_cont.className = 'add_card_btn';
+        cards_cont.setAttribute('id', 'add_card_btn');
+
+        const add_card_btn_in = document.createElement('div');
+        add_card_btn_in.className = 'add_card_btn_in';
+        add_card_btn_in.innerHTML = `<span class='switch_icon_add'></span>`;
+        cards_cont.appendChild(add_card_btn_in);
+
+        const option_cont = this.createCardOptions(btn, cards_cont);
+        cards_cont.appendChild(option_cont);
+
+        this.setupCardContainerListeners(cards_cont);
+
+        return cards_cont;
+    }
+
+    createCardOptions(btn, cards_cont) {
+        const option_cont = document.createElement('div');
+        option_cont.className = 'option_cont';
+
+        btn.cards.forEach(card => {
+            const option = document.createElement('div');
+            option.className = 'option';
+            option.innerText = card.title;
+
+            if (this.rendered_card.includes(card.component)) {
+                option.classList.add('disabled');
+            } else {
+                this.setupCardOptionListener(option, card, cards_cont);
+            }
+
+            option_cont.appendChild(option);
+        });
+
+        return option_cont;
+    }
+
+    setupCardOptionListener(option, card, cards_cont) {
+        const handleClick = (e) => {
+            e.stopPropagation();
+
+            const controllerMethod = dashboardController[card.component];
+            if (controllerMethod && typeof controllerMethod.PreRender === 'function') {
+                controllerMethod.PreRender({
+                    data: [],
+                    visit_id: this.visit_id,
+                });
+            } else {
+                console.error(`PreRender method not found for component: ${card.component}`);
+            }
+
+            this.rendered_card.push(card.title);
+            option.classList.add('disabled');
+            option.removeEventListener('click', handleClick);
+            cards_cont.classList.remove('option');
+            this.is_add_card_open = false;
+            this.add_card_deleted = null;
+            window.removeEventListener('click', this.handleWindowClick);
+        };
+
+        option.addEventListener('click', handleClick);
+    }
+
+    setupCardContainerListeners(cards_cont) {
+        cards_cont.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (this.is_add_card_open) {
+                this.add_card_deleted?.classList.remove('option');
+                this.is_add_card_open = false;
+                window.removeEventListener('click', this.handleWindowClick);
+            }
+            cards_cont.classList.add('option');
+            this.is_add_card_open = true;
+            this.add_card_deleted = cards_cont;
+            window.addEventListener('click', this.handleWindowClick);
+        });
+    }
 
     top_card_view(data) {
-
         const body = document.querySelector('.single_visit_cont .top_card');
         body.innerHTML = `
 <div class="Patient_imag">
-    <img src="${data == '' ? '' : data.Patient_img}" alt="">
+    <img src="${data ? data.Patient_img : ''}" alt="">
 </div>
 
 <div class="patient_detail">
-
     <div class="card name_card">
         <div class="dit_group">
-            <p class="name">${data == '' ? '' : data.name}</p>
-            <p class="description"> Patient id: <span>${data == '' ? '' : data.id}</span></p>
+            <p class="name">${data ? data.name : ''}</p>
+            <p class="description"> Patient id: <span>${data ? data.id : ''}</span></p>
         </div>
-
-        <button type="button" data_src="${data == '' ? '' : data.id}" class="edit_btn">
+        <button type="button" data_src="${data ? data.id : ''}" class="edit_btn">
             <span class='switch_icon_edit'></span>
         </button>
-
     </div>
 
     <div class="card">
+        ${[
+                { icon: 'user', value: data ? data.gender : '' },
+                {
+                    icon: 'calendar_check',
+                    value: data ? `${date_formatter(data.dob)} (${data.age.amount} ${data.age.unit})` : ''
+                },
+                {
+                    icon: 'location_dot',
+                    value: data ? `${data.address} (${data.nationality})` : ''
+                },
+                {
+                    icon: 'phone',
+                    value: data ? `${data.phone} / ${data.alt_phone}` : ''
+                },
+                { icon: 'briefcase', value: data ? data.occupation : '' }
+            ].map(item => `
         <div class="icon_card">
-            <span class='switch_icon_user'></span>
-            <p>${data == '' ? '' : data.gender}</p>
+            <span class='switch_icon_${item.icon}'></span>
+            <p>${item.value}</p>
         </div>
-
-        <div class="icon_card">
-            <span class='switch_icon_calendar_check'></span>
-            <p>${date_formatter(data == '' ? '' : data.dob)} (${data == '' ? '' : data.age.amount} ${data == '' ? '' : data.age.unit} )</p>
-        </div>
-
-        <div class="icon_card">
-            <span class='switch_icon_location_dot'></span>
-            <p>${data == '' ? '' : data.address} (<span>${data == '' ? '' : data.nationality}</span>)</p>
-        </div>
-
-        <div class="icon_card">
-            <span class='switch_icon_phone'></span>
-            <p>${data == '' ? '' : data.phone} <span>/</span> ${data == '' ? '' : data.alt_phone}</p>
-        </div>
-
-        <div class="icon_card">
-            <span class='switch_icon_briefcase'></span>
-            <p>${data == '' ? '' : data.occupation}</p>
-        </div>
-
+        `).join('')}
     </div>
-
 </div>
 `;
     }
 
-
     handleWindowClick = (e) => {
-        // const add_card_btn = document.querySelector('.add_card_btn');
-        const add_card_btn = this.add_card_deleted == '' ? false : this.add_card_deleted;
+        const add_card_btn = this.add_card_deleted;
 
-        if (this.is_add_card_open) {
-            if (!add_card_btn.contains(e.target)) {
-                add_card_btn.classList.remove('option');
-                this.is_add_card_open = false;
-
-                // Remove the event listener once the state is reset
-                window.removeEventListener('click', this.handleWindowClick);
-                this.add_card_deleted = '';
-            }
+        if (this.is_add_card_open && add_card_btn && !add_card_btn.contains(e.target)) {
+            add_card_btn.classList.remove('option');
+            this.is_add_card_open = false;
+            window.removeEventListener('click', this.handleWindowClick);
+            this.add_card_deleted = null;
         }
     };
 
-    card_view(type) {
+//     card_view(type) {
+//         const title = SingleVisitView.CARD_TYPES[type] || 'Unknown';
 
-        // use switch
-        switch (type) {
-            case 'complain':
-                var title = 'Chief Complain';
-                break;
-            case 'illness':
-                var title = 'Presented Illness';
-                break;
-            case 'reviewSystem':
-                var title = 'Review of Other System';
-                break;
-            case 'generalExam':
-                var title = 'General Exam';
-                break;
-            case 'systemicExam':
-                var title = 'Systemic Exam';
-                break;
-            case 'preliminaryDiagnosis':
-                var title = 'Preliminary Diagnosis';
-                break;
-            case 'radiologyExam':
-                var title = 'Radiology Exam';
-                break;
-            case 'labExam':
-                var title = 'Laboratory Exam';
-                break;
-            case 'vital':
-                var title = 'Vital Sign';
-                break;
-            case 'prescription':
-                var title = 'Prescription';
-                break;
-            default:
-                var title = 'Unknown';
-                break;
-        }
+//         const card = document.createElement('div');
+//         card.classList.add('more_visit_detail_card');
+//         card.setAttribute('type', type);
 
+//         card.innerHTML = `
+// <div class="head_part">
+//     <h4 class="heading">${title}</h4>
+//     <div class="add_btn">
+//         <span class='switch_icon_add'></span>
+//     </div>
+// </div>
+// <div class="body_part patient_note_cards_cont"></div>
+// `;
 
-        const card = document.createElement('div');
-        card.classList.add('more_visit_detail_card');
-        card.setAttribute('type', type);
-
-        card.innerHTML = `
-<div class="head_part">
-    <h4 class="heading">${title}</h4>
-
-    <div class="add_btn">
-        <span class='switch_icon_add'></span>
-    </div>
-</div>
-
-<div class="body_part patient_note_cards_cont">
-
-
-</div>
-`;
-
-        return card;
-
-    }
+//         return card;
+//     }
 
     async fetchData() {
         try {

@@ -2691,6 +2691,98 @@ input {
                         }
 
 
+                        /* ----------------------------------------------------------- */
+
+                        .clinical_note_cont_cont {
+                            .clinical_note_cont {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 20px;
+
+                                .clinical_note_card {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 20px;
+
+                                    .clinical_note_card_section {
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 10px;
+                                        width: 100%;
+
+                                        .top {
+
+                                            .head {
+                                                color: var(--pri_color);
+                                                padding-bottom: 10px;
+                                                font-weight: 700;
+                                                border-bottom: 2px solid var(--active_color);
+                                            }
+
+                                        }
+
+                                        .clinical_note_card_section_body {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 10px;
+
+                                            .card {
+                                                display: flex;
+                                                flex-direction: column;
+                                                gap: 10px;
+                                                width: 100%;
+                                                padding: 20px;
+                                                border-radius: var(--main_border_r);
+                                                border: 2px solid var(--input_border);
+                                                padding: 10px;
+
+                                                .incard_top {
+                                                    .date {
+                                                        font-size: 20px;
+                                                        font-weight: 900;
+                                                    }
+
+                                                    .created_by {
+                                                        font-size: 13px;
+                                                    }
+                                                }
+
+                                                .data {
+                                                    display: flex;
+                                                    gap: 5px;
+
+                                                    .head {
+                                                        font-weight: 700;
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;
+                                                        overflow: hidden;
+                                                        display: inline-block;
+                                                    }
+
+                                                    .description {}
+
+                                                }
+
+                                                .complaint {
+                                                    flex-direction: column;
+                                                }
+
+                                                .duration {
+                                                    .description {
+                                                        /* font-weight: 600; */
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;
+                                                        overflow: hidden;
+                                                        display: inline-block;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
                     }
                 }
 

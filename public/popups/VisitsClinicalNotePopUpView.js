@@ -53,37 +53,6 @@ export class VisitsClinicalNotePopUpView {
                             border: 2px solid var(--input_border);
                             " labelStyles="font-size: 13px;"></br-input>
 
-
-                    <div class="input_group_group">
-
-                        <br-input required label="Duration(days/weeks/months)" name="cc_duration" placeholder="How long has this been happening?"
-                        type="number" styles="
-                                border-radius: var(--input_main_border_r);
-                                width: 225px;
-                                padding: 10px;
-                                height: 41px;
-                                background-color: transparent;
-                                border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
-
-                        <br-select required name="cc_unit" value="days" fontSize="13px" label="Unit" placeholder="Unit"
-                        styles="
-                                    border-radius: var(--input_main_border_r);
-                                    width: 100px;
-                                    padding: 10px;
-                                    height: 41px;
-                                    text-transform:capitalize;
-                                    background-color: transparent;
-                                    border: 2px solid var(--input_border);
-                                    " labelStyles="font-size: 14px !important;">
-
-                        ${duration_unit.map((unit) => {
-            return `<br-option style="text-transform:capitalize;" value="${unit}">${unit}</br-option>`
-        }).join("")
-            }
-
-                    </br-select>
-                    </div>
                 </div>
 
 
@@ -95,31 +64,19 @@ export class VisitsClinicalNotePopUpView {
 
                 <div class="input_groups">
 
-                    <br-input placeholder="Briefly describe the main issue" name="hpi_date" label="Onset Date"
-                        required type="date" styles="
+
+
+                    <br-input placeholder="Briefly describe the main issue" name="hpi_description"
+                        label="Complaint Description" required type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
                             padding: 10px;
-                            height: 41px;
+                            height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
                             " labelStyles="font-size: 13px;"></br-input>
 
-                    <br-select required name="hpi_progression" fontSize="13px" label="Progression" placeholder="Select condition"
-                        styles="
-                                    border-radius: var(--input_main_border_r);
-                                    width: 350px;
-                                    padding: 10px;
-                                    height: 41px;
-                                    background-color: transparent;
-                                    border: 2px solid var(--input_border);
-                                    " labelStyles="font-size: 14px !important;">
 
-                        <br-option type="checkbox" value="improving">Improving</br-option>
-                        <br-option type="checkbox" value="worsening">Worsening</br-option>
-                        <br-option type="checkbox" value="unchanged">Unchanged</br-option>
-
-                    </br-select>
                 </div>
 
 
@@ -132,6 +89,40 @@ export class VisitsClinicalNotePopUpView {
 
                     <br-input placeholder="Explain related symptoms" name="ros_symptoms" label="Related Symptoms"
                         type="textarea" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 350px;
+                            padding: 10px;
+                            height: 60px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="section_group">
+                <h4>Preliminary Diagnosis (Dx)</h4>
+
+                <div class="input_groups">
+
+                    <br-input placeholder="Enter initial diagnosis..." option="true" name="dx_diagnosis" required
+                        label="Provisional Diagnosis" require type="text" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 350px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " dropDownStyles="border: 2px solid var(--input_border);"
+                        dropDownBorder_radius="var(--input_main_border_r)" labelStyles="font-size: 13px;"
+                        id="preliminary_diagnosis_input"></br-input>
+
+
+                    <br-input placeholder="Any additional notes or observations..." name="dx_note"
+                        label="Doctor's Notes" require type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
                             padding: 10px;
@@ -170,41 +161,6 @@ export class VisitsClinicalNotePopUpView {
 
 
             <div class="section_group">
-                <h4>Preliminary Diagnosis (Dx)</h4>
-
-                <div class="input_groups">
-
-                    <br-input placeholder="Enter initial diagnosis..." option="true" name="dx_diagnosis"
-                        required label="Provisional Diagnosis" require type="text" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " dropDownStyles="border: 2px solid var(--input_border);" 
-                            dropDownBorder_radius="var(--input_main_border_r)"
-                            labelStyles="font-size: 13px;" id="preliminary_diagnosis_input"></br-input>
-
-
-                    <br-input placeholder="Any additional notes or observations..." name="dx_note"
-                        label="Doctor's Notes" require type="textarea" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 60px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
-
-
-                </div>
-
-
-            </div>
-
-
-            <div class="section_group">
                 <h4>Systemic Examination (SE)</h4>
 
                 <div class="input_groups">
@@ -224,6 +180,10 @@ export class VisitsClinicalNotePopUpView {
 
 
             </div>
+
+
+
+
 
 
 
@@ -327,4 +287,3 @@ export class VisitsClinicalNotePopUpView {
         }
     }
 }
-

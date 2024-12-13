@@ -44,7 +44,7 @@ export class VisitAllergyCardView {
             card.className = 'allergy_card';
 
             card.innerHTML = `
-                   <div class="top">
+                    <div class="top">
                         <p class="date">${date_formatter(data.created_at)}</p>
                         <p class="created_by">${data.created_by}</p>
                     </div>
