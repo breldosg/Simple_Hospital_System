@@ -19,15 +19,15 @@ export class VisitClinicalEvaluationCardView {
         // this.datas = params.data.note_data ? params.data.note_data : [];
         this.visit_id = params.visit_id;
 
-        const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont.add_card_btn');
+
+        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
         if (add_btn) {
             add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
         }
         else {
+            const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
             cont.appendChild(this.ViewReturn());
         }
-
 
         // this.renderNoteCards();
     }
@@ -70,7 +70,7 @@ export class VisitClinicalEvaluationCardView {
 
         card.innerHTML = `
     <div class="head_part">
-        <h4 class="heading">Clinical note</h4>
+        <h4 class="heading">Clinical Evaluation</h4>
 
         <div class="add_btn" id="add_patient_clinical_note">
             <span class='switch_icon_add'></span>
@@ -242,7 +242,7 @@ export class VisitClinicalEvaluationCardView {
 
         const edit_btn = card.querySelector('.clinical_note_cont_cont #add_patient_clinical_note');
         edit_btn.addEventListener('click', () => {
-            dashboardController.visitsClinicalNotePopUpView.PreRender(
+            dashboardController.visitsClinicalEvaluationPopUpView.PreRender(
                 {
                     visit_id: this.visit_id,
                 }
@@ -309,3 +309,4 @@ export class VisitClinicalEvaluationCardView {
     // }
     // }
 }
+

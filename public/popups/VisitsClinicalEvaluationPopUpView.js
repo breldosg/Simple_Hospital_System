@@ -2,7 +2,7 @@ import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, notify, searchInArray } from "../script/index.js";
 
-export class VisitsClinicalNotePopUpView {
+export class VisitsClinicalEvaluationPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
@@ -66,8 +66,8 @@ export class VisitsClinicalNotePopUpView {
 
 
 
-                    <br-input placeholder="Briefly describe the main issue" name="hpi_description"
-                        label="Complaint Description" required type="textarea" styles="
+                    <br-input placeholder="Briefly describe the illness" name="hpi_description"
+                        label="Illness Description" required type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
                             padding: 10px;

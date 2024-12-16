@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 
 export class VisitAllergyCardView {
 
@@ -8,6 +8,7 @@ export class VisitAllergyCardView {
         // window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
         this.datas = [];
+        window.save_allergy = this.save_allergy.bind(this);
     }
 
     async PreRender(params = []) {
@@ -39,11 +40,15 @@ export class VisitAllergyCardView {
 
         const container = document.querySelector('.allergy_card_cont_cont .body_part')
 
-        this.datas.forEach((data) => {
-            const card = document.createElement('div');
-            card.className = 'allergy_card';
+        console.log('googo', this.datas.length);
 
-            card.innerHTML = `
+
+        if (this.datas.length > 0) {
+            this.datas.forEach((data) => {
+                const card = document.createElement('div');
+                card.className = 'allergy_card';
+
+                card.innerHTML = `
                     <div class="top">
                         <p class="date">${date_formatter(data.created_at)}</p>
                         <p class="created_by">${data.created_by}</p>
@@ -80,10 +85,11 @@ export class VisitAllergyCardView {
 
                     `;
 
-            container.prepend(card);
-        })
+                container.prepend(card);
+            })
 
-        this.datas = [];
+            this.datas = [];
+        }
 
     }
 
@@ -132,53 +138,44 @@ export class VisitAllergyCardView {
         //     });
     }
 
-    async save_patient_note(data_old) {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
-        btn_submit.setAttribute('loading', true);
+
+    async save_allergy(data) {
+        dashboardController.visitAllergyPopUpView.add_loader_in_btn();
 
 
-        var formData = {
-            ...data_old,
-            visit_id: this.visit_id,
-            action: 'create',
-        }
-
+        data = {
+            ...data,
+            visit_id: this.visit_id
+        };
 
         try {
-            const response = await fetch('/api/patient/save_update_delete_patient_note', {
+            const response = await fetch('/api/patient/save_allergy', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(data)
             });
 
             if (!response.ok) {
-                throw new Error('failed To update vital. Server Error');
+                throw new Error('Fail to Save Note. Server Error');
             }
 
             const result = await response.json();
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                // After successful creation, clear the popup and close it
-                dashboardController.addPatientNotePopUpView.close();
+                dashboardController.visitAllergyPopUpView.close();
+                this.datas = result.data;
+                console.log('after save:', this.datas);
 
-                this.datas = [];
-                this.datas.push(result.data);
-
-                this.renderNoteCards()
-
+                this.renderAllergyCards();
             } else {
                 notify('top_left', result.message, 'warning');
             }
         } catch (error) {
             notify('top_left', error.message, 'error');
         }
-        finally {
-            btn_submit.setAttribute('loading', false);
-        }
     }
 }
-
 

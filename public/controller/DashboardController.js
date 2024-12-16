@@ -25,7 +25,7 @@ import { ViewOrderListView } from "../views/ViewOrderListView.js";
 import { PlaceOrderPopUpView } from "../popups/PlaceOrderPopUpView.js";
 import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPopUpView.js";
 import { SingleVisitView } from "../views/SingleVisitView.js";
-import { VisitsClinicalNotePopUpView } from "../popups/VisitsClinicalNotePopUpView.js";
+import { VisitsClinicalEvaluationPopUpView } from "../popups/VisitsClinicalEvaluationPopUpView.js";
 import { AddVitalPopUpView } from "../popups/AddVitalPopUpView.js";
 import { VisitVitalCardView } from "../cards/VisitVitalCardView.js";
 import { VisitPatientNoteCardView } from "../cards/VisitPatientNoteCardView.js";
@@ -63,7 +63,7 @@ class DashboardController {
     viewOnProgressView = new ViewOnProgressView();
 
     //Patient Visit
-    visitsClinicalNotePopUpView = new VisitsClinicalNotePopUpView();
+    visitsClinicalEvaluationPopUpView = new VisitsClinicalEvaluationPopUpView();
     visitAllergyPopUpView = new VisitAllergyPopUpView();
     visitFinalDiagnosisPopUpView = new VisitFinalDiagnosisPopUpView();
     visitPlanForNextVisitPopUpView = new VisitPlanForNextVisitPopUpView();

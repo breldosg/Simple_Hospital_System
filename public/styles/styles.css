@@ -14,7 +14,22 @@ a {
 }
 
 p {
+    font-size: 12px;
+}
+
+h4 {
     font-size: 14px;
+}
+
+.main_btn {
+    border: none;
+    color: var(--white);
+    background-color: var(--pri_color);
+    padding-inline: 15px;
+    height: 35px;
+    cursor: pointer;
+    border-radius: var(--btn_border_r);
+    font-size: 12px;
 }
 
 ::-webkit-scrollbar {
@@ -276,16 +291,14 @@ input {
 
     .top_cont {
         width: 100%;
-        height: 150px;
+        height: 120px;
         position: relative;
         z-index: 2;
-
-
     }
 
     .update_cont {
         width: 100%;
-        height: calc(100% - 150px);
+        height: calc(100% - 120px);
         background-color: var(--white_background);
         /* background: rgb(255, 255, 255); */
         /* background: linear-gradient(151deg, rgba(35, 152, 158, 0.266) 0%, rgba(218, 218, 218, 1) 31%, rgba(218, 218, 218, 1) 92%); */
@@ -466,15 +479,8 @@ input {
 
         .outpatient_table_out {
             .main_btn {
-                border: none;
-                color: var(--white);
-                background-color: var(--pri_color);
-                padding-inline: 15px;
                 height: 35px;
                 width: 86px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
             }
 
             .main_btn:hover {
@@ -639,7 +645,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -709,15 +714,7 @@ input {
 
         .staffList_table_out {
             .main_btn {
-                border: none;
-                color: var(--white);
-                background-color: var(--pri_color);
-                padding-inline: 15px;
-                height: 35px;
                 width: 86px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
             }
 
             .main_btn:hover {
@@ -891,7 +888,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -994,17 +990,6 @@ input {
             }
 
             .attendence_table_out {
-                .main_btn {
-                    border: none;
-                    color: var(--white);
-                    background-color: var(--pri_color);
-                    padding-inline: 15px;
-                    height: 35px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    font-size: 14px;
-                }
-
                 .d_flex {
                     display: flex;
                 }
@@ -1117,7 +1102,6 @@ input {
                             cursor: pointer;
 
                             p {
-                                font-size: small;
                                 white-space: nowrap;
                                 text-overflow: ellipsis;
                                 overflow: hidden;
@@ -1572,17 +1556,6 @@ input {
             .medicine_table_out {
                 overflow-y: scroll;
 
-                .main_btn {
-                    border: none;
-                    color: var(--white);
-                    background-color: var(--pri_color);
-                    padding-inline: 15px;
-                    height: 35px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    font-size: 14px;
-                }
-
                 .d_flex {
                     display: flex;
                 }
@@ -1710,7 +1683,6 @@ input {
                             cursor: pointer;
 
                             p {
-                                font-size: small;
                                 white-space: nowrap;
                                 text-overflow: ellipsis;
                                 overflow: hidden;
@@ -2328,7 +2300,7 @@ input {
                 .patient_note_cards_cont_cont {
                     grid-column-start: 2;
                     grid-column-end: 4;
-                    height: 305px;
+                    /* height: 305px; */
 
 
                     .patient_note_cards_cont {
@@ -2336,7 +2308,7 @@ input {
                         flex-direction: row !important;
                         flex-wrap: wrap;
                         overflow: hidden;
-                        height: 220px;
+                        height: 190px;
                         padding: 5px;
 
                         .note_card {
@@ -2369,7 +2341,6 @@ input {
                             }
 
                             .detail {
-                                font-size: 14px;
                                 display: -webkit-box;
                                 -webkit-box-orient: vertical;
                                 overflow: hidden;
@@ -2387,7 +2358,7 @@ input {
 
                     .full_screen_overlay {
                         width: auto;
-                        height: 220px;
+                        /* height: 220px; */
 
                         .full_screen {
                             background-color: var(--pure_white_background);
@@ -2431,7 +2402,7 @@ input {
                 }
 
                 .vital_card_cont {
-                    height: 305px;
+                    /* height: 305px; */
 
                     .vital_card {
                         display: flex;
@@ -2655,7 +2626,7 @@ input {
                                         display: flex;
                                         justify-content: space-between;
                                         align-items: center;
-                                        min-height: 40px;
+                                        /* min-height: 40px; */
                                         padding-block: 5px;
                                         border-bottom: 1px solid var(--input_border);
 
@@ -2783,6 +2754,46 @@ input {
 
                             }
                         }
+
+
+                        /* ----------------------------------------------------------- */
+
+                        .next_visit_plan_cont_cont {
+                            .next_visit_plan_cont {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 10px;
+
+                                .top {
+                                    border: none;
+
+                                    .date {
+                                        font-size: 20px;
+                                        font-weight: 900;
+                                    }
+
+                                    .created_by {
+                                        font-size: 13px;
+                                    }
+                                }
+
+                                .data {
+                                    
+
+                                    .head {
+                                        font-size: 14px;
+                                        font-weight: 700;
+                                        white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        display: inline-block;
+                                    }
+
+                                }
+                            }
+                        }
+
+
                     }
                 }
 
@@ -2801,16 +2812,6 @@ input {
     /* ------------------------------------------------------- */
 
     .medicine_table_out {
-        .main_btn {
-            border: none;
-            color: var(--white);
-            background-color: var(--pri_color);
-            padding-inline: 15px;
-            height: 35px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-        }
 
         .main_btn:hover {
             background-color: var(--btn_hover_color);
@@ -2910,7 +2911,6 @@ input {
                     cursor: pointer;
 
                     p {
-                        font-size: small;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         overflow: hidden;
@@ -2978,16 +2978,6 @@ input {
     /* ------------------------------------------------------- */
 
     .outMedicineCategory_table_out {
-        .main_btn {
-            border: none;
-            color: var(--white);
-            background-color: var(--pri_color);
-            padding-inline: 15px;
-            height: 35px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-        }
 
         .main_btn:hover {
             background-color: var(--btn_hover_color);
@@ -3083,7 +3073,6 @@ input {
                     cursor: pointer;
 
                     p {
-                        font-size: small;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         overflow: hidden;
@@ -3394,17 +3383,6 @@ input {
         .medicine_table_out {
             overflow-y: scroll;
 
-            .main_btn {
-                border: none;
-                color: var(--white);
-                background-color: var(--pri_color);
-                padding-inline: 15px;
-                height: 35px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
-            }
-
             .d_flex {
                 display: flex;
             }
@@ -3506,7 +3484,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -3673,17 +3650,6 @@ input {
         .medicine_table_out {
             overflow-y: scroll;
 
-            .main_btn {
-                border: none;
-                color: var(--white);
-                background-color: var(--pri_color);
-                padding-inline: 15px;
-                height: 35px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
-            }
-
             .d_flex {
                 display: flex;
             }
@@ -3822,7 +3788,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -3986,16 +3951,7 @@ input {
         .medicine_table_out {
             overflow-y: scroll;
 
-            .main_btn {
-                border: none;
-                color: var(--white);
-                background-color: var(--pri_color);
-                padding-inline: 15px;
-                height: 35px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
-            }
+
 
             .d_flex {
                 display: flex;
@@ -4151,7 +4107,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -4318,14 +4273,7 @@ input {
             overflow-y: scroll;
 
             .main_btn {
-                border: none;
-                color: var(--white);
-                background-color: var(--pri_color);
-                padding-inline: 15px;
                 height: 35px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
             }
 
             .main_btn:hover {
@@ -4466,7 +4414,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -4535,7 +4482,6 @@ input {
     }
 }
 
-
 .btn_cont {
     display: flex;
     width: 100%;
@@ -4553,7 +4499,6 @@ input {
         border-radius: var(--input_main_border_r);
     }
 }
-
 
 .alert_collection {
     width: 350px;
@@ -4573,8 +4518,6 @@ input {
         z-index: 1;
     }
 }
-
-
 
 .popup {
     position: fixed;
@@ -5623,7 +5566,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -6052,7 +5994,6 @@ input {
                         cursor: pointer;
 
                         p {
-                            font-size: small;
                             white-space: nowrap;
                             text-overflow: ellipsis;
                             overflow: hidden;
@@ -6870,10 +6811,6 @@ input {
     animation-direction: reverse;
 }
 
-@keyframes l14 {
-    100% {
-        transform: rotate(1turn);
-    }
-}
+
 
 /* <div class="loader_cont active"><div class="loader"></div></div> */

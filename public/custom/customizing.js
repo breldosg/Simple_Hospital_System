@@ -15,10 +15,7 @@ export const visit_add_card_btn = [
                 component: 'visitPlanForNextVisitCardView',
                 title: 'Plan for Next Visit'
             },
-            {
-                component: 'visitFinalDiagnosisCardView',
-                title: 'Final Diagnosis'
-            },
+            
 
         ],
     },
@@ -32,6 +29,10 @@ export const visit_add_card_btn = [
             {
                 component: 'visitLabExamCardView',
                 title: 'Laboratory Test'
+            },
+            {
+                component: 'visitFinalDiagnosisCardView',
+                title: 'Final Diagnosis'
             },
         ],
     },

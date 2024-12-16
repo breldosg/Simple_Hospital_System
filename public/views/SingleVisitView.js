@@ -9,6 +9,7 @@ export class SingleVisitView {
         this.is_add_card_open = false;
         this.rendered_card = [];
         this.add_card_deleted = null;
+        this.current_clicked = null;
     }
 
     // Card type mapping to improve readability and reduce switch statement complexity
@@ -36,6 +37,7 @@ export class SingleVisitView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('active');
 
+        this.rendered_card = [];
         this.visit_id = params.id;
         this.render(params.id);
 
@@ -64,8 +66,10 @@ export class SingleVisitView {
                 dataKey: 'patient_note'
             },
             {
-                method: dashboardController.visitClinicalEvaluationCardView,
-                dataKey: null
+                method: dashboardController.visitPlanForNextVisitCardView,
+                dataKey: 'plan_visit_data',
+                condition: (data) => data.success,
+                afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
             {
                 method: dashboardController.visitAllergyCardView,
@@ -198,8 +202,9 @@ export class SingleVisitView {
                 console.error(`PreRender method not found for component: ${card.component}`);
             }
 
-            this.rendered_card.push(card.title);
+            this.rendered_card.push(card.component);
             option.classList.add('disabled');
+            // this.current_clicked = option;
             option.removeEventListener('click', handleClick);
             cards_cont.classList.remove('option');
             this.is_add_card_open = false;
@@ -281,25 +286,25 @@ export class SingleVisitView {
         }
     };
 
-//     card_view(type) {
-//         const title = SingleVisitView.CARD_TYPES[type] || 'Unknown';
+    //     card_view(type) {
+    //         const title = SingleVisitView.CARD_TYPES[type] || 'Unknown';
 
-//         const card = document.createElement('div');
-//         card.classList.add('more_visit_detail_card');
-//         card.setAttribute('type', type);
+    //         const card = document.createElement('div');
+    //         card.classList.add('more_visit_detail_card');
+    //         card.setAttribute('type', type);
 
-//         card.innerHTML = `
-// <div class="head_part">
-//     <h4 class="heading">${title}</h4>
-//     <div class="add_btn">
-//         <span class='switch_icon_add'></span>
-//     </div>
-// </div>
-// <div class="body_part patient_note_cards_cont"></div>
-// `;
+    //         card.innerHTML = `
+    // <div class="head_part">
+    //     <h4 class="heading">${title}</h4>
+    //     <div class="add_btn">
+    //         <span class='switch_icon_add'></span>
+    //     </div>
+    // </div>
+    // <div class="body_part patient_note_cards_cont"></div>
+    // `;
 
-//         return card;
-//     }
+    //         return card;
+    //     }
 
     async fetchData() {
         try {
@@ -330,4 +335,10 @@ export class SingleVisitView {
             return null;
         }
     }
+
+    add_to_rendered_card_array(value) {
+        this.rendered_card.push(value);
+        this.current_clicked.classList.add('disabled');
+    }
+
 }

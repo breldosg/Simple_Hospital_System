@@ -119,7 +119,7 @@ ${this.Styles()}
     .top {
         width: 100%;
         background-color: var(--pri_color);
-        height: 40%;
+        height: 45%;
         display: flex;
         flex-direction: row;
         align-items: flex-end;
@@ -141,6 +141,7 @@ ${this.Styles()}
                 cursor: pointer;
                 font-weight: bold;
                 color: var(--white);
+                font-size: 14px;
             }
 
             .nav_item.active {
@@ -168,18 +169,19 @@ ${this.Styles()}
                 .main_name {
                     font-weight: bold;
                     text-transform: capitalize;
+                    font-size: 14px;
                 }
 
                 .sub_name {
                     font-weight: 400;
-                    font-size:13px;
+                    font-size:10px;
                     text-transform: capitalize;
                 }
             }
 
             .imag {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
                 border-radius: 5px;
                 display: flex;
                 align-items: center;
@@ -195,7 +197,7 @@ ${this.Styles()}
 
     .choice_collection {
         width: 100%;
-        height: 60%;
+        height: 55%;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -225,14 +227,14 @@ ${this.Styles()}
         }
 
         .choice_item {
-            height: 40px;
-            padding-inline: 20px;
+            padding: 9px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
             border-radius: var(--main_border_r);
             cursor: pointer;
+            font-size: 12px;
         }
 
         .choice_item.active {

@@ -6,7 +6,6 @@ export class VisitAllergyPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
-        window.save_allergy = this.save_allergy.bind(this);
     }
 
     async PreRender(params = '') {
@@ -141,25 +140,7 @@ export class VisitAllergyPopUpView {
 
         cancel_btn.addEventListener('click', () => {
             this.close();
-
         });
-
-
-        // const delete_btn = document.querySelector('#confirm_delete');
-        // delete_btn.addEventListener('click', () => {
-        // const cont = document.querySelector('.popup');
-        // cont.classList.remove('active');
-        // cont.innerHTML = '';
-
-        // const callbackName = this.callback;
-        // const data = this.parameter;
-
-        // if (callbackName && typeof window[callbackName] === 'function') {
-        // window[callbackName](data);
-        // } else {
-        // console.warn(`Callback function ${callbackName} is not defined or not a function`);
-        // }
-        // });
     }
 
     close() {
@@ -168,42 +149,13 @@ export class VisitAllergyPopUpView {
         cont.innerHTML = '';
     }
 
-    async save_allergy(data) {
+    add_loader_in_btn() {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
-
-        data = {
-            ...data,
-            visit_id: this.visit_id
-        };
-
-        try {
-            const response = await fetch('/api/patient/save_allergy', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) {
-                throw new Error('Fail to Save Note. Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                notify('top_left', result.message, 'success');
-                this.close();
-            } else {
-                notify('top_left', result.message, 'warning');
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-        }
-        finally {
-            btn_submit.setAttribute('loading', false);
-        }
+    }
+    remove_loader_in_btn() {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', false);
     }
 }
 

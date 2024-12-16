@@ -16,7 +16,7 @@ export class VisitPlanForNextVisitCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.datas = params.data.note_data ? params.data.note_data : [];
+        // this.datas = params.data.note_data ? params.data.note_data : [];
         this.visit_id = params.visit_id;
 
         const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
@@ -86,10 +86,21 @@ export class VisitPlanForNextVisitCardView {
 
             <div class="body_part next_visit_plan_cont">
 
-                <!-- no note show -->
-                <!-- <div class="start_cont">
-                    <p class="start_view_overlay">No Patient Note Found</p>
-                </div> -->
+            <div class="top">
+                <p class="date">Dec 29, 2024</p>
+                <p class="created_by">kelvin Godliver</p>
+            </div>
+
+            <div class="data">
+                <p class="head">Purpose For Next Visit</p>
+                <p class="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui, inventore?</p>
+            </div>
+            
+            <div class="data">
+                <p class="head">Instruction For Next Visit</p>
+                <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum in distinctio voluptatibus ab quidem saepe perspiciatis voluptates ipsa dignissimos culpa?</p>
+            </div>
+
 
             </div>
 

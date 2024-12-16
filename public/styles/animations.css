@@ -25,7 +25,6 @@
     }
 }
 
-
 @-webkit-keyframes slide-in-left {
     0% {
         -webkit-transform: translateX(-1000px);
@@ -56,7 +55,6 @@
     }
 }
 
-
 @keyframes overlay_show {
     0% {
         background-color: transparent;
@@ -71,7 +69,6 @@
     }
 }
 
-
 @keyframes opacity_overlay {
     0% {
         opacity: 0;
@@ -81,8 +78,6 @@
         opacity: 1;
     }
 }
-
-
 
 @-webkit-keyframes scale-in-ver-bottom {
     0% {
@@ -132,7 +127,6 @@
     }
 }
 
-
 @keyframes scale-in-ver-center {
     0% {
         transform: scaleY(0);
@@ -142,5 +136,11 @@
     100% {
         transform: scaleY(1);
         opacity: 1;
+    }
+}
+
+@keyframes l14 {
+    100% {
+        transform: rotate(1turn);
     }
 }

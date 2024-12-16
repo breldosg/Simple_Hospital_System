@@ -21,14 +21,15 @@ export class VisitFinalDiagnosisCardView {
             this.visit_id = params.visit_id;
         }
 
-        const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
+        const cont = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
+        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont .add_card_btn');
         if (add_btn) {
             add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
         }
         else {
             cont.appendChild(this.ViewReturn());
         }
+
 
 
         // this.renderNoteCards();
