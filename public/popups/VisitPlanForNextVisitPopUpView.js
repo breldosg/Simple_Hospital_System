@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 
@@ -5,7 +6,8 @@ export class VisitPlanForNextVisitPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
-        window.save_next_visit_plan = this.save_next_visit_plan.bind(this);
+        window.save_update_next_visit_plan = this.save_update_next_visit_plan.bind(this);
+        this.state = "creation";
     }
 
     async PreRender(params = '') {
@@ -16,6 +18,10 @@ export class VisitPlanForNextVisitPopUpView {
         }
 
         this.visit_id = params.visit_id ? params.visit_id : '';
+        this.state = params.state ? params.state : "creation";
+        this.plan_data = params.data ? params.data : '';
+
+        console.log(params);
 
 
         const cont = document.querySelector('.popup');
@@ -34,11 +40,11 @@ export class VisitPlanForNextVisitPopUpView {
         <p class="heading">Plan for Next Visit</p>
     </div>
 
-    <br-form callback="save_next_visit_plan">
+    <br-form callback="save_update_next_visit_plan">
         <div class="cont_form">
 
 
-            <br-input name="plan_date" label="Next Visit Date" required
+            <br-input name="plan_date" label="Next Visit Date" value="${this.plan_data.date ? this.plan_data.date : ''}" required
                 type="date" styles="
                 border-radius: var(--input_main_border_r);
                 width: 440px;
@@ -50,6 +56,7 @@ export class VisitPlanForNextVisitPopUpView {
 
 
             <br-input placeholder="Enter the purpose of the next visit (e.g., Follow-up, Lab Results, Check-Up)" name="plan_purpose" label="Purpose of Next Visit" required
+                value="${this.plan_data.purpose ? this.plan_data.purpose : ''}"
                 type="textarea" styles="
                 border-radius: var(--input_main_border_r);
                 width: 440px;
@@ -62,6 +69,7 @@ export class VisitPlanForNextVisitPopUpView {
 
 
             <br-input placeholder="Enter any instructions for the patient (e.g., fasting, tests to bring)" name="plan_instruction" label="Instructions for Patient"
+                value="${this.plan_data.instruction ? this.plan_data.instruction : ''}"
                 type="textarea" styles="
                 border-radius: var(--input_main_border_r);
                 width: 440px;
@@ -76,7 +84,7 @@ export class VisitPlanForNextVisitPopUpView {
 
             <div class="btn_wrapper">
                 <br-button id="confirm_cancel" class="card-button secondary">Cancel</br-button>
-                <br-button class="card-button" type="submit">Save</br-button>
+                <br-button class="card-button" type="submit">${this.state == "update" ? "Update" : "Save"}</br-button>
             </div>
 
 
@@ -106,16 +114,20 @@ export class VisitPlanForNextVisitPopUpView {
         cont.classList.remove('active');
         cont.innerHTML = '';
     }
-    
 
-    async save_next_visit_plan(data) {
+
+    async save_update_next_visit_plan(data) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
-        data = {
-            ...data,
-            visit_id: this.visit_id
+        var formData = {
+            visit_id: this.visit_id,
+            action: this.state == 'update' ? 'update' : 'create',
+            plan_id: this.state == 'update' ? this.plan_data.id : '',
+            ...data
         };
+
+        console.log(formData);
 
         try {
             const response = await fetch('/api/patient/save_next_visit_plan', {
@@ -123,7 +135,7 @@ export class VisitPlanForNextVisitPopUpView {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(formData)
             });
 
             if (!response.ok) {
@@ -133,6 +145,11 @@ export class VisitPlanForNextVisitPopUpView {
             const result = await response.json();
 
             if (result.success) {
+                dashboardController.visitPlanForNextVisitCardView.PreRender({
+                    visit_id: this.visit_id,
+                    data: result.data,
+                    state: this.state,
+                });
                 notify('top_left', result.message, 'success');
                 this.close();
             } else {

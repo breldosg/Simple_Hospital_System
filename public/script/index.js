@@ -186,3 +186,22 @@ export function debounce(func, delay) {
         }, delay);
     };
 }
+
+
+class States {
+    constructor() {
+        this.state = {};
+    }
+
+    // Merge new state directly into the existing state
+    setState(newState = {}) {
+        this.state = Object.assign(this.state, newState);
+    }
+
+    // Retrieve the value of a specific state key
+    getState(stateKey = "") {
+        return stateKey ? this.state[stateKey] : undefined;
+    }
+}
+export const globalStates = new States();
+

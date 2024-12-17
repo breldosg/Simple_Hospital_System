@@ -8,15 +8,13 @@ export const visit_add_card_btn = [
                 title: 'Clinical Evaluation'
             },
             {
-                component: 'visitAllergyCardView',
+                component: 'visitAllergyPopUpView',
                 title: 'Allergy'
             },
             {
-                component: 'visitPlanForNextVisitCardView',
+                component: 'visitPlanForNextVisitPopUpView',
                 title: 'Plan for Next Visit'
             },
-            
-
         ],
     },
     {
@@ -31,7 +29,7 @@ export const visit_add_card_btn = [
                 title: 'Laboratory Test'
             },
             {
-                component: 'visitFinalDiagnosisCardView',
+                component: 'visitFinalDiagnosisPopUpView',
                 title: 'Final Diagnosis'
             },
         ],

@@ -8,7 +8,7 @@ export class VisitAllergyCardView {
         // window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
         this.datas = [];
-        window.save_allergy = this.save_allergy.bind(this);
+        this.state = "creation";
     }
 
     async PreRender(params = []) {
@@ -18,17 +18,20 @@ export class VisitAllergyCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.datas = params.data.allergy_data ? params.data.allergy_data : [];
+        this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
+        this.state = params.state ? params.state : "creation";
 
-
-        const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
-        if (add_btn) {
-            add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
-        }
-        else {
-            cont.appendChild(this.ViewReturn());
+        if (this.state == "creation") {
+            const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
+            const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
+            if (add_btn) {
+                add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
+            }
+            else {
+                cont.appendChild(this.ViewReturn());
+            }
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitAllergyPopUpView');
         }
 
         if (this.datas.length >= 1) {
@@ -40,8 +43,9 @@ export class VisitAllergyCardView {
 
         const container = document.querySelector('.allergy_card_cont_cont .body_part')
 
-        console.log('googo', this.datas.length);
-
+        if (this.state == 'creation') {
+            container.innerHTML = '';
+        }
 
         if (this.datas.length > 0) {
             this.datas.forEach((data) => {
@@ -91,6 +95,8 @@ export class VisitAllergyCardView {
             this.datas = [];
         }
 
+        this.datas = [];
+
     }
 
     ViewReturn() {
@@ -117,11 +123,12 @@ export class VisitAllergyCardView {
             `;
 
 
-        const edit_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
-        edit_btn.addEventListener('click', () => {
+        const add_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
+        add_btn.addEventListener('click', () => {
             dashboardController.visitAllergyPopUpView.PreRender(
                 {
                     visit_id: this.visit_id,
+                    state: 'modify',
                 }
             );
         })
@@ -136,46 +143,6 @@ export class VisitAllergyCardView {
         //     cancel_btn.addEventListener('click', () => {
         //         this.close();
         //     });
-    }
-
-
-    async save_allergy(data) {
-        dashboardController.visitAllergyPopUpView.add_loader_in_btn();
-
-
-        data = {
-            ...data,
-            visit_id: this.visit_id
-        };
-
-        try {
-            const response = await fetch('/api/patient/save_allergy', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) {
-                throw new Error('Fail to Save Note. Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                notify('top_left', result.message, 'success');
-                dashboardController.visitAllergyPopUpView.close();
-                this.datas = result.data;
-                console.log('after save:', this.datas);
-
-                this.renderAllergyCards();
-            } else {
-                notify('top_left', result.message, 'warning');
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-        }
     }
 }
 

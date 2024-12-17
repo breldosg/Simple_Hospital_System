@@ -1,12 +1,14 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { date_formatter } from "../script/index.js";
 
 export class VisitPlanForNextVisitCardView {
 
     constructor() {
         // window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
-        this.datas = [];
+        this.data = [];
+        this.state = "creation";
     }
 
     async PreRender(params = []) {
@@ -16,58 +18,58 @@ export class VisitPlanForNextVisitCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        // this.datas = params.data.note_data ? params.data.note_data : [];
+        this.data = params.data ? params.data : "";
         this.visit_id = params.visit_id;
+        this.state = params.state ? params.state : "creation";
 
-        const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
-        if (add_btn) {
-            add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
-        }
-        else {
-            cont.appendChild(this.ViewReturn());
-        }
+        console.log(params);
 
 
-        // this.renderNoteCards();
+        if (this.data != null) {
+            if (this.state == "creation") {
+                const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
+                const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
+                if (add_btn) {
+                    add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
+                }
+                else {
+                    cont.appendChild(this.ViewReturn());
+                }
+            }
+
+            this.renderPlanCards()
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitPlanForNextVisitPopUpView')
+        };
     }
 
-    // renderNoteCards() {
+    renderPlanCards() {
 
-    //     const container = document.querySelector('.patient_note_cards_cont_cont .body_part')
-
-    //     const start_cont = container.querySelector('.start_cont');
-
-    //     // console.log();
+        if (this.data == "") return;
 
 
-    //     if (this.datas.length < 0) {
+        const container = document.querySelector('.next_visit_plan_cont_cont .body_part')
 
-    //         if (start_cont) {
-    //             start_cont.remove();
-    //         }
-    //     }
+        container.innerHTML = `
+            <div class="top">
+                <p class="date">${date_formatter(this.data.date)}</p>
+                <p class="created_by">${this.data.created_by}</p>
+            </div>
 
-    //     this.datas.forEach((data) => {
-    //         const card = document.createElement('div');
-    //         card.className = 'note_card';
+            <div class="data">
+                <p class="head">Purpose For Next Visit</p>
+                <p class="description">${this.data.purpose}</p>
+            </div>
+            
+            <div class="data">
+                <p class="head">Instruction For Next Visit</p>
+                <p class="description">${this.data.instruction}</p>
+            </div>
+                    `;
 
-    //         card.innerHTML = `
-    //                     <div class="card_head">
-    //                         <p class="title">${data.created_by}</p>
-    //                         <p class="date">${date_formatter(data.created_at)}</p>
-    //                     </div>
-    //                     <p class="detail">
-    //                         ${data.note}
-    //                     </p>
-    //                 `;
 
-    //         container.prepend(card);
-    //     })
+        this.datas = "";
 
-    //     this.datas = [];
-
-    // }
+    }
 
     ViewReturn() {
 
@@ -80,26 +82,11 @@ export class VisitPlanForNextVisitCardView {
                 <h4 class="heading">Plan for Next Visit</h4>
 
                 <div class="add_btn" id="add_next_visit_plan" >
-                    <span class='switch_icon_add'></span>
+                    <span class='switch_icon_edit'></span>
                 </div>
             </div>
 
             <div class="body_part next_visit_plan_cont">
-
-            <div class="top">
-                <p class="date">Dec 29, 2024</p>
-                <p class="created_by">kelvin Godliver</p>
-            </div>
-
-            <div class="data">
-                <p class="head">Purpose For Next Visit</p>
-                <p class="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui, inventore?</p>
-            </div>
-            
-            <div class="data">
-                <p class="head">Instruction For Next Visit</p>
-                <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum in distinctio voluptatibus ab quidem saepe perspiciatis voluptates ipsa dignissimos culpa?</p>
-            </div>
 
 
             </div>
@@ -113,6 +100,8 @@ export class VisitPlanForNextVisitCardView {
             dashboardController.visitPlanForNextVisitPopUpView.PreRender(
                 {
                     visit_id: this.visit_id,
+                    data: this.data,
+                    state: "update",
                 }
             );
         })
@@ -121,13 +110,13 @@ export class VisitPlanForNextVisitCardView {
 
     }
 
-    attachListeners() {
-        //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
+    // attachListeners() {
+    //     //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
 
-        //     cancel_btn.addEventListener('click', () => {
-        //         this.close();
-        //     });
-    }
+    //     //     cancel_btn.addEventListener('click', () => {
+    //     //         this.close();
+    //     //     });
+    // }
 
     // async save_patient_note(data_old) {
     //     const btn_submit = document.querySelector('br-button[type="submit"]');

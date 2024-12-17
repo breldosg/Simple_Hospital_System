@@ -109,3 +109,5 @@ export class VisitFinalDiagnosisPopUpView {
         cont.innerHTML = '';
     }
 }
+
+

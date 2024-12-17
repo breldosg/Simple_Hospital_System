@@ -16,7 +16,7 @@ export class VisitVitalCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.data = params.data.vital_data ? params.data.vital_data : [];
+        this.data = params.data ? params.data : [];
         this.visit_id = params.visit_id;
 
         const cont = document.querySelector('.single_visit_cont .more_visit_detail');

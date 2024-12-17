@@ -16,7 +16,7 @@ export class VisitPatientNoteCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.datas = params.data.note_data ? params.data.note_data : [];
+        this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
 
         const cont = document.querySelector('.single_visit_cont .more_visit_detail');

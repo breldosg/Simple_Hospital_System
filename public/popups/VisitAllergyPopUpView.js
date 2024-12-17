@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { allergySeverity, allergyTypes } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
@@ -6,6 +7,8 @@ export class VisitAllergyPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
+        this.state="creation"
+        window.save_allergy = this.save_allergy.bind(this);
     }
 
     async PreRender(params = '') {
@@ -16,8 +19,7 @@ export class VisitAllergyPopUpView {
         }
 
         this.visit_id = params.visit_id ? params.visit_id : '';
-
-
+        this.state = params.state? params.state : "creation";
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -149,13 +151,59 @@ export class VisitAllergyPopUpView {
         cont.innerHTML = '';
     }
 
-    add_loader_in_btn() {
+    // add_loader_in_btn() {
+    //     const btn_submit = document.querySelector('br-button[type="submit"]');
+    //     btn_submit.setAttribute('loading', true);
+    // }
+    // remove_loader_in_btn() {
+    //     const btn_submit = document.querySelector('br-button[type="submit"]');
+    //     btn_submit.setAttribute('loading', false);
+    // }
+
+    async save_allergy(data) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
-    }
-    remove_loader_in_btn() {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
-        btn_submit.setAttribute('loading', false);
+
+        data = {
+            ...data,
+            visit_id: this.visit_id
+        };
+
+        try {
+            const response = await fetch('/api/patient/save_allergy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Fail to Save Note. Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                this.close();
+                dashboardController.visitAllergyCardView.PreRender({
+                    visit_id: this.visit_id,
+                    state:this.state,
+                    data: result.data,
+                });
+                // dashboardController.visitAllergyPopUpView.close();
+                // this.datas = result.data;
+                // console.log('after save:', this.datas);
+
+                // this.renderAllergyCards();
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
     }
 }
+
 

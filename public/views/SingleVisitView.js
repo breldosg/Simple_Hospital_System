@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { visit_add_card_btn } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { date_formatter, globalStates, notify } from "../script/index.js";
 
 export class SingleVisitView {
     constructor() {
@@ -33,6 +33,7 @@ export class SingleVisitView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+
         // Render initial structure
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('active');
@@ -59,31 +60,36 @@ export class SingleVisitView {
         const cardRenderConfig = [
             {
                 method: dashboardController.visitVitalCardView,
-                dataKey: 'vital_sign'
+                dataKey: 'vital_sign',
+                dataArray: 'vital_data',
             },
             {
                 method: dashboardController.visitPatientNoteCardView,
-                dataKey: 'patient_note'
-            },
-            {
-                method: dashboardController.visitPlanForNextVisitCardView,
-                dataKey: 'plan_visit_data',
-                condition: (data) => data.success,
-                afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+                dataKey: 'patient_note',
+                dataArray: 'note_data',
             },
             {
                 method: dashboardController.visitAllergyCardView,
                 dataKey: 'allergy_data',
+                dataArray: 'allergy_data',
                 condition: (data) => data.success,
-                afterRender: () => this.rendered_card.push('visitAllergyCardView')
-            }
+                // afterRender: () => this.rendered_card.push('visitAllergyCardView')
+            },
+            {
+                method: dashboardController.visitPlanForNextVisitCardView,
+                dataKey: 'plan_visit_data',
+                dataArray: 'plan_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
         ];
 
         cardRenderConfig.forEach(config => {
             if (config.condition && !config.condition(visit_data[config.dataKey])) return;
+            var data = visit_data[config.dataKey];
 
             config.method.PreRender({
-                data: config.dataKey ? visit_data[config.dataKey] : undefined,
+                data: config.dataArray ? data[config.dataArray] : undefined,
                 visit_id: this.visit_id,
             });
 
@@ -196,16 +202,16 @@ export class SingleVisitView {
             if (controllerMethod && typeof controllerMethod.PreRender === 'function') {
                 controllerMethod.PreRender({
                     data: [],
+                    state: 'creation',
                     visit_id: this.visit_id,
                 });
             } else {
                 console.error(`PreRender method not found for component: ${card.component}`);
             }
 
-            this.rendered_card.push(card.component);
-            option.classList.add('disabled');
-            // this.current_clicked = option;
-            option.removeEventListener('click', handleClick);
+            // this.rendered_card.push(card.component);
+            // option.classList.add('disabled');
+            this.current_clicked = option;
             cards_cont.classList.remove('option');
             this.is_add_card_open = false;
             this.add_card_deleted = null;
@@ -336,9 +342,21 @@ export class SingleVisitView {
         }
     }
 
+    // add_to_rendered_card_array(value) {
+    //     this.rendered_card.push(value);
+
+    //     if (this.current_clicked != null) this.current_clicked.classList.add('disabled'); option.removeEventListener('click', handleClick);
+    // }
+
     add_to_rendered_card_array(value) {
         this.rendered_card.push(value);
-        this.current_clicked.classList.add('disabled');
+
+        if (this.current_clicked != null) {
+            this.current_clicked.classList.add('disabled');
+
+            // Use the saved handleClick reference to remove the event listener
+            this.current_clicked.removeEventListener('click', this.current_clicked.handleClick);
+        }
     }
 
 }
