@@ -1,12 +1,13 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { date_formatter } from "../script/index.js";
 
 export class VisitClinicalEvaluationCardView {
 
     constructor() {
         // window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
-        this.datas = [];
+        this.data = [];
     }
 
     async PreRender(params) {
@@ -16,51 +17,160 @@ export class VisitClinicalEvaluationCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        // this.datas = params.data.note_data ? params.data.note_data : [];
+
+        this.data = params.data ? params.data : [];
         this.visit_id = params.visit_id;
+        this.state = params.state ? params.state : "creation";
 
+        if (this.state == "creation") {
+            const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont.add_card_btn');
+            if (add_btn) {
+                add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
+            }
+            else {
+                const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
+                cont.appendChild(this.ViewReturn());
+            }
 
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
-        if (add_btn) {
-            add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitsClinicalEvaluationPopUpView')
+
         }
-        else {
-            const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
-            cont.appendChild(this.ViewReturn());
-        }
 
-        // this.renderNoteCards();
+        this.renderClinicalEvaluationCards();
+
+    }
+    renderClinicalEvaluationCards() {
+
+        if (this.data == "") return;
+
+        console.log(this.data);
+        
+
+
+        const container = document.querySelector('.clinical_note_cont_cont .body_part');
+
+        container.innerHTML = `
+<div class="clinical_note_card">
+
+    <div class="incard_top">
+        <p class="date">${date_formatter(this.data.created_at)}</p>
+        <p class="created_by">${this.data.created_by}</p>
+    </div>
+
+    <div class="clinical_note_card_in">
+        <div class="clinical_note_card_section">
+            <div class="top">
+                <p class="head">Chief Complaints (CC)</p>
+            </div>
+
+            <div class="clinical_evaluation_card_section_body">
+
+                <div class="card">
+                    <div class="data complaint">
+                        <p class="head">Complaint Description</p>
+                        <p class="description">${this.data.chief_complaints}</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="clinical_note_card_section">
+            <div class="top">
+                <p class="head">History of Present Illness (HPI)</p>
+            </div>
+
+            <div class="clinical_evaluation_card_section_body">
+
+                <div class="card">
+                    <div class="data complaint">
+                        <p class="head">Illness Description</p>
+                        <p class="description">${this.data.history_of_present_illness}</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    ${this.data.review_of_systems != null ? `
+        <div class="clinical_note_card_section">
+            <div class="top">
+                <p class="head">Review of Systems (ROS)</p>
+            </div>
+
+            <div class="clinical_evaluation_card_section_body">
+
+                <div class="card">
+
+                    <div class="data complaint">
+                        <p class="head">Related Symptoms</p>
+                        <p class="description">${this.data.review_of_systems}</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>`: ``
     }
 
-    // renderNoteCards() {
+    ${this.data.general_exam != null ? `
+        <div class="clinical_note_card_section">
+            <div class="top">
+                <p class="head">General Examination (GE)</p>
+            </div>
 
-    // const container = document.querySelector('.patient_note_cards_cont_cont .body_part')
+            <div class="clinical_evaluation_card_section_body">
 
-    // const start_cont = container.querySelector('.start_cont');
+                <div class="card">
+                    <div class="data complaint">
+                        <p class="head">Physical Observations</p>
+                        <p class="description">${this.data.general_exam}</p>
 
-    // // console.log();
+                    </div>
+
+                </div>
 
 
-    // if (this.datas.length < 0) { // if (start_cont) { // start_cont.remove(); // } // } // this.datas.forEach((data)=> {
-    // const card = document.createElement('div');
-    // card.className = 'note_card';
+            </div>
+        </div>`: ``
+    }
 
-    // card.innerHTML = `
-    // <div class="card_head">
-    // <p class="title">${data.created_by}</p>
-    // <p class="date">${date_formatter(data.created_at)}</p>
-    // </div>
-    // <p class="detail">
-    // ${data.note}
-    // </p>
-    // `;
+    ${this.data.systemic_exam != null ? `
+        <div class="clinical_note_card_section">
+            <div class="top">
+                <p class="head">Systemic Examination (SE)</p>
+            </div>
 
-    // container.prepend(card);
-    // })
+            <div class="clinical_evaluation_card_section_body">
 
-    // this.datas = [];
+                <div class="card">
 
-    // }
+                    <div class="data complaint">
+                        <p class="head">Focused Findings</p>
+                        <p class="description">${this.data.systemic_exam}</p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>`: ``
+    }
+    </div>
+
+</div>
+        `;
+
+
+        this.datas = "";
+
+    }
 
     ViewReturn() {
 
@@ -69,175 +179,22 @@ export class VisitClinicalEvaluationCardView {
         card.classList.add('clinical_note_cont_cont');
 
         card.innerHTML = `
-    <div class="head_part">
-        <h4 class="heading">Clinical Evaluation</h4>
+<div class="head_part">
+    <h4 class="heading">Clinical Evaluation</h4>
 
-        <div class="add_btn" id="add_patient_clinical_note">
-            <span class='switch_icon_add'></span>
-        </div>
+    <div class="add_btn" id="add_patient_clinical_note">
+        <span class='switch_icon_edit'></span>
     </div>
+</div>
 
-    <div class="body_part clinical_note_cont">
-
-        <div class="clinical_note_card">
-
-            <div class="clinical_note_card_section">
-                <div class="top">
-                    <p class="head">Chief Complaints (CC)</p>
-                </div>
-
-                <div class="clinical_note_card_section_body">
-
-                    <div class="card">
-                        <div class="incard_top">
-                            <p class="date">Dec 12, 2024</p>
-                            <p class="created_by">Kelvin Godliving</p>
-                        </div>
-
-                        <div class="data complaint">
-                            <p class="head">Complaint Description</p>
-                            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore,
-                                similique.</p>
-                        </div>
-
-                    </div>
+<div class="body_part clinical_note_cont">
 
 
-                </div>
-            </div>
-            
-            <div class="clinical_note_card_section">
-                <div class="top">
-                    <p class="head">History of Present Illness (HPI)</p>
-                </div>
 
-                <div class="clinical_note_card_section_body">
-
-                    <div class="card">
-                        <div class="incard_top">
-                            <p class="date">Dec 12, 2024</p>
-                            <p class="created_by">Kelvin Godliving</p>
-                        </div>
-
-                        <div class="data complaint">
-                            <p class="head">Complaint Description</p>
-                            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore,
-                                similique.</p>
-                        </div>
-
-                    </div>
+</div>
 
 
-                </div>
-            </div>
-            
-            <div class="clinical_note_card_section">
-                <div class="top">
-                    <p class="head">Review of Systems (ROS)</p>
-                </div>
-
-                <div class="clinical_note_card_section_body">
-
-                    <div class="card">
-                        <div class="incard_top">
-                            <p class="date">Dec 12, 2024</p>
-                            <p class="created_by">Kelvin Godliving</p>
-                        </div>
-
-                        <div class="data complaint">
-                            <p class="head">Complaint Description</p>
-                            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore,
-                                similique.</p>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-            
-            <div class="clinical_note_card_section">
-                <div class="top">
-                    <p class="head">General Examination (GE)</p>
-                </div>
-
-                <div class="clinical_note_card_section_body">
-
-                    <div class="card">
-                        <div class="incard_top">
-                            <p class="date">Dec 12, 2024</p>
-                            <p class="created_by">Kelvin Godliving</p>
-                        </div>
-
-                        <div class="data complaint">
-                            <p class="head">Complaint Description</p>
-                            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore,
-                                similique.</p>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-
-            <div class="clinical_note_card_section">
-                <div class="top">
-                    <p class="head">Preliminary Diagnosis (Dx)</p>
-                </div>
-
-                <div class="clinical_note_card_section_body">
-
-                    <div class="card">
-                        <div class="incard_top">
-                            <p class="date">Dec 12, 2024</p>
-                            <p class="created_by">Kelvin Godliving</p>
-                        </div>
-
-                        <div class="data complaint">
-                            <p class="head">Complaint Description</p>
-                            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore,
-                                similique.</p>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-            
-            
-            <div class="clinical_note_card_section">
-                <div class="top">
-                    <p class="head">Systemic Examination (SE)</p>
-                </div>
-
-                <div class="clinical_note_card_section_body">
-
-                    <div class="card">
-                        <div class="incard_top">
-                            <p class="date">Dec 12, 2024</p>
-                            <p class="created_by">Kelvin Godliving</p>
-                        </div>
-
-                        <div class="data complaint">
-                            <p class="head">Complaint Description</p>
-                            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore,
-                                similique.</p>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-            
-        </div>
-
-    </div>
-
-
-    `;
+`;
 
 
         const edit_btn = card.querySelector('.clinical_note_cont_cont #add_patient_clinical_note');
@@ -245,6 +202,8 @@ export class VisitClinicalEvaluationCardView {
             dashboardController.visitsClinicalEvaluationPopUpView.PreRender(
                 {
                     visit_id: this.visit_id,
+                    data: this.data,
+                    state: "update",
                 }
             );
         })
@@ -309,4 +268,3 @@ export class VisitClinicalEvaluationCardView {
     // }
     // }
 }
-

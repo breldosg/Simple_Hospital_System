@@ -2607,7 +2607,8 @@ input {
                                     width: 100%;
                                     padding: 20px;
                                     border-radius: var(--main_border_r);
-                                    border: 2px solid var(--input_border);
+                                    /* border: 2px solid var(--input_border); */
+                                    box-shadow: 0 0 5px 0 #0000001d;
 
                                     .top {
                                         border: none;
@@ -2674,84 +2675,92 @@ input {
                                     display: flex;
                                     flex-direction: column;
                                     gap: 20px;
+                                    border-radius: var(--main_border_r);
 
-                                    .clinical_note_card_section {
-                                        display: flex;
-                                        flex-direction: column;
-                                        gap: 10px;
-                                        width: 100%;
-
-                                        .top {
-
-                                            .head {
-                                                color: var(--pri_color);
-                                                padding-bottom: 10px;
-                                                font-weight: 700;
-                                                border-bottom: 2px solid var(--active_color);
-                                            }
-
+                                    .incard_top {
+                                        .date {
+                                            font-size: 20px;
+                                            font-weight: 900;
                                         }
 
-                                        .clinical_note_card_section_body {
+                                        .created_by {
+                                            /* font-size: 10px; */
+                                        }
+
+                                    }
+
+                                    .clinical_note_card_in {
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 30px;
+
+
+                                        .clinical_note_card_section {
                                             display: flex;
                                             flex-direction: column;
-                                            gap: 10px;
+                                            gap: 5px;
+                                            width: 100%;
 
-                                            .card {
+                                            .top {
+
+                                                .head {
+                                                    color: var(--pri_color);
+                                                    padding-bottom: 10px;
+                                                    font-weight: 700;
+                                                    border-bottom: 2px solid var(--active_color);
+                                                    font-size: 14px;
+                                                }
+
+                                            }
+
+                                            .clinical_evaluation_card_section_body {
                                                 display: flex;
                                                 flex-direction: column;
                                                 gap: 10px;
-                                                width: 100%;
-                                                padding: 20px;
-                                                border-radius: var(--main_border_r);
-                                                border: 2px solid var(--input_border);
-                                                padding: 10px;
 
-                                                .incard_top {
-                                                    .date {
-                                                        font-size: 20px;
-                                                        font-weight: 900;
-                                                    }
-
-                                                    .created_by {
-                                                        font-size: 13px;
-                                                    }
-                                                }
-
-                                                .data {
+                                                .card {
                                                     display: flex;
+                                                    flex-direction: column;
                                                     gap: 5px;
+                                                    width: 100%;
 
-                                                    .head {
-                                                        font-weight: 700;
-                                                        white-space: nowrap;
-                                                        text-overflow: ellipsis;
-                                                        overflow: hidden;
-                                                        display: inline-block;
+
+
+                                                    .data {
+                                                        display: flex;
+                                                        gap: 5px;
+
+                                                        .head {
+                                                            /* font-size: 13px; */
+                                                            font-weight: 700;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            overflow: hidden;
+                                                            display: inline-block;
+                                                        }
+
+                                                        .description {}
+
                                                     }
 
-                                                    .description {}
+                                                    .complaint {
+                                                        flex-direction: column;
+                                                    }
 
-                                                }
-
-                                                .complaint {
-                                                    flex-direction: column;
-                                                }
-
-                                                .duration {
-                                                    .description {
-                                                        /* font-weight: 600; */
-                                                        white-space: nowrap;
-                                                        text-overflow: ellipsis;
-                                                        overflow: hidden;
-                                                        display: inline-block;
+                                                    .duration {
+                                                        .description {
+                                                            /* font-weight: 600; */
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            overflow: hidden;
+                                                            display: inline-block;
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 }
-
                             }
                         }
 
@@ -2778,7 +2787,7 @@ input {
                                 }
 
                                 .data {
-                                    
+
 
                                     .head {
                                         font-size: 14px;
@@ -6380,8 +6389,11 @@ input {
     /* ------------------------------------------------------- */
 
     .clinical_note_add_popUp {
-        width: 1300px;
+        /* width: 1300px; */
+        width: fit-content;
+        max-width: 830px;
         height: fit-content;
+        max-height: 650px;
         background: var(--pure_white_background);
         border-radius: var(--main_border_r);
         display: flex;
@@ -6410,8 +6422,8 @@ input {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            gap: 20px;
-            row-gap: 50px;
+            gap: 30px;
+            /* row-gap: 50px; */
 
             .section_group {
                 display: flex;

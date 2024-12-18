@@ -35,10 +35,10 @@ export class VisitPlanForNextVisitCardView {
                 else {
                     cont.appendChild(this.ViewReturn());
                 }
+                dashboardController.singleVisitView.add_to_rendered_card_array('visitPlanForNextVisitPopUpView')
             }
 
             this.renderPlanCards()
-            dashboardController.singleVisitView.add_to_rendered_card_array('visitPlanForNextVisitPopUpView')
         };
     }
 
@@ -110,59 +110,4 @@ export class VisitPlanForNextVisitCardView {
 
     }
 
-    // attachListeners() {
-    //     //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
-
-    //     //     cancel_btn.addEventListener('click', () => {
-    //     //         this.close();
-    //     //     });
-    // }
-
-    // async save_patient_note(data_old) {
-    //     const btn_submit = document.querySelector('br-button[type="submit"]');
-    //     btn_submit.setAttribute('loading', true);
-
-
-    //     var formData = {
-    //         ...data_old,
-    //         visit_id: this.visit_id,
-    //         action: 'create',
-    //     }
-
-
-    //     try {
-    //         const response = await fetch('/api/patient/save_update_delete_patient_note', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(formData)
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error('failed To update vital. Server Error');
-    //         }
-
-    //         const result = await response.json();
-
-    //         if (result.success) {
-    //             notify('top_left', result.message, 'success');
-    //             // After successful creation, clear the popup and close it
-    //             dashboardController.addPatientNotePopUpView.close();
-
-    //             this.datas = [];
-    //             this.datas.push(result.data);
-
-    //             this.renderNoteCards()
-
-    //         } else {
-    //             notify('top_left', result.message, 'warning');
-    //         }
-    //     } catch (error) {
-    //         notify('top_left', error.message, 'error');
-    //     }
-    //     finally {
-    //         btn_submit.setAttribute('loading', false);
-    //     }
-    // }
 }

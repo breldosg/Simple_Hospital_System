@@ -1,4 +1,3 @@
-import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, notify, searchInArray } from "../script/index.js";
@@ -18,8 +17,6 @@ export class VisitsClinicalEvaluationPopUpView {
         }
 
         this.visit_id = params.visit_id ? params.visit_id : '';
-        this.evaluation_data = params.data ? params.data : '';
-        this.state = params.state ? params.state : 'creation';
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -34,7 +31,7 @@ export class VisitsClinicalEvaluationPopUpView {
 <div class="container clinical_note_add_popUp">
 
     <div class="cont_heading">
-        <p class="heading">Clinical Evaluation</p>
+        <p class="heading">Clinical Note</p>
     </div>
 
     <br-form callback="save_clinical_note">
@@ -47,7 +44,6 @@ export class VisitsClinicalEvaluationPopUpView {
                 <div class="input_groups">
 
                     <br-input placeholder="Briefly describe the main issue" name="cc_description"
-                    value="${this.evaluation_data.chief_complaints ? this.evaluation_data.chief_complaints : ''}"
                         label="Complaint Description" required type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -71,7 +67,6 @@ export class VisitsClinicalEvaluationPopUpView {
 
 
                     <br-input placeholder="Briefly describe the illness" name="hpi_description"
-                    value="${this.evaluation_data.history_of_present_illness ? this.evaluation_data.history_of_present_illness : ''}"
                         label="Illness Description" required type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -93,8 +88,41 @@ export class VisitsClinicalEvaluationPopUpView {
                 <div class="input_groups">
 
                     <br-input placeholder="Explain related symptoms" name="ros_symptoms" label="Related Symptoms"
-                    value="${this.evaluation_data.review_of_systems ? this.evaluation_data.review_of_systems : ''}"
                         type="textarea" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 350px;
+                            padding: 10px;
+                            height: 60px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " labelStyles="font-size: 13px;"></br-input>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="section_group">
+                <h4>Preliminary Diagnosis (Dx)</h4>
+
+                <div class="input_groups">
+
+                    <br-input placeholder="Enter initial diagnosis..." option="true" name="dx_diagnosis" required
+                        label="Provisional Diagnosis" require type="text" styles="
+                            border-radius: var(--input_main_border_r);
+                            width: 350px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                            " dropDownStyles="border: 2px solid var(--input_border);"
+                        dropDownBorder_radius="var(--input_main_border_r)" labelStyles="font-size: 13px;"
+                        id="preliminary_diagnosis_input"></br-input>
+
+
+                    <br-input placeholder="Any additional notes or observations..." name="dx_note"
+                        label="Doctor's Notes" require type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
                             padding: 10px;
@@ -116,7 +144,6 @@ export class VisitsClinicalEvaluationPopUpView {
                 <div class="input_groups">
 
                     <br-input placeholder="Any visible or notable physical findings" name="ge_observation"
-                    value="${this.evaluation_data.general_exam ? this.evaluation_data.general_exam : ''}"
                         label="Physical Observations" type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -139,7 +166,6 @@ export class VisitsClinicalEvaluationPopUpView {
                 <div class="input_groups">
 
                     <br-input placeholder="Key findings in specific systems..." name="se_findings"
-                    value="${this.evaluation_data.systemic_exam ? this.evaluation_data.systemic_exam : ''}"
                         label="Focused Findings" require type="textarea" styles="
                             border-radius: var(--input_main_border_r);
                             width: 350px;
@@ -163,7 +189,7 @@ export class VisitsClinicalEvaluationPopUpView {
 
             <div class="btn_wrapper">
                 <br-button id="confirm_cancel" class="card-button secondary">Cancel</br-button>
-                <br-button class="card-button" type="submit">${this.state == "update" ? "Update" : "Save"}</br-button>
+                <br-button class="card-button" type="submit">Save</br-button>
             </div>
 
 
@@ -186,6 +212,32 @@ export class VisitsClinicalEvaluationPopUpView {
 
         });
 
+
+        const preliminary_diagnosis_input = document.querySelector('#preliminary_diagnosis_input');
+
+        const debouncedFunction = debounce(() => {
+            let value = preliminary_diagnosis_input.getValue();
+
+            if (value == null) {
+                value = '';
+            }
+
+            // Call your search function here
+            const found_options = searchInArray(diagnosisArray, value, null, 5);
+            // console.log(found_options);
+
+            if (found_options.length >= 1) {
+                preliminary_diagnosis_input.updateOption(found_options);
+            }
+
+        }, 800);
+
+        preliminary_diagnosis_input.addEventListener('input', () => {
+
+            debouncedFunction();
+
+        });
+
     }
 
     close() {
@@ -200,13 +252,11 @@ export class VisitsClinicalEvaluationPopUpView {
 
         data = {
             ...data,
-            action: this.state == 'update' ? 'update' : 'create',
-            evaluation_id: this.state == 'update' ? this.evaluation_data.id : '',
             visit_id: this.visit_id
         };
+        // console.log(data);
 
-        console.log(data);
-
+        // add visit_id in data json
 
         try {
             const response = await fetch('/api/patient/save_clinical_note', {
@@ -224,11 +274,6 @@ export class VisitsClinicalEvaluationPopUpView {
             const result = await response.json();
 
             if (result.success) {
-                dashboardController.visitClinicalEvaluationCardView.PreRender({
-                    visit_id: this.visit_id,
-                    data: result.data,
-                    state: this.state,
-                });
                 notify('top_left', result.message, 'success');
                 this.close();
             } else {
@@ -237,6 +282,8 @@ export class VisitsClinicalEvaluationPopUpView {
         } catch (error) {
             notify('top_left', error.message, 'error');
         }
-
+        finally {
+            btn_submit.setAttribute('loading', false);
+        }
     }
 }

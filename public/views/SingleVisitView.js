@@ -69,6 +69,13 @@ export class SingleVisitView {
                 dataArray: 'note_data',
             },
             {
+                method: dashboardController.visitClinicalEvaluationCardView,
+                dataKey: 'clinical_evaluation_data',
+                dataArray: 'evaluation_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitAllergyCardView')
+            },
+            {
                 method: dashboardController.visitAllergyCardView,
                 dataKey: 'allergy_data',
                 dataArray: 'allergy_data',

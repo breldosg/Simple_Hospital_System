@@ -4,8 +4,12 @@ export const visit_add_card_btn = [
         body_container_id: 'clinical_group',
         cards: [
             {
-                component: 'visitClinicalEvaluationCardView',
+                component: 'visitsClinicalEvaluationPopUpView',
                 title: 'Clinical Evaluation'
+            },
+            {
+                component: 'visitPlanForNextVisitPopUpViewe',
+                title: 'Preliminary Diagnosis'
             },
             {
                 component: 'visitAllergyPopUpView',
