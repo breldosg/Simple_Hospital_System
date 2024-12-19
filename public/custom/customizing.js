@@ -25,7 +25,7 @@ export const visit_add_card_btn = [
         body_container_id: 'diagnosis_group',
         cards: [
             {
-                component: 'visitRadiologyExamCardView',
+                component: 'visitRadiologyExamPopUpView',
                 title: 'Radiology Exam'
             },
             {
