@@ -100,7 +100,7 @@ export class CreateProductPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
 
         <br-input required name="price" label="Consumable Price" type="number" styles="
@@ -110,7 +110,7 @@ export class CreateProductPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
         <br-input required name="patient_to_use" label="Patient usage" value="1" type="number" styles="
                     border-radius: var(--input_main_border_r);
@@ -119,7 +119,7 @@ export class CreateProductPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
     </div>
     <div class="btn_cont">
@@ -141,7 +141,7 @@ export class CreateProductPopUpView {
             height: 41px;
             background-color: transparent;
             border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;"></br-input>
+            " labelStyles="font-size: 12px;"></br-input>
 
 
         <br-select search required name="category" fontSize="13px" label="Category name"
@@ -152,7 +152,7 @@ export class CreateProductPopUpView {
             height: 41px;
             background-color: transparent;
             border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
 
 ${this.category_select_rows}
 
@@ -165,7 +165,7 @@ ${this.category_select_rows}
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;">
+                                " labelStyles="font-size: 12px;">
 
             <br-option type="checkbox" value="bottle">Bottle</br-option>
             <br-option type="checkbox" value="cards">Cards</br-option>
@@ -181,7 +181,7 @@ ${this.category_select_rows}
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
         <br-input required name="min_quantity" label="Amount To Trigger Low Stock Alert" placeholder="Unit"
             type="number" styles="
@@ -191,7 +191,7 @@ ${this.category_select_rows}
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
         
         <br-input required name="patient_to_use" label="Patient usage" value="1" type="number" styles="
                     border-radius: var(--input_main_border_r);
@@ -200,7 +200,7 @@ ${this.category_select_rows}
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
     </div>
 
     <div class="btn_cont">

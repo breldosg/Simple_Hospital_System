@@ -76,7 +76,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                     <br-option type="checkbox" value="out_patient">Out Patient</br-option>
                     <br-option type="checkbox" value="in_patient">In Patient</br-option>
                     <br-option type="checkbox" value="emergency">Emergency</br-option>
@@ -92,7 +92,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                     <br-option type="checkbox" value="normal">Normal</br-option>
                     <br-option type="checkbox" value="fast">Fast</br-option>
                 </br-select>
@@ -106,7 +106,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                 </br-select>
 
 
@@ -117,7 +117,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                 </br-select>
 
 
@@ -160,7 +160,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                     <br-option type="checkbox" value="out_patient">Out Patient</br-option>
                     <br-option type="checkbox" value="in_patient">In Patient</br-option>
                     <br-option type="checkbox" value="emergency">Emergency</br-option>
@@ -176,7 +176,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                     <br-option type="checkbox" value="normal">Normal</br-option>
                     <br-option type="checkbox" value="fast">Fast</br-option>
                 </br-select>
@@ -190,7 +190,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                     ${departments ? departments : ''}
                 </br-select>
 
@@ -202,7 +202,7 @@ export class CreateVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-            " labelStyles="font-size: 13px;">
+            " labelStyles="font-size: 12px;">
                     ${doctors ? doctors : ''}
                 </br-select>
 

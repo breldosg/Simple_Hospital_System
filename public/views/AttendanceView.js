@@ -41,7 +41,7 @@ export class AttendanceView {
                         height: 41px;
                         background-color: transparent;
                         border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;"></br-input>
+                        " labelStyles="font-size: 12px;"></br-input>
 
 
             <br-input label="Choose Date" type="date" styles="
@@ -51,7 +51,7 @@ export class AttendanceView {
                         height: 41px;
                         background-color: transparent;
                         border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;"></br-input>
+                        " labelStyles="font-size: 12px;"></br-input>
 
 
         </div>

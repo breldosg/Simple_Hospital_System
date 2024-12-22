@@ -44,7 +44,7 @@ export class VisitFinalDiagnosisPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 12px;"></br-input>
 
 
             <br-input placeholder="Add any additional observations or comments" name="chief_complain" label="Notes/Remarks" required
@@ -55,7 +55,7 @@ export class VisitFinalDiagnosisPopUpView {
                 height: 100px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 12px;"></br-input>
 
 
 

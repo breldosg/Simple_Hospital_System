@@ -40,7 +40,7 @@ export class AddPatientNotePopUpView {
                                         height: 100px;
                                         background-color: transparent;
                                         border: 2px solid var(--input_border);
-                                        " labelStyles="font-size: 13px;"></br-input>
+                                        " labelStyles="font-size: 12px;"></br-input>
 
                         <div class="btn_cont">
                         <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>

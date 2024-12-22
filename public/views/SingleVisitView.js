@@ -12,20 +12,6 @@ export class SingleVisitView {
         this.current_clicked = null;
     }
 
-    // Card type mapping to improve readability and reduce switch statement complexity
-    // static CARD_TYPES = {
-    //     'complain': 'Chief Complain',
-    //     'illness': 'Presented Illness',
-    //     'reviewSystem': 'Review of Other System',
-    //     'generalExam': 'General Exam',
-    //     'systemicExam': 'Systemic Exam',
-    //     'preliminaryDiagnosis': 'Preliminary Diagnosis',
-    //     'radiologyExam': 'Radiology Exam',
-    //     'labExam': 'Laboratory Exam',
-    //     'vital': 'Vital Sign',
-    //     'prescription': 'Prescription'
-    // };
-
     async PreRender(params) {
         // Ensure dashboard is rendered
         const check_dashboard = document.querySelector('.update_cont');
@@ -105,6 +91,8 @@ export class SingleVisitView {
 
         // Render add buttons
         this.render_add_btn();
+
+        this.fetch_Dataset();
     }
 
     ViewReturn(loader = '') {
@@ -299,26 +287,6 @@ export class SingleVisitView {
         }
     };
 
-    //     card_view(type) {
-    //         const title = SingleVisitView.CARD_TYPES[type] || 'Unknown';
-
-    //         const card = document.createElement('div');
-    //         card.classList.add('more_visit_detail_card');
-    //         card.setAttribute('type', type);
-
-    //         card.innerHTML = `
-    // <div class="head_part">
-    //     <h4 class="heading">${title}</h4>
-    //     <div class="add_btn">
-    //         <span class='switch_icon_add'></span>
-    //     </div>
-    // </div>
-    // <div class="body_part patient_note_cards_cont"></div>
-    // `;
-
-    //         return card;
-    //     }
-
     async fetchData() {
         try {
             const response = await fetch('/api/patient/single_visit_detail', {
@@ -349,12 +317,6 @@ export class SingleVisitView {
         }
     }
 
-    // add_to_rendered_card_array(value) {
-    //     this.rendered_card.push(value);
-
-    //     if (this.current_clicked != null) this.current_clicked.classList.add('disabled'); option.removeEventListener('click', handleClick);
-    // }
-
     add_to_rendered_card_array(value) {
         this.rendered_card.push(value);
 
@@ -363,6 +325,58 @@ export class SingleVisitView {
 
             // Use the saved handleClick reference to remove the event listener
             this.current_clicked.removeEventListener('click', this.current_clicked.handleClick);
+        }
+    }
+
+    // fetch future used dataset from server
+    async fetch_Dataset() {
+
+        // Fetch radiology data
+        if (!globalStates.hasState('radiology_data')) {
+            globalStates.setState({ radiology_data_exists: false });
+            await this.fetchRadiologyData();
+        }
+
+    }
+
+    async fetchRadiologyData() {
+        try {
+            const response = await fetch('/api/patient/get_radiology_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                globalStates.setState({ radiology_data_exists: true });
+                globalStates.setState({ radiology_data: result.data});
+                if (globalStates.hasState('radiology_data_render_function')) {
+                    var callbackName = globalStates.getState('radiology_data_render_function');
+                    if (callbackName && typeof window[callbackName] === 'function') {
+                        window[callbackName]();
+                        globalStates.removeState('radiology_data_render_function');
+                    } else {
+                        console.warn(`Callback function ${callbackName} is not defined or not a function`);
+                    }
+                }
+
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
         }
     }
 

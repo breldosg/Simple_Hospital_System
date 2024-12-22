@@ -356,7 +356,7 @@ export class ViewMedicineView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
                 
                 <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
@@ -366,7 +366,7 @@ export class ViewMedicineView {
                                     height: 41px;
                                     background-color: transparent;
                                     border: 2px solid var(--input_border);
-                                    " labelStyles="font-size: 13px;">
+                                    " labelStyles="font-size: 12px;">
 
                                     ${this.category_elements}
 
@@ -414,7 +414,7 @@ export class ViewMedicineView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
                 
                 <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
@@ -424,7 +424,7 @@ export class ViewMedicineView {
                                     height: 41px;
                                     background-color: transparent;
                                     border: 2px solid var(--input_border);
-                                    " labelStyles="font-size: 13px;">
+                                    " labelStyles="font-size: 12px;">
 
                                     ${this.category_elements}
 

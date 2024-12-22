@@ -334,7 +334,7 @@ export class ViewPatientView {
 //                     background-color: transparent;
 //                     border: 2px solid var(--input_border);
 //                     margin
-//                     " labelStyles="font-size: 13px;"></br-input>
+//                     " labelStyles="font-size: 12px;"></br-input>
 
 
 //                         <br-button title="Search Patient" loader_width="23" class="btn_search" type="submit">

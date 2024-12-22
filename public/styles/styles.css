@@ -669,7 +669,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 700;
                         }
@@ -912,7 +912,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 700;
                         }
@@ -2077,8 +2077,8 @@ input {
                 position: relative;
 
                 .Patient_imag {
-                    width: 125px;
-                    height: 125px;
+                    width: 108px;
+                    height: 108px;
                     border-radius: 50%;
                     overflow: hidden;
                     background-color: var(--image_background);
@@ -2094,7 +2094,7 @@ input {
                 .patient_detail {
                     width: 100%;
                     display: flex;
-                    gap: 25px;
+                    gap: 15px;
                     flex-direction: column;
 
                     .card {
@@ -2105,7 +2105,7 @@ input {
                         flex-wrap: wrap;
 
                         .name {
-                            font-size: 45px;
+                            font-size: 30px;
                             font-weight: 900;
                         }
 
@@ -3518,7 +3518,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 700;
                         }
@@ -3822,7 +3822,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 700;
                         }
@@ -4141,7 +4141,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 700;
                         }
@@ -4202,12 +4202,12 @@ input {
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 15px;
             position: relative;
 
             .name {
                 font-weight: 900;
-                font-size: 45px;
+                font-size: 30px;
             }
 
             .provider {
@@ -4234,16 +4234,13 @@ input {
                         padding: 10px 20px;
                         font-weight: bold;
                         width: 100%;
-                        font-size: 14px;
+                        font-size: 12px;
                         color: var(--white);
                         text-align: center;
                         cursor: pointer;
                         border-radius: var(--input_main_border_r);
 
-                        span {
-                            color: var(--white);
-                            font-size: 14px;
-                        }
+
                     }
 
                     .btn_batch_close:hover {
@@ -4266,11 +4263,9 @@ input {
 
                     .description {
                         font-weight: 500;
-                        font-size: 15px;
                     }
 
                     .title {
-                        font-size: 16px;
                         font-weight: 900;
                     }
                 }
@@ -4449,7 +4444,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 700;
                         }
@@ -5275,8 +5270,8 @@ input {
         }
 
         .heading {
-            font-size: 17px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
             margin-bottom: 10px;
         }
 
@@ -5333,7 +5328,7 @@ input {
 
                         .start_view_overlay {
                             color: var(--gray_text);
-                            font-size: 30px;
+                            font-size: 20px;
                             font-weight: 900;
                             opacity: 0.5;
                         }
@@ -5353,11 +5348,10 @@ input {
 
 
                         .name {
-                            font-weight: 900;
+                            font-weight: 700;
                         }
 
                         .type {
-                            font-size: 14px;
                             text-transform: capitalize;
                             font-weight: bold;
                             color: var(--gray_text);
@@ -5613,7 +5607,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 900;
                         }
@@ -5632,7 +5626,6 @@ input {
                     align-items: center;
                     gap: 20px;
                     flex: none;
-                    padding-block: 15px;
 
                     .btn_next[type="cancel"] {
                         background-color: var(--error_color);
@@ -5647,7 +5640,6 @@ input {
                         background-color: var(--pri_color);
                         padding: 10px 20px;
                         font-weight: bold;
-                        font-size: 14px;
                         color: var(--white);
                         text-align: center;
                         cursor: pointer;
@@ -5690,8 +5682,8 @@ input {
         }
 
         .heading {
-            font-size: 17px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
             margin-bottom: 10px;
         }
 
@@ -5748,7 +5740,7 @@ input {
 
                         .start_view_overlay {
                             color: var(--gray_text);
-                            font-size: 30px;
+                            font-size: 20px;
                             font-weight: 900;
                             opacity: 0.5;
                         }
@@ -5768,13 +5760,12 @@ input {
 
 
                         .name {
-                            font-weight: 900;
+                            font-weight: 700;
                         }
 
                         .type {
-                            font-size: 14px;
                             text-transform: capitalize;
-                            font-weight: bold;
+                            font-weight: 700;
                             color: var(--gray_text);
                         }
                     }
@@ -6041,7 +6032,7 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 30px;
+                            font-size: 20px;
                             color: var(--black-op2);
                             font-weight: 900;
                         }
@@ -6060,7 +6051,6 @@ input {
                     align-items: center;
                     gap: 20px;
                     flex: none;
-                    padding-block: 15px;
 
                     .btn_next[type="cancel"] {
                         background-color: var(--error_color);
@@ -6389,7 +6379,7 @@ input {
     /* ------------------------------------------------------- */
 
     .clinical_note_add_popUp {
-        width: fit-content;
+        width: 80%;
         max-width: 830px;
         height: fit-content;
         max-height: 650px;
@@ -6422,6 +6412,7 @@ input {
             flex-wrap: wrap;
             justify-content: space-between;
             gap: 30px;
+            height: 100%;
             /* row-gap: 50px; */
 
             .section_group {
@@ -6732,10 +6723,10 @@ input {
     /* ------------------------------------------------------- */
 
     .radiology_popUp {
-        width: fit-content;
-        /* max-width: 830px; */
-        height: fit-content;
-        /* max-height: 650px; */
+        width: 1200px;
+        max-width: 80%;
+        height: 650px;
+        max-height: 88%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -6749,7 +6740,7 @@ input {
             background: var(--pure_white_background);
             border-radius: var(--main_border_r);
             box-shadow: 0 0 5px 0 #0000001d;
-            padding: 20px;
+            padding: 10px 20px;
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -6760,7 +6751,7 @@ input {
                 font-weight: bold;
             }
 
-            .close_btn{
+            .close_btn {
                 width: 35px;
                 height: 35px;
                 display: flex;
@@ -6771,7 +6762,7 @@ input {
                 cursor: pointer;
             }
 
-            .close_btn:hover{
+            .close_btn:hover {
                 box-shadow: 0 0 5px 0 #00000019;
             }
 
@@ -6780,9 +6771,27 @@ input {
         .radiology_pop_cont {
             /* padding: 20px; */
             display: flex;
-            width: 1200px;
-            height: 600px;
+            width: 100%;
+            height: 100%;
             gap: 20px;
+            overflow: scroll;
+
+            .radiology_pop_loader_cont {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background-color: var(--pure_white_background);
+                display: none;
+                justify-content: center;
+                align-items: center;
+
+            }
+
+            .radiology_pop_loader_cont.active{
+                display: flex;
+            }
 
             .left {
                 padding-block: 20px;
@@ -6793,6 +6802,7 @@ input {
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
+                overflow: hidden;
 
                 .top_head {
                     padding-inline: 20px;
@@ -6814,7 +6824,7 @@ input {
                         border-radius: var(--main_border_r);
                         overflow: hidden;
 
-                        .radiolody_popup_search {
+                        .radiology_popup_search {
                             width: 250px;
                             padding: 10px;
                             height: 41px;
@@ -6843,6 +6853,7 @@ input {
                     flex-direction: column;
                     gap: 20px;
                     height: calc(100% - 60px);
+                    position: relative;
                     /* overflow-y: scroll; */
 
                     .group_category_cont {
@@ -6931,6 +6942,10 @@ input {
                     }
                 }
 
+                .loader_cont {
+                    position: absolute;
+                }
+
             }
 
             .right {
@@ -6962,6 +6977,7 @@ input {
                     overflow-y: scroll;
                     padding-inline: 20px;
                     padding-bottom: 20px;
+                    position: relative;
 
                     .radiology_list_item {
                         padding: 15px 20px;

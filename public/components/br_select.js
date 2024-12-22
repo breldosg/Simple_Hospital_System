@@ -10,6 +10,7 @@ export class BrCustomSelect extends HTMLElement {
         this.selectElement = this.shadowRoot.querySelector('.select-options');
         this.inputElement = this.shadowRoot.querySelector('.select-search');
         this.arrow = this.shadowRoot.querySelector('.arrow');
+        this.selectContainer = this.shadowRoot.querySelector('.select-container');
         this.selectedElement = this.shadowRoot.querySelector('.selected-value');
         this.update_input = this.shadowRoot.querySelector('.selected-value_in');
         this.dropdownElement = this.shadowRoot.querySelector('.select-dropdown');
@@ -52,8 +53,7 @@ export class BrCustomSelect extends HTMLElement {
         const search = this.hasAttribute('search');
         const label = this.hasAttribute('label');
         const error = this.hasAttribute('error') ? 'error' : '';
-        // const placeholder = this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
-        const placeholder = this.hasAttribute('placeholder') ? `<span class="custom_placeholder">${this.getAttribute('placeholder')}</span>` : '';
+        const placeholder = this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -79,15 +79,13 @@ export class BrCustomSelect extends HTMLElement {
         const labelStyles = this.getAttribute('labelStyles') || '';
 
         return `
-            * { box-sizing: border-box; color: currentColor; font-family: inherit; font-size: 14px;}
+            * { box-sizing: border-box; color: currentColor; font-size: 12px;}
             :host { display: block; position: relative; }
             label { ${labelStyles} }
-            .custom_placeholder{opacity: 0.8}
             .selected-value {  border: 1px solid #ccc; cursor: pointer; background: #fff; display: flex; justify-content: space-between; align-items: center; ${additionalStyles} }
-            .selected-value_in {font-size: 14px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
+            .selected-value_in {padding: 10px;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
             .select-dropdown { display: none; position: absolute; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
             .selected-value.error { border-color: #EE5D50; }
-            .select-dropdown.open { display: block; }
             .select-search { width: 100%; padding: 10px; border: none; border-bottom: 1px solid #ccc; outline: none; }
             .select-options { list-style: none; padding: 0; margin: 0; }
             .option { padding: 10px; cursor: pointer; }
@@ -95,7 +93,11 @@ export class BrCustomSelect extends HTMLElement {
             .select-dropdown::-webkit-scrollbar-thumb { background-color: var(--gray_text); border-radius: var(--input_main_border_r);}
             .select-dropdown::-webkit-scrollbar { width: 5px; }
             .arrow{ transition:all 0.3s ease}
-            .arrow.open{ position: relative; transform: rotate(180deg); }
+            .select-container.open{
+            .select-dropdown { display: block; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; } 
+            .arrow{ position: relative; transform: rotate(180deg); }
+            .selected-value{ border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border: 1px solid #ccc; }
+            }
         `;
     }
 
@@ -108,9 +110,8 @@ export class BrCustomSelect extends HTMLElement {
     }
 
     toggleDropdown() {
-        this.dropdownElement.classList.toggle('open');
-        this.arrow.classList.toggle('open');
-        if (this.dropdownElement.classList.contains('open')) {
+        this.selectContainer.classList.toggle('open');
+        if (this.selectContainer.classList.contains('open')) {
             document.addEventListener('click', this.handleOutsideClick);
         } else {
             document.removeEventListener('click', this.handleOutsideClick);
@@ -118,8 +119,7 @@ export class BrCustomSelect extends HTMLElement {
     }
 
     closeDropdown() {
-        this.arrow.classList.toggle('open');
-        this.dropdownElement.classList.remove('open');
+        this.selectContainer.classList.remove('open');
         document.removeEventListener('click', this.handleOutsideClick);
     }
 
@@ -144,7 +144,7 @@ export class BrCustomSelect extends HTMLElement {
     updateSelectedOption(elements) {
         const matchedElement = elements.find(el => el.getAttribute('value') === this.default_value);
         if (matchedElement) {
-            this.update_input.textContent = matchedElement.textContent;
+            this.selectedElement.textContent = matchedElement.textContent;
             this.selectedElement.setAttribute('value', matchedElement.getAttribute('value'));
         }
     }
@@ -154,7 +154,7 @@ export class BrCustomSelect extends HTMLElement {
     }
 
     reset() {
-        this.update_input.innerHTML = `<span class="custom_placeholder">${this.getAttribute('placeholder')}</span>` || '';
+        this.selectedElement.textContent = this.getAttribute('placeholder') || '';
         this.selectedElement.setAttribute('value', '');
         if (this.inputElement) {
             this.inputElement.value = '';

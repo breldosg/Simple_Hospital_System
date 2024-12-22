@@ -50,7 +50,7 @@ export class UpdateCategoryPopUpView {
                                         height: 41px;
                                         background-color: transparent;
                                         border: 2px solid var(--input_border);
-                                        " labelStyles="font-size: 13px;"></br-input>
+                                        " labelStyles="font-size: 12px;"></br-input>
 
 
                         <br-input name="description" label="Category Description" value="${params.c_description == null ? '' : params.c_description}" type="textarea" styles="
@@ -60,7 +60,7 @@ export class UpdateCategoryPopUpView {
                                         height: 100px;
                                         background-color: transparent;
                                         border: 2px solid var(--input_border);
-                                        " labelStyles="font-size: 13px;"></br-input>
+                                        " labelStyles="font-size: 12px;"></br-input>
 
                         <div class="btn_cont">
                             <br-button loader_width="23" class="btn_next" type="submit">Update</br-button>

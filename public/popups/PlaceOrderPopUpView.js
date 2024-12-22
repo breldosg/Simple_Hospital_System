@@ -51,7 +51,7 @@ export class PlaceOrderPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
 
                         <br-button loader_width="23" class="btn_search" type="submit">
@@ -251,8 +251,8 @@ export class PlaceOrderPopUpView {
                 row.setAttribute('data_src', medicine.id);
                 row.setAttribute('title', decodeHTML(medicine.name));
                 row.innerHTML = `
-<div class="name">${medicine.name}</div>
-<div class="type">${medicine.type}</div>
+<p class="name">${medicine.name}</p>
+<p class="type">${medicine.type}</p>
 `;
                 // Attach click event listener to the row
                 row.addEventListener('click', () => {

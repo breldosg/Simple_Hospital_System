@@ -59,7 +59,7 @@ export class AddUserView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required></br-input>
+                        " labelStyles="font-size: 12px;" required></br-input>
 
                         <br-select required fontSize="13px" label="Gender" name="gender" placeholder="Select Gender" styles="
                             border-radius: var(--input_main_border_r);
@@ -68,7 +68,7 @@ export class AddUserView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;">
+                        " labelStyles="font-size: 12px;">
                             <br-option value="Male">Male</br-option>
                             <br-option value="Female">Female</br-option>
                         </br-select>
@@ -80,7 +80,7 @@ export class AddUserView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required ></br-input>
+                        " labelStyles="font-size: 12px;" required ></br-input>
 
                         <br-select required fontSize="13px" label="Role" name="role" placeholder="Select Role" styles="
                             border-radius: var(--input_main_border_r);
@@ -89,7 +89,7 @@ export class AddUserView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;">
+                        " labelStyles="font-size: 12px;">
                             ${roles}
                         </br-select>
 
@@ -100,7 +100,7 @@ export class AddUserView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required></br-input>
+                        " labelStyles="font-size: 12px;" required></br-input>
 
                         <br-input label="Password" name="pass" type="password" styles="
                             border-radius: var(--input_main_border_r);
@@ -109,7 +109,7 @@ export class AddUserView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 13px;" required></br-input>
+                        " labelStyles="font-size: 12px;" required></br-input>
 
                         <div class="btn_cont">
                             <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>

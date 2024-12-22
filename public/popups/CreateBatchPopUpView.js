@@ -44,7 +44,7 @@ export class CreateBatchPopUpView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
 
                 <br-input required name="provider_name" label="Provider name" type="text" styles="
@@ -54,7 +54,7 @@ export class CreateBatchPopUpView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <br-input name="invoice_number" label="Invoice Number" type="number" styles="
                                 border-radius: var(--input_main_border_r);
@@ -63,7 +63,7 @@ export class CreateBatchPopUpView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <div class="btn_cont">
                     <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>

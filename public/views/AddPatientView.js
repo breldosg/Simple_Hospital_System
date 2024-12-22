@@ -47,7 +47,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
 
                 <br-select required name="gender" fontSize="13px" label="Gender" placeholder="Select Gender" styles="
@@ -57,7 +57,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;">
+                                " labelStyles="font-size: 12px;">
 
                     <br-option type="checkbox" value="Male">Male</br-option>
                     <br-option type="checkbox" value="Female">Female</br-option>
@@ -72,7 +72,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <br-input required name="occupation" label="Occupation" type="text" styles="
                                 border-radius: var(--input_main_border_r);
@@ -81,7 +81,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <br-input required name="phone" label="Phone number" type="tel" styles="
                                 border-radius: var(--input_main_border_r);
@@ -90,7 +90,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <br-input required name="alt_phone" label="Second phone number" type="tel" styles="
                                 border-radius: var(--input_main_border_r);
@@ -99,7 +99,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <br-input required name="nationality" label="Nationality" type="text" styles="
                                 border-radius: var(--input_main_border_r);
@@ -108,7 +108,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
 
                 <br-input required name="address" label="Address" type="text" styles="
@@ -118,7 +118,7 @@ export class AddPatientView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
 
 

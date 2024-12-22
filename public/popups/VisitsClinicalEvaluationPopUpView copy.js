@@ -51,7 +51,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
                 </div>
 
@@ -74,7 +74,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
 
                 </div>
@@ -95,7 +95,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
 
                 </div>
@@ -117,7 +117,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             background-color: transparent;
                             border: 2px solid var(--input_border);
                             " dropDownStyles="border: 2px solid var(--input_border);"
-                        dropDownBorder_radius="var(--input_main_border_r)" labelStyles="font-size: 13px;"
+                        dropDownBorder_radius="var(--input_main_border_r)" labelStyles="font-size: 12px;"
                         id="preliminary_diagnosis_input"></br-input>
 
 
@@ -129,7 +129,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
 
                 </div>
@@ -151,7 +151,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
 
                 </div>
@@ -173,7 +173,7 @@ export class VisitsClinicalEvaluationPopUpView {
                             height: 60px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
 
                 </div>

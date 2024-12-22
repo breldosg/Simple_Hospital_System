@@ -52,7 +52,7 @@ export class VisitPlanForNextVisitPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 12px;"></br-input>
 
 
             <br-input placeholder="Enter the purpose of the next visit (e.g., Follow-up, Lab Results, Check-Up)" name="plan_purpose" label="Purpose of Next Visit" required
@@ -64,7 +64,7 @@ export class VisitPlanForNextVisitPopUpView {
                 height: 100px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 12px;"></br-input>
 
 
 
@@ -77,7 +77,7 @@ export class VisitPlanForNextVisitPopUpView {
                 height: 100px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 12px;"></br-input>
 
 
 

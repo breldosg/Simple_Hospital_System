@@ -52,7 +52,7 @@ export class ReceiveIntakeBatchPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
                     </div>
                 </br-form>
@@ -89,7 +89,7 @@ export class ReceiveIntakeBatchPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;" disable="true"></br-input>
+                    " labelStyles="font-size: 12px;" disable="true"></br-input>
 
 
                     <br-input required name="expire_date" min="${getCurrentDate()}" label="Expire date" type="date" styles="
@@ -99,7 +99,7 @@ export class ReceiveIntakeBatchPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
 
                     <br-input required name="quantity" label="Quantity" type="number" styles="
@@ -109,7 +109,7 @@ export class ReceiveIntakeBatchPopUpView {
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 13px;"></br-input>
+                    " labelStyles="font-size: 12px;"></br-input>
 
                     <div class="btn">
                         <br-button loader_width="23" class="btn_next" type="submit">Add</br-button>
@@ -303,8 +303,8 @@ export class ReceiveIntakeBatchPopUpView {
                 row.setAttribute('data_src', medicine.id);
                 row.setAttribute('title', decodeHTML(medicine.name));
                 row.innerHTML = `
-                    <div class="name">${medicine.name}</div>
-                    <div class="type">${medicine.type}</div>
+                    <p class="name">${medicine.name}</p>
+                    <p class="type">${medicine.type}</p>
                                 `;
                 // Attach click event listener to the row
                 row.addEventListener('click', () => {

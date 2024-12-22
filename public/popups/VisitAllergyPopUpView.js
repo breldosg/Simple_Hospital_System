@@ -81,7 +81,7 @@ export class VisitAllergyPopUpView {
                 height: 41px;
                 background-color: transparent;
                 border: 2px solid var(--input_border);
-                " labelStyles="font-size: 13px;"></br-input>
+                " labelStyles="font-size: 12px;"></br-input>
 
 
                 

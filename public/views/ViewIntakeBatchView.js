@@ -288,7 +288,7 @@ export class ViewIntakeBatchView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
                 <br-input label="From Date" id="from_inp" name="from" type="date" value="${this.searchTerm == null ? '' : this.searchTerm}" styles="
                             border-radius: var(--input_main_border_r);
@@ -297,7 +297,7 @@ export class ViewIntakeBatchView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
 
                 <br-input label="To Date" name="to" id="to_inp" type="date" value="${this.searchTerm == null ? '' : this.searchTerm}"styles="
@@ -307,7 +307,7 @@ export class ViewIntakeBatchView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 13px;"></br-input>
+                            " labelStyles="font-size: 12px;"></br-input>
 
         
                 <div class="med_btn_cont">

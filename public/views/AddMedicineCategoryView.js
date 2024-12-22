@@ -44,7 +44,7 @@ export class AddMedicineCategoryView {
                                 height: 41px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
 
                 <br-input required name="description" label="Category Description" type="textarea" styles="
@@ -54,7 +54,7 @@ export class AddMedicineCategoryView {
                                 height: 100px;
                                 background-color: transparent;
                                 border: 2px solid var(--input_border);
-                                " labelStyles="font-size: 13px;"></br-input>
+                                " labelStyles="font-size: 12px;"></br-input>
 
                 <div class="btn_cont">
                     <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
