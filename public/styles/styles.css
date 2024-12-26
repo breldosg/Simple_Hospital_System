@@ -2802,6 +2802,103 @@ input {
                             }
                         }
 
+                        /* ----------------------------------------------------------- */
+
+                        .radiology_exam_cont_cont {
+                            .radiology_exam_cont {
+                                display: flex;
+                                flex-direction: column;
+                                flex: none;
+                                gap: 20px;
+
+                                .radiology_exam_card {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    width: 100%;
+                                    height: 93px;
+                                    padding: 20px;
+                                    border-radius: var(--main_border_r);
+                                    box-shadow: 0 0 5px 0 #0000001d;
+                                    cursor: pointer;
+
+                                    .left {
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: start;
+                                        width: 80%;
+
+                                        .title {
+                                            font-size: 16px;
+                                            font-weight: 900;
+                                            width: 100%;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+                                    }
+
+                                    .right {
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: flex-end;
+                                        justify-content: space-between;
+                                        height: 100%;
+                                        gap: 5px;
+
+                                        .more_btn {
+                                            width: 35px;
+                                            height: 35px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            border-radius: 5px;
+                                            flex: none;
+                                            cursor: pointer;
+
+                                            span {
+                                                font-size: 14px;
+                                            }
+                                        }
+
+                                        .more_btn:hover {
+                                            background-color: var(--pri_op);
+                                            cursor: pointer;
+
+                                            span {
+                                                color: var(--pri_color);
+                                            }
+
+                                        }
+
+                                        .status {
+                                            text-transform: capitalize;
+                                            font-weight: 600;
+                                        }
+
+                                        .pending {
+                                            color: var(--error_color);
+                                        }
+
+                                        .approved {
+                                            color: var(--warning_color);
+                                        }
+
+                                        .complete {
+                                            color: var(--success_color);
+                                        }
+
+                                    }
+
+
+                                }
+
+                                .radiology_exam_card:hover {
+                                    box-shadow: 0 0 5px 0 #0000003e;
+                                }
+                            }
+                        }
+
 
                     }
                 }
@@ -6789,7 +6886,7 @@ input {
 
             }
 
-            .radiology_pop_loader_cont.active{
+            .radiology_pop_loader_cont.active {
                 display: flex;
             }
 
@@ -6819,8 +6916,8 @@ input {
                     .search_cont {
                         display: flex;
                         align-items: center;
-                        border: 2px solid var(--black-op3);
-                        box-shadow: 0 0 5px 0 #0000000b;
+                        /* border: 2px solid var(--black-op3); */
+                        box-shadow: 0 0 5px 0 #23989e38;
                         border-radius: var(--main_border_r);
                         overflow: hidden;
 

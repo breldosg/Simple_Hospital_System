@@ -41,6 +41,8 @@ export class SingleVisitView {
 
         // Render top patient card
         this.top_card_view(visit_data.patient_data);
+        console.log(visit_data);
+        
 
         // Render various card views
         const cardRenderConfig = [
@@ -72,6 +74,13 @@ export class SingleVisitView {
                 method: dashboardController.visitPlanForNextVisitCardView,
                 dataKey: 'plan_visit_data',
                 dataArray: 'plan_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
+            {
+                method: dashboardController.visitRadiologyExamCardView,
+                dataKey: 'radiology_order_data',
+                dataArray: 'order_data',
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },

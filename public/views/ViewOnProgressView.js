@@ -275,7 +275,7 @@ export class ViewOnProgressView {
                 </div>
                 <div class="table_body d_flex flex__co">
                     <div class="start_page deactivate">
-                        <p>There Is No Any Patient Registered</p>
+                        <p>There Is No Any Active Visit</p>
                     </div>
                     <div class="loader_cont active"><div class="loader"></div></div>
                 </div>

@@ -9,8 +9,10 @@ export class VisitRadiologyExamPopUpView {
         this.data = null;
         this.selected_category = null;
         window.render_radiology_data = this.render_radiology_data.bind(this);
+        window.save_radiology_order = this.save_radiology_order.bind(this);
         this.selected_radiology_test = [];
-        this.searchQuery = 'scan';
+        this.searchQuery = '';
+        this.state="creation";
     }
 
     async PreRender(params = '') {
@@ -153,7 +155,7 @@ export class VisitRadiologyExamPopUpView {
                     this.loadRadiologyList();
                 });
 
-                selected_radiology_list.appendChild(radiology_item);
+                selected_radiology_list.prepend(radiology_item);
             }
             );
         }
@@ -275,19 +277,7 @@ export class VisitRadiologyExamPopUpView {
                 notify('top_left', 'Please select at least one radiology test', 'warning');
                 return;
             }
-            console.log(this.selected_radiology_test);
-            
-            // this.save_clinical_note();
-            if (this.callback) {
-                const callback = this.callback;
-                if (callback && typeof window[callback] === 'function') {
-                    window[callback](this.selected_radiology_test);
-                    globalStates.removeState('radiology_data_render_function');
-                } else {
-                    console.warn(`Callback function ${callback} is not defined or not a function`);
-                }
-            }
-            // this.close();
+            this.save_radiology_order();
         });
     }
 
@@ -298,49 +288,48 @@ export class VisitRadiologyExamPopUpView {
         cont.innerHTML = '';
     }
 
-    // async save_clinical_note(data) {
-    // const btn_submit = document.querySelector('br-button[type="submit"]');
-    // btn_submit.setAttribute('loading', true);
-
-    // data = {
-    // ...data,
-    // action: this.state == 'update' ? 'update' : 'create',
-    // evaluation_id: this.state == 'update' ? this.evaluation_data.id : '',
-    // visit_id: this.visit_id
-    // };
-
-    // console.log(data);
+    async save_radiology_order() {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
 
 
-    // try {
-    // const response = await fetch('/api/patient/save_clinical_note', {
-    // method: 'POST',
-    // headers: {
-    // 'Content-Type': 'application/json'
-    // },
-    // body: JSON.stringify(data)
-    // });
+        var data = {
+            radiology_order: this.selected_radiology_test,
+            visit_id: this.visit_id
+        };
+        console.log(data);
 
-    // if (!response.ok) {
-    // throw new Error('Fail to Save Note. Server Error');
-    // }
+        try {
+            const response = await fetch('/api/patient/save_radiology_exam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-    // const result = await response.json();
+            if (!response.ok) {
+                throw new Error('Fail to Save Note. Server Error');
+            }
 
-    // if (result.success) {
-    // dashboardController.visitClinicalEvaluationCardView.PreRender({
-    // visit_id: this.visit_id,
-    // data: result.data,
-    // state: this.state,
-    // });
-    // notify('top_left', result.message, 'success');
-    // this.close();
-    // } else {
-    // notify('top_left', result.message, 'warning');
-    // }
-    // } catch (error) {
-    // notify('top_left', error.message, 'error');
-    // }
+            const result = await response.json();
 
-    // }
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                dashboardController.visitRadiologyExamCardView.PreRender({
+                    visit_id: this.visit_id,
+                    state:this.state,
+                    data: result.data,
+                });
+                this.close();
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
+        }
+    }
 }
