@@ -3,7 +3,7 @@ import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, globalStates, notify, searchInArray } from "../script/index.js";
 
-export class VisitRadiologyExamPopUpView {
+export class VisitLabTestOrdersPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
@@ -21,7 +21,7 @@ export class VisitRadiologyExamPopUpView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-
+        
         this.selected_radiology_test = [];
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.evaluation_data = params.data ? params.data : '';
@@ -39,23 +39,23 @@ export class VisitRadiologyExamPopUpView {
 
     ViewReturn() {
         return `
-<div class="container radiology_popUp">
+<div class="container lab_order_popup">
 
     <div class="cont_heading">
-        <p class="heading">Add Radiology Examination</p>
+        <p class="heading">Add Laboratory Test Order</p>
         <div class="close_btn">
             <span class='switch_icon_close'>
             </span>
         </div>
     </div>
-    <div class="radiology_pop_cont">
+    <div class="lab_order_pop_cont">
 
         <div class="left">
             <div class="top_head">
                 <p class="heading">Select Radiology Exam</p>
 
                 <div class="search_cont">
-                    <input type="text" placeholder="Search" class="radiology_popup_search">
+                    <input type="text" placeholder="Search" class="lab_order_popup_search">
                     <br-button loader_width="23" class="btn_search" type="submit">
                         <span class="switch_icon_magnifying_glass"></span>
                     </br-button>
@@ -69,14 +69,14 @@ export class VisitRadiologyExamPopUpView {
                 </div>
 
                 <div class="group_category_list">
-                    <div class="radiology_list_item selected" data_src="x_ray_1">
+                    <div class="lab_order_list_item selected" data_src="x_ray_1">
                         <p>X-Ray 1</p>
                         <span class='switch_icon_check_box'></span>
                     </div>
 
                 </div>
 
-                <div class="radiology_pop_loader_cont active">
+                <div class="lab_order_pop_loader_cont active">
                     <div class="loader"></div>
                 </div>
 
@@ -90,12 +90,12 @@ export class VisitRadiologyExamPopUpView {
             </div>
 
             <div class="right_body_cont">
-                <!-- <div class="radiology_list_item selected" data_src="x_ray_1">
+                <!-- <div class="lab_order_list_item selected" data_src="x_ray_1">
                     <p>X-Ray 1</p>
                     <span class='switch_icon_indeterminate_check_box'></span>
                 </div> -->
 
-                <div class="radiology_pop_loader_cont active">
+                <div class="lab_order_pop_loader_cont active">
                     <div class="loader"></div>
                 </div>
                 
@@ -118,7 +118,7 @@ export class VisitRadiologyExamPopUpView {
 
     render_radiology_data() {
         if (globalStates.getState('radiology_data_exists')) {
-            document.querySelector('.radiology_popUp .left_body_cont .radiology_pop_loader_cont').classList.remove('active');
+            document.querySelector('.lab_order_popup .left_body_cont .lab_order_pop_loader_cont').classList.remove('active');
             this.loadRadiologyCategoryList();
             this.loadRadiologyList();
         }
@@ -128,7 +128,7 @@ export class VisitRadiologyExamPopUpView {
     }
 
     render_selected_radiology_test() {
-        const selected_radiology_list = document.querySelector('.radiology_popUp .right_body_cont');
+        const selected_radiology_list = document.querySelector('.lab_order_popup .right_body_cont');
         selected_radiology_list.innerHTML = '';
         if (this.selected_radiology_test.length > 0) {
 
@@ -139,7 +139,7 @@ export class VisitRadiologyExamPopUpView {
                 const item = radiology_data.radiology_tests.find(val => val.id === item_id);
                 if (!item) return;
                 var radiology_item = document.createElement('div');
-                radiology_item.classList.add('radiology_list_item');
+                radiology_item.classList.add('lab_order_list_item');
                 radiology_item.classList.add('selected');
                 radiology_item.setAttribute('data_src', item.id);
                 radiology_item.innerHTML = `
@@ -165,7 +165,7 @@ export class VisitRadiologyExamPopUpView {
     loadRadiologyCategoryList() {
         if (globalStates.getState('radiology_data_exists')) {
             const radiology_data = globalStates.getState('radiology_data');
-            const category_list = document.querySelector('.radiology_popUp .group_category_cont');
+            const category_list = document.querySelector('.lab_order_popup .group_category_cont');
 
             category_list.innerHTML = '';
 
@@ -203,7 +203,7 @@ export class VisitRadiologyExamPopUpView {
     loadRadiologyList() {
         if (globalStates.getState('radiology_data_exists')) {
             const radiology_data = globalStates.getState('radiology_data');
-            const radiology_list = document.querySelector('.radiology_popUp .group_category_list');
+            const radiology_list = document.querySelector('.lab_order_popup .group_category_list');
             radiology_list.innerHTML = '';
 
             var radiology_list_data = radiology_data.radiology_tests;
@@ -251,7 +251,7 @@ export class VisitRadiologyExamPopUpView {
     }
 
     attachListeners() {
-        const cancel_btns = document.querySelectorAll('.radiology_popUp #confirm_cancel, .radiology_popUp .close_btn');
+        const cancel_btns = document.querySelectorAll('.lab_order_popup #confirm_cancel, .lab_order_popup .close_btn');
 
         cancel_btns.forEach((btn) => {
             btn.addEventListener('click', () => {
@@ -259,20 +259,20 @@ export class VisitRadiologyExamPopUpView {
             });
         });
 
-        const search_input = document.querySelector('.radiology_popUp .radiology_popup_search');
+        const search_input = document.querySelector('.lab_order_popup .lab_order_popup_search');
         search_input.addEventListener('input', debounce((e) => {
             this.searchQuery = e.target.value;
 
             this.loadRadiologyList();
         }, 500));
 
-        const search_btn = document.querySelector('.radiology_popUp .btn_search');
+        const search_btn = document.querySelector('.lab_order_popup .btn_search');
         search_btn.addEventListener('click', () => {
             this.searchQuery = search_input.value;
             this.loadRadiologyList();
         });
 
-        const submit_btn = document.querySelector('.radiology_popUp br-button[type="btn"]');
+        const submit_btn = document.querySelector('.lab_order_popup br-button[type="btn"]');
         submit_btn.addEventListener('click', () => {
             if (this.selected_radiology_test.length == 0) {
                 notify('top_left', 'Please select at least one radiology test', 'warning');

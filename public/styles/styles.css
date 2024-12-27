@@ -100,6 +100,12 @@ input {
     --error_background_color: #ad0e0065;
     --warning_color: #ffce20;
 
+
+    --white_error_color: #e9766b;
+    --white_error_color_op1: #ffd0cc5e;
+
+    --pri_color_op1: #43b5bb;
+
     --btn_error_hover_color: #da4538;
 
     --white_op: rgba(255, 255, 255, 0.247);
@@ -2805,17 +2811,96 @@ input {
                         /* ----------------------------------------------------------- */
 
                         .radiology_exam_cont_cont {
+                            padding: 10px;
+
+                            .head_part {
+                                padding: 19px;
+                                padding-top: 10px;
+                                padding-bottom: 0px;
+
+                                .top_heading {
+                                    display: flex;
+                                    gap: 10px;
+
+                                    .check_box {
+                                        /* width: 50px; */
+                                        height: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        cursor: pointer;
+                                    }
+
+                                }
+
+                                .btn_section {
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: center;
+
+                                    .cancel_btn {
+                                        width: 35px;
+                                        height: 35px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        border-radius: 5px;
+                                        flex: none;
+                                        cursor: pointer;
+                                        background-color: var(--pri_op);
+                                        cursor: pointer;
+
+                                        span {
+                                            color: var(--pri_color_op1);
+                                            font-size: 18px;
+                                        }
+                                    }
+
+                                    .cancel_btn:hover {
+                                        span {
+                                            color: var(--pri_color);
+                                        }
+                                    }
+
+                                    .delete_btn {
+                                        width: 35px;
+                                        height: 35px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        border-radius: 5px;
+                                        flex: none;
+                                        cursor: pointer;
+                                        background-color: var(--white_error_color_op1);
+                                        cursor: pointer;
+
+                                        span {
+                                            color: var(--white_error_color);
+                                            font-size: 18px;
+                                        }
+                                    }
+
+                                    .delete_btn:hover {
+                                        span {
+                                            color: var(--error_color);
+                                        }
+                                    }
+                                }
+
+                            }
+
                             .radiology_exam_cont {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
                                 gap: 20px;
 
+
                                 .radiology_exam_card {
                                     display: flex;
                                     justify-content: space-between;
                                     width: 100%;
-                                    height: 93px;
+                                    height: 90px;
                                     padding: 20px;
                                     border-radius: var(--main_border_r);
                                     box-shadow: 0 0 5px 0 #0000001d;
@@ -2823,28 +2908,48 @@ input {
 
                                     .left {
                                         display: flex;
-                                        flex-direction: column;
-                                        align-items: start;
                                         width: 80%;
+                                        gap: 10px;
 
-                                        .title {
-                                            font-size: 16px;
-                                            font-weight: 900;
+                                        .check_box {
+                                            /* width: 50px; */
+                                            height: 100%;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                        }
+
+                                        .check_box.inactive {
+                                            opacity: 0.3;
+                                            cursor: not-allowed;
+                                            pointer-events: none;
+                                        }
+
+                                        .word {
+                                            display: flex;
+                                            flex-direction: column;
+                                            align-items: start;
+                                            justify-content: center;
                                             width: 100%;
-                                            white-space: nowrap;
-                                            text-overflow: ellipsis;
-                                            overflow: hidden;
-                                            display: inline-block;
+
+                                            .title {
+                                                font-size: 16px;
+                                                font-weight: 900;
+                                                width: 100%;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                display: inline-block;
+                                            }
                                         }
                                     }
 
                                     .right {
                                         display: flex;
-                                        flex-direction: column;
-                                        align-items: flex-end;
+                                        align-items: center;
                                         justify-content: space-between;
                                         height: 100%;
-                                        gap: 5px;
+                                        gap: 10px;
 
                                         .more_btn {
                                             width: 35px;
@@ -2855,37 +2960,44 @@ input {
                                             border-radius: 5px;
                                             flex: none;
                                             cursor: pointer;
+                                            background-color: var(--white_error_color_op1);
+
 
                                             span {
-                                                font-size: 14px;
+                                                color: var(--white_error_color);
+                                                font-size: 18px;
                                             }
                                         }
 
                                         .more_btn:hover {
-                                            background-color: var(--pri_op);
-                                            cursor: pointer;
-
                                             span {
-                                                color: var(--pri_color);
+                                                color: var(--error_color);
                                             }
-
                                         }
 
+                                        .more_btn.inactive {
+                                            opacity: 0.5;
+                                            cursor: not-allowed;
+                                            pointer-events: none;
+                                        }
+
+
                                         .status {
-                                            text-transform: capitalize;
-                                            font-weight: 600;
+                                            width: 10px;
+                                            height: 10px;
+                                            border-radius: 5px;
                                         }
 
                                         .pending {
-                                            color: var(--error_color);
+                                            background-color: var(--error_color);
                                         }
 
                                         .approved {
-                                            color: var(--warning_color);
+                                            background-color: var(--warning_color);
                                         }
 
                                         .complete {
-                                            color: var(--success_color);
+                                            background-color: var(--success_color);
                                         }
 
                                     }
@@ -7092,6 +7204,323 @@ input {
                     }
 
                     .radiology_list_item:hover {
+                        box-shadow: 0 0 5px 0 #0000000b;
+                    }
+                }
+
+
+            }
+
+
+        }
+
+
+        .btn_cont {
+            padding-inline: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 10px;
+            padding-top: 0;
+            /* margin-top: 30px; */
+
+            br-button {
+                border: none;
+                background-color: var(--pri_color);
+                padding: 10px 35px;
+                font-weight: bold;
+                font-size: 12px;
+                color: var(--white);
+                cursor: pointer;
+                border-radius: var(--input_main_border_r);
+            }
+
+            .secondary {
+                background-color: var(--gray_text);
+                color: var(--white);
+            }
+
+        }
+
+    }
+
+
+    /* ------------------------------------------------------- */
+
+    .lab_order_popup {
+        width: 1200px;
+        max-width: 80%;
+        height: 650px;
+        max-height: 88%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        /* padding: 50px; */
+        position: relative;
+        z-index: 1;
+
+        .cont_heading {
+            background: var(--pure_white_background);
+            border-radius: var(--main_border_r);
+            box-shadow: 0 0 5px 0 #0000001d;
+            padding: 10px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .heading {
+                font-size: 17px;
+                font-weight: bold;
+            }
+
+            .close_btn {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 5px;
+                flex: none;
+                cursor: pointer;
+            }
+
+            .close_btn:hover {
+                box-shadow: 0 0 5px 0 #00000019;
+            }
+
+        }
+
+        .lab_order_pop_cont {
+            /* padding: 20px; */
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
+            overflow: scroll;
+
+            .lab_order_pop_loader_cont {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background-color: var(--pure_white_background);
+                display: none;
+                justify-content: center;
+                align-items: center;
+
+            }
+
+            .lab_order_pop_loader_cont.active {
+                display: flex;
+            }
+
+            .left {
+                padding-block: 20px;
+                width: 70%;
+                background: var(--pure_white_background);
+                border-radius: var(--main_border_r);
+                box-shadow: 0 0 5px 0 #0000001d;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                overflow: hidden;
+
+                .top_head {
+                    padding-inline: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    /* border-bottom: 1px solid var(--input_border); */
+
+                    .heading {
+                        font-size: 15px;
+                        font-weight: 700;
+                    }
+
+                    .search_cont {
+                        display: flex;
+                        align-items: center;
+                        /* border: 2px solid var(--black-op3); */
+                        box-shadow: 0 0 5px 0 #23989e38;
+                        border-radius: var(--main_border_r);
+                        overflow: hidden;
+
+                        .lab_order_popup_search {
+                            width: 250px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: none;
+
+                        }
+
+                        .btn_search {
+                            border: none;
+                            /* background-color: var(--pri_color); */
+                            width: 50px;
+                            height: 40px;
+                            cursor: pointer;
+                            /* border-radius: var(--input_main_border_r); */
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+
+                }
+
+                .left_body_cont {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    height: calc(100% - 60px);
+                    position: relative;
+                    /* overflow-y: scroll; */
+
+                    .group_category_cont {
+                        display: flex;
+                        gap: 10px;
+                        padding-inline: 20px;
+
+                        .group_category {
+                            padding: 10px 20px;
+                            /* box-shadow: 0 0 5px 0 #0000000b; */
+                            border-radius: var(--main_border_r);
+                            cursor: pointer;
+                            border: 1px solid #00000007;
+
+
+                            p {
+                                font-weight: 800;
+                            }
+                        }
+
+                        .group_category:hover {
+                            border: 1px solid var(--pri_op);
+                            box-shadow: 0 0 5px 0 #0000000b;
+
+                        }
+
+                        .group_category.active {
+                            border: 1px solid var(--pri_op);
+                            background-color: var(--pri_op);
+
+                            p {
+                                color: var(--pri_color);
+                            }
+                        }
+                    }
+
+                    .group_category_list {
+                        padding-inline: 20px;
+                        padding-bottom: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 10px;
+                        width: 100%;
+                        overflow-y: scroll;
+                        height: 100%;
+
+                        .radiology_list_item {
+                            padding: 15px 20px;
+                            width: 100%;
+                            border-radius: var(--main_border_r);
+                            cursor: pointer;
+                            border: 1px solid #00000007;
+                            display: flex;
+                            justify-content: space-between;
+                        }
+
+                        .radiology_list_item.selected {
+                            border: 1px solid var(--pri_color);
+
+                            span {
+                                color: var(--pri_color);
+                            }
+                        }
+
+                        .radiology_list_item.selected:hover {
+                            border: 1px solid var(--pri_color);
+                            box-shadow: 0 0 5px 0 #0000000b;
+
+                            span {
+                                color: var(--pri_color);
+                            }
+                        }
+
+
+
+                        .radiology_list_item:hover {
+                            border: 1px solid var(--pri_op);
+                            box-shadow: 0 0 5px 0 #0000000b;
+
+                            span {
+                                color: var(--pri_color);
+                            }
+                        }
+
+                    }
+                }
+
+                .loader_cont {
+                    position: absolute;
+                }
+
+            }
+
+            .right {
+                padding-block: 20px;
+                background: var(--pure_white_background);
+                border-radius: var(--main_border_r);
+                box-shadow: 0 0 5px 0 #0000001d;
+                width: 30%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                justify-content: space-between;
+
+                .top_head {
+                    padding: 10px 20px;
+                    /* border-bottom: 1px solid var(--input_border); */
+
+                    .heading {
+                        font-size: 15px;
+                        font-weight: 700;
+                    }
+                }
+
+                .right_body_cont {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    height: 100%;
+                    overflow-y: scroll;
+                    padding-inline: 20px;
+                    padding-bottom: 20px;
+                    position: relative;
+
+                    .lab_order_list_item {
+                        padding: 15px 20px;
+                        width: 100%;
+                        box-shadow: 0 0 5px 0 #0000000b;
+                        border-radius: var(--main_border_r);
+                        cursor: pointer;
+                        display: flex;
+                        justify-content: space-between;
+                        border: 1px solid var(--pri_color);
+
+                        span {
+                            color: var(--pri_color);
+                        }
+                    }
+
+                    .lab_order_list_item:hover {
                         box-shadow: 0 0 5px 0 #0000000b;
                     }
                 }

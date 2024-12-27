@@ -29,7 +29,7 @@ export const visit_add_card_btn = [
                 title: 'Radiology Exam'
             },
             {
-                component: 'visitLabExamCardView',
+                component: 'visitLabTestOrdersPopUpView',
                 title: 'Laboratory Test'
             },
             {
