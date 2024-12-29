@@ -84,13 +84,13 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
-            {
-                method: dashboardController.visitLabTestOrdersPopUpView,
-                dataKey: 'radiology_order_data',
-                dataArray: 'order_data',
-                // condition: (data) => data.success,
-                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
-            },
+            // {
+            //     method: dashboardController.visitLabTestOrdersPopUpView,
+            //     dataKey: 'radiology_order_data',
+            //     dataArray: 'order_data',
+            //     // condition: (data) => data.success,
+            //     // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            // },
         ];
 
         cardRenderConfig.forEach(config => {
@@ -353,6 +353,12 @@ export class SingleVisitView {
             await this.fetchRadiologyData();
         }
 
+        // Fetch Lab Test data
+        if (!globalStates.hasState('Lab_test_data')) {
+            globalStates.setState({ Lab_test_data_exists: false });
+            await this.fetchLabTestData();
+        }
+
     }
 
     async fetchRadiologyData() {
@@ -381,6 +387,47 @@ export class SingleVisitView {
                     if (callbackName && typeof window[callbackName] === 'function') {
                         window[callbackName]();
                         globalStates.removeState('radiology_data_render_function');
+                    } else {
+                        console.warn(`Callback function ${callbackName} is not defined or not a function`);
+                    }
+                }
+
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
+    async fetchLabTestData() {
+        try {
+            const response = await fetch('/api/patient/get_lab_test_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                globalStates.setState({ lab_test_data_exists: true });
+                globalStates.setState({ lab_test_data: result.data});
+                if (globalStates.hasState('lab_test_data_render_function')) {
+                    var callbackName = globalStates.getState('lab_test_data_render_function');
+                    if (callbackName && typeof window[callbackName] === 'function') {
+                        window[callbackName]();
+                        globalStates.removeState('lab_test_data_render_function');
                     } else {
                         console.warn(`Callback function ${callbackName} is not defined or not a function`);
                     }

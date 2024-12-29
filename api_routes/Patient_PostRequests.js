@@ -358,14 +358,12 @@ router.post('/get_radiology_data', async (req, res) => {
 });
 
 
-
-
-router.post('/save_radiology_exam', async (req, res) => {
+router.post('/get_lab_test_data', async (req, res) => {
     const body = req.body;
 
     try {
-        var result = await RequestHandler(req, 540, body); // Add `await` since it's an async function
-        console.log('save_radiology_exam Result:', result);
+        var result = await RequestHandler(req, 550, body); // Add `await` since it's an async function
+        console.log('get_lab_test_data Result:', result);
 
         if (result.success) {
             return res.status(200).json(result); // Send the success response
@@ -373,7 +371,47 @@ router.post('/save_radiology_exam', async (req, res) => {
             return res.status(400).json(result); // Send an error status with the message
         }
     } catch (error) {
-        console.error('Error in /save_radiology_exam route:', error);
+        console.error('Error in /get_lab_test_data route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+
+
+router.post('/save_radiology_order', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 540, body); // Add `await` since it's an async function
+        console.log('save_radiology_order Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /save_radiology_order route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+router.post('/save_lab_test_order', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 560, body); // Add `await` since it's an async function
+        console.log('save_lab_test_order Result:', result);
+
+        if (result.success) {
+            return res.status(200).json(result); // Send the success response
+        } else {
+            return res.status(400).json(result); // Send an error status with the message
+        }
+    } catch (error) {
+        console.error('Error in /save_lab_test_order route:', error);
         return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
     }
 });

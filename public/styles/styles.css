@@ -7427,7 +7427,7 @@ input {
                         overflow-y: scroll;
                         height: 100%;
 
-                        .radiology_list_item {
+                        .lab_test_list_item {
                             padding: 15px 20px;
                             width: 100%;
                             border-radius: var(--main_border_r);
@@ -7437,7 +7437,7 @@ input {
                             justify-content: space-between;
                         }
 
-                        .radiology_list_item.selected {
+                        .lab_test_list_item.selected {
                             border: 1px solid var(--pri_color);
 
                             span {
@@ -7445,7 +7445,7 @@ input {
                             }
                         }
 
-                        .radiology_list_item.selected:hover {
+                        .lab_test_list_item.selected:hover {
                             border: 1px solid var(--pri_color);
                             box-shadow: 0 0 5px 0 #0000000b;
 
@@ -7456,7 +7456,7 @@ input {
 
 
 
-                        .radiology_list_item:hover {
+                        .lab_test_list_item:hover {
                             border: 1px solid var(--pri_op);
                             box-shadow: 0 0 5px 0 #0000000b;
 

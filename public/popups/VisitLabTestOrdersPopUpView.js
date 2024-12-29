@@ -8,9 +8,9 @@ export class VisitLabTestOrdersPopUpView {
         this.callback = null;
         this.data = null;
         this.selected_category = null;
-        window.render_radiology_data = this.render_radiology_data.bind(this);
-        window.save_radiology_order = this.save_radiology_order.bind(this);
-        this.selected_radiology_test = [];
+        window.render_lab_test_data = this.render_lab_test_data.bind(this);
+        // window.save_radiology_order = this.save_radiology_order.bind(this);
+        this.selected_lab_test = [];
         this.searchQuery = '';
         this.state = "creation";
     }
@@ -22,7 +22,7 @@ export class VisitLabTestOrdersPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
         
-        this.selected_radiology_test = [];
+        this.selected_lab_test = [];
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.evaluation_data = params.data ? params.data : '';
         this.state = params.state ? params.state : 'creation';
@@ -33,8 +33,8 @@ export class VisitLabTestOrdersPopUpView {
 
 
         this.attachListeners();
-        this.render_radiology_data();
-        this.render_selected_radiology_test();
+        this.render_lab_test_data();
+        this.render_selected_lab_test();
     }
 
     ViewReturn() {
@@ -52,7 +52,7 @@ export class VisitLabTestOrdersPopUpView {
 
         <div class="left">
             <div class="top_head">
-                <p class="heading">Select Radiology Exam</p>
+                <p class="heading">Select Laboratory Test</p>
 
                 <div class="search_cont">
                     <input type="text" placeholder="Search" class="lab_order_popup_search">
@@ -86,7 +86,7 @@ export class VisitLabTestOrdersPopUpView {
 
         <div class="right">
             <div class="top_head">
-                <p class="heading">Selected Radiology Exam</p>
+                <p class="heading">Selected Laboratory Test</p>
             </div>
 
             <div class="right_body_cont">
@@ -116,60 +116,60 @@ export class VisitLabTestOrdersPopUpView {
 `;
     }
 
-    render_radiology_data() {
-        if (globalStates.getState('radiology_data_exists')) {
+    render_lab_test_data() {
+        if (globalStates.getState('lab_test_data_exists')) {
             document.querySelector('.lab_order_popup .left_body_cont .lab_order_pop_loader_cont').classList.remove('active');
-            this.loadRadiologyCategoryList();
-            this.loadRadiologyList();
+            this.loadLabTestCategoryList();
+            this.loadLabTestList();
         }
         else {
             globalStates.setState({ radiology_data_render_function: 'render_radiology_data' });
         }
     }
 
-    render_selected_radiology_test() {
+    render_selected_lab_test() {
         const selected_radiology_list = document.querySelector('.lab_order_popup .right_body_cont');
         selected_radiology_list.innerHTML = '';
-        if (this.selected_radiology_test.length > 0) {
+        if (this.selected_lab_test.length > 0) {
 
-            this.selected_radiology_test.forEach((item_id) => {
+            this.selected_lab_test.forEach((item_id) => {
 
                 // the item is the id of radiology test so take name from the radiology_data.radiology_tests
-                const radiology_data = globalStates.getState('radiology_data');
-                const item = radiology_data.radiology_tests.find(val => val.id === item_id);
+                const lab_test_data = globalStates.getState('lab_test_data');
+                const item = lab_test_data.lab_test_tests.find(val => val.id === item_id);
                 if (!item) return;
-                var radiology_item = document.createElement('div');
-                radiology_item.classList.add('lab_order_list_item');
-                radiology_item.classList.add('selected');
-                radiology_item.setAttribute('data_src', item.id);
-                radiology_item.innerHTML = `
+                var row_item = document.createElement('div');
+                row_item.classList.add('lab_order_list_item');
+                row_item.classList.add('selected');
+                row_item.setAttribute('data_src', item.id);
+                row_item.innerHTML = `
                 <p>${item.name}</p>
                 <span class='switch_icon_indeterminate_check_box'></span>
                 `;
 
-                radiology_item.addEventListener('click', () => {
+                row_item.addEventListener('click', () => {
                     //remove the clicked item from the selected_radiology_test array
-                    this.selected_radiology_test = this.selected_radiology_test.filter((selected_items) => selected_items != item_id);
+                    this.selected_lab_test = this.selected_lab_test.filter((selected_items) => selected_items != item_id);
                     // remove the item from the selected_radiology_test array
-                    this.render_selected_radiology_test();
+                    this.render_selected_lab_test();
                     // remove the item from the selected_radiology_test array
-                    this.loadRadiologyList();
+                    this.loadLabTestList();
                 });
 
-                selected_radiology_list.prepend(radiology_item);
+                selected_radiology_list.prepend(row_item);
             }
             );
         }
     }
 
-    loadRadiologyCategoryList() {
-        if (globalStates.getState('radiology_data_exists')) {
-            const radiology_data = globalStates.getState('radiology_data');
+    loadLabTestCategoryList() {
+        if (globalStates.getState('lab_test_data_exists')) {
+            const lab_test_data = globalStates.getState('lab_test_data');
             const category_list = document.querySelector('.lab_order_popup .group_category_cont');
 
             category_list.innerHTML = '';
 
-            var category_list_data = radiology_data.radiology_category;
+            var category_list_data = lab_test_data.lab_test_category;
             var is_first_active = false;
             category_list_data.forEach((item) => {
 
@@ -190,7 +190,7 @@ export class VisitLabTestOrdersPopUpView {
                     const active_category = category_list.querySelector('.group_category.active');
                     active_category.classList.remove('active');
                     category_item.classList.add('active');
-                    this.loadRadiologyList();
+                    this.loadLabTestList();
                 });
 
                 category_list.appendChild(category_item);
@@ -200,51 +200,51 @@ export class VisitLabTestOrdersPopUpView {
         }
     }
 
-    loadRadiologyList() {
-        if (globalStates.getState('radiology_data_exists')) {
-            const radiology_data = globalStates.getState('radiology_data');
-            const radiology_list = document.querySelector('.lab_order_popup .group_category_list');
-            radiology_list.innerHTML = '';
+    loadLabTestList() {
+        if (globalStates.getState('lab_test_data_exists')) {
+            const lab_test_data = globalStates.getState('lab_test_data');
+            const lab_test_list = document.querySelector('.lab_order_popup .group_category_list');
+            lab_test_list.innerHTML = '';
 
-            var radiology_list_data = radiology_data.radiology_tests;
-            radiology_list_data.forEach((item) => {
+            var lab_test_list_data = lab_test_data.lab_test_tests;
+            lab_test_list_data.forEach((item) => {
                 if (this.searchQuery != '' && !item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
                     return;
                 }
                 if (item.category == this.selected_category) {
                     var span_class = "switch_icon_check_box_outline_blank";
-                    var radiology_item = document.createElement('div');
-                    radiology_item.classList.add('radiology_list_item');
-                    if (this.selected_radiology_test.includes(item.id)) {
-                        radiology_item.classList.add('selected');
+                    var lab_test_item = document.createElement('div');
+                    lab_test_item.classList.add('lab_test_list_item');
+                    if (this.selected_lab_test.includes(item.id)) {
+                        lab_test_item.classList.add('selected');
                         span_class = "switch_icon_check_box";
                     }
-                    radiology_item.setAttribute('data_src', item.id);
-                    radiology_item.innerHTML = `
+                    lab_test_item.setAttribute('data_src', item.id);
+                    lab_test_item.innerHTML = `
                                                 <p>${item.name}</p>
                                                 <span class='${span_class}'></span>
                 `;
-                    radiology_item.addEventListener('click', () => {
-                        const selected_item = radiology_item.getAttribute('data_src');
+                    lab_test_item.addEventListener('click', () => {
+                        const selected_item = lab_test_item.getAttribute('data_src');
                         // check if the clicked item has class selected
-                        if (radiology_item.classList.contains('selected')) {
-                            radiology_item.classList.remove('selected');
-                            // remove the item from the selected_radiology_test array
-                            this.selected_radiology_test = this.selected_radiology_test.filter((item) => item != selected_item);
+                        if (lab_test_item.classList.contains('selected')) {
+                            lab_test_item.classList.remove('selected');
+                            // remove the item from the selected_lab_test array
+                            this.selected_lab_test = this.selected_lab_test.filter((item) => item != selected_item);
                             // replace the span class with switch_icon_check_box_outline_blank
-                            radiology_item.querySelector('span').classList.replace('switch_icon_check_box', 'switch_icon_check_box_outline_blank');
+                            lab_test_item.querySelector('span').classList.replace('switch_icon_check_box', 'switch_icon_check_box_outline_blank');
                         }
                         else {
                             // replace the span class with switch_icon_check_box
-                            radiology_item.querySelector('span').classList.replace('switch_icon_check_box_outline_blank', 'switch_icon_check_box');
-                            radiology_item.classList.add('selected');
-                            // add the item to the selected_radiology_test array
-                            this.selected_radiology_test.push(selected_item);
+                            lab_test_item.querySelector('span').classList.replace('switch_icon_check_box_outline_blank', 'switch_icon_check_box');
+                            lab_test_item.classList.add('selected');
+                            // add the item to the selected_lab_test array
+                            this.selected_lab_test.push(selected_item);
                         }
-                        this.render_selected_radiology_test();
+                        this.render_selected_lab_test();
                     });
 
-                    radiology_list.appendChild(radiology_item);
+                    lab_test_list.appendChild(lab_test_item);
                 }
             });
         }
@@ -263,22 +263,22 @@ export class VisitLabTestOrdersPopUpView {
         search_input.addEventListener('input', debounce((e) => {
             this.searchQuery = e.target.value;
 
-            this.loadRadiologyList();
+            this.loadLabTestList();
         }, 500));
 
         const search_btn = document.querySelector('.lab_order_popup .btn_search');
         search_btn.addEventListener('click', () => {
             this.searchQuery = search_input.value;
-            this.loadRadiologyList();
+            this.loadLabTestList();
         });
 
         const submit_btn = document.querySelector('.lab_order_popup br-button[type="btn"]');
         submit_btn.addEventListener('click', () => {
-            if (this.selected_radiology_test.length == 0) {
+            if (this.selected_lab_test.length == 0) {
                 notify('top_left', 'Please select at least one radiology test', 'warning');
                 return;
             }
-            this.save_radiology_order();
+            this.save_lab_test_order();
         });
     }
 
@@ -289,19 +289,19 @@ export class VisitLabTestOrdersPopUpView {
         cont.innerHTML = '';
     }
 
-    async save_radiology_order() {
+    async save_lab_test_order() {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
 
         var data = {
-            radiology_order: this.selected_radiology_test,
+            lab_order: this.selected_lab_test,
             visit_id: this.visit_id
         };
         console.log(data);
 
         try {
-            const response = await fetch('/api/patient/save_radiology_exam', {
+            const response = await fetch('/api/patient/save_lab_test_order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -317,11 +317,13 @@ export class VisitLabTestOrdersPopUpView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                dashboardController.visitRadiologyExamCardView.PreRender({
-                    visit_id: this.visit_id,
-                    state: this.state,
-                    data: result.data,
-                });
+                // dashboardController.visitRadiologyExamCardView.PreRender({
+                //     visit_id: this.visit_id,
+                //     state: this.state,
+                //     data: result.data,
+                // });
+                console.log(result.data);
+                
                 this.close();
             } else {
                 notify('top_left', result.message, 'warning');

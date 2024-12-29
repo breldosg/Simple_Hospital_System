@@ -301,7 +301,7 @@ export class VisitRadiologyExamPopUpView {
         console.log(data);
 
         try {
-            const response = await fetch('/api/patient/save_radiology_exam', {
+            const response = await fetch('/api/patient/save_radiology_order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
