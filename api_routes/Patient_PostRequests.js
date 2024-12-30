@@ -318,8 +318,6 @@ router.post('/save_allergy', async (req, res) => {
 
 
 
-
-
 router.post('/save_next_visit_plan', async (req, res) => {
     const body = req.body;
 
