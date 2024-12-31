@@ -24,8 +24,9 @@ export class VisitRadiologyExamPopUpView {
 
         this.selected_radiology_test = [];
         this.visit_id = params.visit_id ? params.visit_id : '';
-        this.evaluation_data = params.data ? params.data : '';
+        this.selected_radiology_test = params.data ? params.data : [];
         this.state = params.state ? params.state : 'creation';
+        
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -34,7 +35,6 @@ export class VisitRadiologyExamPopUpView {
 
         this.attachListeners();
         this.render_radiology_data();
-        this.render_selected_radiology_test();
     }
 
     ViewReturn() {
@@ -121,6 +121,8 @@ export class VisitRadiologyExamPopUpView {
             document.querySelector('.radiology_popUp .left_body_cont .radiology_pop_loader_cont').classList.remove('active');
             this.loadRadiologyCategoryList();
             this.loadRadiologyList();
+            this.render_selected_radiology_test();
+
         }
         else {
             globalStates.setState({ radiology_data_render_function: 'render_radiology_data' });
@@ -136,7 +138,7 @@ export class VisitRadiologyExamPopUpView {
 
                 // the item is the id of radiology test so take name from the radiology_data.radiology_tests
                 const radiology_data = globalStates.getState('radiology_data');
-                const item = radiology_data.radiology_tests.find(val => val.id === item_id);
+                const item = radiology_data.radiology_tests.find(val => parseInt(val.id) === item_id);
                 if (!item) return;
                 var radiology_item = document.createElement('div');
                 radiology_item.classList.add('radiology_list_item');
@@ -215,7 +217,8 @@ export class VisitRadiologyExamPopUpView {
                     var span_class = "switch_icon_check_box_outline_blank";
                     var radiology_item = document.createElement('div');
                     radiology_item.classList.add('radiology_list_item');
-                    if (this.selected_radiology_test.includes(item.id)) {
+                    
+                    if (this.selected_radiology_test.includes(parseInt(item.id))) {
                         radiology_item.classList.add('selected');
                         span_class = "switch_icon_check_box";
                     }
@@ -290,9 +293,6 @@ export class VisitRadiologyExamPopUpView {
     }
 
     async save_radiology_order() {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
-        btn_submit.setAttribute('loading', true);
-
 
         var data = {
             radiology_order: this.selected_radiology_test,
@@ -328,9 +328,6 @@ export class VisitRadiologyExamPopUpView {
             }
         } catch (error) {
             notify('top_left', error.message, 'error');
-        }
-        finally {
-            btn_submit.setAttribute('loading', false);
         }
     }
 }

@@ -43,8 +43,8 @@ export class VisitClinicalEvaluationCardView {
 
         if (this.data == "") return;
 
-        console.log(this.data);
-        
+
+
 
 
         const container = document.querySelector('.clinical_note_cont_cont .body_part');
@@ -116,7 +116,7 @@ export class VisitClinicalEvaluationCardView {
 
             </div>
         </div>`: ``
-    }
+            }
 
     ${this.data.general_exam != null ? `
         <div class="clinical_note_card_section">
@@ -138,7 +138,7 @@ export class VisitClinicalEvaluationCardView {
 
             </div>
         </div>`: ``
-    }
+            }
 
     ${this.data.systemic_exam != null ? `
         <div class="clinical_note_card_section">
@@ -161,7 +161,7 @@ export class VisitClinicalEvaluationCardView {
 
             </div>
         </div>`: ``
-    }
+            }
     </div>
 
 </div>

@@ -278,7 +278,6 @@ export class ViewOrderListView {
 
     }
 
-
     async fetchData() {
         try {
             const response = await fetch('/api/pharmacy/search_order_list', {
@@ -340,7 +339,6 @@ export class ViewOrderListView {
             dashboardController.loaderView.remove();
         }
     }
-
 
     async deny_order_request(order_id) {
 

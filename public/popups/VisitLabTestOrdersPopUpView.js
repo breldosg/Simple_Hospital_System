@@ -21,11 +21,14 @@ export class VisitLabTestOrdersPopUpView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-        
+
         this.selected_lab_test = [];
         this.visit_id = params.visit_id ? params.visit_id : '';
-        this.evaluation_data = params.data ? params.data : '';
+        this.selected_lab_test = params.data ? params.data : [];
         this.state = params.state ? params.state : 'creation';
+
+
+
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -34,7 +37,6 @@ export class VisitLabTestOrdersPopUpView {
 
         this.attachListeners();
         this.render_lab_test_data();
-        this.render_selected_lab_test();
     }
 
     ViewReturn() {
@@ -121,22 +123,24 @@ export class VisitLabTestOrdersPopUpView {
             document.querySelector('.lab_order_popup .left_body_cont .lab_order_pop_loader_cont').classList.remove('active');
             this.loadLabTestCategoryList();
             this.loadLabTestList();
+            this.render_selected_lab_test();
         }
         else {
-            globalStates.setState({ radiology_data_render_function: 'render_radiology_data' });
+            globalStates.setState({ radiology_data_render_function: 'render_lab_test_data' });
         }
     }
 
     render_selected_lab_test() {
         const selected_radiology_list = document.querySelector('.lab_order_popup .right_body_cont');
         selected_radiology_list.innerHTML = '';
+        // the item is the id of radiology test so take name from the radiology_data.radiology_tests
+        const lab_test_data = globalStates.getState('lab_test_data');
+
         if (this.selected_lab_test.length > 0) {
 
             this.selected_lab_test.forEach((item_id) => {
 
-                // the item is the id of radiology test so take name from the radiology_data.radiology_tests
-                const lab_test_data = globalStates.getState('lab_test_data');
-                const item = lab_test_data.lab_test_tests.find(val => val.id === item_id);
+                const item = lab_test_data.lab_test_tests.find(val => parseInt(val.id) === item_id);
                 if (!item) return;
                 var row_item = document.createElement('div');
                 row_item.classList.add('lab_order_list_item');
@@ -215,7 +219,8 @@ export class VisitLabTestOrdersPopUpView {
                     var span_class = "switch_icon_check_box_outline_blank";
                     var lab_test_item = document.createElement('div');
                     lab_test_item.classList.add('lab_test_list_item');
-                    if (this.selected_lab_test.includes(item.id)) {
+
+                    if (this.selected_lab_test.includes(parseInt(item.id))) {
                         lab_test_item.classList.add('selected');
                         span_class = "switch_icon_check_box";
                     }
@@ -290,15 +295,11 @@ export class VisitLabTestOrdersPopUpView {
     }
 
     async save_lab_test_order() {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
-        btn_submit.setAttribute('loading', true);
-
-
         var data = {
             lab_order: this.selected_lab_test,
             visit_id: this.visit_id
         };
-        console.log(data);
+
 
         try {
             const response = await fetch('/api/patient/save_lab_test_order', {
@@ -317,22 +318,19 @@ export class VisitLabTestOrdersPopUpView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                // dashboardController.visitRadiologyExamCardView.PreRender({
-                //     visit_id: this.visit_id,
-                //     state: this.state,
-                //     data: result.data,
-                // });
-                console.log(result.data);
-                
+                dashboardController.visitLabExamCardView.PreRender({
+                    visit_id: this.visit_id,
+                    state: this.state,
+                    data: result.data,
+                });
+
+
                 this.close();
             } else {
                 notify('top_left', result.message, 'warning');
             }
         } catch (error) {
             notify('top_left', error.message, 'error');
-        }
-        finally {
-            btn_submit.setAttribute('loading', false);
         }
     }
 }

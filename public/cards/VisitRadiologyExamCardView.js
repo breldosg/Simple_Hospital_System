@@ -21,6 +21,9 @@ export class VisitRadiologyExamCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.selected_ids = params.data.map((item) => item.exam_id);
+
+
 
 
         if (this.state == "creation") {
@@ -88,6 +91,10 @@ export class VisitRadiologyExamCardView {
                     if (!this.select_all_active) {
                         this.add_check_box_btn();
                     }
+                    else {
+                        var main_checkbox = document.querySelector('.radiology_exam_cont_cont #main_radiology_order_check_box');
+                        this.make_checkbox_indeterminate(main_checkbox)
+                    }
 
                 })
 
@@ -102,6 +109,9 @@ export class VisitRadiologyExamCardView {
         const check_box = document.createElement('div');
         check_box.className = 'radiology_check_box';
         check_box.classList.add('check_box');
+        check_box.id='main_radiology_order_check_box';
+        // add title to the button with good message
+        check_box.title = "Select all radiology exams";
         check_box.innerHTML = `
         <span class='switch_icon_indeterminate_check_box'></span>
         `;
@@ -184,10 +194,12 @@ export class VisitRadiologyExamCardView {
         `;
 
         check_box.addEventListener('click', (e) => {
+
             dashboardController.visitRadiologyExamPopUpView.PreRender(
                 {
                     visit_id: this.visit_id,
                     state: 'modify',
+                    data: this.selected_ids,
                 }
             );
         });

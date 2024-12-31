@@ -84,13 +84,13 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
-            // {
-            //     method: dashboardController.visitLabTestOrdersPopUpView,
-            //     dataKey: 'radiology_order_data',
-            //     dataArray: 'order_data',
-            //     // condition: (data) => data.success,
-            //     // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
-            // },
+            {
+                method: dashboardController.visitLabExamCardView,
+                dataKey: 'lab_order_data',
+                dataArray: 'order_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
         ];
 
         cardRenderConfig.forEach(config => {

@@ -2893,7 +2893,7 @@ input {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 20px;
+                                gap: 15px;
 
 
                                 .radiology_exam_card {
@@ -2930,7 +2930,7 @@ input {
                                             flex-direction: column;
                                             align-items: start;
                                             justify-content: center;
-                                            width: 100%;
+                                            width: calc(100% - 26px);
 
                                             .title {
                                                 font-size: 16px;
@@ -3006,6 +3006,210 @@ input {
                                 }
 
                                 .radiology_exam_card:hover {
+                                    box-shadow: 0 0 5px 0 #0000003e;
+                                }
+                            }
+                        }
+
+
+                        /* ----------------------------------------------------------- */
+
+                        .lab_test_cont_cont {
+                            padding: 10px;
+
+                            .head_part {
+                                padding: 19px;
+                                padding-top: 10px;
+                                padding-bottom: 0px;
+
+                                .top_heading {
+                                    display: flex;
+                                    gap: 10px;
+
+                                    .check_box {
+                                        /* width: 50px; */
+                                        height: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        cursor: pointer;
+                                    }
+
+                                }
+
+                                .btn_section {
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: center;
+
+                                    .cancel_btn {
+                                        width: 35px;
+                                        height: 35px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        border-radius: 5px;
+                                        flex: none;
+                                        cursor: pointer;
+                                        background-color: var(--pri_op);
+                                        cursor: pointer;
+
+                                        span {
+                                            color: var(--pri_color_op1);
+                                            font-size: 18px;
+                                        }
+                                    }
+
+                                    .cancel_btn:hover {
+                                        span {
+                                            color: var(--pri_color);
+                                        }
+                                    }
+
+                                    .delete_btn {
+                                        width: 35px;
+                                        height: 35px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        border-radius: 5px;
+                                        flex: none;
+                                        cursor: pointer;
+                                        background-color: var(--white_error_color_op1);
+                                        cursor: pointer;
+
+                                        span {
+                                            color: var(--white_error_color);
+                                            font-size: 18px;
+                                        }
+                                    }
+
+                                    .delete_btn:hover {
+                                        span {
+                                            color: var(--error_color);
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            .lab_test_cont {
+                                display: flex;
+                                flex-direction: column;
+                                flex: none;
+                                gap: 15px;
+
+
+                                .lab_test_card {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    width: 100%;
+                                    height: 90px;
+                                    padding: 20px;
+                                    border-radius: var(--main_border_r);
+                                    box-shadow: 0 0 5px 0 #0000001d;
+                                    cursor: pointer;
+
+                                    .left {
+                                        display: flex;
+                                        width: 80%;
+                                        gap: 10px;
+
+                                        .check_box {
+                                            /* width: 50px; */
+                                            height: 100%;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                        }
+
+                                        .check_box.inactive {
+                                            opacity: 0.3;
+                                            cursor: not-allowed;
+                                            pointer-events: none;
+                                        }
+
+                                        .word {
+                                            display: flex;
+                                            flex-direction: column;
+                                            align-items: start;
+                                            justify-content: center;
+                                            width: calc(100% - 26px);
+
+                                            .title {
+                                                font-size: 16px;
+                                                font-weight: 900;
+                                                width: 100%;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                display: inline-block;
+                                            }
+                                        }
+                                    }
+
+                                    .right {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                        height: 100%;
+                                        gap: 10px;
+
+                                        .more_btn {
+                                            width: 35px;
+                                            height: 35px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            border-radius: 5px;
+                                            flex: none;
+                                            cursor: pointer;
+                                            background-color: var(--white_error_color_op1);
+
+
+                                            span {
+                                                color: var(--white_error_color);
+                                                font-size: 18px;
+                                            }
+                                        }
+
+                                        .more_btn:hover {
+                                            span {
+                                                color: var(--error_color);
+                                            }
+                                        }
+
+                                        .more_btn.inactive {
+                                            opacity: 0.5;
+                                            cursor: not-allowed;
+                                            pointer-events: none;
+                                        }
+
+
+                                        .status {
+                                            width: 10px;
+                                            height: 10px;
+                                            border-radius: 5px;
+                                        }
+
+                                        .pending {
+                                            background-color: var(--error_color);
+                                        }
+
+                                        .approved {
+                                            background-color: var(--warning_color);
+                                        }
+
+                                        .complete {
+                                            background-color: var(--success_color);
+                                        }
+
+                                    }
+
+
+                                }
+
+                                .lab_test_card:hover {
                                     box-shadow: 0 0 5px 0 #0000003e;
                                 }
                             }
@@ -7395,7 +7599,7 @@ input {
                             border-radius: var(--main_border_r);
                             cursor: pointer;
                             border: 1px solid #00000007;
-                            
+
                             p {
                                 padding: 10px 20px;
                                 font-weight: 800;

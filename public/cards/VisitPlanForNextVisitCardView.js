@@ -22,7 +22,7 @@ export class VisitPlanForNextVisitCardView {
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
 
-        console.log(params);
+ 
 
 
         if (this.data != null) {
