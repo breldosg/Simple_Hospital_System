@@ -138,6 +138,8 @@ export class VisitLabTestOrdersPopUpView {
 
         if (this.selected_lab_test.length > 0) {
 
+
+
             this.selected_lab_test.forEach((item_id) => {
 
                 const item = lab_test_data.lab_test_tests.find(val => parseInt(val.id) === item_id);
@@ -230,7 +232,7 @@ export class VisitLabTestOrdersPopUpView {
                                                 <span class='${span_class}'></span>
                 `;
                     lab_test_item.addEventListener('click', () => {
-                        const selected_item = lab_test_item.getAttribute('data_src');
+                        const selected_item = parseInt(lab_test_item.getAttribute('data_src'));
                         // check if the clicked item has class selected
                         if (lab_test_item.classList.contains('selected')) {
                             lab_test_item.classList.remove('selected');

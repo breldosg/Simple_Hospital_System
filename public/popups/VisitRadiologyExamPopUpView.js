@@ -26,7 +26,7 @@ export class VisitRadiologyExamPopUpView {
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.selected_radiology_test = params.data ? params.data : [];
         this.state = params.state ? params.state : 'creation';
-        
+
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -217,7 +217,7 @@ export class VisitRadiologyExamPopUpView {
                     var span_class = "switch_icon_check_box_outline_blank";
                     var radiology_item = document.createElement('div');
                     radiology_item.classList.add('radiology_list_item');
-                    
+
                     if (this.selected_radiology_test.includes(parseInt(item.id))) {
                         radiology_item.classList.add('selected');
                         span_class = "switch_icon_check_box";
@@ -226,9 +226,9 @@ export class VisitRadiologyExamPopUpView {
                     radiology_item.innerHTML = `
                                                 <p>${item.name}</p>
                                                 <span class='${span_class}'></span>
-                `;
+                                                `;
                     radiology_item.addEventListener('click', () => {
-                        const selected_item = radiology_item.getAttribute('data_src');
+                        const selected_item = parseInt(radiology_item.getAttribute('data_src'));
                         // check if the clicked item has class selected
                         if (radiology_item.classList.contains('selected')) {
                             radiology_item.classList.remove('selected');
