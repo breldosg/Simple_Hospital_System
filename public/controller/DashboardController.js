@@ -45,6 +45,8 @@ import { VisitVaccineCardView } from "../cards/VisitVaccineCardView.js";
 import { VisitImplantableDevicesCardView } from "../cards/VisitImplantableDevicesCardView.js";
 import { VisitRadiologyExamPopUpView } from "../popups/VisitRadiologyExamPopUpView.js";
 import { VisitLabTestOrdersPopUpView } from "../popups/VisitLabTestOrdersPopUpView.js";
+import { VisitsPreliminaryDiagnosisPopUpView } from "../popups/VisitsPreliminaryDiagnosisPopUpView.js";
+import { VisitPreDiagnosisCardView } from "../cards/VisitPreDiagnosisCardView.js";
 
 class DashboardController {
     // Loader View
@@ -71,6 +73,7 @@ class DashboardController {
     visitPlanForNextVisitPopUpView = new VisitPlanForNextVisitPopUpView();
     visitRadiologyExamPopUpView = new VisitRadiologyExamPopUpView();
     visitLabTestOrdersPopUpView = new VisitLabTestOrdersPopUpView();
+    visitsPreliminaryDiagnosisPopUpView = new VisitsPreliminaryDiagnosisPopUpView();
     
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();
@@ -85,6 +88,7 @@ class DashboardController {
     visitProceduresCardView = new VisitProceduresCardView();
     visitVaccineCardView = new VisitVaccineCardView();
     visitImplantableDevicesCardView = new VisitImplantableDevicesCardView();
+    visitPreDiagnosisCardView = new VisitPreDiagnosisCardView();
     
     
     // Patient PopUp

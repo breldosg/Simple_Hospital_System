@@ -1,8 +1,8 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { date_formatter } from "../script/index.js";
 
-export class VisitRadiologyExamCardView {
+export class VisitPreDiagnosisCardView {
     constructor() {
         this.visit_id = null;
         this.datas = [];
@@ -29,7 +29,6 @@ export class VisitRadiologyExamCardView {
 
         console.log(params);
 
-
         this.resetState(data, visit_id, state);
         this.render();
 
@@ -47,7 +46,7 @@ export class VisitRadiologyExamCardView {
     render() {
         if (this.state !== "creation") return;
 
-        const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
+        const container = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
         const addButton = container.querySelector('.add_card_btn');
         const card = this.createMainCard();
 
@@ -62,16 +61,16 @@ export class VisitRadiologyExamCardView {
 
     createMainCard() {
         const card = document.createElement('div');
-        card.className = 'more_visit_detail_card radiology_exam_cont_cont';
+        card.className = 'more_visit_detail_card pre_diagnosis_cont_cont';
 
         card.innerHTML = `
             <div class="head_part">
                 <div class="top_heading">
-                    <h4 class="heading">Radiology Exam</h4>
+                    <h4 class="heading">Preliminary Diagnosis</h4>
                 </div>
                 <div class="btn_section"></div>
             </div>
-            <div class="body_part radiology_exam_cont"></div>
+            <div class="body_part pre_diagnosis_cont"></div>
         `;
 
         // Add the add button by default
@@ -119,7 +118,7 @@ export class VisitRadiologyExamCardView {
         e.preventDefault();
         const checkbox = e.currentTarget;
         const span = checkbox.querySelector('span');
-        const cards = document.querySelectorAll('.radiology_exam_cont_cont .radiology_exam_cont .radiology_exam_card');
+        const cards = document.querySelectorAll('.pre_diagnosis_cont_cont .pre_diagnosis_cont .pre_diagnosis_card');
 
         if (span.classList.contains('switch_icon_indeterminate_check_box')) {
             this.deselectAll(cards);
@@ -160,7 +159,7 @@ export class VisitRadiologyExamCardView {
     }
 
     renderRadiologyCards() {
-        const container = document.querySelector('.radiology_exam_cont_cont .body_part');
+        const container = document.querySelector('.pre_diagnosis_cont_cont .body_part');
 
         container.innerHTML = '';
         this.datas.forEach(data => {
@@ -171,36 +170,35 @@ export class VisitRadiologyExamCardView {
 
     createRadiologyCard(data) {
         const card = document.createElement('div');
-        card.className = 'radiology_exam_card';
+        card.className = 'pre_diagnosis_card';
         card.setAttribute('data_src', data.id);
 
-        const isPending = data.status === 'pending';
+        console.log(data);
+        
 
         card.innerHTML = `
             <div class="left">
-                <div class="check_box radiology_check_box ${isPending ? '' : 'inactive'}">
+                <div class="check_box radiology_check_box">
                     <span class='switch_icon_check_box_outline_blank'></span>
                 </div>
                 <div class="word">
-                    <p class="title">${data.name}</p>
+                    <p class="title">${data.diagnosis}</p>
                     <p class="created_by">${data.created_by}</p>
                     <p class="date">${date_formatter(data.created_at)}</p>
                 </div>
             </div>
             <div class="right">
-                <div title="${data.status}" class="status ${data.status}"></div>
-                <div title="Delete this order." class="more_btn order_delete_btn ${isPending ? '' : 'inactive'}">
+                <div title="Delete this order." class="more_btn order_delete_btn">
                     <span class='switch_icon_delete'></span>
                 </div>
             </div>
         `;
 
-        this.attachCardListeners(card, data, isPending);
+        this.attachCardListeners(card, data);
         return card;
     }
 
-    attachCardListeners(card, data, isPending) {
-        if (!isPending) return;
+    attachCardListeners(card, data) {
 
         const checkbox = card.querySelector('.radiology_check_box');
         const deleteBtn = card.querySelector('.order_delete_btn');
@@ -256,7 +254,7 @@ export class VisitRadiologyExamCardView {
         if (!this.isSelectAllActive && this.selectedIds.size > 0) {
             this.initializeMultipleSelection();
         } else if (this.isSelectAllActive) {
-            const mainCheckbox = document.querySelector('.radiology_exam_cont_cont #main_radiology_order_check_box');
+            const mainCheckbox = document.querySelector('.pre_diagnosis_cont_cont #main_radiology_order_check_box');
             this.updateMainCheckboxState(mainCheckbox);
         }
     }
@@ -279,8 +277,8 @@ export class VisitRadiologyExamCardView {
     }
 
     renderSelectionControls() {
-        const container = document.querySelector('.radiology_exam_cont_cont .top_heading');
-        const btnSection = document.querySelector('.radiology_exam_cont_cont .btn_section');
+        const container = document.querySelector('.pre_diagnosis_cont_cont .top_heading');
+        const btnSection = document.querySelector('.pre_diagnosis_cont_cont .btn_section');
 
         container.prepend(this.createSelectAllCheckbox());
         btnSection.innerHTML = '';
@@ -343,7 +341,7 @@ export class VisitRadiologyExamCardView {
     }
 
     exitSelectionMode() {
-        const cards = document.querySelectorAll('.radiology_exam_cont_cont .radiology_exam_cont .radiology_exam_card');
+        const cards = document.querySelectorAll('.pre_diagnosis_cont_cont .pre_diagnosis_cont .pre_diagnosis_card');
         this.deselectAll(cards);
 
         // Remove selection controls
@@ -355,7 +353,7 @@ export class VisitRadiologyExamCardView {
         this.isSelectAllActive = false;
 
         // Reset button section
-        const btnSection = document.querySelector('.radiology_exam_cont_cont .btn_section');
+        const btnSection = document.querySelector('.pre_diagnosis_cont_cont .btn_section');
         btnSection.innerHTML = '';
         btnSection.appendChild(this.createAddButton());
     }

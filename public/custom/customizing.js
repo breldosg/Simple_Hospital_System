@@ -8,7 +8,7 @@ export const visit_add_card_btn = [
                 title: 'Clinical Evaluation'
             },
             {
-                component: 'visitPlanForNextVisitPopUpViewe',
+                component: 'visitsPreliminaryDiagnosisPopUpView',
                 title: 'Preliminary Diagnosis'
             },
             {

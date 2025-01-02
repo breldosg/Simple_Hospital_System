@@ -91,6 +91,13 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
+            {
+                method: dashboardController.visitPreDiagnosisCardView,
+                dataKey: 'pre_diagnosis_data',
+                dataArray: 'diagnosis_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
         ];
 
         cardRenderConfig.forEach(config => {
