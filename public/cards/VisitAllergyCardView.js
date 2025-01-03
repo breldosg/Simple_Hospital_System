@@ -54,8 +54,18 @@ export class VisitAllergyCardView {
 
                 card.innerHTML = `
                     <div class="top">
-                        <p class="date">${date_formatter(data.created_at)}</p>
-                        <p class="created_by">${data.created_by}</p>
+                        <div class="left">
+                            <p class="date">${date_formatter(data.created_at)}</p>
+                            <p class="created_by">${data.created_by}</p>
+                        </div>
+                        <div class="right">
+                            <div class="edit_btn btn" id="edit_patient_allergy" >
+                                <span class='switch_icon_edit'></span>
+                            </div>
+                            <div class="delete_btn btn" id="delete_patient_allergy" >
+                                <span class='switch_icon_delete'></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="data">

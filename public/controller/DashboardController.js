@@ -34,7 +34,6 @@ import { VisitClinicalEvaluationCardView } from "../cards/VisitClinicalEvaluatio
 import { VisitAllergyCardView } from "../cards/visitAllergyCardView.js";
 import { VisitAllergyPopUpView } from "../popups/VisitAllergyPopUpView.js";
 import { VisitFinalDiagnosisCardView } from "../cards/VisitFinalDiagnosisCardView.js";
-import { VisitFinalDiagnosisPopUpView } from "../popups/VisitFinalDiagnosisPopUpView.js";
 import { VisitPlanForNextVisitCardView } from "../cards/VisitPlanForNextVisitCardView.js";
 import { VisitPlanForNextVisitPopUpView } from "../popups/VisitPlanForNextVisitPopUpView.js";
 import { VisitRadiologyExamCardView } from "../cards/VisitRadiologyExamCardView.js";
@@ -47,6 +46,7 @@ import { VisitRadiologyExamPopUpView } from "../popups/VisitRadiologyExamPopUpVi
 import { VisitLabTestOrdersPopUpView } from "../popups/VisitLabTestOrdersPopUpView.js";
 import { VisitsPreliminaryDiagnosisPopUpView } from "../popups/VisitsPreliminaryDiagnosisPopUpView.js";
 import { VisitPreDiagnosisCardView } from "../cards/VisitPreDiagnosisCardView.js";
+import { VisitFinalDiagnosisPopUpView } from "../popups/VisitsFinalDiagnosisPopUpView.js";
 
 class DashboardController {
     // Loader View

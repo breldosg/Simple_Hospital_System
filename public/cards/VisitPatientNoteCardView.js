@@ -4,125 +4,112 @@ import { date_formatter, notify } from "../script/index.js";
 
 export class VisitPatientNoteCardView {
     constructor() {
-        window.save_patient_note = this.save_patient_note.bind(this);
-        this.visit_id = null;
-        this.datas = [];
+        this.state = {
+            visitId: null,
+            notes: [],
+            isLoading: false,
+            mounted: false
+        };
+
+        // Bind methods
+        this.save_patient_note = this.save_patient_note.bind(this);
+        this.deleteNote = this.deleteNote.bind(this);
+        this.renderNoteCards = this.renderNoteCards.bind(this);
+        this.updateState = this.updateState.bind(this);
+
+        window.save_patient_note = this.save_patient_note;
+    }
+
+    updateState(newState) {
+        this.state = { ...this.state, ...newState };
+        // Only render if component is mounted
+        if (this.state.mounted) {
+            this.renderNoteCards();
+        }
     }
 
     async PreRender(params) {
-        // Render the initial structure with the loader
+        // Ensure dashboard is rendered
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.datas = params.data ? params.data : [];
-        this.visit_id = params.visit_id;
+        // Update state but don't trigger render yet
+        this.state = {
+            ...this.state,
+            notes: params.data || [],
+            visitId: params.visit_id
+        };
 
+        // Create and mount the component
         const cont = document.querySelector('.single_visit_cont .more_visit_detail');
-        cont.classList.add('active');
-        cont.appendChild(this.ViewReturn());
+        if (cont) {
+            cont.classList.add('active');
+            cont.appendChild(this.ViewReturn());
 
+            // Mark as mounted and then render notes
+            this.state.mounted = true;
+            this.renderNoteCards();
+        }
+    }
 
-        this.renderNoteCards();
+    createNoteCard(data) {
+        const card = document.createElement('div');
+        card.className = 'note_card';
+
+        card.innerHTML = `
+            <div class="card_head">
+                <div class="card_info">
+                    <p class="date">${date_formatter(data.created_at)}</p>
+                    <p class="title">${data.created_by}</p>
+                </div>
+                <div class="card_actions">
+                    <div class="delete_btn btn" data-note-id="${data.id}">
+                        <span class='switch_icon_delete'></span>
+                    </div>
+                </div>
+            </div>
+            <p class="detail">${data.note}</p>
+        `;
+
+        const deleteBtn = card.querySelector('.delete_btn');
+        deleteBtn.addEventListener('click', () => this.deleteNote(data.id));
+
+        return card;
     }
 
     renderNoteCards() {
+        // Safe guard against rendering before mount
+        if (!this.state.mounted) return;
 
-        const container = document.querySelector('.patient_note_cards_cont_cont .body_part')
+        const container = document.querySelector('.patient_note_cards_cont_cont .body_part');
+        if (!container) return;
 
-        const start_cont = container.querySelector('.start_cont');
+        // Clear existing cards
+        container.innerHTML = '';
 
-
-        if (this.datas.length < 1) {
-            if (start_cont) {
-                start_cont.remove();
-            }
-        }
-
-        this.datas.forEach((data) => {
-            const card = document.createElement('div');
-            card.className = 'note_card';
-
-            card.innerHTML = `
-                        <div class="card_head">
-                        <p class="date">${date_formatter(data.created_at)}</p>
-                        <p class="title">${data.created_by}</p>
-                        </div>
-                        <p class="detail">
-                            ${data.note}
-                        </p>
-                    `;
-
-            container.prepend(card);
-        })
-
-        this.datas = [];
-
-    }
-
-    ViewReturn() {
-
-        const card = document.createElement('div');
-        card.className = 'more_visit_detail_card';
-        card.classList.add('patient_note_cards_cont_cont');
-
-        card.innerHTML = `
-        <!-- add active to open full screen -->
-    <div class="full_screen_overlay ">
-        <div class="full_screen">
-            <div class="head_part">
-                <h4 class="heading">Patient Note</h4>
-
-                <div class="add_btn" id="add_patient_note_btn" >
-                    <span class='switch_icon_add'></span>
-                </div>
-            </div>
-
-            <div class="body_part patient_note_cards_cont">
-
-                <!-- no note show -->
+        if (this.state.notes.length < 1) {
+            container.innerHTML = `
                 <div class="start_cont">
                     <p class="start_view_overlay">No Patient Note Found</p>
                 </div>
-
-            </div>
-
-        </div>
-    </div>
-        
             `;
-
-
-        const edit_btn = card.querySelector('#add_patient_note_btn');
-        edit_btn.addEventListener('click', () => {
-            console.log('add Note Btn');
-            dashboardController.addPatientNotePopUpView.PreRender();
-        })
-
-        return card;
-
-    }
-
-    attachListeners() {
-        //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
-
-        //     cancel_btn.addEventListener('click', () => {
-        //         this.close();
-        //     });
-    }
-
-    async save_patient_note(data_old) {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
-        btn_submit.setAttribute('loading', true);
-
-
-        var formData = {
-            ...data_old,
-            visit_id: this.visit_id,
-            action: 'create',
+            return;
         }
 
+        // Render notes
+        this.state.notes.forEach(note => {
+            container.prepend(this.createNoteCard(note));
+        });
+    }
+
+    async deleteNote(noteId) {
+        if (!confirm('Are you sure you want to delete this note?')) {
+            return;
+        }
+
+        this.updateState({ isLoading: true });
 
         try {
             const response = await fetch('/api/patient/save_update_delete_patient_note', {
@@ -130,35 +117,100 @@ export class VisitPatientNoteCardView {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({
+                    note_id: noteId,
+                    action: 'delete'
+                })
             });
 
             if (!response.ok) {
-                throw new Error('failed To update vital. Server Error');
+                throw new Error('Failed to delete note. Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.updateState({
+                    notes: this.state.notes.filter(note => note.id !== noteId)
+                });
+                notify('top_left', 'Note deleted successfully', 'success');
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            this.updateState({ isLoading: false });
+        }
+    }
+
+    async save_patient_note(data_old) {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        if (btn_submit) {
+            btn_submit.setAttribute('loading', true);
+        }
+
+        try {
+            const response = await fetch('/api/patient/save_update_delete_patient_note', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...data_old,
+                    visit_id: this.state.visitId,
+                    action: 'create'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update vital. Server Error');
             }
 
             const result = await response.json();
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                // After successful creation, clear the popup and close it
                 dashboardController.addPatientNotePopUpView.close();
 
-                this.datas = [];
-                this.datas.push(result.data);
-
-                this.renderNoteCards()
-
+                this.updateState({
+                    notes: [result.data, ...this.state.notes]
+                });
             } else {
                 notify('top_left', result.message, 'warning');
             }
         } catch (error) {
             notify('top_left', error.message, 'error');
-        }
-        finally {
-            btn_submit.setAttribute('loading', false);
+        } finally {
+            if (btn_submit) {
+                btn_submit.setAttribute('loading', false);
+            }
         }
     }
-}
 
-// P/SP/0024
+    ViewReturn() {
+        const card = document.createElement('div');
+        card.className = 'more_visit_detail_card patient_note_cards_cont_cont';
+
+        card.innerHTML = `
+            <div class="full_screen_overlay">
+                <div class="full_screen">
+                    <div class="head_part">
+                        <h4 class="heading">Patient Note</h4>
+                        <div class="add_btn" id="add_patient_note_btn">
+                            <span class='switch_icon_add'></span>
+                        </div>
+                    </div>
+                    <div class="body_part patient_note_cards_cont"></div>
+                </div>
+            </div>
+        `;
+
+        const addBtn = card.querySelector('#add_patient_note_btn');
+        addBtn.addEventListener('click', () => {
+            dashboardController.addPatientNotePopUpView.PreRender();
+        });
+
+        return card;
+    }
+}

@@ -1,6 +1,6 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
 
-export class VisitFinalDiagnosisPopUpView {
+export class VisitFinalDiagnosisPopUpView_v1 {
     constructor() {
         this.callback = null;
         this.data = null;

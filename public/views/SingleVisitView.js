@@ -42,7 +42,7 @@ export class SingleVisitView {
         // Render top patient card
         this.top_card_view(visit_data.patient_data);
         console.log(visit_data);
-        
+
 
         // Render various card views
         const cardRenderConfig = [
@@ -62,6 +62,13 @@ export class SingleVisitView {
                 dataArray: 'evaluation_data',
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitAllergyCardView')
+            },
+            {
+                method: dashboardController.visitPreDiagnosisCardView,
+                dataKey: 'pre_diagnosis_data',
+                dataArray: 'diagnosis_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
             {
                 method: dashboardController.visitAllergyCardView,
@@ -92,12 +99,13 @@ export class SingleVisitView {
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
             {
-                method: dashboardController.visitPreDiagnosisCardView,
-                dataKey: 'pre_diagnosis_data',
+                method: dashboardController.visitFinalDiagnosisCardView,
+                dataKey: 'final_diagnosis_data',
                 dataArray: 'diagnosis_data',
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
+
         ];
 
         cardRenderConfig.forEach(config => {
@@ -388,7 +396,7 @@ export class SingleVisitView {
 
             if (result.success) {
                 globalStates.setState({ radiology_data_exists: true });
-                globalStates.setState({ radiology_data: result.data});
+                globalStates.setState({ radiology_data: result.data });
                 if (globalStates.hasState('radiology_data_render_function')) {
                     var callbackName = globalStates.getState('radiology_data_render_function');
                     if (callbackName && typeof window[callbackName] === 'function') {
@@ -429,7 +437,7 @@ export class SingleVisitView {
 
             if (result.success) {
                 globalStates.setState({ lab_test_data_exists: true });
-                globalStates.setState({ lab_test_data: result.data});
+                globalStates.setState({ lab_test_data: result.data });
                 if (globalStates.hasState('lab_test_data_render_function')) {
                     var callbackName = globalStates.getState('lab_test_data_render_function');
                     if (callbackName && typeof window[callbackName] === 'function') {

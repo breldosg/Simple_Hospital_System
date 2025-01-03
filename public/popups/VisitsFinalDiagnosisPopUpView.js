@@ -3,13 +3,12 @@ import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, notify, searchInArray } from "../script/index.js";
 
-export class VisitsPreliminaryDiagnosisPopUpView {
+export class VisitFinalDiagnosisPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
         this.added_diagnosis = new Set();
         this.visit_id = '';
-        // window.save_clinical_note = this.save_clinical_note.bind(this);
     }
 
     async PreRender(params = '') {
@@ -33,10 +32,10 @@ export class VisitsPreliminaryDiagnosisPopUpView {
 
     ViewReturn() {
         return `
-<div class="container add_preliminary_diagnosis_popUp">
+<div class="container final_diagnosis_popUp">
 
     <div class="cont_heading">
-        <p class="heading">Preliminary Diagnosis</p>
+        <p class="heading">Final Diagnosis</p>
         <div class="close_btn" id="confirm_cancel">
             <span class="switch_icon_close"></span>
         </div>
@@ -53,7 +52,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
         background-color: transparent;
         border: 2px solid var(--input_border);
         " dropDownStyles="border: 2px solid var(--input_border);" dropDownBorder_radius="var(--input_main_border_r)"
-                labelStyles="font-size: 12px;" id="preliminary_diagnosis_input"></br-input>
+                labelStyles="font-size: 12px;" id="final_diagnosis_input"></br-input>
 
             <br-button class="card-button" id="add_to_added_list_btn" type="add">Add</br-button>
         </div>
@@ -99,14 +98,14 @@ export class VisitsPreliminaryDiagnosisPopUpView {
     }
 
     handleNoDataAdded() {
-        const card_list = document.querySelector('.add_preliminary_diagnosis_popUp .card_list');
-        const submitBtn = document.querySelector('#submit_btn');
+        const card_list = document.querySelector('.final_diagnosis_popUp .card_list');
+        const submitBtn = document.querySelector('.final_diagnosis_popUp #submit_btn');
         submitBtn.classList.add('disabled');
         card_list.innerHTML = this.exampleCard();
     }
 
     handleDataAdded(input_value) {
-        const submitBtn = document.querySelector('#submit_btn');
+        const submitBtn = document.querySelector('.final_diagnosis_popUp #submit_btn');
         submitBtn.classList.remove('disabled');
 
         this.added_diagnosis.add(input_value);
@@ -121,7 +120,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
     }
 
     createCard() {
-        const card_list = document.querySelector('.add_preliminary_diagnosis_popUp .card_list');
+        const card_list = document.querySelector('.final_diagnosis_popUp .card_list');
         card_list.innerHTML = '';
         this.added_diagnosis.forEach(data => {
             const card = document.createElement('div');
@@ -159,16 +158,16 @@ export class VisitsPreliminaryDiagnosisPopUpView {
     }
 
     attachListeners() {
-        const cancel_btn = document.querySelector('#confirm_cancel');
+        const cancel_btn = document.querySelector('.final_diagnosis_popUp #confirm_cancel');
 
         cancel_btn.addEventListener('click', () => {
             this.close();
         });
 
-        const preliminary_diagnosis_input = document.querySelector('#preliminary_diagnosis_input');
+        const final_diagnosis_input = document.querySelector('.final_diagnosis_popUp #final_diagnosis_input');
 
         const debouncedFunction = debounce(() => {
-            let value = preliminary_diagnosis_input.getValue();
+            let value = final_diagnosis_input.getValue();
 
             if (value == null) {
                 value = '';
@@ -179,22 +178,22 @@ export class VisitsPreliminaryDiagnosisPopUpView {
             // console.log(found_options);
 
             if (found_options.length >= 1) {
-                preliminary_diagnosis_input.updateOption(found_options);
+                final_diagnosis_input.updateOption(found_options);
             }
 
         }, 800);
 
-        preliminary_diagnosis_input.addEventListener('input', () => {
+        final_diagnosis_input.addEventListener('input', () => {
 
             debouncedFunction();
 
         });
 
-        const add_to_added_list_btn = document.querySelector('#add_to_added_list_btn');
+        const add_to_added_list_btn = document.querySelector('.final_diagnosis_popUp #add_to_added_list_btn');
 
         add_to_added_list_btn.addEventListener('click', () => {
-            var input_value = preliminary_diagnosis_input.getValue();
-            preliminary_diagnosis_input.reset();
+            var input_value = final_diagnosis_input.getValue();
+            final_diagnosis_input.reset();
 
             if (input_value == null) {
                 notify('top_left', 'No diagnosis Selected', 'warning');
@@ -205,8 +204,8 @@ export class VisitsPreliminaryDiagnosisPopUpView {
 
         })
 
-        const submit_btn = document.querySelector('#submit_btn');
-        submit_btn.addEventListener('click', () => { this.save_pre_diagnosis_note() });
+        const submit_btn = document.querySelector('.final_diagnosis_popUp #submit_btn');
+        submit_btn.addEventListener('click', () => { this.save_final_diagnosis_note() });
     }
 
     close() {
@@ -215,8 +214,8 @@ export class VisitsPreliminaryDiagnosisPopUpView {
         cont.innerHTML = '';
     }
 
-    async save_pre_diagnosis_note() {
-        const btn_submit = document.querySelector('br-button[type="submit"]');
+    async save_final_diagnosis_note() {
+        const btn_submit = document.querySelector('.final_diagnosis_popUp br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
 
@@ -233,7 +232,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
 
 
         try {
-            const response = await fetch('/api/patient/create_delete_pre_diagnosis', {
+            const response = await fetch('/api/patient/create_delete_final_diagnosis', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -248,11 +247,13 @@ export class VisitsPreliminaryDiagnosisPopUpView {
             const result = await response.json();
 
             if (result.success) {
-                dashboardController.visitPreDiagnosisCardView.PreRender({
+                dashboardController.visitFinalDiagnosisCardView.PreRender({
                     visit_id: this.visit_id,
                     data: result.data,
                     state: this.state,
                 });
+                console.log('final');
+                
                 notify('top_left', result.message, 'success');
                 console.log(result.data);
 

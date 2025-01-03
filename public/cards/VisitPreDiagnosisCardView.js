@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 
 export class VisitPreDiagnosisCardView {
     constructor() {
@@ -11,12 +11,12 @@ export class VisitPreDiagnosisCardView {
 
 
         // Bind methods
-        this.remove_order_radiology_exam_request = this.remove_order_radiology_exam_request.bind(this);
-        this.remove_radiology_exam_request_bulk = this.remove_radiology_exam_request_bulk.bind(this);
+        this.remove_pre_diagnosis_request = this.remove_pre_diagnosis_request.bind(this);
+        this.remove_pre_diagnosis_request_bulk = this.remove_pre_diagnosis_request_bulk.bind(this);
 
         // Add to window for callback access
-        window.remove_order_radiology_exam_request = this.remove_order_radiology_exam_request;
-        window.remove_radiology_exam_request_bulk = this.remove_radiology_exam_request_bulk;
+        window.remove_pre_diagnosis_request = this.remove_pre_diagnosis_request;
+        window.remove_pre_diagnosis_request_bulk = this.remove_pre_diagnosis_request_bulk;
 
     }
 
@@ -32,7 +32,7 @@ export class VisitPreDiagnosisCardView {
         this.resetState(data, visit_id, state);
         this.render();
 
-        this.renderRadiologyCards();
+        this.renderSingleCards();
     }
 
     resetState(data, visit_id, state) {
@@ -56,7 +56,7 @@ export class VisitPreDiagnosisCardView {
             container.appendChild(card);
         }
 
-        dashboardController.singleVisitView.add_to_rendered_card_array('visitRadiologyExamPopUpView');
+        dashboardController.singleVisitView.add_to_rendered_card_array('visitsPreliminaryDiagnosisPopUpView');
     }
 
     createMainCard() {
@@ -83,20 +83,15 @@ export class VisitPreDiagnosisCardView {
     createAddButton() {
         const addBtn = document.createElement('div');
         addBtn.className = 'add_btn';
-        addBtn.id = 'add_radiology_exam';
+        addBtn.id = 'add_pre_diagnosis_exam';
         addBtn.innerHTML = '<span class="switch_icon_add"></span>';
 
 
 
         addBtn.addEventListener('click', () => {
-            const pendingIds = this.datas
-                .filter(item => item.status === 'pending')
-                .map(item => item.exam_id);
-
-            dashboardController.visitRadiologyExamPopUpView.PreRender({
+            dashboardController.visitsPreliminaryDiagnosisPopUpView.PreRender({
                 visit_id: this.visit_id,
                 state: 'modify',
-                data: pendingIds,
             });
         });
 
@@ -158,7 +153,7 @@ export class VisitPreDiagnosisCardView {
             'switch_icon_check_box_outline_blank';
     }
 
-    renderRadiologyCards() {
+    renderSingleCards() {
         const container = document.querySelector('.pre_diagnosis_cont_cont .body_part');
 
         container.innerHTML = '';
@@ -172,10 +167,6 @@ export class VisitPreDiagnosisCardView {
         const card = document.createElement('div');
         card.className = 'pre_diagnosis_card';
         card.setAttribute('data_src', data.id);
-
-        console.log(data);
-        
-
         card.innerHTML = `
             <div class="left">
                 <div class="check_box radiology_check_box">
@@ -214,11 +205,11 @@ export class VisitPreDiagnosisCardView {
         if (deleteBtn.classList.contains('inactive')) return;
 
         dashboardController.confirmPopUpView.PreRender({
-            callback: 'remove_order_radiology_exam_request',
+            callback: 'remove_pre_diagnosis_request',
             parameter: data.id,
-            title: 'Remove Radiology Order Request',
-            sub_heading: `Order For: ${data.name}`,
-            description: 'Are you sure you want to remove this order?',
+            title: 'Remove Preliminary Diagnosis Request',
+            sub_heading: `Diagnosis For: ${data.diagnosis}`,
+            description: 'Are you sure you want to remove this diagnosis?',
             ok_btn: 'Remove',
             cancel_btn: 'Cancel'
         });
@@ -322,22 +313,22 @@ export class VisitPreDiagnosisCardView {
 
         const selectedIds = Array.from(this.selectedIds);
         dashboardController.confirmPopUpView.PreRender({
-            callback: 'remove_radiology_exam_request_bulk',
+            callback: 'remove_pre_diagnosis_request_bulk',
             parameter: selectedIds,
-            title: 'Remove Selected Radiology Orders',
-            sub_heading: `You have selected ${selectedIds.length} Radiology orders.`,
-            description: 'Are you sure you want to remove these selected Radiology orders?',
+            title: 'Remove Selected Diagnosis',
+            sub_heading: `You have selected ${selectedIds.length} diagnosis.`,
+            description: 'Are you sure you want to remove these selected diagnosis?',
             ok_btn: 'Remove',
             cancel_btn: 'Cancel'
         });
     }
 
-    remove_order_radiology_exam_request(id) {
-        return this.handleRadiologyExamRequest([id], 'single');
+    remove_pre_diagnosis_request(id) {
+        return this.handlePreDiagnosisRequest([id], 'single');
     }
 
-    remove_radiology_exam_request_bulk(ids) {
-        return this.handleRadiologyExamRequest(ids, 'multiple');
+    remove_pre_diagnosis_request_bulk(ids) {
+        return this.handlePreDiagnosisRequest(ids, 'multiple');
     }
 
     exitSelectionMode() {
@@ -358,16 +349,17 @@ export class VisitPreDiagnosisCardView {
         btnSection.appendChild(this.createAddButton());
     }
 
-    async handleRadiologyExamRequest(ids, state = 'single') {
+    async handlePreDiagnosisRequest(ids, state = 'single') {
         dashboardController.loaderView.render();
 
         try {
-            const response = await fetch('/api/patient/delete_radiology_test_order', {
+            const response = await fetch('/api/patient/create_delete_pre_diagnosis', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    action: 'delete',
                     visit_id: this.visit_id,
-                    radiology_order_id: ids,
+                    diagnosis: ids,
                     state
                 })
             });
@@ -385,23 +377,17 @@ export class VisitPreDiagnosisCardView {
             if (state === 'single' && this.singleSelectedToDelete) {
                 this.singleSelectedToDelete.remove();
                 this.datas = this.datas.filter(item => item.id != this.singleSelectedToDelete_id);
+                if(this.selectedIds.has(this.singleSelectedToDelete_id)) {
+                    this.selectedIds.delete(this.singleSelectedToDelete_id);
+                }
                 this.singleSelectedToDelete = '';
                 this.singleSelectedToDelete_id = '';
             } else {
                 // Update the view with new data for bulk deletion
-                // this.PreRender({
-                //     visit_id: this.visit_id,
-                //     state: 'modify',
-                //     data: result.data,
-                // });
-
-                this.renderRadiologyCards();
-                console.log(result.data);
-
                 this.datas = result.data;
-
                 this.selectedIds.clear();
 
+                this.renderSingleCards();
                 // Exit selection mode
                 this.exitSelectionMode();
 

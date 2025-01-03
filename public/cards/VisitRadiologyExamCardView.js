@@ -396,14 +396,10 @@ export class VisitRadiologyExamCardView {
                 //     state: 'modify',
                 //     data: result.data,
                 // });
-
-                this.renderRadiologyCards();
-                console.log(result.data);
-
+                this.selectedIds.clear();
                 this.datas = result.data;
 
-                this.selectedIds.clear();
-
+                this.renderRadiologyCards();
                 // Exit selection mode
                 this.exitSelectionMode();
 
