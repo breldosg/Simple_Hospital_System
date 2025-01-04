@@ -8104,6 +8104,12 @@ input {
                             border: 1px solid #00000007;
                             display: flex;
                             justify-content: space-between;
+
+                            span {
+                                font-size: 12px;
+                                display: flex;
+                                align-items: center;
+                            }
                         }
 
                         .radiology_list_item.selected {
@@ -8186,6 +8192,10 @@ input {
 
                         span {
                             color: var(--pri_color);
+                            font-size: 12px;
+                            display: flex;
+                            align-items: center;
+
                         }
                     }
 
