@@ -281,7 +281,9 @@ export class VisitRadiologyExamCardView {
     renderSelectionControls() {
         const container = document.querySelector('.radiology_exam_cont_cont .top_heading');
         const btnSection = document.querySelector('.radiology_exam_cont_cont .btn_section');
+        const body_part = document.querySelector('.radiology_exam_cont_cont .radiology_exam_cont');
 
+        body_part.classList.add('selectionMode');
         container.prepend(this.createSelectAllCheckbox());
         btnSection.innerHTML = '';
         btnSection.append(
@@ -343,9 +345,12 @@ export class VisitRadiologyExamCardView {
     }
 
     exitSelectionMode() {
-        const cards = document.querySelectorAll('.radiology_exam_cont_cont .radiology_exam_cont .radiology_exam_card');
+        const body_part = document.querySelector('.radiology_exam_cont_cont .radiology_exam_cont');
+        const cards = body_part.querySelectorAll('.radiology_exam_card');
         this.deselectAll(cards);
 
+
+        body_part.classList.remove('selectionMode');
         // Remove selection controls
         const selectAllCheckbox = document.querySelector('#main_radiology_order_check_box');
         if (selectAllCheckbox) {

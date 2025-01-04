@@ -270,6 +270,8 @@ export class VisitFinalDiagnosisCardView {
     renderSelectionControls() {
         const container = document.querySelector('.final_diagnosis_cont_cont .top_heading');
         const btnSection = document.querySelector('.final_diagnosis_cont_cont .btn_section');
+        const body_part = document.querySelector('.final_diagnosis_cont_cont .final_diagnosis_cont');
+        body_part.classList.add('selectionMode');
 
         container.prepend(this.createSelectAllCheckbox());
         btnSection.innerHTML = '';
@@ -332,8 +334,10 @@ export class VisitFinalDiagnosisCardView {
     }
 
     exitSelectionMode() {
-        const cards = document.querySelectorAll('.final_diagnosis_cont_cont .final_diagnosis_cont .final_diagnosis_card');
+        const body_part = document.querySelector('.final_diagnosis_cont_cont .final_diagnosis_cont');
+        const cards = body_part.querySelectorAll('.final_diagnosis_card');
         this.deselectAll(cards);
+        body_part.classList.remove('selectionMode');
 
         // Remove selection controls
         const selectAllCheckbox = document.querySelector('.final_diagnosis_cont_cont #main_final_diagnosis_check_box');

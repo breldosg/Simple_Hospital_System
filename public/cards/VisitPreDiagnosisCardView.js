@@ -268,9 +268,11 @@ export class VisitPreDiagnosisCardView {
     }
 
     renderSelectionControls() {
-        const container = document.querySelector('.pre_diagnosis_cont_cont .top_heading');
+        const body_part = document.querySelector('.pre_diagnosis_cont_cont .pre_diagnosis_cont');
+        const container = document.querySelector('.pre_diagnosis_cont_cont .top_heading'); 
         const btnSection = document.querySelector('.pre_diagnosis_cont_cont .btn_section');
 
+        body_part.classList.add('selectionMode');
         container.prepend(this.createSelectAllCheckbox());
         btnSection.innerHTML = '';
         btnSection.append(
@@ -332,9 +334,11 @@ export class VisitPreDiagnosisCardView {
     }
 
     exitSelectionMode() {
-        const cards = document.querySelectorAll('.pre_diagnosis_cont_cont .pre_diagnosis_cont .pre_diagnosis_card');
+        const body_part = document.querySelector('.pre_diagnosis_cont_cont .pre_diagnosis_cont');
+        const cards = body_part.querySelectorAll('.pre_diagnosis_card');
+        
         this.deselectAll(cards);
-
+        body_part.classList.remove('selectionMode');
         // Remove selection controls
         const selectAllCheckbox = document.querySelector('#main_radiology_order_check_box');
         if (selectAllCheckbox) {
@@ -377,7 +381,7 @@ export class VisitPreDiagnosisCardView {
             if (state === 'single' && this.singleSelectedToDelete) {
                 this.singleSelectedToDelete.remove();
                 this.datas = this.datas.filter(item => item.id != this.singleSelectedToDelete_id);
-                if(this.selectedIds.has(this.singleSelectedToDelete_id)) {
+                if (this.selectedIds.has(this.singleSelectedToDelete_id)) {
                     this.selectedIds.delete(this.singleSelectedToDelete_id);
                 }
                 this.singleSelectedToDelete = '';

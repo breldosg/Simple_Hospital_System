@@ -58,7 +58,7 @@ export class VisitLabExamCardView {
 
     createMainCard() {
         const card = document.createElement('div');
-        card.className = 'more_visit_detail_card lab_test_cont_cont';
+        card.className = 'more_visit_detail_card lab_test_cont_cont ';
 
         card.innerHTML = `
             <div class="head_part">
@@ -316,9 +316,11 @@ export class VisitLabExamCardView {
     }
 
     renderSelectionControls() {
+        const body_part = document.querySelector('.lab_test_cont_cont .lab_test_cont');
         const container = document.querySelector('.lab_test_cont_cont .top_heading');
         const btnSection = document.querySelector('.lab_test_cont_cont .btn_section');
 
+        body_part.classList.add('selectionMode');
         container.prepend(this.createSelectAllCheckbox());
         btnSection.innerHTML = '';
         btnSection.append(
@@ -328,8 +330,11 @@ export class VisitLabExamCardView {
     }
 
     exitSelectionMode() {
-        const cards = document.querySelectorAll('.lab_test_cont_cont .lab_test_cont .lab_test_card');
+        const body_part = document.querySelector('.lab_test_cont_cont .lab_test_cont');
+        const cards = body_part.querySelectorAll('.lab_test_card');
         this.deselectAll(cards);
+
+        body_part.classList.remove('selectionMode');
 
         // Remove selection controls
         const selectAllCheckbox = document.querySelector('#main_lab_test_check_box');
