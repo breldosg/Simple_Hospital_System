@@ -105,6 +105,13 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
+            {
+                method: dashboardController.visitsProcedurePopUpView,
+                dataKey: 'final_diagnosis_data',
+                dataArray: 'diagnosis_data',
+                // condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
 
         ];
 
