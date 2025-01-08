@@ -33,7 +33,6 @@ app.get(['/', '/login'], (req, res) => {
 
 
 
-
 app.get('*', async (req, res) => {
 
     const token_available = check_cookie(req);

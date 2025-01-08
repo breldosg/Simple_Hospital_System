@@ -137,6 +137,7 @@ export class VisitRadiologyExamCardView {
         cards.forEach(card => {
             const checkbox = card.querySelector('.radiology_check_box');
             if (!checkbox.classList.contains('inactive')) {
+                card.classList.add('selected');
                 this.make_checkbox_active(checkbox);
                 const id = parseInt(card.getAttribute('data_src'));
                 this.selectedIds.add(id);
@@ -147,6 +148,7 @@ export class VisitRadiologyExamCardView {
     deselectAll(cards) {
         cards.forEach(card => {
             const checkbox = card.querySelector('.radiology_check_box');
+            card.classList.remove('selected');
             this.make_checkbox_inactive(checkbox);
         });
         this.selectedIds.clear();
@@ -205,7 +207,7 @@ export class VisitRadiologyExamCardView {
         const checkbox = card.querySelector('.radiology_check_box');
         const deleteBtn = card.querySelector('.order_delete_btn');
 
-        checkbox.addEventListener('click', (e) => this.handleCheckboxClick(e, checkbox, data.id));
+        checkbox.addEventListener('click', (e) => this.handleCheckboxClick(e, checkbox, data.id, card));
         deleteBtn.addEventListener('click', (e) => this.handleDeleteClick(e, deleteBtn, data, card));
     }
 
@@ -230,21 +232,19 @@ export class VisitRadiologyExamCardView {
     }
 
 
-    handleCheckboxClick(e, checkbox, id) {
+    handleCheckboxClick(e, checkbox, id, card) {
         e.preventDefault();
 
         const isChecked = checkbox.querySelector('span').classList.contains('switch_icon_check_box');
 
-        console.log(this.datas);
-
-        console.log(id);
-
 
         if (isChecked) {
             this.selectedIds.delete(id);
+            card.classList.remove('selected');
             this.make_checkbox_inactive(checkbox);
         } else {
             this.selectedIds.add(id);
+            card.classList.add('selected');
             this.make_checkbox_active(checkbox);
         }
 

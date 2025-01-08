@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, globalStates, notify, searchInArray } from "../script/index.js";
+import { debounce,  notify, searchInArray } from "../script/index.js";
 
 export class VisitRadiologyExamPopUpView {
     constructor() {

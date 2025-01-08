@@ -54,7 +54,7 @@ export const visit_add_card_btn = [
                 title: 'Vaccine'
             },
             {
-                component: 'visitImplantableDevicesCardView',
+                component: 'visitsImplementableDevicePopUpView',
                 title: 'Implantable Devices'
             },
         ],

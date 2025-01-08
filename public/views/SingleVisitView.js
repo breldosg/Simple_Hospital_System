@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { visit_add_card_btn } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, globalStates, notify } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 
 export class SingleVisitView {
     constructor() {
@@ -106,7 +106,7 @@ export class SingleVisitView {
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
             {
-                method: dashboardController.visitsProcedurePopUpView,
+                method: dashboardController.visitsImplementableDevicePopUpView,
                 dataKey: 'final_diagnosis_data',
                 dataArray: 'diagnosis_data',
                 // condition: (data) => data.success,
@@ -381,6 +381,12 @@ export class SingleVisitView {
             await this.fetchLabTestData();
         }
 
+        // Fetch Lab Test data
+        if (!globalStates.hasState('add_procedure_form')) {
+            globalStates.setState({ add_procedure_form_exists: false });
+            await this.fetch_add_procedure_form();
+        }
+
     }
 
     async fetchRadiologyData() {
@@ -450,6 +456,47 @@ export class SingleVisitView {
                     if (callbackName && typeof window[callbackName] === 'function') {
                         window[callbackName]();
                         globalStates.removeState('lab_test_data_render_function');
+                    } else {
+                        console.warn(`Callback function ${callbackName} is not defined or not a function`);
+                    }
+                }
+
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
+    async fetch_add_procedure_form() {
+        try {
+            const response = await fetch('/api/patient/get_data_add_procedure_form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                globalStates.setState({ add_procedure_form_exists: true });
+                globalStates.setState({ add_procedure_form: result.data });
+                if (globalStates.hasState('add_procedure_form_render_function')) {
+                    var callbackName = globalStates.getState('add_procedure_form_render_function');
+                    if (callbackName && typeof window[callbackName] === 'function') {
+                        window[callbackName]();
+                        globalStates.removeState('add_procedure_form_render_function');
                     } else {
                         console.warn(`Callback function ${callbackName} is not defined or not a function`);
                     }
