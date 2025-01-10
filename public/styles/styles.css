@@ -2994,7 +2994,7 @@ input {
                                     /* box-shadow: 0 0 5px 0 #0000001d; */
                                     border: solid 1px var(--pri_border_color);
                                     cursor: pointer;
-                                    
+
 
                                     .left {
                                         display: flex;
@@ -3105,7 +3105,7 @@ input {
                                 .radiology_exam_card.selected {
                                     background: var(--pri_op1);
                                 }
-                                
+
                                 .radiology_exam_card:hover {
                                     background: var(--pri_op1);
                                 }
@@ -8999,6 +8999,7 @@ input {
         position: relative;
         z-index: 1;
         padding: 50px;
+        max-height: 547px;
 
 
         .cont_heading {
@@ -9137,21 +9138,38 @@ input {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        /* border-radius: var(--main_border_r); */
-                        /* border-bottom: 2px solid var(--pri_op); */
-                        /* box-shadow: 0 0 5px 0 #0000001d; */
-                        cursor: pointer;
                         width: 100%;
-                        padding: 10px 0px;
+                        height: 90px;
+                        padding: 20px;
+                        border-radius: var(--main_border_r);
+                        /* box-shadow: 0 0 5px 0 #0000001d; */
+                        border: solid 1px var(--pri_border_color);
+                        cursor: pointer;
 
-                        .word {
-                            width: 85%;
-                            font-size: 14px;
-                            font-weight: 500;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                            overflow: hidden;
-                            display: inline-block;
+                        .words {
+                            width: 80%;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: start;
+                            justify-content: center;
+
+
+                            .word {
+                                width: 85%;
+                                font-weight: 900;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                            }
+
+                            .sub_id {
+                                width: 75%;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                            }
                         }
 
                         .remove_btn {
@@ -9192,6 +9210,15 @@ input {
                         }
                     }
 
+                }
+
+                .card_list::-webkit-scrollbar-thumb {
+                    background-color: var(--pri_color);
+                    border-radius: var(--input_main_border_r);
+                }
+
+                .card_list::-webkit-scrollbar {
+                    width: 5px;
                 }
 
                 .heading_btn {

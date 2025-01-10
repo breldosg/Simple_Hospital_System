@@ -1,13 +1,12 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";
+import { date_formatter, getCurrentDate, notify } from "../script/index.js";
 
 export class VisitsImplementableDevicePopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
-        this.added_diagnosis = new Set();
+        this.added_devices = new Set();
         this.visit_id = '';
         window.add_implementable_device_in_right_section = this.add_implementable_device_in_right_section.bind(this);
     }
@@ -21,13 +20,14 @@ export class VisitsImplementableDevicePopUpView {
 
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : 'creation';
-        this.added_diagnosis.clear();
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
         cont.innerHTML = this.ViewReturn();
+        this.added_devices.clear();
 
         this.attachListeners()
+        this.createCard();
     }
 
     ViewReturn() {
@@ -98,10 +98,7 @@ export class VisitsImplementableDevicePopUpView {
     }
 
     add_implementable_device_in_right_section(data) {
-        console.log(data);
-
         this.handleDataAdded(data);
-
     }
 
     handleNoDataAdded() {
@@ -115,7 +112,7 @@ export class VisitsImplementableDevicePopUpView {
         const submitBtn = document.querySelector('.add_implementable_device_popUp #submit_btn');
         submitBtn.classList.remove('disabled');
 
-        this.added_diagnosis.add(input_value);
+        this.added_devices.add(input_value);
         this.createCard();
 
     }
@@ -151,17 +148,21 @@ export class VisitsImplementableDevicePopUpView {
     createCard() {
         const card_list = document.querySelector('.add_implementable_device_popUp .card_list');
         card_list.innerHTML = '';
-        this.added_diagnosis.forEach(data => {
+
+        if (this.added_devices.size <= 0) {
+            this.handleNoDataAdded()
+            return;
+        }
+
+        this.added_devices.forEach(data => {
             const card = document.createElement('div');
             card.className = 'card';
 
             card.innerHTML = `
                     <div class="words">
                         <p class="word">${data.name}</p>
-                        <div class="sub_words_cont">
-                            <p class="sub_id">${data.device_identity}</p>
-                            <p class="sub_word">${data.implanted_date}</p>
-                        </div>
+                        <p class="sub_id">${data.device_identity}</p>
+                        <p class="sub_word">${date_formatter(data.implanted_date)}</p>
                     </div>`;
             const cont = document.createElement('div');
             cont.className = 'btns';
@@ -170,18 +171,18 @@ export class VisitsImplementableDevicePopUpView {
             remove_btn.innerHTML = `<span class="switch_icon_delete"></span>`;
 
             // log key of set array
-            var key = Array.from(this.added_diagnosis).indexOf(data);
+            var key = Array.from(this.added_devices).indexOf(data);
             console.log(key);
 
 
             remove_btn.addEventListener('click', (e) => {
                 e.stopPropagation()
-                this.added_diagnosis.delete(data);
+                this.added_devices.delete(data);
                 card.remove();
 
-                console.log(this.added_diagnosis);
+                console.log(this.added_devices);
 
-                if (this.added_diagnosis.size <= 0) { this.handleNoDataAdded() }
+                if (this.added_devices.size <= 0) { this.handleNoDataAdded() }
             });
             cont.appendChild(remove_btn);
             card.appendChild(cont);
@@ -190,10 +191,16 @@ export class VisitsImplementableDevicePopUpView {
     }
 
     attachListeners() {
-        const
-            cancel_btn = document.querySelector('.add_implementable_device_popUp #confirm_cancel'); cancel_btn.addEventListener('click', () => {
-                this.close();
-            });
+        const cancel_btn = document.querySelector('.add_implementable_device_popUp #confirm_cancel');
+        cancel_btn.addEventListener('click', () => {
+            this.close();
+        });
+
+
+        const submit_btn = document.querySelector('.add_implementable_device_popUp #submit_btn');
+        submit_btn.addEventListener('click', () => {
+            this.save_implantable_devices();
+        });
     }
 
     close() {
@@ -202,29 +209,48 @@ export class VisitsImplementableDevicePopUpView {
         cont.innerHTML = '';
     }
 
-    // async save_pre_diagnosis_note() {
-    //     const btn_submit = document.querySelector('br-button[type="submit"]');
-    //     btn_submit.setAttribute('loading', true);
+    async save_implantable_devices() {
+        // const btn_submit = document.querySelector('br-button[type="submit"]');
+        // btn_submit.setAttribute('loading', true);
 
 
-    //     if (this.added_diagnosis.size <= 0) { notify('top_left', 'No Added Diagnosis.', 'warning'); return; } var
-    //         formData = { action: 'create', diagnosis: Array.from(this.added_diagnosis), visit_id: this.visit_id }; try {
-    //             const response = await fetch('/api/patient/create_delete_pre_diagnosis', {
-    //                 method: 'POST', headers:
-    //                     { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
-    //             }); if (!response.ok) {
-    //                 throw new
-    //                     Error('Fail to Save Note. Server Error');
-    //             } const result = await response.json(); if (result.success) {
-    //                 dashboardController.visitPreDiagnosisCardView.PreRender({
-    //                     visit_id: this.visit_id, data: result.data, state:
-    //                         this.state,
-    //                 }); notify('top_left', result.message, 'success'); console.log(result.data); this.close();
-    //             } else {
-    //                 notify('top_left', result.message, 'warning');
-    //             }
-    //         } catch (error) {
-    //             notify('top_left', error.message, 'error');
-    //         } finally { btn_submit.removeAttribute('loading'); }
-    // }
+        if (this.added_devices.size <= 0) {
+            notify('top_left', 'No Added Diagnosis.', 'warning');
+            return;
+        }
+        var formData = {
+            devices: Array.from(this.added_devices),
+            visit_id: this.visit_id
+        };
+        console.log(formData);
+        try {
+            const response = await fetch('/api/patient/save_implantable_devices',
+                {
+                    method: 'POST', headers:
+                        { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
+                });
+            if (!response.ok) {
+                throw new
+                    Error('Fail to Save Note. Server Error');
+            }
+            const result = await response.json();
+            if (result.success) {
+                // dashboardController.visitPreDiagnosisCardView.PreRender({
+                //     visit_id: this.visit_id, data: result.data, state:
+                //         this.state,
+                // }); 
+                console.log(result.data);
+
+                notify('top_left', result.message, 'success');
+                console.log(result.data);
+                // this.close();
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            btn_submit.removeAttribute('loading');
+        }
+    }
 }
