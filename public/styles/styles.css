@@ -3818,6 +3818,118 @@ input {
                         }
 
 
+                        /* -------------------------------------------------------- */
+
+                        .implantable_devices_card_cont_cont {
+                            .device_card_cont {
+                                display: flex;
+                                flex-direction: column;
+                                flex: none;
+                                gap: 20px;
+
+                                .device_card {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 10px;
+                                    width: 100%;
+                                    padding: 20px;
+                                    border-radius: var(--main_border_r);
+                                    /* box-shadow: 0 0 5px 0 #0000001d; */
+                                    border: solid 1px var(--pri_border_color);
+
+                                    .top {
+                                        border: none;
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+
+                                        .left {
+                                            width: 70%;
+                                        }
+
+                                        .right {
+                                            display: flex;
+                                            gap: 10px;
+
+                                            .btn {
+                                                width: 35px;
+                                                height: 35px;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                border-radius: 5px;
+                                                flex: none;
+                                                cursor: pointer;
+
+                                                span {
+                                                    font-size: 16px;
+                                                }
+                                            }
+
+                                            .btn:hover {
+                                                background-color: var(--pri_op);
+
+                                                span {
+                                                    color: var(--pri_color);
+                                                }
+                                            }
+
+                                            .delete_btn:hover {
+                                                background-color: var(--white_error_color_op1);
+
+                                                span {
+                                                    color: var(--error_color);
+                                                }
+                                            }
+                                        }
+
+                                        .date {
+                                            font-size: 20px;
+                                            font-weight: 900;
+                                        }
+
+                                        .created_by {
+                                            font-size: 13px;
+                                        }
+                                    }
+
+                                    .data {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        padding-block: 5px;
+                                        border-bottom: 1px solid var(--input_border);
+
+                                        .head {
+                                            font-weight: 500;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+
+                                        .description {
+                                            width: 40%;
+                                            font-weight: 600;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+                                    }
+
+                                    .data:last-child {
+                                        border: none;
+                                    }
+                                }
+
+                                .device_card:hover {
+                                    /* box-shadow: 0 0 5px 0 #0000003e; */
+                                    background: var(--pri_op1);
+                                }
+                            }
+                        }
+
                     }
                 }
 
@@ -9142,7 +9254,6 @@ input {
                         height: 90px;
                         padding: 20px;
                         border-radius: var(--main_border_r);
-                        /* box-shadow: 0 0 5px 0 #0000001d; */
                         border: solid 1px var(--pri_border_color);
                         cursor: pointer;
 

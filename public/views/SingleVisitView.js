@@ -106,10 +106,10 @@ export class SingleVisitView {
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
             {
-                method: dashboardController.visitsImplementableDevicePopUpView,
-                dataKey: 'final_diagnosis_data',
-                dataArray: 'diagnosis_data',
-                // condition: (data) => data.success,
+                method: dashboardController.visitImplantableDevicesCardView,
+                dataKey: 'implantable_device_data',
+                dataArray: 'devices_data',
+                condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
 

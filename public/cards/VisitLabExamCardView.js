@@ -373,7 +373,7 @@ export class VisitLabExamCardView {
         span.classList.add('switch_icon_indeterminate_check_box');
     }
 
-    async handleLabExamRequest(ids, state = 'single') {
+    async handleLabExamRequest(ids, state = 'multiple') {
         dashboardController.loaderView.render();
 
         try {

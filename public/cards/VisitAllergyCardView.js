@@ -147,12 +147,6 @@ export class VisitAllergyCardView {
 
     }
 
-    attachListeners() {
-        //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
 
-        //     cancel_btn.addEventListener('click', () => {
-        //         this.close();
-        //     });
-    }
 }
 

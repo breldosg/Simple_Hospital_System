@@ -235,15 +235,16 @@ export class VisitsImplementableDevicePopUpView {
             }
             const result = await response.json();
             if (result.success) {
-                // dashboardController.visitPreDiagnosisCardView.PreRender({
-                //     visit_id: this.visit_id, data: result.data, state:
-                //         this.state,
-                // }); 
+                dashboardController.visitImplantableDevicesCardView.PreRender({
+                    visit_id: this.visit_id,
+                    data: result.data,
+                    state: this.state,
+                });
                 console.log(result.data);
 
                 notify('top_left', result.message, 'success');
                 console.log(result.data);
-                // this.close();
+                this.close();
             } else {
                 notify('top_left', result.message, 'warning');
             }
