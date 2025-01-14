@@ -47,7 +47,7 @@ export class VisitsImplementableDevicePopUpView {
                 <p class="heading">Device Form</p>
             </div>
             <br-form callback="add_implementable_device_in_right_section" class="slides">
-                <div class="body_left animation">
+                <div class="body_left">
 
                     <br-input required placeholder="Enter device name" name="name" label="Device Name" type="text"
                         styles="${this.input_style()}" labelStyles="font-size: 12px;"></br-input>
@@ -94,7 +94,8 @@ export class VisitsImplementableDevicePopUpView {
 
     </div>
 
-</div>`;
+</div>
+`;
     }
 
     add_implementable_device_in_right_section(data) {
