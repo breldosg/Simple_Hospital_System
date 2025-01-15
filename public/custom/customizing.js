@@ -50,7 +50,7 @@ export const visit_add_card_btn = [
                 title: 'Procedures'
             },
             {
-                component: 'visitVaccineCardView',
+                component: 'visitsVaccinePopUpView',
                 title: 'Vaccine'
             },
             {

@@ -112,6 +112,13 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
+            {
+                method: dashboardController.visitVaccineCardView,
+                dataKey: 'vaccine_data',
+                dataArray: 'vaccine_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
 
         ];
 

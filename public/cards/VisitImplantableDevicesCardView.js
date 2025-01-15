@@ -79,8 +79,8 @@ export class VisitImplantableDevicesCardView {
                     </div>
                     
                     ${data.note ? `
-                    <div class="data">
-                        <p class="head">Note:</p>
+                    <div class="data note">
+                        <p class="head">Note</p>
                         <p class="description">${data.note}</p>
                     </div>
                     ` : ''}
