@@ -46,7 +46,7 @@ export const visit_add_card_btn = [
                 title: 'Prescriptions'
             },
             {
-                component: 'visitProceduresCardView',
+                component: 'visitsProcedurePopUpView',
                 title: 'Procedures'
             },
             {
@@ -14338,3 +14338,41 @@ export const duration_unit = [
     'weeks',
     'years',
 ];
+
+
+export const side_slide_selector_data = {
+    procedure: {
+        heading: 'Procedure List',
+        search_inp: 'Search procedure',
+        search_data_name: 'procedure',
+        selected_data:'selected_procedure',
+        max_data:1,
+    },
+    surgeon: {
+        heading: 'Leading Surgeon List',
+        search_inp: 'Search doctor/nurse name',
+        search_data_name: 'staff',
+        selected_data:'selected_leading_surgeon',
+        max_data:1,
+    },
+    anesthesiologist: {
+        heading: 'Anesthesiologist List',
+        search_inp: 'Search anesthesiologist',
+        search_data_name: 'staff',
+        selected_data:'selected_anesthesiologist',
+        max_data:1,
+    },
+    assistants: {
+        heading: 'Surgeons/Assistants List',
+        search_inp: 'Search surgeons/assistants',
+        search_data_name: 'staff',
+        selected_data:'selected_assistants',
+        max_data:10,
+    },
+};
+export const side_slide_selector_data_role_icon_name = {
+        procedure: "switch_icon_airline_seat_flat",
+        doctor: "switch_icon_user_doctor",
+        nurse: "switch_icon_user_nurse",
+};
+
