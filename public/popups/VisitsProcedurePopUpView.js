@@ -1,5 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { diagnosisArray, duration_unit, side_slide_selector_data, side_slide_selector_data_role_icon_name } from "../custom/customizing.js";
+import { diagnosisArray, duration_unit, visitsProcedurePopUpViewStageDatas, side_slide_selector_data_role_icon_name, visitsProcedurePopUpViewStages } from
+    "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";
 
@@ -9,7 +10,8 @@ export class VisitsProcedurePopUpView {
         this.data = null;
         this.added_diagnosis = new Set();
         this.visit_id = '';
-        // window.render_add_procedure_form = this.render_add_procedure_form.bind(this);
+        this.currentStage = 0;
+        window.add_procedure_form_render_function = this.add_procedure_form_render_function.bind(this);
 
         // window.save_clinical_note = this.save_clinical_note.bind(this);
     }
@@ -33,6 +35,12 @@ export class VisitsProcedurePopUpView {
 
 
         this.attachListeners()
+        this.stageUpdater();
+
+    }
+
+    add_procedure_form_render_function() {
+        this.searchInProcedureItemList();
     }
 
     ViewReturn() {
@@ -47,126 +55,53 @@ export class VisitsProcedurePopUpView {
     </div>
 
     <div class="body">
-        <div class="left">
-            <div class="heading_cont">
-                <p class="heading">Procedure Form</p>
-            </div>
-            <div class="body_left">
 
-                <div class="add_procedure_pop_loader_cont">
-                    <div class="loader"></div>
+        <div class="progress_bar_container_out">
+            <div class="progress_bar_container">
+
+                <div class="progress_line">
+                    <div class="fill_line"></div>
                 </div>
 
-                <br-input id="procedure_name" required disable placeholder="Select Procedure" label="Procedure Name" type="text" styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 440px;
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 12px;"></br-input>
-                
-                <br-input id="leading_Surgeon" required disable label="Leading Surgeon" placeholder="Select Doctor/Nurse Name" type="text"
-                    styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 440px;
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 12px;"></br-input>
-                
-                
-                <br-input id="anesthesiologist" required disable placeholder="Select Anesthesiologist" label="Anesthesiologist" type="text"
-                    styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 440px;
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 12px;"></br-input>
-                
-                
-                <br-input id="assistants" required disable placeholder="Select Surgeons/Assistants" label="Surgeons/Assistants" type="text"
-                    styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 440px;
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 12px;"></br-input>
-
-                <br-input placeholder="Add any instructions" label="Notes" type="textarea" styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 440px;
-                    padding: 10px;
-                    height: 61px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 12px;"></br-input>
-
-                <br-input type="date" label="Procedure Date" styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 440px;
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " value="${getCurrentDate()}" min="${getCurrentDate()}" labelStyles="font-size: 12px;"></br-input>
-
-                <div class="btn_cont">
-                    <br-button class="card-button" id="add_to_added_list_btn" type="add">Add</br-button>
-                </div>
-
-            </div>
-
-        </div>
-        
-        <div class="line">
-        </div>
-
-        <div class="right">
-            <div class="heading_cont">
-                <p class="heading">Added Procedure</p>
-            </div>
-            <div class="card_list">
-
-
-                <div class="card">
-                    <div class="words">
-                        <p class="word">Procedure type</p>
-                        <div class="sub_words_cont">
-                            <p class="sub_word">Kelvin Leader</p>
-                            </div>
+                <div class="stages_cont">
+                    <div class="stage_out">
+                        <div class="stage passed">
+                            <div class="stage_dot"></div>
+                            <div class="stage_title">Design</div>
+                        </div>
                     </div>
-                    <div class="btns">
-                        <div class="remove_btn">
-                            <span class="switch_icon_delete"></span>
+                    <div class="stage_out">
+                        <div class="stage active">
+                            <div class="stage_dot"></div>
+                            <div class="stage_title">Graphic</div>
+                        </div>
+                    </div>
+                    <div class="stage_out">
+                        <div class="stage">
+                            <div class="stage_dot"></div>
+                            <div class="stage_title">Pussy</div>
+                        </div>
+
+                    </div>
+                    <div class="stage_out">
+                        <div class="stage">
+                            <div class="stage_dot"></div>
+                            <div class="stage_title">Fuck</div>
                         </div>
                     </div>
                 </div>
 
 
-                <!-- <div class="example">
-                    <p class="word">No Diagnosis Added</p>
-                </div> -->
-
-
-
             </div>
+        </div>
 
-            <div class="heading_btn">
-                <br-button class="card-button disabled" id="submit_btn" type="submit">Submit</br-button>
-            </div>
+        <div class="body_container">
 
 
         </div>
 
-        <div class="top_container  animation">
-                
-
+        <div class="btn_cont">
+            <br-button class="card-button" id="next_stage">Add</br-button>
         </div>
 
     </div>
@@ -176,147 +111,127 @@ export class VisitsProcedurePopUpView {
 `;
     }
 
-    sideSlideSelector(data) {
+
+    stageUpdater() {
+
+        const stage_line = this.main_container.querySelector('.top_stage_line');
+
+        var data = visitsProcedurePopUpViewStageDatas[visitsProcedurePopUpViewStages[this.currentStage]];
+        console.log(data);
+
+        const container = this.main_container.querySelector('.body_container');
+        container.innerHTML = '';
 
         const heading_cont = document.createElement("div");
         heading_cont.className = "heading_cont";
         heading_cont.innerHTML = `<p class="heading">${data.heading}</p>`;
+        container.appendChild(heading_cont);
 
-        const close_btn = document.createElement("div");
-        close_btn.className = "close_btn";
-        close_btn.innerHTML = `<span class="switch_icon_close"></span>`;
-        close_btn.addEventListener('click', () => {
-            console.log('close_clicked');
-            this.close_top_container();
-        });
-        heading_cont.appendChild(close_btn);
 
-        const body_left = document.createElement("div");
-        body_left.className = "body_left";
 
-        const search_cont = document.createElement("div");
-        search_cont.className = "search_cont";
+        if (data.search.available) {
+            const search_cont = document.createElement("div");
+            search_cont.className = "search_cont";
 
-        const search_inp = document.createElement("input");
-        search_inp.className = "search";
-        search_inp.placeholder = data.search_inp;
-        search_inp.type = "text";
-        search_inp.addEventListener('input', () => {
-            debounce(this.searchInProcedureItemList(list_cont, json_data[data.search_data_name], search_inp.value, data), 300);
-        });
-        search_cont.appendChild(search_inp);
+            const search_inp = document.createElement("input");
+            search_inp.className = "search";
+            search_inp.placeholder = data.search.placeholder;
+            search_inp.type = "text";
+            search_inp.addEventListener('input', () => {
+                if (globalStates.hasState('add_procedure_form')) {
+                    debounce(this.searchInProcedureItemList(search_inp.value, data), 300);
+                }
+                else {
+                    globalStates.setState({ add_procedure_form_render_function: 'add_procedure_form_render_function' });
+                }
+            });
+            search_cont.appendChild(search_inp);
 
-        const search_btn = document.createElement("div");
-        search_btn.className = "search_btn";
-        search_btn.innerHTML = `
-                            <span class='switch_icon_magnifying_glass'></span>
-                            <div class="loader"></div>
-                            `;
-        search_btn.addEventListener('click', () => {
-            console.log('search_btn_clicked');
-        });
-        search_cont.appendChild(search_btn);
+            const search_btn = document.createElement("div");
+            search_btn.className = "search_btn";
+            search_btn.innerHTML = `
+                        <span class='switch_icon_magnifying_glass'></span>
+                        <div class="loader"></div>
+                        `;
+            search_btn.addEventListener('click', () => {
+                console.log('search_btn_clicked');
+            });
+            search_cont.appendChild(search_btn);
 
-        body_left.prepend(search_cont);
+            container.appendChild(search_cont);
+        }
 
         const list_cont = document.createElement("div");
         list_cont.className = "list_cont";
-        body_left.appendChild(list_cont);
+        container.appendChild(list_cont);
 
-
-        const btn_cont = document.createElement("div");
-        btn_cont.className = "btn_cont";
-
-        const add_btn = document.createElement("br-button");
-        add_btn.className = "card-button";
-        add_btn.id = "add_to_added_list_btn";
-        add_btn.type = "add";
-        add_btn.innerHTML = "Add";
-        add_btn.addEventListener('click', () => {
-            console.log('add_to_added_list_btn_clicked');
-        });
-        btn_cont.appendChild(add_btn);
-        body_left.appendChild(btn_cont);
-
-
-        const container = this.main_container.querySelector('.top_container');
-        container.innerHTML = '';
-        container.prepend(heading_cont);
-        container.appendChild(body_left);
-        container.classList.add('in');
-
-        const json_data = globalStates.getState('add_procedure_form');
-
-        this.searchInProcedureItemList(list_cont, json_data[data.search_data_name], '', data);
-
+        if (globalStates.hasState('add_procedure_form')) {
+            this.searchInProcedureItemList();
+        }
+        else {
+            globalStates.setState({ add_procedure_form_render_function: 'add_procedure_form_render_function' });
+        }
 
     }
 
-    searchInProcedureItemList(container, data_list, query, section_data) {
+    searchInProcedureItemList(query = '') {
+        var container = this.main_container.querySelector('.list_cont');
         container.innerHTML = '';
+        var section_data = visitsProcedurePopUpViewStageDatas[visitsProcedurePopUpViewStages[this.currentStage]];
         var set_name = section_data.selected_data;
         var set_size_limit = section_data.max_data;
+        const json_data = globalStates.getState('add_procedure_form');
+        if (section_data.search_data_name == 'other') { 
+            
+        }
+        else {
+            var data_list = json_data[section_data.search_data_name];
+            data_list.forEach((item) => {
 
-        data_list.forEach((item) => {
+                if (item.name.toLowerCase().includes(query.toLowerCase())) {
+                    const item_card = document.createElement('div');
+                    item_card.className = "item";
 
-            if (item.name.toLowerCase().includes(query.toLowerCase())) {
-                const item_card = document.createElement('div');
-                item_card.className = "item";
-
-                if (this[set_name] && this[set_name].has(item.id)) {
-                    item_card.classList.add('selected');
-                }
-
-                var role = section_data.search_data_name == 'procedure' ? 'procedure' : item.role.toLowerCase();
-
-                item_card.innerHTML = `
-                <div class="icon">
-                    <span class='${side_slide_selector_data_role_icon_name[role]}'></span>
-                </div>
-                <div class="words">
-                    <p class="name">${item.name}</p>
-                    <p class="sub_word">${item.category || item.role}</p>
-                </div>
-                `;
-
-                item_card.addEventListener('click', () => {
-
-                    // Check if the variable exists on the instance
-                    if (!this[set_name]) {
-                        this[set_name] = new Set();
-                    }
-
-                    if (!this[set_name].has(item.id) && this[set_name].size < set_size_limit) {
-                        this[set_name].add(item.id);
-                        console.log('added', item);
+                    if (this[set_name] && this[set_name].has(item.id)) {
                         item_card.classList.add('selected');
                     }
-                    else {
-                        this[set_name].delete(item.id);
-                        console.log('removed', item);
-                        item_card.classList.remove('selected');
-                    }
 
+                    var role = section_data.search_data_name == 'procedure' ? 'procedure' : item.role.toLowerCase();
 
-                });
+                    item_card.innerHTML = `
+                                    <div class="icon">
+                                        <span class='${side_slide_selector_data_role_icon_name[role]}'></span>
+                                    </div>
+                                    <div class="words">
+                                        <p class="name">${item.name}</p>
+                                        <p class="sub_word">${item.category || item.role}</p>
+                                    </div>
+                                    `;
 
-                container.appendChild(item_card);
-            }
-        })
+                    item_card.addEventListener('click', () => {
 
+                        // Check if the variable exists on the instance
+                        if (!this[set_name]) {
+                            this[set_name] = new Set();
+                        }
 
-
-
-
-
-
-
+                        if (!this[set_name].has(item.id) && this[set_name].size < set_size_limit) {
+                            this[set_name].add(item.id);
+                            console.log('added', item); item_card.classList.add('selected');
+                        } else {
+                            this[set_name].delete(item.id);
+                            console.log('removed', item); item_card.classList.remove('selected');
+                        }
+                    });
+                    container.appendChild(item_card);
+                }
+            })
+        }
     }
 
     close_top_container() {
         const container = this.main_container.querySelector('.top_container');
-        container.classList.add('out');
-        container.addEventListener('animationend', () => {
+        container.classList.add('out'); container.addEventListener('animationend', () => {
             container.classList.remove('out');
             container.classList.remove('in');
         }, { once: true });
@@ -340,8 +255,8 @@ export class VisitsProcedurePopUpView {
 
     exampleCard() {
         return `<div class="example">
-    <p class="word">No Diagnosis Added</p>
-</div>`;
+        <p class="word">No Diagnosis Added</p>
+    </div>`;
     }
 
     createCard() {
@@ -351,16 +266,13 @@ export class VisitsProcedurePopUpView {
             const card = document.createElement('div');
             card.className = 'card';
 
-            card.innerHTML = `
-<p class="word">${data}</p>
-`;
+            card.innerHTML = `<p class="word">${data}</p>`;
+
             const cont = document.createElement('div');
             cont.className = 'btns';
             const remove_btn = document.createElement('div');
             remove_btn.className = 'remove_btn';
-            remove_btn.innerHTML = `
-<span class="switch_icon_delete"></span>
-`;
+            remove_btn.innerHTML = ` <span class="switch_icon_delete"></span> `;
 
             remove_btn.addEventListener('click', (e) => {
                 e.stopPropagation()
@@ -381,68 +293,21 @@ export class VisitsProcedurePopUpView {
             this.close();
         });
 
-        const procedure_name = this.main_container.querySelector('#procedure_name');
-        procedure_name.addEventListener('click', () => {
-            this.sideSlideSelector(side_slide_selector_data.procedure);
+        const next_stage = this.main_container.querySelector('#next_stage');
+        next_stage.addEventListener('click', () => {
+
+            console.log(this.currentStage);
+
+            // this.currentStage=next_stage;
+            if (this.currentStage < visitsProcedurePopUpViewStages.length - 1) {
+                this.currentStage++;
+                this.stageUpdater();
+            } else {
+                // this.save_procedure_note();
+                notify('top_left', 'You Have No Stage Remain', 'warning');
+
+            }
         });
-
-        const leading_Surgeon = this.main_container.querySelector('#leading_Surgeon');
-        leading_Surgeon.addEventListener('click', () => {
-            this.sideSlideSelector(side_slide_selector_data.surgeon);
-        });
-
-        const anesthesiologist = this.main_container.querySelector('#anesthesiologist');
-        anesthesiologist.addEventListener('click', () => {
-            this.sideSlideSelector(side_slide_selector_data.anesthesiologist);
-        });
-
-        const assistants = this.main_container.querySelector('#assistants');
-        assistants.addEventListener('click', () => {
-            this.sideSlideSelector(side_slide_selector_data.assistants);
-        });
-
-        // const preliminary_diagnosis_input = document.querySelector('#preliminary_diagnosis_input');
-
-        // const debouncedFunction = debounce(() => {
-        //     let value = preliminary_diagnosis_input.getValue();
-
-        //     if (value == null) {
-        //         value = '';
-        //     }
-
-        //     // Call your search function here
-        //     const found_options = searchInArray(diagnosisArray, value, null, 100);
-        //     // console.log(found_options);
-
-        //     if (found_options.length >= 1) {
-        //         preliminary_diagnosis_input.updateOption(found_options);
-        //     }
-
-        // }, 800);
-
-        // preliminary_diagnosis_input.addEventListener('input', () => {
-
-        //     debouncedFunction();
-
-        // });
-
-        // const add_to_added_list_btn = document.querySelector('#add_to_added_list_btn');
-
-        // add_to_added_list_btn.addEventListener('click', () => {
-        //     var input_value = preliminary_diagnosis_input.getValue();
-        //     preliminary_diagnosis_input.reset();
-
-        //     if (input_value == null) {
-        //         notify('top_left', 'No diagnosis Selected', 'warning');
-        //         return;
-        //     }
-
-        //     this.handleDataAdded(input_value)
-
-        // })
-
-        // const submit_btn = document.querySelector('#submit_btn');
-        // submit_btn.addEventListener('click', () => { this.save_pre_diagnosis_note() });
     }
 
     close() {
@@ -469,11 +334,52 @@ export class VisitsProcedurePopUpView {
                         visit_id: this.visit_id, data: result.data, state:
                             this.state,
                     }); notify('top_left', result.message, 'success'); console.log(result.data); this.close();
-                } else {
-                    notify('top_left', result.message, 'warning');
                 }
+                else { notify('top_left', result.message, 'warning'); }
             } catch (error) {
                 notify('top_left', error.message, 'error');
             } finally { btn_submit.removeAttribute('loading'); }
     }
 }
+
+
+
+/* <div class="top_stage_line">
+
+<div class="back_line">
+    <div class="back_line_fill"></div>
+
+    <div class="stage passed active">
+        <div class="word_cont">
+            <p class="stage_word">Procedure</p>
+        </div>
+    </div>
+
+    <div class="stage sec">
+        <div class="word_cont">
+            <p class="stage_word">Surgeon</p>
+        </div>
+    </div>
+
+    <div class="stage thrd">
+        <div class="word_cont">
+            <p class="stage_word">Anesthesiologist</p>
+        </div>
+    </div>
+
+    <div class="stage frth">
+        <div class="word_cont">
+            <p class="stage_word">Assistants</p>
+        </div>
+    </div>
+
+    <div class="stage ffth">
+        <div class="word_cont">
+            <p class="stage_word">Other</p>
+        </div>
+    </div>
+
+</div>
+
+
+</div> */

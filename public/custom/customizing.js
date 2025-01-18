@@ -14340,39 +14340,69 @@ export const duration_unit = [
 ];
 
 
-export const side_slide_selector_data = {
+export const visitsProcedurePopUpViewStages = [
+    'procedure','surgeon','anesthesiologist','assistants','other'
+];
+
+export const visitsProcedurePopUpViewStageDatas = {
     procedure: {
-        heading: 'Procedure List',
-        search_inp: 'Search procedure',
+        heading: 'Select Procedure',
+        search:{
+            available:true,
+            placeholder:'Search procedure',
+        },
         search_data_name: 'procedure',
         selected_data:'selected_procedure',
         max_data:1,
     },
     surgeon: {
-        heading: 'Leading Surgeon List',
-        search_inp: 'Search doctor/nurse name',
+        heading: 'Select Leading Surgeon',
+        search:{
+            available:true,
+            placeholder:'Search doctor/nurse name',
+        },
         search_data_name: 'staff',
         selected_data:'selected_leading_surgeon',
         max_data:1,
     },
     anesthesiologist: {
-        heading: 'Anesthesiologist List',
-        search_inp: 'Search anesthesiologist',
+        heading: 'Select Anesthesiologist',
+        search:{
+            available:true,
+            placeholder:'Search anesthesiologist',
+        },
         search_data_name: 'staff',
         selected_data:'selected_anesthesiologist',
         max_data:1,
     },
     assistants: {
-        heading: 'Surgeons/Assistants List',
-        search_inp: 'Search surgeons/assistants',
+        heading: 'Select Surgeons/Assistants',
+        search:{
+            available:true,
+            placeholder:'Search surgeons/assistants',
+        },
         search_data_name: 'staff',
         selected_data:'selected_assistants',
         max_data:10,
     },
+    other: {
+        heading: 'Other Information',
+        search:{
+            available:false,
+            placeholder:'Search surgeons/assistants',
+        },
+        search_data_name: 'other',
+        selected_data:'selected_assistants',
+        max_data:10,
+    },
+
 };
+
+
 export const side_slide_selector_data_role_icon_name = {
         procedure: "switch_icon_airline_seat_flat",
         doctor: "switch_icon_user_doctor",
         nurse: "switch_icon_user_nurse",
 };
+
 
