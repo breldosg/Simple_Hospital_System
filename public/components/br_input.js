@@ -91,6 +91,7 @@ export class BrCustomInput extends HTMLElement {
     styles() {
         const additionalStyles = this.getAttribute('styles') || '';
         const labelStyles = this.getAttribute('labelStyles') || '';
+        const labelstyles = this.getAttribute('labelstyles') || '';
         const dropDownStyles = this.getAttribute('dropDownStyles') || '';
         const dropDownBorder_radius = this.getAttribute('dropDownBorder_radius') || '0';
 
@@ -127,6 +128,7 @@ export class BrCustomInput extends HTMLElement {
             }
             label{
                 ${labelStyles}
+                ${labelstyles}
             }
             .cont {
                 display: flex;
@@ -302,7 +304,7 @@ export class BrCustomInput extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['error', 'value', 'shadow_value'];
+        return ['error', 'value', 'shadow_value', 'placeholder', 'label','type', 'styles', 'labelStyles', 'labelstyles'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -322,6 +324,9 @@ export class BrCustomInput extends HTMLElement {
         }
         else if (name == 'shadow_value' && newValue !== '') {
             this.shadow_value = newValue;
+        }
+        else if (name === 'placeholder' || name === 'label' || name === 'labelstyles' || name === 'type' || name === 'styles' || name === 'labelStyles') {
+            this.render();
         }
     }
 

@@ -14341,68 +14341,68 @@ export const duration_unit = [
 
 
 export const visitsProcedurePopUpViewStages = [
-    'procedure','surgeon','anesthesiologist','assistants','other'
+    'procedure', 'surgeon', 'anesthesiologist', 'assistants', 'other'
 ];
 
 export const visitsProcedurePopUpViewStageDatas = {
     procedure: {
         heading: 'Select Procedure',
-        search:{
-            available:true,
-            placeholder:'Search procedure',
+        search: {
+            available: true,
+            placeholder: 'Search procedure',
         },
         search_data_name: 'procedure',
-        selected_data:'selected_procedure',
-        max_data:1,
+        selected_data: 'selected_procedure',
+        max_data: 1,
     },
     surgeon: {
         heading: 'Select Leading Surgeon',
-        search:{
-            available:true,
-            placeholder:'Search doctor/nurse name',
+        search: {
+            available: true,
+            placeholder: 'Search doctor/nurse name',
         },
         search_data_name: 'staff',
-        selected_data:'selected_leading_surgeon',
-        max_data:1,
+        selected_data: 'selected_leading_surgeon',
+        max_data: 1,
     },
     anesthesiologist: {
         heading: 'Select Anesthesiologist',
-        search:{
-            available:true,
-            placeholder:'Search anesthesiologist',
+        search: {
+            available: true,
+            placeholder: 'Search anesthesiologist',
         },
         search_data_name: 'staff',
-        selected_data:'selected_anesthesiologist',
-        max_data:1,
+        selected_data: 'selected_anesthesiologist',
+        max_data: 1,
     },
     assistants: {
         heading: 'Select Surgeons/Assistants',
-        search:{
-            available:true,
-            placeholder:'Search surgeons/assistants',
+        search: {
+            available: true,
+            placeholder: 'Search surgeons/assistants',
         },
         search_data_name: 'staff',
-        selected_data:'selected_assistants',
-        max_data:10,
+        selected_data: 'selected_assistants',
+        max_data: 10,
     },
     other: {
         heading: 'Other Information',
-        search:{
-            available:false,
-            placeholder:'Search surgeons/assistants',
+        search: {
+            available: false,
+            placeholder: 'Search surgeons/assistants',
         },
         search_data_name: 'other',
-        selected_data:'selected_assistants',
-        max_data:10,
+        selected_data: 'other',
+        selected_data_array: ['other_note', 'other_date'],
     },
 
 };
 
 
 export const side_slide_selector_data_role_icon_name = {
-        procedure: "switch_icon_airline_seat_flat",
-        doctor: "switch_icon_user_doctor",
-        nurse: "switch_icon_user_nurse",
+    procedure: "switch_icon_airline_seat_flat",
+    doctor: "switch_icon_user_doctor",
+    nurse: "switch_icon_user_nurse",
 };
 
 

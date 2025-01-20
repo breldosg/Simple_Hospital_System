@@ -8,9 +8,10 @@ export class VisitsProcedurePopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
-        this.added_diagnosis = new Set();
         this.visit_id = '';
         this.currentStage = 0;
+        this.is_add_procedure_side = false;
+        this.selected_data_list = new Set();
         window.add_procedure_form_render_function = this.add_procedure_form_render_function.bind(this);
 
         // window.save_clinical_note = this.save_clinical_note.bind(this);
@@ -22,10 +23,11 @@ export class VisitsProcedurePopUpView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+        this.currentStage = 0;
 
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : 'creation';
-        this.added_diagnosis.clear();
+        this.selected_data_list.clear();
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -34,8 +36,8 @@ export class VisitsProcedurePopUpView {
         this.main_container = document.querySelector('.add_procedure_popUp');
 
 
-        this.attachListeners()
-        this.stageUpdater();
+        this.attachListeners();
+        this.render_selected_list_view();
 
     }
 
@@ -55,55 +57,6 @@ export class VisitsProcedurePopUpView {
     </div>
 
     <div class="body">
-
-        <div class="progress_bar_container_out">
-            <div class="progress_bar_container">
-
-                <div class="progress_line">
-                    <div class="fill_line"></div>
-                </div>
-
-                <div class="stages_cont">
-                    <div class="stage_out">
-                        <div class="stage passed">
-                            <div class="stage_dot"></div>
-                            <div class="stage_title">Design</div>
-                        </div>
-                    </div>
-                    <div class="stage_out">
-                        <div class="stage active">
-                            <div class="stage_dot"></div>
-                            <div class="stage_title">Graphic</div>
-                        </div>
-                    </div>
-                    <div class="stage_out">
-                        <div class="stage">
-                            <div class="stage_dot"></div>
-                            <div class="stage_title">Pussy</div>
-                        </div>
-
-                    </div>
-                    <div class="stage_out">
-                        <div class="stage">
-                            <div class="stage_dot"></div>
-                            <div class="stage_title">Fuck</div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-
-        <div class="body_container">
-
-
-        </div>
-
-        <div class="btn_cont">
-            <br-button class="card-button" id="next_stage">Add</br-button>
-        </div>
-
     </div>
 
 </div>
@@ -111,13 +64,301 @@ export class VisitsProcedurePopUpView {
 `;
     }
 
+    render_selected_list_view() {
+        this.is_add_procedure_side = false;
+
+        const container = this.main_container.querySelector('.body');
+        container.classList.add('body_on_list');
+        if (container.classList.contains('body_when_add')) {
+            container.classList.remove('body_when_add');
+        }
+        container.innerHTML = '';
+
+        const heading_cont = document.createElement('div');
+        heading_cont.className = 'heading_cont';
+        // heading_cont.innerHTML=`<p class="heading">Selected Procedure (${this.added_diagnosis.size})</p>`;
+        heading_cont.innerHTML = `<p class="heading">Selected Procedure (0)</p>`;
+        const add_btn = document.createElement('div');
+        add_btn.className = 'add_btn';
+        add_btn.innerHTML = `<span class="switch_icon_add"></span>`;
+        add_btn.addEventListener('click', () => {
+            this.render_add_procedure_view();
+            this.stageUpdater();
+        });
+        heading_cont.appendChild(add_btn);
+        container.appendChild(heading_cont);
+
+        const selected_procedures_cont = document.createElement('div');
+        selected_procedures_cont.className = 'selected_procedures_cont';
+        selected_procedures_cont.innerHTML = `
+                    <div class="example">
+                        <p class="word">No Procedure Added</p>
+                    </div>
+        `;
+
+        const btn_cont = document.createElement('div');
+        btn_cont.className = 'btn_cont';
+
+        const save_btn = document.createElement('button');
+        save_btn.className = 'card-button';
+        save_btn.id = 'save_btn';
+        save_btn.innerHTML = `Save`;
+        save_btn.addEventListener('click', () => {
+            if (this.currentStage > 0) {
+                this.currentStage--;
+                this.stageUpdater();
+            }
+        });
+        btn_cont.appendChild(save_btn);
+        container.appendChild(selected_procedures_cont);
+        container.appendChild(btn_cont);
+
+        console.log(this.selected_data_list);
+
+        if (this.selected_data_list.size >= 1) {
+            this.render_selected_procedure_card();
+
+        }
+
+    }
+
+    render_selected_procedure_card() {
+
+        // selected_data_list
+
+        const container = this.main_container.querySelector('.selected_procedures_cont');
+        container.innerHTML = '';
+
+        this.selected_data_list.forEach((data) => {
+            const procedure_card = document.createElement('div');
+            procedure_card.className = 'procedure_card';
+
+            const top = document.createElement('div');
+            top.className = 'top';
+            top.innerHTML = `
+                    <div class="left">
+                        <p class="date">Above Elbow POP (Children)</p>
+                        <p class="created_by">Jan 17, 2025</p>
+                    </div>
+                        `;
+
+            const right = document.createElement('div');
+            right.className = 'right';
+
+            const delete_btn = document.createElement('div');
+            delete_btn.className = 'delete_btn btn';
+            delete_btn.id = 'delete_patient_device';
+            delete_btn.innerHTML = '<span class="switch_icon_delete"></span>';
+            right.appendChild(delete_btn);
+
+            top.appendChild(right);
+
+            procedure_card.innerHTML = `
+                <div class="data">
+                    <p class="head">Leading Surgeon:</p>
+                    <p class="description">3123913789388</p>
+                </div>
+
+                <div class="data">
+                    <p class="head">Anesthesiologist Name:</p>
+                    <p class="description">Kombola maji</p>
+                </div>
+
+                <div class="data pills">
+                    <p class="head">Assistants</p>
+                    <div class="pills_cont">
+                        <p class="pill">ABDALLA SALEH HASSAN</p>
+                        <p class="pill">ABDUL-AZIZ HAMAD CHILALA</p>
+                        <p class="pill">ALI MUSSA MUHIDIN</p>
+                        <p class="pill">Amina Abrahman Haji</p>
+                    </div>
+                </div>
+
+                <div class="data note">
+                    <p class="head">Note</p>
+                    <p class="description">anatakiwa asikae karibu na moto atalipuka Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, distinctio!</p>
+                </div>
+                `;
+            procedure_card.prepend(top);
+
+            container.appendChild(procedure_card);
+        });
+
+    }
+
+    render_add_procedure_view() {
+        this.is_add_procedure_side = true;
+        const container = this.main_container.querySelector('.body');
+        container.classList.add('body_when_add');
+        if (container.classList.contains('body_on_list')) {
+            container.classList.remove('body_on_list');
+        }
+        container.innerHTML = '';
+
+        const progress_bar_container_out = document.createElement('div');
+        progress_bar_container_out.className = 'progress_bar_container_out';
+
+        const progress_bar_container = document.createElement('div');
+        progress_bar_container.className = 'progress_bar_container';
+
+        const progress_line = document.createElement('div');
+        progress_line.className = 'progress_line';
+
+        const fill_line = document.createElement('div');
+        fill_line.className = 'fill_line';
+
+        var stages = visitsProcedurePopUpViewStages;
+
+
+        progress_line.appendChild(fill_line);
+        const stages_cont = document.createElement('div');
+        stages_cont.className = 'stages_cont';
+
+
+        stages.forEach((stage_data, index) => {
+            const stage = document.createElement('div');
+            stage.className = "stage_out";
+            stage.innerHTML = `
+                <div class="stage ${this.currentStage == index ? 'passed' : ''} ${index == 0 ? 'active' : ''} index_${index}">
+                    <div class="stage_dot"></div>
+                    <div class="stage_title">${stage_data}</div>
+                </div>`;
+
+            stage.addEventListener('click', () => {
+                this.currentStage = index;
+                this.stageUpdater();
+                // console.log(this.main_container.querySelector(`.stage.index_${this.currentStage}`));
+            })
+
+            stages_cont.appendChild(stage);
+
+        });
+        progress_bar_container.appendChild(stages_cont);
+
+
+
+        progress_bar_container.appendChild(progress_line);
+        progress_bar_container_out.appendChild(progress_bar_container);
+
+        container.appendChild(progress_bar_container_out);
+
+        const body_container = document.createElement('div');
+        body_container.className = 'body_container';
+
+        container.appendChild(body_container);
+
+        const btn_cont = document.createElement('div');
+        btn_cont.className = 'btn_cont';
+
+        const previous_stage = document.createElement('button');
+        previous_stage.className = 'card-button';
+        previous_stage.id = 'previous_stage';
+        previous_stage.innerHTML = `<span class='switch_icon_keyboard_arrow_left'></span> Back`;
+        previous_stage.addEventListener('click', () => {
+            if (this.currentStage > 0) {
+                this.currentStage--;
+                this.stageUpdater();
+            }
+        });
+
+
+
+        const next_stage = document.createElement('button');
+        next_stage.className = 'card-button';
+        next_stage.id = 'next_stage';
+        next_stage.innerHTML = `Next <span class='switch_icon_keyboard_arrow_right'>`;
+        next_stage.addEventListener('click', () => {
+            // this.currentStage=next_stage;
+            if (this.currentStage < visitsProcedurePopUpViewStages.length - 1) {
+                this.currentStage++;
+                this.stageUpdater();
+            } else {
+                // this.save_procedure_note();
+                this.add_validate_to_selected_data()
+
+            }
+        });
+
+        btn_cont.appendChild(previous_stage);
+        btn_cont.appendChild(next_stage);
+        container.appendChild(btn_cont);
+    }
+
+    render_stages() {
+        var stages = visitsProcedurePopUpViewStages;
+        var return_data = '';
+        var i = 0;
+        stages.forEach((stage_data) => {
+            const stage = document.createElement('div');
+            stage.className = "stage_out";
+            stage.innerHTML = `
+                <div class="stage ${this.currentStage == i ? 'passed' : ''} ${i == 0 ? 'active' : ''} index_${i}" data-src="${i}">
+                    <div class="stage_dot"></div>
+                    <div class="stage_title">${stage_data}</div>
+                </div>`;
+            return_data += stage.outerHTML;
+            i++;
+        });
+        return return_data;
+
+    }
+
+    add_validate_to_selected_data() {
+        var array = {};
+        var fail = false;
+
+        this.main_container.querySelectorAll('.stage').forEach((stage) => {
+            stage.classList.remove('error');
+        });
+
+        visitsProcedurePopUpViewStages.forEach((stage, index) => {
+            if (stage == 'other') {
+                if (!this.other_date == '') {
+                    array = {
+                        ...array,
+                        other_note: this.other_note || '',
+                        other_date: this.other_date
+                    };
+                } else {
+                    fail = true;
+                    this.main_container.querySelector(`.stage.index_${index}`).classList.add('error');
+                    console.warn('No other value found');
+                }
+
+            } else {
+                var data_store = visitsProcedurePopUpViewStageDatas[stage].selected_data;
+
+                if (this[data_store] && this[data_store].size > 0) {
+                    // console.log(this[data_store]);Array.from(this.added_diagnosis)
+                    array = {
+                        ...array,
+                        [stage]: Array.from(this[data_store])
+                    }
+                }
+                else {
+                    fail = true;
+                    this.main_container.querySelector(`.stage.index_${index}`).classList.add('error');
+                }
+
+            }
+        })
+        if (!fail) {
+            this.selected_data_list.add(array);
+            this.render_selected_list_view();
+        }
+    }
+
+    update_next_btn_to_finish(type) {
+        if (type == 'finish') {
+            this.main_container.querySelector('#next_stage').innerHTML = `Add <span class='switch_icon_add'></span>`;
+        } else if (type == 'next') {
+            this.main_container.querySelector('#next_stage').innerHTML = `Next <span class='switch_icon_keyboard_arrow_right'>`;
+        }
+    }
 
     stageUpdater() {
-
-        const stage_line = this.main_container.querySelector('.top_stage_line');
-
+        this.update_stage_bar()
         var data = visitsProcedurePopUpViewStageDatas[visitsProcedurePopUpViewStages[this.currentStage]];
-        console.log(data);
 
         const container = this.main_container.querySelector('.body_container');
         container.innerHTML = '';
@@ -181,8 +422,11 @@ export class VisitsProcedurePopUpView {
         var set_name = section_data.selected_data;
         var set_size_limit = section_data.max_data;
         const json_data = globalStates.getState('add_procedure_form');
-        if (section_data.search_data_name == 'other') { 
-            
+        if (section_data.search_data_name == 'other') {
+
+
+            this.render_other_information_view(container)
+
         }
         else {
             var data_list = json_data[section_data.search_data_name];
@@ -215,12 +459,26 @@ export class VisitsProcedurePopUpView {
                             this[set_name] = new Set();
                         }
 
-                        if (!this[set_name].has(item.id) && this[set_name].size < set_size_limit) {
-                            this[set_name].add(item.id);
-                            console.log('added', item); item_card.classList.add('selected');
-                        } else {
+                        if (this[set_name].has(item.id)) {
                             this[set_name].delete(item.id);
-                            console.log('removed', item); item_card.classList.remove('selected');
+                            item_card.classList.remove('selected');
+                        }
+                        else {
+                            if (this[set_name].size >= set_size_limit) {
+                                if (set_size_limit == 1) {
+                                    this.main_container.querySelector('.item.selected').classList.remove('selected');
+                                    this[set_name].clear();
+                                    this[set_name].add(item.id);
+                                    item_card.classList.add('selected')
+                                }
+                                else {
+                                    notify('top_left', 'You Have Reach The Max Amount.', 'warning');
+                                }
+                            }
+                            else {
+                                this[set_name].add(item.id);
+                                item_card.classList.add('selected');
+                            }
                         }
                     });
                     container.appendChild(item_card);
@@ -250,13 +508,102 @@ export class VisitsProcedurePopUpView {
 
         this.added_diagnosis.add(input_value);
         this.createCard();
+    }
 
+    update_stage_bar() {
+        const fill_line = this.main_container.querySelector('.fill_line');
+
+        // update width of fill_line based on current stage and total stages
+        var interval = (this.currentStage / (visitsProcedurePopUpViewStages.length - 1)) * 100;
+
+        this.interval_add = (1 / (visitsProcedurePopUpViewStages.length - 1)) * 100 / 2;
+        var width = interval + this.interval_add;
+        if (width > 100) {
+            width = 100;
+        }
+
+        fill_line.style.width = `${width}%`;
+        this.main_container.querySelector('.stage.active').classList.remove('active');
+
+        if (this.currentStage == visitsProcedurePopUpViewStages.length - 1) {
+            this.update_next_btn_to_finish('finish');
+        }
+        else {
+            this.update_next_btn_to_finish('next');
+        }
+
+        if (this.currentStage == 0) {
+            this.main_container.querySelector('#previous_stage').classList.add('hide');
+        }
+        else {
+            this.main_container.querySelector('#previous_stage').classList.remove('hide');
+        }
+
+        var stage = this.main_container.querySelector(`.stage.index_${this.currentStage}`);
+        stage.classList.add('active');
+        if (!stage.classList.contains('passed')) {
+            stage.classList.add('passed');
+        }
     }
 
     exampleCard() {
         return `<div class="example">
-        <p class="word">No Diagnosis Added</p>
-    </div>`;
+                    <p class="word">No Diagnosis Added</p>
+                </div>
+                `;
+    }
+
+    render_other_information_view(container) {
+
+        const note = document.createElement('br-input');
+        note.setAttribute('placeholder', 'Add any instructions');
+        note.setAttribute('label', 'Notes');
+        note.setAttribute('type', 'textarea');
+        note.setAttribute('styles', `
+                                border-radius: var(--input_main_border_r);
+                                width: 920px;
+                                padding: 10px;
+                                height: 210px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                                `);
+        note.setAttribute('labelStyles', `font-size: 12px;`);
+        if (!this.other_note) {
+            this.other_note = '';
+        }
+        note.addEventListener('input', () => {
+            this.other_note = note.getValue();
+        })
+
+
+        const procedure_date = document.createElement('br-input');
+        procedure_date.setAttribute('type', 'date');
+        procedure_date.setAttribute('label', 'Procedure Date');
+        procedure_date.setAttribute('styles', `
+            border-radius: var(--input_main_border_r);
+            width: 920px;
+            padding: 10px;
+            height: 41px;
+            background-color: transparent;
+            border: 2px solid var(--input_border);
+            `);
+        procedure_date.setAttribute('value', getCurrentDate());
+        procedure_date.setAttribute('min', getCurrentDate());
+        procedure_date.setAttribute('labelStyles', `font-size: 12px;`);
+
+        procedure_date.addEventListener('input', () => {
+            this.other_date = procedure_date.getValue();
+        })
+
+        container.appendChild(note);
+        container.appendChild(procedure_date);
+        note.setValue(this.other_note)
+        if (!this.other_date) {
+            this.other_date = getCurrentDate();
+        } else {
+            procedure_date.setValue(this.other_date)
+        }
+
     }
 
     createCard() {
@@ -290,22 +637,10 @@ export class VisitsProcedurePopUpView {
     attachListeners() {
         const cancel_btn = this.main_container.querySelector('#confirm_cancel');
         cancel_btn.addEventListener('click', () => {
-            this.close();
-        });
-
-        const next_stage = this.main_container.querySelector('#next_stage');
-        next_stage.addEventListener('click', () => {
-
-            console.log(this.currentStage);
-
-            // this.currentStage=next_stage;
-            if (this.currentStage < visitsProcedurePopUpViewStages.length - 1) {
-                this.currentStage++;
-                this.stageUpdater();
+            if (this.is_add_procedure_side) {
+                this.render_selected_list_view();
             } else {
-                // this.save_procedure_note();
-                notify('top_left', 'You Have No Stage Remain', 'warning');
-
+                this.close();
             }
         });
     }
@@ -321,65 +656,31 @@ export class VisitsProcedurePopUpView {
         btn_submit.setAttribute('loading', true);
 
 
-        if (this.added_diagnosis.size <= 0) { notify('top_left', 'No Added Diagnosis.', 'warning'); return; } var
-            formData = { action: 'create', diagnosis: Array.from(this.added_diagnosis), visit_id: this.visit_id }; try {
-                const response = await fetch('/api/patient/create_delete_pre_diagnosis', {
-                    method: 'POST', headers:
-                        { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
-                }); if (!response.ok) {
-                    throw new
-                        Error('Fail to Save Note. Server Error');
-                } const result = await response.json(); if (result.success) {
-                    dashboardController.visitPreDiagnosisCardView.PreRender({
-                        visit_id: this.visit_id, data: result.data, state:
-                            this.state,
-                    }); notify('top_left', result.message, 'success'); console.log(result.data); this.close();
-                }
-                else { notify('top_left', result.message, 'warning'); }
-            } catch (error) {
-                notify('top_left', error.message, 'error');
-            } finally { btn_submit.removeAttribute('loading'); }
+        if (this.added_diagnosis.size <= 0) {
+            notify('top_left', 'No Added Diagnosis.', 'warning');
+            return;
+        }
+        var formData = {
+            action: 'create',
+            diagnosis: Array.from(this.added_diagnosis),
+            visit_id: this.visit_id
+        }; try {
+            const response = await fetch('/api/patient/create_delete_pre_diagnosis', {
+                method: 'POST', headers:
+                    { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
+            }); if (!response.ok) {
+                throw new
+                    Error('Fail to Save Note. Server Error');
+            } const result = await response.json(); if (result.success) {
+                dashboardController.visitPreDiagnosisCardView.PreRender({
+                    visit_id: this.visit_id, data: result.data, state:
+                        this.state,
+                }); notify('top_left', result.message, 'success'); console.log(result.data); this.close();
+            }
+            else { notify('top_left', result.message, 'warning'); }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally { btn_submit.removeAttribute('loading'); }
     }
 }
 
-
-
-/* <div class="top_stage_line">
-
-<div class="back_line">
-    <div class="back_line_fill"></div>
-
-    <div class="stage passed active">
-        <div class="word_cont">
-            <p class="stage_word">Procedure</p>
-        </div>
-    </div>
-
-    <div class="stage sec">
-        <div class="word_cont">
-            <p class="stage_word">Surgeon</p>
-        </div>
-    </div>
-
-    <div class="stage thrd">
-        <div class="word_cont">
-            <p class="stage_word">Anesthesiologist</p>
-        </div>
-    </div>
-
-    <div class="stage frth">
-        <div class="word_cont">
-            <p class="stage_word">Assistants</p>
-        </div>
-    </div>
-
-    <div class="stage ffth">
-        <div class="word_cont">
-            <p class="stage_word">Other</p>
-        </div>
-    </div>
-
-</div>
-
-
-</div> */

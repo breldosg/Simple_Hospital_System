@@ -97,7 +97,7 @@ ${this.Styles()}
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        font-family: "DM Sans", sans-serif;
+        font-family: inherit;
         color: var(--main_text);
         transition: all 0.3s ease-in;
     }
