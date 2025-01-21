@@ -182,4 +182,6 @@ export class VisitImplantableDevicesCardView {
             dashboardController.loaderView.remove();
         }
     }
+
+    
 }

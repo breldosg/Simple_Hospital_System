@@ -2,7 +2,7 @@ import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit, visitsProcedurePopUpViewStageDatas, side_slide_selector_data_role_icon_name, visitsProcedurePopUpViewStages } from
     "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";
+import { date_formatter, debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";
 
 export class VisitsProcedurePopUpView {
     constructor() {
@@ -76,8 +76,8 @@ export class VisitsProcedurePopUpView {
 
         const heading_cont = document.createElement('div');
         heading_cont.className = 'heading_cont';
-        // heading_cont.innerHTML=`<p class="heading">Selected Procedure (${this.added_diagnosis.size})</p>`;
-        heading_cont.innerHTML = `<p class="heading">Selected Procedure (0)</p>`;
+        heading_cont.innerHTML = `<p class="heading">Added Procedure (${this.selected_data_list.size})</p>`;
+        // heading_cont.innerHTML = `<p class="heading">Selected Procedure (0)</p>`;
         const add_btn = document.createElement('div');
         add_btn.className = 'add_btn';
         add_btn.innerHTML = `<span class="switch_icon_add"></span>`;
@@ -101,19 +101,21 @@ export class VisitsProcedurePopUpView {
 
         const save_btn = document.createElement('button');
         save_btn.className = 'card-button';
+        // add id
+        save_btn.id = 'confirm_save';
+        save_btn.setAttribute('type', 'submit');
+        if (this.selected_data_list.size <= 0) {
+            save_btn.classList.add('disabled');
+        }
         save_btn.id = 'save_btn';
         save_btn.innerHTML = `Save`;
         save_btn.addEventListener('click', () => {
-            if (this.currentStage > 0) {
-                this.currentStage--;
-                this.stageUpdater();
-            }
+            this.save_procedure_note();
         });
         btn_cont.appendChild(save_btn);
         container.appendChild(selected_procedures_cont);
         container.appendChild(btn_cont);
 
-        console.log(this.selected_data_list);
 
         if (this.selected_data_list.size >= 1) {
             this.render_selected_procedure_card();
@@ -124,12 +126,27 @@ export class VisitsProcedurePopUpView {
 
     render_selected_procedure_card() {
 
-        // selected_data_list
-
         const container = this.main_container.querySelector('.selected_procedures_cont');
         container.innerHTML = '';
 
-        this.selected_data_list.forEach((data) => {
+
+        async function fetch_toJson_data(side, data, compare_data) {
+            const json_data = globalStates.getState('add_procedure_form');
+            return json_data[side].filter(item => item.id == data[compare_data])[0].name;
+        }
+
+        async function renderAssistants(assistants) {
+            const pills = await Promise.all(
+                assistants.map(async (assistant) => {
+                    const name = await fetch_toJson_data('staff', { assistant }, 'assistant');
+                    return `<div class="pill">${name}</div>`;
+                })
+            );
+
+            return pills.join('');
+        }
+
+        this.selected_data_list.forEach(async (data) => {
             const procedure_card = document.createElement('div');
             procedure_card.className = 'procedure_card';
 
@@ -137,8 +154,8 @@ export class VisitsProcedurePopUpView {
             top.className = 'top';
             top.innerHTML = `
                     <div class="left">
-                        <p class="date">Above Elbow POP (Children)</p>
-                        <p class="created_by">Jan 17, 2025</p>
+                        <p class="date">${await fetch_toJson_data('procedure', data, 'procedure')}</p>
+                        <p class="created_by">${date_formatter(data.other_date)}</p>
                     </div>
                         `;
 
@@ -149,6 +166,10 @@ export class VisitsProcedurePopUpView {
             delete_btn.className = 'delete_btn btn';
             delete_btn.id = 'delete_patient_device';
             delete_btn.innerHTML = '<span class="switch_icon_delete"></span>';
+            delete_btn.addEventListener('click', () => {
+                this.selected_data_list.delete(data);
+                this.render_selected_list_view();
+            });
             right.appendChild(delete_btn);
 
             top.appendChild(right);
@@ -156,27 +177,24 @@ export class VisitsProcedurePopUpView {
             procedure_card.innerHTML = `
                 <div class="data">
                     <p class="head">Leading Surgeon:</p>
-                    <p class="description">3123913789388</p>
+                    <p class="description">${await fetch_toJson_data('staff', data, 'surgeon')}</p>
                 </div>
 
                 <div class="data">
                     <p class="head">Anesthesiologist Name:</p>
-                    <p class="description">Kombola maji</p>
+                    <p class="description">${await fetch_toJson_data('staff', data, 'anesthesiologist')}</p>
                 </div>
 
                 <div class="data pills">
                     <p class="head">Assistants</p>
                     <div class="pills_cont">
-                        <p class="pill">ABDALLA SALEH HASSAN</p>
-                        <p class="pill">ABDUL-AZIZ HAMAD CHILALA</p>
-                        <p class="pill">ALI MUSSA MUHIDIN</p>
-                        <p class="pill">Amina Abrahman Haji</p>
+                        ${await renderAssistants(data.assistants)}
                     </div>
                 </div>
 
                 <div class="data note">
                     <p class="head">Note</p>
-                    <p class="description">anatakiwa asikae karibu na moto atalipuka Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, distinctio!</p>
+                    <p class="description scroll_bar">${data.other_note}</p>
                 </div>
                 `;
             procedure_card.prepend(top);
@@ -187,7 +205,18 @@ export class VisitsProcedurePopUpView {
     }
 
     render_add_procedure_view() {
+        this.currentStage = 0;
         this.is_add_procedure_side = true;
+
+        visitsProcedurePopUpViewStages.forEach((stage, index) => {
+            if (stage == 'other') {
+                this.other_note = '';
+                this.other_date = getCurrentDate();
+            } else {
+                this[visitsProcedurePopUpViewStageDatas[stage].selected_data] = new Set();
+            }
+        })
+
         const container = this.main_container.querySelector('.body');
         container.classList.add('body_when_add');
         if (container.classList.contains('body_on_list')) {
@@ -273,34 +302,13 @@ export class VisitsProcedurePopUpView {
                 this.currentStage++;
                 this.stageUpdater();
             } else {
-                // this.save_procedure_note();
-                this.add_validate_to_selected_data()
-
+                this.add_validate_to_selected_data();
             }
         });
 
         btn_cont.appendChild(previous_stage);
         btn_cont.appendChild(next_stage);
         container.appendChild(btn_cont);
-    }
-
-    render_stages() {
-        var stages = visitsProcedurePopUpViewStages;
-        var return_data = '';
-        var i = 0;
-        stages.forEach((stage_data) => {
-            const stage = document.createElement('div');
-            stage.className = "stage_out";
-            stage.innerHTML = `
-                <div class="stage ${this.currentStage == i ? 'passed' : ''} ${i == 0 ? 'active' : ''} index_${i}" data-src="${i}">
-                    <div class="stage_dot"></div>
-                    <div class="stage_title">${stage_data}</div>
-                </div>`;
-            return_data += stage.outerHTML;
-            i++;
-        });
-        return return_data;
-
     }
 
     add_validate_to_selected_data() {
@@ -415,6 +423,7 @@ export class VisitsProcedurePopUpView {
 
     }
 
+
     searchInProcedureItemList(query = '') {
         var container = this.main_container.querySelector('.list_cont');
         container.innerHTML = '';
@@ -422,11 +431,9 @@ export class VisitsProcedurePopUpView {
         var set_name = section_data.selected_data;
         var set_size_limit = section_data.max_data;
         const json_data = globalStates.getState('add_procedure_form');
+
         if (section_data.search_data_name == 'other') {
-
-
-            this.render_other_information_view(container)
-
+            this.render_other_information_view(container);
         }
         else {
             var data_list = json_data[section_data.search_data_name];
@@ -487,28 +494,6 @@ export class VisitsProcedurePopUpView {
         }
     }
 
-    close_top_container() {
-        const container = this.main_container.querySelector('.top_container');
-        container.classList.add('out'); container.addEventListener('animationend', () => {
-            container.classList.remove('out');
-            container.classList.remove('in');
-        }, { once: true });
-    }
-
-    handleNoDataAdded() {
-        const card_list = this.main_container.querySelector('.card_list');
-        const submitBtn = this.main_container.querySelector('#submit_btn');
-        submitBtn.classList.add('disabled');
-        card_list.innerHTML = this.exampleCard();
-    }
-
-    handleDataAdded(input_value) {
-        const submitBtn = this.main_container.querySelector('#submit_btn');
-        submitBtn.classList.remove('disabled');
-
-        this.added_diagnosis.add(input_value);
-        this.createCard();
-    }
 
     update_stage_bar() {
         const fill_line = this.main_container.querySelector('.fill_line');
@@ -606,34 +591,6 @@ export class VisitsProcedurePopUpView {
 
     }
 
-    createCard() {
-        const card_list = this.main_container.querySelector('.card_list');
-        card_list.innerHTML = '';
-        this.added_diagnosis.forEach(data => {
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            card.innerHTML = `<p class="word">${data}</p>`;
-
-            const cont = document.createElement('div');
-            cont.className = 'btns';
-            const remove_btn = document.createElement('div');
-            remove_btn.className = 'remove_btn';
-            remove_btn.innerHTML = ` <span class="switch_icon_delete"></span> `;
-
-            remove_btn.addEventListener('click', (e) => {
-                e.stopPropagation()
-                this.added_diagnosis.delete(data);
-                card.remove();
-
-                console.log(this.added_diagnosis);
-
-                if (this.added_diagnosis.size <= 0) { this.handleNoDataAdded() }
-            }); cont.appendChild(remove_btn);
-            card.appendChild(cont); card_list.prepend(card);
-        })
-    }
-
     attachListeners() {
         const cancel_btn = this.main_container.querySelector('#confirm_cancel');
         cancel_btn.addEventListener('click', () => {
@@ -652,35 +609,48 @@ export class VisitsProcedurePopUpView {
     }
 
     async save_procedure_note() {
-        const btn_submit = this.main_container.querySelector('br-button[type="submit"]');
+        const btn_submit = this.main_container.querySelector('#save_btn[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
 
-        if (this.added_diagnosis.size <= 0) {
-            notify('top_left', 'No Added Diagnosis.', 'warning');
+        if (this.selected_data_list.size <= 0) {
+            notify('top_left', 'No Added Procedure.', 'warning');
             return;
         }
         var formData = {
-            action: 'create',
-            diagnosis: Array.from(this.added_diagnosis),
+            procedures: Array.from(this.selected_data_list),
             visit_id: this.visit_id
-        }; try {
-            const response = await fetch('/api/patient/create_delete_pre_diagnosis', {
-                method: 'POST', headers:
-                    { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
-            }); if (!response.ok) {
-                throw new
-                    Error('Fail to Save Note. Server Error');
-            } const result = await response.json(); if (result.success) {
-                dashboardController.visitPreDiagnosisCardView.PreRender({
-                    visit_id: this.visit_id, data: result.data, state:
-                        this.state,
-                }); notify('top_left', result.message, 'success'); console.log(result.data); this.close();
+        };
+
+        console.log(formData);
+
+
+        try {
+            const response = await fetch('/api/patient/save_procedure_order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                throw new Error('Fail to Save Note. Server Error');
+            }
+            const result = await response.json();
+            if (result.success) {
+                dashboardController.visitProceduresCardView.PreRender({
+                    visit_id: this.visit_id,
+                    data: result.data,
+                    state: this.state,
+                });
+                notify('top_left', result.message, 'success');
+                console.log(result.data);
+                this.close();
             }
             else { notify('top_left', result.message, 'warning'); }
         } catch (error) {
             notify('top_left', error.message, 'error');
-        } finally { btn_submit.removeAttribute('loading'); }
+        } finally {
+            btn_submit.removeAttribute('loading');
+        }
     }
 }
 
