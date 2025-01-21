@@ -29,7 +29,7 @@ export class VisitProceduresCardView {
             else {
                 cont.appendChild(this.ViewReturn());
             }
-            dashboardController.singleVisitView.add_to_rendered_card_array('visitsProcedureOrderPopUpView');
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitsProcedurePopUpView');
         }
 
         if (this.datas.length >= 1) {
@@ -160,7 +160,7 @@ export class VisitProceduresCardView {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     visit_id: this.visit_id,
-                    procedure_ids: [ids],
+                    procedure_ids: ids,
                     state: 'single',
                 })
             });
