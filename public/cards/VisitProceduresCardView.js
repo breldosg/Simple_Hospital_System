@@ -160,7 +160,7 @@ export class VisitProceduresCardView {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     visit_id: this.visit_id,
-                    procedure_ids: ids,
+                    procedure_id: ids,
                     state: 'single',
                 })
             });

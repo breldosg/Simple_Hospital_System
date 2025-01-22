@@ -1,114 +1,38 @@
 
 const express = require('express');
 const router = express.Router();
-const { check_cookie, get_cookie, user_agent_infos, ApiHost, set_cookie, RequestHandler } = require('../utility/serverFunctions');
+const { RequestHandler } = require('../utility/serverFunctions');
+
 
 
 router.post('/get_role', async (req, res) => {
+    const body = req.body;
 
-    if (check_cookie(req)) {
-        const user_cookie = get_cookie(req);
+    try {
+        var result = await RequestHandler(req, 130, body); // Add `await` since it's an async function
 
-        const user_infos = JSON.stringify(user_agent_infos(req));
+        return res.status(200).json(result); // Send the success response
 
-
-        const body_data = {
-            key: 130,
-            user_agent_infos: user_infos,
-        }
-        try {
-            const res2 = await fetch(ApiHost, {
-                "method": 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user_cookie}`
-                },
-                body: JSON.stringify(body_data)
-            })
-
-            console.log('result', res2);
-            const result = await res2.json();
-
-            const { data, status, success } = result;
-
-            if (success) {
-
-                res.send(result);
-            }
-            else if (status == 401) {
-
-                res.sendStatus(401);
-            }
-            else {
-                res.send(result);
-            }
-
-        }
-        catch (e) {
-            console.log(e);
-            res.send({ success: false, message: "Server error", status: "error" });
-        }
+    } catch (error) {
+        console.error('Error in /get_role route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
     }
-    else {
-        res.sendStatus(401);
-        res.send({ success: false, message: "Unauthorized Access", status: "error" });
-    }
+});
 
-})
 
 router.post('/register_staff', async (req, res) => {
+    const body = req.body;
 
-    if (check_cookie(req)) {
-        const user_cookie = get_cookie(req);
+    try {
+        var result = await RequestHandler(req, 100, body); // Add `await` since it's an async function
 
-        const user_infos = JSON.stringify(user_agent_infos(req));
-        const body = req.body;
+        return res.status(200).json(result); // Send the success response
 
-
-        const body_data = {
-            key: 100,
-            data: JSON.stringify(body),
-            user_agent_infos: user_infos,
-        }
-        try {
-            const res2 = await fetch(ApiHost, {
-                "method": 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user_cookie}`
-                },
-                body: JSON.stringify(body_data)
-            })
-
-            console.log('result', res2);
-            const result = await res2.json();
-
-            const { data, status, success } = result;
-
-            if (success) {
-
-                res.send(result);
-            }
-            else if (status == 401) {
-
-                res.sendStatus(401);
-            }
-            else {
-                res.send(result);
-            }
-
-        }
-        catch (e) {
-            console.log(e);
-            res.send({ success: false, message: "Server error", status: "error" });
-        }
+    } catch (error) {
+        console.error('Error in /register_staff route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
     }
-    else {
-        res.sendStatus(401);
-        res.send({ success: false, message: "Unauthorized Access", status: "error" });
-    }
-
-})
+});
 
 
 router.post('/search_staff', async (req, res) => {
@@ -116,13 +40,9 @@ router.post('/search_staff', async (req, res) => {
 
     try {
         var result = await RequestHandler(req, 140, body); // Add `await` since it's an async function
-        console.log('Search Staff Result:', result);
 
-        if (result.success) {
-            return res.status(200).json(result); // Send the success response
-        } else {
-            return res.status(400).json(result); // Send an error status with the message
-        }
+        return res.status(200).json(result); // Send the success response
+
     } catch (error) {
         console.error('Error in /search_staff route:', error);
         return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
@@ -134,13 +54,9 @@ router.post('/first_data', async (req, res) => {
 
     try {
         var result = await RequestHandler(req, 170, body); // Add `await` since it's an async function
-        console.log('Search Staff Result:', result);
 
-        if (result.success) {
-            return res.status(200).json(result); // Send the success response
-        } else {
-            return res.status(400).json(result); // Send an error status with the message
-        }
+        return res.status(200).json(result); // Send the success response
+
     } catch (error) {
         console.error('Error in /search_staff route:', error);
         return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
@@ -154,20 +70,14 @@ router.post('/change_user_account_state', async (req, res) => {
 
     try {
         var result = await RequestHandler(req, 320, body); // Add `await` since it's an async function
-        console.log('change_user_account_state Result:', result);
 
-        if (result.success) {
-            return res.status(200).json(result); // Send the success response
-        } else {
-            return res.status(400).json(result); // Send an error status with the message
-        }
+        return res.status(200).json(result); // Send the success response
+
     } catch (error) {
         console.error('Error in /change_user_account_state route:', error);
         return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
     }
 });
-
-
 
 
 

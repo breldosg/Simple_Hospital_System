@@ -1,4 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
+import { consumable_unit, medicine_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 
@@ -112,6 +113,22 @@ export class CreateProductPopUpView {
                     border: 2px solid var(--input_border);
                     " labelStyles="font-size: 12px;"></br-input>
 
+                <br-select required name="quantity_unit" fontSize="13px" label="Unit" placeholder="Select Quantity Unit" styles="
+                                border-radius: var(--input_main_border_r);
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                                " labelStyles="font-size: 12px;">
+
+        ${consumable_unit.map(unit => {
+            return `<br-option type="checkbox" value="${unit.toLowerCase()}">${unit}</br-option>`;
+        }).join("")}
+                                
+
+        </br-select>
+
         <br-input required name="patient_to_use" label="Patient usage" value="1" type="number" styles="
                     border-radius: var(--input_main_border_r);
                     width: 300px;
@@ -167,9 +184,10 @@ ${this.category_select_rows}
                                 border: 2px solid var(--input_border);
                                 " labelStyles="font-size: 12px;">
 
-            <br-option type="checkbox" value="bottle">Bottle</br-option>
-            <br-option type="checkbox" value="cards">Cards</br-option>
-            <br-option type="checkbox" value="pills">Pills</br-option>
+        ${medicine_unit.map(unit => {
+            return `<br-option type="checkbox" value="${unit.toLowerCase()}">${unit}</br-option>`;
+        }).join("")}
+                                
 
         </br-select>
 

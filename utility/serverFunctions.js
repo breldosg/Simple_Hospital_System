@@ -125,7 +125,6 @@ const ApiHost = `http://api.simplehospital.com`;
 const RequestHandler = async (req, key, body) => {
     if (check_cookie(req)) {
         const user_cookie = get_cookie(req);
-
         const user_infos = JSON.stringify(user_agent_infos(req));
         const bodySend = body ? body : null;
 
@@ -148,24 +147,29 @@ const RequestHandler = async (req, key, body) => {
 
             if (!res2.ok) {
                 console.error('API Error:', res2.statusText);
-                return { success: false, message: 'Error from external API', status: 'error' };
+                return { success: false, message: 'Error from external API', errorCode: "500", status: 'error' };
             }
 
             const result = await res2.json();
             const { data, status, success } = result;
-            
+
             return result;
 
         } catch (error) {
             console.error('Request Handler Error:', error);
-            return { success: false, message: "Server error", status: "error" };
+            return { success: false, message: "Server error", errorCode: "500", status: "error" };
         }
     } else {
-        return { success: false, message: "Unauthorized Access", status: "error" };
+        return {
+            success: false,
+            message: "Unauthorized Access",
+            status: "error",
+            errorCode: "401"
+        };
     }
 };
 
-const trailing_slashes=(req,res,next) => {
+const trailing_slashes = (req, res, next) => {
     if (req.path !== '/' && req.path.endsWith('/')) {
         // Redirect to the same URL without the trailing slash
         const newPath = req.path.slice(0, -1);

@@ -42,7 +42,7 @@ export const visit_add_card_btn = [
         body_container_id: 'treatment_group',
         cards: [
             {
-                component: 'visitPrescriptionsCardView',
+                component: 'visitsPrescriptionPopUpView',
                 title: 'Prescriptions'
             },
             {
@@ -14329,6 +14329,22 @@ export const diagnosisArray = [
     "Z99.2 Dependence on renal dialysis",
     "Z99.3 Dependence on wheelchair",
     "Z99.8 Dependence on other enabling machines and devices"
+];
+
+
+export const medicine_unit = [
+    'Tube',
+    'Bottle',
+    'Tablet',
+    'Capsule',
+    'Ampule',
+    'Vial',
+    'Sacchet',
+];
+
+export const consumable_unit = [
+    'Liter',
+    'Piece',
 ];
 
 

@@ -50,6 +50,7 @@ import { VisitFinalDiagnosisPopUpView } from "../popups/VisitsFinalDiagnosisPopU
 import { VisitsProcedurePopUpView } from "../popups/VisitsProcedurePopUpView.js";
 import { VisitsImplementableDevicePopUpView } from "../popups/VisitsImplementableDevicePopUpView.js";
 import { VisitsVaccinePopUpView } from "../popups/VisitsVaccinePopUpView.js";
+import { VisitsPrescriptionPopUpView } from "../popups/VisitsPrescriptionPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -80,6 +81,7 @@ class DashboardController {
     visitsProcedurePopUpView = new VisitsProcedurePopUpView();
     visitsImplementableDevicePopUpView = new VisitsImplementableDevicePopUpView();
     visitsVaccinePopUpView = new VisitsVaccinePopUpView();
+    visitsPrescriptionPopUpView = new VisitsPrescriptionPopUpView();
     
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();
