@@ -437,5 +437,22 @@ router.post('/delete_procedure_order', async (req, res) => {
 
 
 
+router.post('/save_prescription', async (req, res) => {
+    const body = req.body;
+
+    try {
+        var result = await RequestHandler(req, 680, body); // Add `await` since it's an async function
+
+        return res.status(200).json(result); // Send the success response
+
+    } catch (error) {
+        console.error('Error in /save_prescription route:', error);
+        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
+    }
+});
+
+
+
+
 
 module.exports = router

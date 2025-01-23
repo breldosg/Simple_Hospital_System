@@ -117,17 +117,8 @@ export class VisitsPrescriptionPopUpView {
             <p class="heading">Prescription Details</p>
         </div>
         <div class="pending_data_view">
-            <div class="table_head tr d_flex flex__c_a">
-                <p class="name">Medicine</p>
-                <p class="dosage">Dosage</p>
-                <p class="frequency">Frequency</p>
-                <p class="duration">Duration</p>
-                <div class="action"></div>
-            </div>
             <div class="table_body" id="table_body_for_pending_data">
-                <div class="start_page">
-                    <p>No Medicines Added</p>
-                </div>
+                
             </div>
             <div class="btn_cont">
                 <br-button loader_width="23" class="btn_next" type="cancel">Cancel</br-button>
@@ -188,7 +179,7 @@ export class VisitsPrescriptionPopUpView {
                 },
                 body: JSON.stringify({
                     visit_id: this.visit_id,
-                    prescription_list: prescription_list,
+                    prescriptions: prescription_list,
                 })
             });
 
