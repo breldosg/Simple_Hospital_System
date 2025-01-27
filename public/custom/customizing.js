@@ -19,6 +19,10 @@ export const visit_add_card_btn = [
                 component: 'visitPlanForNextVisitPopUpView',
                 title: 'Plan for Next Visit'
             },
+            {
+                component: 'visitsAttachmentPopUpView',
+                title: 'Attachments'
+            },
         ],
     },
     {
