@@ -117,7 +117,45 @@ export class VisitsPrescriptionPopUpView {
             <p class="heading">Prescription Details</p>
         </div>
         <div class="pending_data_view">
-            <div class="table_body" id="table_body_for_pending_data">
+            <div class="pending_data_body" id="table_body_for_pending_data">
+
+                <div class="procedure_card"><div class="top">
+                    <div class="left">
+                        <p class="date">Above Elbow POP (Adult)</p>
+                        <p class="created_by">Jan 24, 2025</p>
+                    </div>
+                        <div class="right"><div class="delete_btn btn" id="delete_patient_device"><span class="switch_icon_delete"></span></div></div></div>
+                <div class="data">
+                    <p class="head">Leading Surgeon:</p>
+                    <p class="description">Aida Jacob Gama</p>
+                </div>
+
+                <div class="data">
+                    <p class="head">Anesthesiologist Name:</p>
+                    <p class="description">ADAM NICOLAUS  MSEMWA</p>
+                </div>
+
+                <div class="data pills">
+                    <p class="head">Assistants</p>
+                    <div class="pills_cont">
+                        
+                            <span class="pill">AHLAM VUAI RAMADHAN</span>
+                        
+                            <span class="pill">ADAM NICOLAUS  MSEMWA</span>
+                        
+                            <span class="pill">Aida Jacob Gama</span>
+                        
+                    </div>
+                </div>
+
+                
+                <div class="data note">
+                    <p class="head">Note</p>
+                    <p class="description scroll_bar">uytrew</p>
+                </div>
+                    
+                
+                </div>
                 
             </div>
             <div class="btn_cont">
