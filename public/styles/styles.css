@@ -745,9 +745,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 700;
                         }
                     }
 
@@ -988,9 +988,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 700;
                         }
                     }
 
@@ -1202,9 +1202,9 @@ input {
                             justify-content: center;
 
                             p {
-                                font-size: 30px;
+                                font-size: 16px;
+                                font-weight: 600;
                                 color: var(--black-op2);
-                                font-weight: 700;
                             }
                         }
                     }
@@ -1784,9 +1784,9 @@ input {
                             justify-content: center;
 
                             p {
-                                font-size: 30px;
+                                font-size: 16px;
+                                font-weight: 600;
                                 color: var(--black-op2);
-                                font-weight: 700;
                             }
                         }
                     }
@@ -4472,9 +4472,9 @@ input {
                     justify-content: center;
 
                     p {
-                        font-size: 30px;
+                        font-size: 16px;
+                        font-weight: 600;
                         color: var(--black-op2);
-                        font-weight: 700;
                     }
                 }
 
@@ -4634,9 +4634,9 @@ input {
                     justify-content: center;
 
                     p {
-                        font-size: 30px;
+                        font-size: 16px;
+                        font-weight: 600;
                         color: var(--black-op2);
-                        font-weight: 700;
                     }
                 }
 
@@ -5046,9 +5046,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 700;
                         }
                     }
                 }
@@ -5350,9 +5350,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 700;
                         }
                     }
                 }
@@ -5669,9 +5669,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 700;
                         }
                     }
                 }
@@ -5972,9 +5972,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 700;
                         }
                     }
 
@@ -6855,10 +6855,9 @@ input {
                         height: 100%;
 
                         .start_view_overlay {
-                            color: var(--gray_text);
-                            font-size: 20px;
-                            font-weight: 900;
-                            opacity: 0.5;
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
                         }
                     }
 
@@ -7135,9 +7134,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 900;
                         }
                     }
 
@@ -7267,10 +7266,9 @@ input {
                         height: 100%;
 
                         .start_view_overlay {
-                            color: var(--gray_text);
-                            font-size: 20px;
-                            font-weight: 900;
-                            opacity: 0.5;
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
                         }
                     }
 
@@ -7560,9 +7558,9 @@ input {
                         justify-content: center;
 
                         p {
-                            font-size: 20px;
+                            font-size: 16px;
+                            font-weight: 600;
                             color: var(--black-op2);
-                            font-weight: 900;
                         }
                     }
 
@@ -7629,9 +7627,18 @@ input {
         max-width: 1300px;
         max-height: 650px;
 
+
         .loader_cont {
-            border-radius: var(--main_border_r);
             position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--pure_white_background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
         }
 
         .heading {
@@ -7655,7 +7662,7 @@ input {
 
         .left {
             display: flex;
-            overflow: scroll;
+            overflow: hidden;
             width: 500px;
 
             .slider {
@@ -7667,6 +7674,33 @@ input {
                 flex-direction: column;
                 gap: 10px;
 
+                .search_cont_cont{
+                    .search_cont {
+                        display: flex;
+                        gap: 10px;
+                        width: 100%;
+                        align-items: flex-end;
+                        flex-direction: row;
+    
+                        .btn_search {
+                            border: none;
+                            background-color: var(--pri_color);
+                            width: 50px;
+                            height: 40px;
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+    
+                            span {
+                                font-size: 17px;
+                                color: var(--white);
+                            }
+                        }
+                    }
+                }
+
                 .result_cont {
                     display: flex;
                     gap: 5px;
@@ -7676,6 +7710,7 @@ input {
                     overflow-y: scroll;
                     border-top: 2px solid var(--input_border);
                     padding-top: 10px;
+                    position: relative;
 
                     .start_view {
                         display: flex;
@@ -7685,10 +7720,9 @@ input {
                         height: 100%;
 
                         .start_view_overlay {
-                            color: var(--gray_text);
-                            font-size: 20px;
-                            font-weight: 900;
-                            opacity: 0.5;
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
                         }
                     }
 
@@ -7744,13 +7778,8 @@ input {
                     }
                 }
 
-                .result_cont::-webkit-scrollbar-thumb {
+                .scroll_bar::-webkit-scrollbar-thumb {
                     background-color: var(--gray_text);
-                    border-radius: var(--input_main_border_r);
-                }
-
-                .result_cont::-webkit-scrollbar {
-                    width: 5px;
                 }
 
                 .search_cont {
@@ -7761,6 +7790,10 @@ input {
 
                     .btn {
                         padding-top: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: end;
+                        height: 100%;
 
                         .btn_next {
                             border: none;
@@ -7836,37 +7869,53 @@ input {
                     width: 100%;
                     display: flex;
                     flex-wrap: wrap;
-                    gap: 20px;
+                    gap: 10px;
                     overflow-y: scroll;
                     height: 100%;
-    
+
+                    .start_page {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+
+                        p {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
+                        }
+                    }
+
                     .procedure_card {
                         display: flex;
                         flex-direction: column;
                         gap: 10px;
                         width: calc(50% - 20px);
-                        max-width: 463px;
+                        max-width: 341px;
                         padding: 20px;
-                        height: auto;
+                        height: fit-content;
                         border-radius: var(--main_border_r);
                         border: solid 1px var(--pri_border_color);
                         flex-grow: 1;
-                        max-height: 325px;
-    
+
+
                         .top {
                             border: none;
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-    
-                            .left {
+
+                            .card_left {
                                 width: 70%;
                             }
-    
-                            .right {
+
+                            .card_right {
                                 display: flex;
                                 gap: 10px;
-    
+
                                 .btn {
                                     width: 35px;
                                     height: 35px;
@@ -7876,46 +7925,52 @@ input {
                                     border-radius: 5px;
                                     flex: none;
                                     cursor: pointer;
-    
+
                                     span {
                                         font-size: 16px;
                                     }
                                 }
-    
+
                                 .btn:hover {
                                     background-color: var(--pri_op);
-    
+
                                     span {
                                         color: var(--pri_color);
                                     }
                                 }
-    
+
                                 .delete_btn:hover {
                                     background-color: var(--white_error_color_op1);
-    
+
                                     span {
                                         color: var(--error_color);
                                     }
                                 }
                             }
-    
+
                             .date {
-                                font-size: 20px;
+                                font-size: 16px;
                                 font-weight: 900;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 2;
+
                             }
-    
+
                             .created_by {
                                 font-size: 13px;
                             }
                         }
-    
+
                         .data {
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
                             padding-block: 5px;
                             border-bottom: 1px solid var(--input_border);
-    
+
                             .head {
                                 font-weight: 500;
                                 white-space: nowrap;
@@ -7923,7 +7978,7 @@ input {
                                 overflow: hidden;
                                 display: inline-block;
                             }
-    
+
                             .description {
                                 width: 40%;
                                 font-weight: 600;
@@ -7933,13 +7988,13 @@ input {
                                 display: inline-block;
                             }
                         }
-    
+
                         .note {
                             flex-direction: column;
                             gap: 10px;
                             height: 100%;
                             overflow: auto;
-    
+
                             .head {
                                 font-weight: 700;
                                 white-space: nowrap;
@@ -7949,7 +8004,7 @@ input {
                                 width: 100%;
                                 flex: none;
                             }
-    
+
                             .description {
                                 width: 100%;
                                 font-weight: 400;
@@ -7962,12 +8017,12 @@ input {
                                 height: 100%;
                             }
                         }
-    
+
                         .pills {
                             align-items: left;
                             flex-direction: column;
                             gap: 10px;
-    
+
                             .head {
                                 font-weight: 700;
                                 white-space: nowrap;
@@ -7976,14 +8031,14 @@ input {
                                 display: inline-block;
                                 width: 100%;
                             }
-    
+
                             .pills_cont {
                                 width: 100%;
                                 display: flex;
                                 gap: 5px;
                                 width: 100%;
                                 overflow-x: scroll;
-    
+
                                 .pill {
                                     flex: none;
                                     white-space: nowrap;
@@ -8000,12 +8055,12 @@ input {
                                 }
                             }
                         }
-    
+
                         .data:last-child {
                             border: none;
                         }
                     }
-    
+
                     .example {
                         display: flex;
                         justify-content: center;
@@ -8013,18 +8068,20 @@ input {
                         width: 100%;
                         height: 100%;
                         font-weight: 600;
-    
+
                         .word {
                             font-size: 16px;
                             font-weight: 600;
                             color: var(--black-op2);
                         }
                     }
-    
+
                     .procedure_card:hover {
                         /* box-shadow: 0 0 5px 0 #0000003e; */
                         background: var(--pri_op2);
                     }
+
+
 
                 }
 

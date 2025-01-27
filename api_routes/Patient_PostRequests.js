@@ -1,458 +1,63 @@
-
 const express = require('express');
 const router = express.Router();
-const { RequestHandler } = require('../utility/serverFunctions');
+const { createRouteHandler } = require('../utility/serverFunctions');
+
+// Route configuration object
+const ROUTE_CONFIG = {
+    // Patient Management
+    register_patient: 150,
+    search_patient: 160,
+    single_patient: 190,
+
+    // Visit Management
+    get_create_visit_open_data: 200,
+    create_visit: 180,
+    check_out_patient: 210,
+    onprogress_visits: 220,
+    single_visit_detail: 460,
+
+    // Clinical Documentation
+    save_vital: 470,
+    save_update_delete_patient_note: 480,
+    save_clinical_note: 500,
+    save_allergy: 510,
+    save_next_visit_plan: 520,
+
+    // Diagnostic Orders
+    get_radiology_data: 530,
+    get_lab_test_data: 550,
+    save_radiology_order: 540,
+    save_lab_test_order: 560,
+    delete_lab_test_order: 570,
+    delete_radiology_test_order: 580,
+
+    // Diagnosis Management
+    create_delete_pre_diagnosis: 590,
+    create_delete_final_diagnosis: 600,
+
+    // Procedures and Devices
+    get_data_add_procedure_form: 610,
+    save_implantable_devices: 620,
+    delete_implantable_devices: 630,
+
+    // Vaccines
+    save_vaccine_order: 640,
+    delete_vaccine_order: 650,
+
+    // Procedures
+    save_procedure_order: 660,
+    delete_procedure_order: 670,
+
+    // Prescriptions
+    save_prescription: 680
+};
 
 
-router.post('/register_patient', async (req, res) => {
-    const body = req.body;
 
-    try {
-        var result = await RequestHandler(req, 150, body); // Add `await` since it's an async function
 
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /register_patient route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
+// Register all routes
+Object.entries(ROUTE_CONFIG).forEach(([routeName, handlerCode]) => {
+    router.post(`/${routeName}`, createRouteHandler(routeName, handlerCode));
 });
 
-
-router.post('/search_patient', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 160, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /search_staff route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-router.post('/single_patient', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 190, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /single_patient route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-router.post('/get_create_visit_open_data', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 200, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get open create visit data route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/create_visit', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 180, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get open create visit data route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/check_out_patient', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 210, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get open create visit data route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/onprogress_visits', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 220, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get open create visit data route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/single_visit_detail', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 460, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /single_visit_detail route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/save_vital', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 470, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_vital route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/save_update_delete_patient_note', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 480, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_update_delete_patient_note route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/save_clinical_note', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 500, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_clinical_note route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/save_allergy', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 510, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_allergy route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/save_next_visit_plan', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 520, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_next_visit_plan route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/get_radiology_data', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 530, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get_radiology_data route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/get_lab_test_data', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 550, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get_lab_test_data route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-
-router.post('/save_radiology_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 540, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_radiology_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/save_lab_test_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 560, body); // Add `await` since it's an async function
-
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_lab_test_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/delete_lab_test_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 570, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /delete_lab_test_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/delete_radiology_test_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 580, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /delete_radiology_test_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-
-
-router.post('/create_delete_pre_diagnosis', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 590, body); // Add `await` since it's an async function
-        console.log('create_delete_pre_diagnosis Result:', result);
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /create_delete_pre_diagnosis route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/create_delete_final_diagnosis', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 600, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /create_delete_final_diagnosis route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/get_data_add_procedure_form', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 610, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /get_data_add_procedure_form route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/save_implantable_devices', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 620, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-    } catch (error) {
-        console.error('Error in /save_implantable_devices route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/delete_implantable_devices', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 630, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-    } catch (error) {
-        console.error('Error in /delete_implantable_devices route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/save_vaccine_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 640, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_vaccine_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-router.post('/delete_vaccine_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 650, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-    } catch (error) {
-        console.error('Error in /delete_vaccine_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-router.post('/save_procedure_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 660, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_procedure_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-router.post('/delete_procedure_order', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 670, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /delete_procedure_order route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-
-router.post('/save_prescription', async (req, res) => {
-    const body = req.body;
-
-    try {
-        var result = await RequestHandler(req, 680, body); // Add `await` since it's an async function
-
-        return res.status(200).json(result); // Send the success response
-
-    } catch (error) {
-        console.error('Error in /save_prescription route:', error);
-        return res.status(500).json({ success: false, message: 'Server error', status: 'error' });
-    }
-});
-
-
-
-
-
-module.exports = router
+module.exports = router;

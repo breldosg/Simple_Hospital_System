@@ -8,8 +8,8 @@ export class VisitsPrescriptionPopUpView {
         window.add_to_prescription_pending = this.add_to_prescription_pending.bind(this);
         this.visit_id = null;
         this.batchNumber = 1;
-        this.selected_medicine = '';
-        this.number_pending_data = 0;
+        this.selected_product = '';
+        this.pending_data = new Set();
         this.load_more_btn = null;
     }
 
@@ -19,13 +19,26 @@ export class VisitsPrescriptionPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.visit_id = params.id;
+        console.log(params);
+        
+        this.visit_id = params.visit_id;
 
+        // Clear all constructor variables
+        this.selected_product = '';
+        this.pending_data.clear;
+        this.load_more_btn = null;
+        this.batchNumber = 1;
+
+        // Render the initial structure with the loader
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
         cont.innerHTML = this.ViewReturn(params, 'active');
 
+
+        this.main_container = document.querySelector('.prescription_popup');
+
         this.attachListeners();
+        this.Prescription_comp_Search_medicine_and_consumable('');
     }
 
     ViewReturn() {
@@ -37,22 +50,26 @@ export class VisitsPrescriptionPopUpView {
             <div class="search_cont_cont">
                 <br-form callback="Prescription_comp_Search_medicine_and_consumable">
                     <div class="search_cont">
-                        <br-input label="Medicine Name" name="query" type="text" styles="
+                        <br-input label="Medicine/Consumable Name" name="query" type="text" styles="
                     border-radius: var(--input_main_border_r);
-                    width: 400px;
+                    width: 350px;
                     padding: 10px;
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
                     " labelStyles="font-size: 12px;"></br-input>
+
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                        <span class='switch_icon_magnifying_glass'></span>
+                    </br-button>
+
                     </div>
                 </br-form>
+                
             </div>
 
-            <div class="result_cont">
-                <div class="start_view">
-                    <p class="start_view_overlay">Search Medicine</p>
-                </div>
+            <div class="result_cont scroll_bar">
+                ${this.loader_view()}
             </div>
         </div>
 
@@ -66,7 +83,7 @@ export class VisitsPrescriptionPopUpView {
 
             <br-form id="more_detail_form" callback="add_to_prescription_pending">
                 <div class="search_cont">
-                    <br-input name="medicine" label="Medicine Name" id="medicine_name_view" type="text" styles="
+                    <br-input name="product" label="Medicine/Consumable Name" id="medicine_name_view" type="text" styles="
                     border-radius: var(--input_main_border_r);
                     width: 400px;
                     padding: 10px;
@@ -74,15 +91,6 @@ export class VisitsPrescriptionPopUpView {
                     background-color: transparent;
                     border: 2px solid var(--input_border);
                     " labelStyles="font-size: 12px;" disable="true"></br-input>
-
-                    <br-input required name="instruction" label="Instruction" type="text" styles="
-                    border-radius: var(--input_main_border_r);
-                    width: 400px;
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                    " labelStyles="font-size: 12px;"></br-input>
 
                     <br-input required name="amount" label="Amount" type="number" styles="
                     border-radius: var(--input_main_border_r);
@@ -102,6 +110,15 @@ export class VisitsPrescriptionPopUpView {
                     border: 2px solid var(--input_border);
                     " labelStyles="font-size: 12px;"></br-input>
 
+                    <br-input required name="instruction" label="Instruction" type="textarea" styles="
+                    border-radius: var(--input_main_border_r);
+                    width: 400px;
+                    padding: 10px;
+                    height: 61px;
+                    background-color: transparent;
+                    border: 2px solid var(--input_border);
+                    " labelStyles="font-size: 12px;"></br-input>
+
                     <div class="btn">
                         <br-button loader_width="23" class="btn_next" type="submit">Add</br-button>
                     </div>
@@ -117,50 +134,14 @@ export class VisitsPrescriptionPopUpView {
             <p class="heading">Prescription Details</p>
         </div>
         <div class="pending_data_view">
-            <div class="pending_data_body" id="table_body_for_pending_data">
-
-                <div class="procedure_card"><div class="top">
-                    <div class="left">
-                        <p class="date">Above Elbow POP (Adult)</p>
-                        <p class="created_by">Jan 24, 2025</p>
-                    </div>
-                        <div class="right"><div class="delete_btn btn" id="delete_patient_device"><span class="switch_icon_delete"></span></div></div></div>
-                <div class="data">
-                    <p class="head">Leading Surgeon:</p>
-                    <p class="description">Aida Jacob Gama</p>
+            <div class="pending_data_body scroll_bar" id="table_body_for_pending_data">
+                <div class="start_page">
+                    <p>No Medicines/Consumable Added</p>
                 </div>
-
-                <div class="data">
-                    <p class="head">Anesthesiologist Name:</p>
-                    <p class="description">ADAM NICOLAUS  MSEMWA</p>
-                </div>
-
-                <div class="data pills">
-                    <p class="head">Assistants</p>
-                    <div class="pills_cont">
-                        
-                            <span class="pill">AHLAM VUAI RAMADHAN</span>
-                        
-                            <span class="pill">ADAM NICOLAUS  MSEMWA</span>
-                        
-                            <span class="pill">Aida Jacob Gama</span>
-                        
-                    </div>
-                </div>
-
-                
-                <div class="data note">
-                    <p class="head">Note</p>
-                    <p class="description scroll_bar">uytrew</p>
-                </div>
-                    
-                
-                </div>
-                
             </div>
             <div class="btn_cont">
                 <br-button loader_width="23" class="btn_next" type="cancel">Cancel</br-button>
-                <br-button loader_width="23" class="btn_next" type="submit">Save Prescription</br-button>
+                <br-button loader_width="23" class="btn_next submit_btn disabled" type="submit">Save Prescription</br-button>
             </div>
         </div>
     </div>
@@ -178,7 +159,7 @@ export class VisitsPrescriptionPopUpView {
     attachListeners() {
         const cancel_btn = document.querySelector('.pending_data_view br-button[type="cancel"]');
         cancel_btn.addEventListener('click', () => {
-            this.close_pop_up();
+            this.close();
         });
 
         const back_btn = document.querySelector('#back_btn');
@@ -195,30 +176,28 @@ export class VisitsPrescriptionPopUpView {
     async save_prescription(btn) {
         btn.setAttribute('loading', true);
 
-        const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
-
-        if (rows.length === 0) {
-            notify('top_left', 'No Medicines Added', 'warning');
+        if (this.pending_data.size <= 0) {
+            notify('top_left', 'No Medicines Added.', 'warning');
             btn.removeAttribute('loading');
             return;
         }
 
-        let prescription_list = [];
-        rows.forEach((row) => {
-            const row_data_src_raw = row.getAttribute('data_src');
-            prescription_list.push(JSON.parse(row_data_src_raw));
-        });
+        console.log(this.visit_id);
+        
+        var body_form = {
+            visit_id: this.visit_id,
+            prescriptions: Array.from(this.pending_data),
+        };
+        console.log(body_form);
+
 
         try {
-            const response = await fetch('/api/visits/save_prescription', {
+            const response = await fetch('/api/patient/save_prescription', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    visit_id: this.visit_id,
-                    prescriptions: prescription_list,
-                })
+                body: JSON.stringify(body_form)
             });
 
             if (!response.ok) {
@@ -232,7 +211,7 @@ export class VisitsPrescriptionPopUpView {
                 return;
             }
             notify('top_left', 'Prescription Saved Successfully.', 'success');
-            this.close_pop_up();
+            this.close();
             dashboardController.visitsView.fetch_table_data();
 
         } catch (error) {
@@ -244,6 +223,9 @@ export class VisitsPrescriptionPopUpView {
     }
 
     async fetch_data(searchTerm) {
+        // btn_search
+        // const 
+
         try {
             const response = await fetch('/api/pharmacy/product_list', {
                 method: 'POST',
@@ -269,17 +251,30 @@ export class VisitsPrescriptionPopUpView {
         }
     }
 
+    loader_view() {
+        return `
+                <div class="loader_cont active">
+                    <div class="loader"></div>
+                </div>
+        `;
+    }
+
     async Prescription_comp_Search_medicine_and_consumable(query) {
         if (this.load_more_btn == null) this.batchNumber = 1;
-        const data = await this.fetch_data(query.query);
 
         const tableBody = document.querySelector('.result_cont');
-        if (!tableBody) {
-            this.PreRender({
-                id: this.visit_id
-            });
-            return;
+        if (this.batchNumber == 1) {
+            tableBody.innerHTML = this.loader_view();
         }
+
+        const data = await this.fetch_data(query.query);
+
+        // if (!tableBody) {
+        //     this.PreRender({
+        //         id: this.visit_id
+        //     });
+        //     return;
+        // }
 
         if (this.batchNumber === 1) {
             tableBody.innerHTML = '';
@@ -330,9 +325,16 @@ export class VisitsPrescriptionPopUpView {
     }
 
     open_fill_form(id, name, type) {
+        const check_if_exist = [...this.pending_data].some(data => data.product == id);
+
+        if (check_if_exist) {
+            notify('top_left', 'Medicine already exists in the prescription.', 'warning');
+            return;
+        }
+
         document.getElementById('input_slide').scrollIntoView({ behavior: 'smooth' });
         const medicine_name_view = document.querySelector('#medicine_name_view');
-        this.selected_medicine = {
+        this.selected_product = {
             name: name,
             id: id,
             type: type
@@ -342,54 +344,81 @@ export class VisitsPrescriptionPopUpView {
     }
 
     add_to_prescription_pending(data) {
-        const container = document.getElementById('table_body_for_pending_data');
+        data = {
+            product_name: this.selected_product.name,
+            ...data
+        };
 
-        if (this.number_pending_data === 0) {
-            container.innerHTML = '';
-        }
+        this.selected_product = '';
 
-        const rows = document.querySelectorAll('#table_body_for_pending_data .tr');
+        this.pending_data.add(data);
 
-        if (rows.length >= 1) {
-            for (let row of rows) {
-                const parsed_data = JSON.parse(row.getAttribute('data_src'));
-                if (parsed_data.id == this.selected_medicine.id) {
-                    notify('top_left', 'Medicine already added', 'warning');
-                    return;
-                }
-            }
-        }
-
-        const row = document.createElement('div');
-        row.classList.add('tr');
-        row.classList.add('d_flex');
-        row.classList.add('flex__c_a');
-        row.setAttribute('data_src', JSON.stringify({
-            id: this.selected_medicine.id,
-            instruction: data.instruction,
-            amount: data.amount,
-            duration: data.duration
-        }));
-        row.setAttribute('title', this.selected_medicine.name);
-
-        row.innerHTML = `
-            <p class="name">${this.selected_medicine.name}</p>
-            <p class="dosage">${data.instruction}</p>
-            <p class="frequency">${data.amount}</p>
-            <p class="duration">${data.duration} days</p>
-            <div class="action d_flex flex__c_c">
-                <button class="btn_remove">Remove</button>
-            </div>
-        `;
-
-        const remove_btn = row.querySelector('.btn_remove');
-        remove_btn.addEventListener('click', () => {
-            this.remove_from_pending(row);
-        });
-
-        container.insertBefore(row, container.firstChild);
-        this.number_pending_data++;
+        this.render_cards();
         this.back_to_search_view();
+    }
+
+    render_cards() {
+        const container = this.main_container.querySelector('#table_body_for_pending_data');
+        container.innerHTML = '';
+        const submit_btn = this.main_container.querySelector('.submit_btn[type="submit"]');
+
+        if (this.pending_data.size <= 0) {
+            container.innerHTML = this.no_data_view();
+            submit_btn.classList.add('disabled');
+            return;
+        }
+        submit_btn.classList.remove('disabled');
+
+        this.pending_data.forEach((data) => {
+
+            const card = document.createElement('div');
+            card.classList.add('procedure_card');
+            card.innerHTML = `
+            <div class="top">
+                <div class="card_left">
+                    <p class="date">${data.product_name}</p>
+                    <!-- <p class="created_by">Jan 24, 2025</p> -->
+                </div>
+                <div class="card_right">
+                    <div class="delete_btn btn">
+                        <span class="switch_icon_delete"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data">
+                <p class="head">Amount:</p>
+                <p class="description">${data.amount}</p>
+            </div>
+
+            <div class="data">
+                <p class="head">Duration:</p>
+                <p class="description">${data.duration} days</p>
+            </div>
+
+                
+            <div class="data note">
+                <p class="head">Instruction</p>
+                <p class="description scroll_bar">${data.instruction}</p>
+            </div>
+                    `;
+            card.setAttribute('title', data.product_name);
+
+
+            const remove_btn = card.querySelector('.delete_btn');
+            remove_btn.addEventListener('click', () => {
+                this.remove_from_pending(data);
+            });
+
+
+            container.prepend(card);
+
+        });
+    }
+
+    remove_from_pending(data) {
+        this.pending_data.delete(data);
+        this.render_cards();
     }
 
     back_to_search_view() {
@@ -397,22 +426,13 @@ export class VisitsPrescriptionPopUpView {
         document.querySelector('#more_detail_form').reset();
     }
 
-    remove_from_pending(row) {
-        row.remove();
-        this.number_pending_data--;
-
-        if (this.number_pending_data <= 0) {
-            document.getElementById('table_body_for_pending_data').innerHTML = this.no_data_view();
-        }
-    }
-
-    close_pop_up() {
-        this.number_pending_data = 0;
+    close() {
+        this.pending_data.clear();
+        this.selected_product = '';
         const cont = document.querySelector('.popup');
         cont.classList.remove('active');
         cont.innerHTML = '';
     }
-
 
 }
 

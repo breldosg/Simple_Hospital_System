@@ -494,7 +494,6 @@ export class VisitsProcedurePopUpView {
         }
     }
 
-
     update_stage_bar() {
         const fill_line = this.main_container.querySelector('.fill_line');
 

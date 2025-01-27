@@ -169,6 +169,29 @@ const RequestHandler = async (req, key, body) => {
     }
 };
 
+/**
+ * Creates a standardized route handler with error handling
+ * @param {string} routeName - Name of the route for error logging
+ * @param {number} handlerCode - Code to pass to RequestHandler
+ * @returns {Function} Express route handler
+ */
+const createRouteHandler = (routeName, handlerCode) => {
+    return async (req, res) => {
+        try {
+            const result = await RequestHandler(req, handlerCode, req.body);
+            return res.status(200).json(result);
+        } catch (error) {
+            console.error(`Error in /${routeName} route:`, error);
+            return res.status(500).json({
+                success: false,
+                message: 'Server error',
+                status: 'error'
+            });
+        }
+    };
+};
+
+
 const trailing_slashes = (req, res, next) => {
     if (req.path !== '/' && req.path.endsWith('/')) {
         // Redirect to the same URL without the trailing slash
@@ -187,5 +210,6 @@ module.exports = {
     delete_cookie,
     ApiHost,
     RequestHandler,
-    trailing_slashes
+    trailing_slashes,
+    createRouteHandler
 }
