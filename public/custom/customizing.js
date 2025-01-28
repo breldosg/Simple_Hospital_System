@@ -14426,3 +14426,18 @@ export const side_slide_selector_data_role_icon_name = {
 };
 
 
+export const attachment_type_selects = [
+    'Report',
+    'CT Scan',
+    'X - ray',
+    'Scan',
+    'Sonogram',
+    'MRI',
+    'Blood Report',
+    'ECG',
+    'Old Patient File',
+    'Web Link',
+    'NST',
+    'ECHO',
+    'Other'
+];

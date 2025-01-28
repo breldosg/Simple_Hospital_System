@@ -178,6 +178,8 @@ const RequestHandler = async (req, key, body) => {
 const createRouteHandler = (routeName, handlerCode) => {
     return async (req, res) => {
         try {
+            // console.log(req);
+            
             const result = await RequestHandler(req, handlerCode, req.body);
             return res.status(200).json(result);
         } catch (error) {

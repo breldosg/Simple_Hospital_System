@@ -1,76 +1,125 @@
-import { dashboardController } from "../controller/DashboardController.js";
-import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, getCurrentDate, notify } from "../script/index.js";
+import { attachment_type_selects } from "../custom/customizing.js";
 
 export class VisitsAttachmentPopUpView {
     constructor() {
-        this.callback = null;
-        this.data = null;
-        this.addedVaccines = new Set();
+        this.files = [];
         this.visit_id = '';
-        window.add_vaccine_in_right_section = this.add_vaccine_in_right_section.bind(this);
+        this.state = 'creation';
     }
 
     async PreRender(params = '') {
-        const check_dashboard = document.querySelector('.update_cont');
-        if (!check_dashboard) {
-            await screenCollection.dashboardScreen.PreRender();
-        }
+        this.visit_id = params.visit_id || '';
+        this.state = params.state || 'creation';
 
-        this.visit_id = params.visit_id ? params.visit_id : '';
-        this.state = params.state ? params.state : 'creation';
+        const popup = document.querySelector('.popup');
+        popup.classList.add('active');
+        popup.innerHTML = this.ViewReturn();
 
-        const cont = document.querySelector('.popup');
-        cont.classList.add('active');
-        cont.innerHTML = this.ViewReturn();
-        this.addedVaccines.clear();
-
-        this.container = document.querySelector('.vaccine_popup');
+        this.container = document.querySelector('.attachment_popup');
         this.attachListeners();
+        // this.addStyles();
     }
 
     ViewReturn() {
         return `
-<div class="container attachment_popup">
-    <div class="cont_heading">
-        <p class="heading">Vaccine Records</p>
-        <div class="close_btn" id="confirm_cancel">
-            <span class="switch_icon_close"></span>
-        </div>
-    </div>
+            <div class="container attachment_popup">
+                <div class="popup_header">
+                    <h2>Attachments</h2>
+                    <div class="close_btn" id="close_popup">
+                        <span class='switch_icon_close'></span>
+                    </div>
+                </div>
 
-    <div class="body">
-        
-    </div>
-</div>
-`;
+                <div class="popup_body">
+                    <div class="form_group">
+                        <br-select required name="allergy_type" id="attachment_type" fontSize="12px" label="Attachment Type" placeholder="Select Attachment type"
+                            styles="${this.selectorStyle()}" labelStyles="font-size: 12px !important;">
+        ${attachment_type_selects.map((type) => {
+            return `<br-option type="checkbox" value="${type}">${type}</br-option>`
+        }).join('')}
+                        </br-select>
+
+                    <br-input placeholder="Enter additional information" name="note"
+                        label="Note" required type="textarea" styles="
+                        border-radius: var(--input_main_border_r);
+                        width: 552px;
+                        padding: 10px;
+                        height: 61px;
+                        background-color: transparent;
+                        border: 2px solid var(--input_border);
+                        " labelStyles="font-size: 12px;"></br-input>
+                    </div>
+
+                    <div class="dropzone" id="dropzone">
+                        <div class="dropzone_content">
+                            <div class="folder_icon">
+                                <span class='switch_icon_folder_open'></span>
+                            </div>
+                            <p>Drag files here or</p>
+                            <button class="browse_btn" id="browse_btn">Browse</button>
+                            <input type="file" id="file_input" multiple hidden>
+                        </div>
+                        <div class="file_list scroll_bar" id="file_list"></div>
+                    </div>
+
+                    <div class="button_group">
+                        <button class="cancel_btn" id="cancel_btn">Cancel</button>
+                        <button class="submit_btn disabled" id="submit_btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
-    add_vaccine_in_right_section(data) {
-        this.handleDataAdded(data);
-    }
-
-    handleNoDataAdded() {
-        const card_list = this.container.querySelector('.card_list');
+    attachListeners() {
+        const closeBtn = this.container.querySelector('#close_popup');
+        const cancelBtn = this.container.querySelector('#cancel_btn');
+        const browseBtn = this.container.querySelector('#browse_btn');
+        const fileInput = this.container.querySelector('#file_input');
+        const dropzone = this.container.querySelector('#dropzone');
+        const attachmentType = this.container.querySelector('#attachment_type');
         const submitBtn = this.container.querySelector('#submit_btn');
-        submitBtn.classList.add('disabled');
-        card_list.innerHTML = this.exampleCard();
+
+        closeBtn.addEventListener('click', () => this.close());
+        cancelBtn.addEventListener('click', () => this.close());
+        browseBtn.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            this.handleFiles(Array.from(e.target.files));
+        });
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.remove('dragover');
+            this.handleFiles(Array.from(e.dataTransfer.files));
+        });
+
+        attachmentType.addEventListener('change', () => {
+            console.log('Attachment type changed');
+
+            this.updateSubmitButton();
+        });
+
+        submitBtn.addEventListener('click', () => {
+            this.handleSubmit();
+        });
     }
 
-    handleDataAdded(input_value) {
-        const submitBtn = this.container.querySelector('#submit_btn');
-        submitBtn.classList.remove('disabled');
-
-        this.addedVaccines.add(input_value);
-        this.createCard();
-        var form = this.container.querySelector('br-form');
-        form.reset();
-    }
-
-    input_style() {
+    selectorStyle() {
         return `
         border-radius: var(--input_main_border_r);
-        width: 440px;
+        width: 100%;
         padding: 10px;
         height: 41px;
         background-color: transparent;
@@ -78,124 +127,83 @@ export class VisitsAttachmentPopUpView {
         `;
     }
 
-    text_area_style() {
-        return `
-        border-radius: var(--input_main_border_r);
-        width: 440px;
-        padding: 10px;
-        height: 61px;
-        background-color: transparent;
-        border: 2px solid var(--input_border);
-        `;
+    handleFiles(newFiles) {
+        this.files = [...this.files, ...newFiles];
+        this.updateFileList();
+        this.updateSubmitButton();
     }
 
-    exampleCard() {
-        return `<div class="example">
-                    <p class="word">No Vaccines Added</p>
-                </div>`;
-    }
+    updateFileList() {
+        const fileList = this.container.querySelector('#file_list');
+        fileList.innerHTML = this.files.map((file, index) => `
+            <div class="file_item">
+                <p>${file.name}</p>
+                <button class="remove_btn" data-index="${index}">
+                    <span class='switch_icon_close'></span>
+                </button>
+            </div>
+        `).join('');
 
-    createCard() {
-        const card_list = this.container.querySelector('.card_list');
-        card_list.innerHTML = '';
-
-        if (this.addedVaccines.size <= 0) {
-            this.handleNoDataAdded();
-            return;
-        }
-
-        this.addedVaccines.forEach(data => {
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            card.innerHTML = `
-                    <div class="words">
-                        <p class="word">${data.name}</p>
-                        <p class="sub_id">${data.notes}</p>
-                        <p class="sub_word">${data.given_date}</p>
-                    </div>`;
-
-            const cont = document.createElement('div');
-            cont.className = 'btns';
-            const remove_btn = document.createElement('div');
-            remove_btn.className = 'remove_btn';
-            remove_btn.innerHTML = `<span class="switch_icon_delete"></span>`;
-
-            remove_btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.addedVaccines.delete(data);
-                card.remove();
-
-                if (this.addedVaccines.size <= 0) {
-                    this.handleNoDataAdded();
-                }
+        // Add remove button listeners
+        fileList.querySelectorAll('.remove_btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.files.splice(parseInt(btn.dataset.index), 1);
+                this.updateFileList();
+                this.updateSubmitButton();
             });
-
-            cont.appendChild(remove_btn);
-            card.appendChild(cont);
-            card_list.prepend(card);
         });
     }
 
-    attachListeners() {
-        const cancel_btn = this.container.querySelector('#confirm_cancel');
-        cancel_btn.addEventListener('click', () => {
-            this.close();
-        });
+    updateSubmitButton() {
+        const submitBtn = this.container.querySelector('#submit_btn');
+        const attachmentType = this.container.querySelector('#attachment_type');
 
-        const submit_btn = this.container.querySelector('#submit_btn');
-        submit_btn.addEventListener('click', () => {
-            this.saveVaccines();
-        });
-    }
-
-    close() {
-        const cont = document.querySelector('.popup');
-        cont.classList.remove('active');
-        cont.innerHTML = '';
-    }
-
-    async saveVaccines() {
-        if (this.addedVaccines.size <= 0) {
-            notify('top_left', 'No Vaccines Added.', 'warning');
+        if (!attachmentType.getValue() || this.files.length == 0) {
+            submitBtn.classList.add('disabled');
             return;
         }
+        submitBtn.classList.remove('disabled');
+    }
 
-        const formData = {
-            vaccines: Array.from(this.addedVaccines),
-            visit_id: this.visit_id
-        };
+    async handleSubmit() {
+        
+        const attachmentType = this.container.querySelector('#attachment_type').getValue();
+        if (!attachmentType || this.files.length === 0) return;
 
-        console.log(formData);
-        // return;
+        const formData = new FormData();
+        formData.append('visit_id', this.visit_id);
+        formData.append('attachment_type', attachmentType);
+        this.files.forEach(file => {
+            formData.append('files', file);
+        });
+        console.log('submit1');
 
         try {
-            const response = await fetch('/api/patient/save_vaccine_order', {
+            const response = await fetch('/api/patient/upload_attachments', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: formData
             });
+        console.log('submit2');
 
-            if (!response.ok) {
-                throw new Error('Failed to Save Vaccines. Server Error');
-            }
+
+            if (!response.ok) throw new Error('Upload failed');
 
             const result = await response.json();
             if (result.success) {
-                dashboardController.visitVaccineCardView.PreRender({
-                    visit_id: this.visit_id,
-                    data: result.data,
-                    state: this.state,
-                });
-
-                notify('top_left', result.message, 'success');
                 this.close();
-            } else {
-                notify('top_left', result.message, 'warning');
+                // Add success notification here
             }
         } catch (error) {
-            notify('top_left', error.message, 'error');
+            console.error('Upload error:', error);
+        console.log('submit3');
+        // Add error notification here
         }
+    }
+
+    close() {
+        const popup = document.querySelector('.popup');
+        popup.classList.remove('active');
+        popup.innerHTML = '';
     }
 
 
