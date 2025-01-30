@@ -127,10 +127,10 @@ export class SingleVisitView {
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
             {
-                method: dashboardController.visitsAttachmentPopUpView,
-                dataKey: 'procedure_data',
-                dataArray: 'procedure_data',
-                // condition: (data) => data.success,
+                method: dashboardController.visitAttachmentsCardView,
+                dataKey: 'attachments_data',
+                dataArray: 'attachments_data',
+                condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
 

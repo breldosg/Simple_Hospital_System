@@ -2,8 +2,11 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 4000;
-const { check_cookie, get_cookie, user_agent_infos, trailing_slashes } = require('./utility/serverFunctions.js');
+const { check_cookie, get_cookie, user_agent_infos, trailing_slashes, ApiHost } = require('./utility/serverFunctions.js');
 const cookieParser = require('cookie-parser');
+const { pipeline } = require("stream");
+const { promisify } = require("util");
+const pipelineAsync = promisify(pipeline);
 
 // Use cookie-parser middleware
 app.use(trailing_slashes)
@@ -30,6 +33,55 @@ app.use('/api/pharmacy', apiRouterPharmacy);
 app.get(['/', '/login'], (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 })
+
+
+app.get("/attachments/:filename", async (req, res) => {
+    const { filename } = req.params;
+    const imageUrl = `${ApiHost}/assets/attachments/${filename}`;
+
+    console.log('imageUrl:', imageUrl);
+    
+
+    try {
+        const response = await fetch(imageUrl);
+
+        if (!response.ok) {
+            return res.status(404).send("Image not found");
+        }
+// Set correct content type
+res.set("Content-Type", response.headers.get("content-type"));
+
+// Stream the response properly
+await pipelineAsync(response.body, res);
+    } catch (error) {
+        console.error("Error fetching image:", error);
+        res.status(500).send("Server error");
+    }
+});
+
+app.get("/images/:filename", async (req, res) => {
+    const { filename } = req.params;
+    const imageUrl = `${ApiHost}/assets/images/${filename}`;
+
+    console.log('imageUrl:', imageUrl);
+    
+
+    try {
+        const response = await fetch(imageUrl);
+
+        if (!response.ok) {
+            return res.status(404).send("Image not found");
+        }
+// Set correct content type
+res.set("Content-Type", response.headers.get("content-type"));
+
+// Stream the response properly
+await pipelineAsync(response.body, res);
+    } catch (error) {
+        console.error("Error fetching image:", error);
+        res.status(500).send("Server error");
+    }
+});
 
 
 

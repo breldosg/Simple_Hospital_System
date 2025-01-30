@@ -1,4 +1,5 @@
 import { attachment_type_selects } from "../custom/customizing.js";
+import { notify } from "../script/index.js";
 
 export class VisitsAttachmentPopUpView {
     constructor() {
@@ -39,7 +40,7 @@ export class VisitsAttachmentPopUpView {
         }).join('')}
                         </br-select>
 
-                    <br-input placeholder="Enter additional information" name="note"
+                    <br-input placeholder="Enter additional information" id="attachment_note" name="allergy_note"
                         label="Note" required type="textarea" styles="
                         border-radius: var(--input_main_border_r);
                         width: 552px;
@@ -55,9 +56,10 @@ export class VisitsAttachmentPopUpView {
                             <div class="folder_icon">
                                 <span class='switch_icon_folder_open'></span>
                             </div>
-                            <p>Drag files here or</p>
-                            <button class="browse_btn" id="browse_btn">Browse</button>
-                            <input type="file" id="file_input" multiple hidden>
+                            <p class="title">Drag Files Here Or <button class="browse_btn" id="browse_btn">Browse</button></p>
+                            <p class="note">You can upload up to 5 files at a time.</p>
+                            
+                            <input type="file" id="file_input" max="5" multiple hidden>
                         </div>
                         <div class="file_list scroll_bar" id="file_list"></div>
                     </div>
@@ -128,6 +130,12 @@ export class VisitsAttachmentPopUpView {
     }
 
     handleFiles(newFiles) {
+        // check file limit 
+        if (this.files.length + newFiles.length > 6) {
+            // Add error notification here
+            notify('top_left', 'Maximum limit reached! You can only upload up to 5 files.', 'warning');
+            return;
+        }
         this.files = [...this.files, ...newFiles];
         this.updateFileList();
         this.updateSubmitButton();
@@ -166,37 +174,38 @@ export class VisitsAttachmentPopUpView {
     }
 
     async handleSubmit() {
-        
+
+        const attachmentNote = this.container.querySelector('#attachment_note').getValue();
         const attachmentType = this.container.querySelector('#attachment_type').getValue();
         if (!attachmentType || this.files.length === 0) return;
 
         const formData = new FormData();
         formData.append('visit_id', this.visit_id);
         formData.append('attachment_type', attachmentType);
+        formData.append('attachment_note', attachmentNote);
         this.files.forEach(file => {
             formData.append('files', file);
         });
-        console.log('submit1');
 
         try {
             const response = await fetch('/api/patient/upload_attachments', {
                 method: 'POST',
                 body: formData
             });
-        console.log('submit2');
 
 
             if (!response.ok) throw new Error('Upload failed');
 
             const result = await response.json();
             if (result.success) {
+                notify('top_left', result.message, 'success');
                 this.close();
-                // Add success notification here
+            }
+            else {
+                notify('top_left', result.message, 'warning');
             }
         } catch (error) {
-            console.error('Upload error:', error);
-        console.log('submit3');
-        // Add error notification here
+            notify('top_left', 'Fail To Upload Files.', 'error');
         }
     }
 

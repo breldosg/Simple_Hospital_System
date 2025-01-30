@@ -14441,3 +14441,14 @@ export const attachment_type_selects = [
     'ECHO',
     'Other'
 ];
+
+export const fileCategories = {
+    switch_icon_file_pdf: ["pdf"],
+    switch_icon_file_image: ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "tiff"],
+    switch_icon_file_video: ["mp4", "mkv", "avi", "mov", "wmv", "flv", "webm"],
+    switch_icon_file_audio: ["mp3", "wav", "aac", "ogg", "flac", "m4a"],
+    switch_icon_file_word: ["doc", "docx"],
+    switch_icon_file_powerpoint: ["ppt", "pptx"],
+    switch_icon_file_excel: ["xls", "xlsx"],
+    switch_icon_file_csv: ["csv"]
+};

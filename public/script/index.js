@@ -1,6 +1,7 @@
 import { frontRouter } from "/public/script/route.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { dashboardController } from "../controller/DashboardController.js";
+import { fileCategories } from "../custom/customizing.js";
 
 
 
@@ -185,6 +186,15 @@ export function debounce(func, delay) {
             func.apply(context, args);
         }, delay);
     };
+}
+
+export function getFileExtension(fileName) {
+    return fileName.split('.').pop();
+}
+
+export function getFileCategory(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    return Object.keys(fileCategories).find(cat => fileCategories[cat].includes(ext)) || "unknown";
 }
 
 

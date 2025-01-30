@@ -4332,6 +4332,136 @@ input {
                             }
                         }
 
+
+                        /* -------------------------------------------------------- */
+
+                        .attachment_card_cont_cont {
+                            .attachment_card_cont {
+                                display: flex;
+                                flex-direction: column;
+                                flex: none;
+                                gap: 20px;
+
+                                .btn {
+                                    width: 35px;
+                                    height: 35px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border-radius: 5px;
+                                    flex: none;
+                                    cursor: pointer;
+
+                                    span {
+                                        font-size: 16px;
+                                    }
+                                }
+
+                                .btn:hover {
+                                    background-color: var(--pri_op);
+
+                                    span {
+                                        color: var(--pri_color);
+                                    }
+                                }
+
+                                .delete_btn:hover {
+                                    background-color: var(--white_error_color_op1);
+
+                                    span {
+                                        color: var(--error_color);
+                                    }
+                                }
+
+                                .attachment_card {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 10px;
+                                    width: 100%;
+                                    padding: 20px;
+                                    border-radius: var(--main_border_r);
+                                    border: solid 1px var(--pri_border_color);
+
+                                    
+
+                                    .top {
+                                        display: flex;
+                                        gap: 10px;
+
+                                        .icon {
+                                            width: 50px;
+                                            height: 50px;
+                                            background-color: var(--pri_back_op);
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            border-radius: 5px;
+
+                                            span {
+                                                font-size: 25px;
+                                                color: var(--pri_color);
+
+                                            }
+                                        }
+
+                                        .other {
+                                            width: calc(100% - 50px);
+                                            display: flex;
+                                            justify-content: space-between;
+                                            gap: 10px;
+
+                                            .info {
+
+                                                .head {
+                                                    font-size: 14px;
+                                                    font-weight: 700;
+                                                    white-space: nowrap;
+                                                    text-overflow: ellipsis;
+                                                    overflow: hidden;
+                                                    display: inline-block;
+
+                                                }
+
+                                                .description {
+
+                                                    .created_by,
+                                                    .date {
+                                                        font-size: 10px;
+                                                    }
+                                                }
+                                            }
+
+                                            .action_btn {
+                                                display: flex;
+                                                gap: 10px;
+                                            }
+                                        }
+                                    }
+
+                                    .bottom {
+                                        .note_cont {
+                                            display: flex;
+                                            flex-direction: column;
+                                            /* gap: 5px; */
+
+                                            .head {
+                                                font-weight: 600;
+                                            }
+
+                                        }
+                                    }
+
+                                }
+
+                                .attachment_card *{
+                                    cursor: pointer !important;
+                                }
+                                .attachment_card:hover {
+                                    background: var(--pri_op1);
+                                }
+                            }
+                        }
+
                     }
                 }
 
@@ -11403,10 +11533,6 @@ input {
                 border-radius: 5px;
                 flex: none;
                 cursor: pointer;
-
-                span {
-                    /* font-size: 20px; */
-                }
             }
 
             .close_btn:hover {
@@ -11442,16 +11568,20 @@ input {
                     }
                 }
 
-                p {
-                    /* color: #666; */
+                .title {
+                    font-weight: 700;
+                }
+
+                .note {
                     margin: 0 0 8px 0;
+                    color: var(--gray_text);
                 }
 
                 .browse_btn {
                     color: var(--pri_color);
                     background: none;
                     border: none;
-                    font-weight: 500;
+                    font-weight: 900;
                     cursor: pointer;
                 }
 

@@ -76,20 +76,12 @@ const storage = multer.diskStorage({
     }
 });
 
-const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword'];
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error('Invalid file type'), false);
-    }
-};
+
 
 const upload = multer({
     storage: storage,
-    fileFilter: fileFilter,
     limits: {
-        fileSize: 5 * 1024 * 1024
+        fileSize: 50 * 1024 * 1024
     }
 });
 
@@ -106,14 +98,13 @@ const handleFileUpload = async (req, res) => {
     const user_infos = JSON.stringify(user_agent_infos(req));
 
     try {
-        console.log(req.files);
-        
+
         const formData = new FormData();
 
         // Add files to form data
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
-                formData.append('files', fs.createReadStream(file.path), file.originalname);
+                formData.append('files[]', fs.createReadStream(file.path), file.originalname);
             }
         }
 
@@ -123,12 +114,6 @@ const handleFileUpload = async (req, res) => {
         // Add data as a JSON string in a form field
         const dataObject = {
             ...req.body,
-            files: req.files.map(file => ({
-                filename: file.filename,
-                originalname: file.originalname,
-                size: file.size,
-                mimetype: file.mimetype
-            }))
         };
         formData.append('data', JSON.stringify(dataObject));
 
@@ -143,6 +128,7 @@ const handleFileUpload = async (req, res) => {
             },
             body: formData
         });
+
 
         const data = await response.json();
 
