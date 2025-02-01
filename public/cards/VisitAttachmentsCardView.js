@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, getFileCategory, notify } from "../script/index.js";
+import { date_formatter, download, getFileCategory, notify } from "../script/index.js";
 
 export class VisitAttachmentsCardView {
     constructor() {
@@ -34,9 +34,8 @@ export class VisitAttachmentsCardView {
 
         this.main_cont = document.querySelector('.attachment_card_cont_cont');
 
-        if (this.datas.length >= 1) {
-            this.renderAttachmentCards();
-        }
+        this.renderAttachmentCards();
+
     }
 
     renderAttachmentCards() {
@@ -67,7 +66,7 @@ export class VisitAttachmentsCardView {
                             </div>
                             
                             <div class="action_btn">
-                                <div class="btn" title="Download Attachment">
+                                <div class="btn download_btn" title="Download Attachment">
                                     <span class='switch_icon_file_download1'></span>
                                 </div>
     
@@ -90,10 +89,23 @@ ${data.note ? `
                         : ''
                     }
                 `;
+                card.addEventListener('click', () => {
+                    // open the link in black tab
+                    window.open(data.url, '_blank');
+                });
 
                 // delete listener
+                const download_btn = card.querySelector('.download_btn');
+                download_btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    download(data.url, data.file_name);
+                });
+                // delete listener
                 const delete_btn = card.querySelector('.delete_btn');
-                delete_btn.addEventListener('click', () => {
+                delete_btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
 
                     dashboardController.confirmPopUpView.PreRender({
                         callback: 'remove_attachment_request',
@@ -132,7 +144,7 @@ ${data.note ? `
                 </div>
             </div>
 
-            <div class="body_part attachment_card_cont">
+            <div class="body_part attachment_card_cont scroll_bar">
 
                 <!-- <div class="attachment_card">
                     <div class="top">
@@ -190,41 +202,44 @@ ${data.note ? `
         return card;
     }
 
-    async remove_attachment_request(ids) {
-        // dashboardController.loaderView.render();
+    async remove_attachment_request(id) {
+        dashboardController.loaderView.render();
 
-        console.log('coming soon');
-        
-        // try {
-        //     const response = await fetch('/api/patient/delete_vaccine_order', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({
-        //             visit_id: this.visit_id,
-        //             attachment_ids: ids,
-        //         })
-        //     });
+        try {
+            const response = await fetch('/api/patient/delete_attachment_order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                    attachment_id: id
+                })
+            });
 
-        //     if (!response.ok) throw new Error('Server Error');
+            if (!response.ok) throw new Error('Server Error');
 
-        //     const result = await response.json();
-        //     if (!result.success) {
-        //         notify('top_left', result.message, 'warning');
-        //         return;
-        //     }
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
 
-        //     notify('top_left', result.message, 'success');
+            notify('top_left', result.message, 'success');
 
-        //     if (this.singleSelectedToDelete) {
-        //         this.singleSelectedToDelete.remove();
-        //         this.singleSelectedToDelete = '';
-        //     }
+            this.PreRender({
+                data: result.data,
+                state: 'modify',
+                visit_id: this.visit_id
+            });
+            // if (this.singleSelectedToDelete) {
+            //     this.singleSelectedToDelete.remove();
+            //     this.singleSelectedToDelete = '';
+            // }
 
-        // } catch (error) {
-        //     notify('top_left', error.message, 'error');
-        // } finally {
-        //     dashboardController.loaderView.remove();
-        // }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            dashboardController.loaderView.remove();
+        }
     }
 
 }

@@ -63,6 +63,9 @@ const routes = {
     '/store/orderlist': dashboardController.viewOrderListView,
 
 
+    '/radiology': dashboardController.viewActiveRadiologyListView,
+    '/radiology/activevisits': dashboardController.viewActiveRadiologyListView,
+    '/radiology/activevisits/:id': dashboardController.singleVisitRadiologyView,
 
 
     '/notice': screenCollection.dashboardScreen,
@@ -198,3 +201,30 @@ export function getFileCategory(fileName) {
 }
 
 
+export async function download(url, file_name) {
+    try {
+        const fetchResponse = await fetch(url);
+
+        if (!fetchResponse.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        notify('top_left', 'Download Started.', 'success');
+        const responseData = await fetchResponse.blob();
+
+        const objectUrl = URL.createObjectURL(responseData); // Create an Object URL
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = file_name; // You can set a default filename here
+        document.body.appendChild(link);
+        link.click(); // Trigger the download
+        document.body.removeChild(link);
+        // Revoke the Object URL after the download to free memory ,wait for some seconds before to make sure it is used before revoked
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 100);
+    }
+    catch (e) {
+        console.error('There was a problem with the fetch operation:', e);
+        notify('top_left', 'Download Fail.', 'error');
+
+    }
+
+}

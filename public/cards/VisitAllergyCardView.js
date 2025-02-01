@@ -9,6 +9,8 @@ export class VisitAllergyCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        window.remove_allergy_request = this.remove_allergy_request.bind(this);
+
     }
 
     async PreRender(params = []) {
@@ -34,18 +36,17 @@ export class VisitAllergyCardView {
             dashboardController.singleVisitView.add_to_rendered_card_array('visitAllergyPopUpView');
         }
 
-        if (this.datas.length >= 1) {
-            this.renderAllergyCards();
-        }
+
+        this.renderAllergyCards();
+
     }
 
     renderAllergyCards() {
 
         const container = document.querySelector('.allergy_card_cont_cont .body_part')
 
-        if (this.state == 'creation') {
-            container.innerHTML = '';
-        }
+        container.innerHTML = '';
+
 
         if (this.datas.length > 0) {
             this.datas.forEach((data) => {
@@ -99,6 +100,26 @@ export class VisitAllergyCardView {
 
                     `;
 
+                const delete_btn = card.querySelector('.delete_btn');
+                delete_btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'remove_allergy_request',
+                        parameter: data.id,
+                        title: 'Remove Allergy',
+                        sub_heading: `Allergy: ${data.allergy_type}`,
+                        description: 'Are you sure you want to remove this allergy?',
+                        ok_btn: 'Remove',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.singleSelectedToDelete = card;
+
+                });
+
+
                 container.prepend(card);
             })
 
@@ -147,6 +168,43 @@ export class VisitAllergyCardView {
 
     }
 
+    async remove_allergy_request(id) {
+        dashboardController.loaderView.render();
 
+        try {
+            const response = await fetch('/api/patient/delete_allergy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                    allergy_id: id
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+
+            notify('top_left', result.message, 'success');
+
+            this.PreRender({
+                data: result.data,
+                state: 'modify',
+                visit_id: this.visit_id
+            });
+            // if (this.singleSelectedToDelete) {
+            //     this.singleSelectedToDelete.remove();
+            //     this.singleSelectedToDelete = '';
+            // }
+
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            dashboardController.loaderView.remove();
+        }
+    }
 }
-

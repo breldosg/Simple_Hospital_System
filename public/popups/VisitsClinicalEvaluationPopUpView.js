@@ -205,7 +205,6 @@ export class VisitsClinicalEvaluationPopUpView {
             visit_id: this.visit_id
         };
 
-        console.log(data);
 
 
         try {

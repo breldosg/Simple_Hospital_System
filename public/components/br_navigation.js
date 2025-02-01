@@ -12,81 +12,116 @@ export class BrCustomNavigation extends HTMLElement {
         });
     }
 
-    render() {
+    render(){
         const staff_name = this.getAttribute('name') || '';
         const staff_role = this.getAttribute('role') || '';
         const nameInitial = staff_name.split('')[0];
 
         this.shadowRoot.innerHTML = `
-<style>
+        <style>${this.Styles()}</style>
+        ${this.createTopNavigation(staff_name, staff_role, nameInitial)}
+        ${this.createNavigationChoices()}
+    `;
+    }
 
-${this.Styles()}
+    createTopNavigation(staffName, staffRole, nameInitial) {
+        return `
+            <div class="top">
+                <div class="nav_cont">
+                    ${this.createMainNavItems()}
+                </div>
+                <div class="staff_cont">
+                    <div class="word_cont">
+                        <p class="main_name">${staffName}</p>
+                        <p class="sub_name">${staffRole}</p>
+                    </div>
+                    <div class="imag">
+                        <span>${nameInitial}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
-</style>
+    createMainNavItems() {
+        const navItems = [
+            { label: 'Users', link: '/users' },
+            { label: 'Patients', link: '/patient' },
+            { label: 'Pharmacy', link: '/pharmacy' },
+            { label: 'Radiology', link: '/radiology' },
+            { label: 'Store', link: '/store' },
+            { label: 'Notice', link: '/notice' }
+        ];
 
-<div class="top">
-    <div class="nav_cont">
+        return navItems.map((item, index) => 
+            `<div link="${item.link}" class="nav_item ${index === 0 ? 'active' : ''}">${item.label}</div>`
+        ).join('');
+    }
 
-        <div link="/users" class="nav_item active">Users</div>
-        <div link="/patient" class="nav_item">Patients</div>
-        <div link="/pharmacy" class="nav_item">Pharmacy</div>
-        <div link="/store" class="nav_item">Store</div>
-        <div link="/notice" class="nav_item">Notice</div>
 
-    </div>
+    createNavigationChoices() {
+        const navigationSections = [
+            {
+                type: '/users',
+                choices: [
+                    { label: 'User List', href: '/users/userlist' },
+                    { label: 'Add User', href: '/users/adduser' },
+                    { label: 'Attendance', href: '/users/attendance' }
+                ]
+            },
+            {
+                type: '/patient',
+                choices: [
+                    { label: 'View Patient', href: '/patient/viewpatient' },
+                    { label: 'Add Patient', href: '/patient/addpatient' },
+                    { label: 'On Progress Visits', href: '/patient/activevisit' }
+                ]
+            },
+            {
+                type: '/pharmacy',
+                choices: [
+                    { label: 'View All Products', href: '/pharmacy/viewpharmacyproducts' },
+                    { label: 'View All category', href: '/pharmacy/viewcategory' },
+                    { label: 'Add category', href: '/pharmacy/addcategory' },
+                    { label: 'Order List', href: '/pharmacy/orderlist' }
+                ]
+            },
+            {
+                type: '/radiology',
+                choices: [
+                    { label: 'Active Visits', href: '/radiology/activevisits' },
+                ]
+            },
+            {
+                type: '/store',
+                choices: [
+                    { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                    { label: 'View All category', href: '/store/viewcategory' },
+                    { label: 'Add category', href: '/store/addcategory' },
+                    { label: 'View All batch', href: '/store/viewinatakebatch' },
+                    { label: 'Pharmacy Orders', href: '/store/orderlist' }
+                ]
+            },
+            {
+                type: '/notice',
+                choices: [
+                    { label: 'View All notice', href: '/notice/viewnotice' },
+                    { label: 'Add notice', href: '/notice/addnotice' }
+                ]
+            }
+        ];
 
-    <div class="staff_cont">
-        <div class="word_cont">
-            <p class="main_name">${staff_name}</p>
-            <p class="sub_name">${staff_role}</p>
-        </div>
-        <div class="imag">
-            <span>${nameInitial.toLocaleUpperCase()}</span>
-        </div>
-    </div>
-</div>
-<div class="choice_collection">
-
-    <div class="nav_collection active" type="/users">
-
-        <a href="/users/userlist" data-link class="choice_item active">User List</a>
-        <a href="/users/adduser" data-link class="choice_item ">Add User</a>
-        <a href="/users/attendance" data-link class="choice_item">Attendance</a>
-
-    </div>
-
-    <div class="nav_collection" type="/patient">
-
-        <a href="/patient/viewpatient" data-link class="choice_item">View Patient</a>
-        <a href="/patient/addpatient" data-link class="choice_item">Add Patient</a>
-        <a href="/patient/activevisit" data-link class="choice_item">Active Visits</a>
-
-    </div>
-
-    <div class="nav_collection" type="/pharmacy">
-        <a href="/pharmacy/viewpharmacyproducts" data-link class="choice_item">View All Products</a>
-        <a href="/pharmacy/viewcategory" data-link class="choice_item">View All category</a>
-        <a href="/pharmacy/addcategory" data-link class="choice_item">Add category</a>
-        <a href="/pharmacy/orderlist" data-link class="choice_item">Order List</a>
-    </div>
-
-    <div class="nav_collection" type="/store">
-        <a href="/store/viewpharmacyproducts" data-link class="choice_item">View All Products</a>
-        <a href="/store/viewcategory" data-link class="choice_item">View All category</a>
-        <a href="/store/addcategory" data-link class="choice_item">Add category</a>
-        <a href="/store/viewinatakebatch" data-link class="choice_item">View All batch</a>
-        <a href="/store/orderlist" data-link class="choice_item">Pharmacy Orders</a>
-
-    </div>
-
-    <div class="nav_collection " type="/notice">
-
-        <a href="/notice/viewnotice" data-link class="choice_item">View All notice</a>
-        <a href="/notice/addnotice" data-link class="choice_item">Add notice</a>
-
-    </div>
-</div>
-            `;
+        return `
+            <div class="choice_collection">
+                ${navigationSections.map(section => `
+                    <div class="nav_collection ${section.type === '/users' ? 'active' : ''}" type="${section.type}">
+                        ${section.choices.map(choice => 
+                            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
+                        ).join('')}
+                    </div>
+                `).join('')}
+            </div>
+        `;
     }
 
     Styles() {
@@ -170,6 +205,10 @@ ${this.Styles()}
                     font-weight: bold;
                     text-transform: capitalize;
                     font-size: 14px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: inline-block;
                 }
 
                 .sub_name {

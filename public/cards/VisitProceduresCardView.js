@@ -32,9 +32,9 @@ export class VisitProceduresCardView {
             dashboardController.singleVisitView.add_to_rendered_card_array('visitsProcedurePopUpView');
         }
 
-        if (this.datas.length >= 1) {
-            this.renderProcedureCards();
-        }
+
+        this.renderProcedureCards();
+
     }
 
     renderProcedureCards() {

@@ -20,7 +20,7 @@ export class VisitsPrescriptionPopUpView {
         }
 
         console.log(params);
-        
+
         this.visit_id = params.visit_id;
 
         // Clear all constructor variables
@@ -183,7 +183,7 @@ export class VisitsPrescriptionPopUpView {
         }
 
         console.log(this.visit_id);
-        
+
         var body_form = {
             visit_id: this.visit_id,
             prescriptions: Array.from(this.pending_data),

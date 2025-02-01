@@ -1,168 +1,179 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
+import { date_formatter, notify } from "../script/index.js";
 
 export class VisitPrescriptionsCardView {
-
     constructor() {
-        // window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
         this.datas = [];
+        this.state = "creation";
+        window.remove_prescription_order_request = this.remove_prescription_order_request.bind(this);
     }
 
     async PreRender(params = []) {
-        // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        if (params.length > 0) {
-            this.datas = params.data ? params.data : [];
-            this.visit_id = params.visit_id;
+        this.datas = params.data ? params.data : [];
+        this.visit_id = params.visit_id;
+        this.state = params.state ? params.state : "creation";
+
+        if (this.state == "creation") {
+            const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
+            const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont .add_card_btn');
+            if (add_btn) {
+                add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
+            }
+            else {
+                cont.appendChild(this.ViewReturn());
+            }
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitsProcedurePopUpView');
         }
 
-        const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
-        const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont .add_card_btn');
-        if (add_btn) {
-            add_btn.insertAdjacentElement('beforebegin', this.ViewReturn())
-        }
-        else {
-            cont.appendChild(this.ViewReturn());
-        }
+        this.main_container = document.querySelector('.prescription_order_card_cont_cont');
 
+        this.renderPrescriptionCards();
 
-        // this.renderNoteCards();
     }
 
-    // renderNoteCards() {
-
-    //     const container = document.querySelector('.patient_note_cards_cont_cont .body_part')
-
-    //     const start_cont = container.querySelector('.start_cont');
-
-    //     // console.log();
+    renderPrescriptionCards() {
+        const container = this.main_container.querySelector('.body_part')
+        console.log(this.datas);
 
 
-    //     if (this.datas.length < 0) {
+        container.innerHTML = '';
 
-    //         if (start_cont) {
-    //             start_cont.remove();
-    //         }
-    //     }
+        if (this.datas.length > 0) {
+            this.datas.forEach((data) => {
 
-    //     this.datas.forEach((data) => {
-    //         const card = document.createElement('div');
-    //         card.className = 'note_card';
 
-    //         card.innerHTML = `
-    //                     <div class="card_head">
-    //                         <p class="title">${data.created_by}</p>
-    //                         <p class="date">${date_formatter(data.created_at)}</p>
-    //                     </div>
-    //                     <p class="detail">
-    //                         ${data.note}
-    //                     </p>
-    //                 `;
+                const card = document.createElement('div');
+                card.classList.add('procedure_card');
+                card.innerHTML = `
+            <div class="top">
+                <div class="card_left">
+                    <p class="date">${data.product_name}</p>
+                    <p class="created_by">${date_formatter(data.created_at)}</p>
+                </div>
+                <div class="card_right">
+                    <div class="delete_btn btn">
+                        <span class="switch_icon_delete"></span>
+                    </div>
+                </div>
+            </div>
 
-    //         container.prepend(card);
-    //     })
+            <div class="data">
+                <p class="head">Amount:</p>
+                <p class="description">${data.amount}</p>
+            </div>
 
-    //     this.datas = [];
+            <div class="data">
+                <p class="head">Duration:</p>
+                <p class="description">${data.duration} days</p>
+            </div>
 
-    // }
+                
+            <div class="data note">
+                <p class="head">Instruction</p>
+                <p class="description scroll_bar">${data.instruction}</p>
+            </div>
+                    `;
+                card.setAttribute('title', data.product_name);
+
+
+                const remove_btn = card.querySelector('.delete_btn');
+                remove_btn.addEventListener('click', () => {
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'remove_prescription_order_request',
+                        parameter: data.id,
+                        title: 'Remove Procedure Order',
+                        sub_heading: `Order For: ${data.procedure_name}`,
+                        description: 'Are you sure you want to remove this procedure order?',
+                        ok_btn: 'Remove',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.singleSelectedToDelete = card;
+
+                });
+
+
+                container.prepend(card);
+            })
+        }
+
+        this.datas = [];
+    }
 
     ViewReturn() {
-
         const card = document.createElement('div');
         card.className = 'more_visit_detail_card';
-        card.classList.add('prescriptions_cont_cont');
+        card.classList.add('prescription_order_card_cont_cont');
 
         card.innerHTML = `
             <div class="head_part">
-                <h4 class="heading">Prescriptions</h4>
+                <h4 class="heading">Prescription Orders</h4>
 
-                <div class="add_btn" id="add_prescriptions" >
+                <div class="add_btn">
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
 
-            <div class="body_part prescriptions_cont">
-
-                <!-- no note show -->
-                <!-- <div class="start_cont">
-                    <p class="start_view_overlay">No Patient Note Found</p>
-                </div> -->
+            <div class="body_part prescription_card_cont">
 
             </div>
+        `;
 
-        
-            `;
-
-
-        const edit_btn = card.querySelector('.prescriptions_cont_cont #add_prescriptions');
-        edit_btn.addEventListener('click', () => {
-            // dashboardController.visitPlanForNextVisitPopUpView.PreRender();
-            console.log('add_prescriptions not yet');
-            
+        const add_btn = card.querySelector('.add_btn');
+        add_btn.addEventListener('click', () => {
+            dashboardController.visitsPrescriptionPopUpView.PreRender(
+                {
+                    visit_id: this.visit_id,
+                    state: 'modify',
+                }
+            );
         })
 
         return card;
-
     }
 
-    attachListeners() {
-        //     const cancel_btn = document.querySelector('br-button[type="cancel"]');
+    async remove_prescription_order_request(id) {
+        dashboardController.loaderView.render();
 
-        //     cancel_btn.addEventListener('click', () => {
-        //         this.close();
-        //     });
+        try {
+            const response = await fetch('/api/patient/delete_prescription_order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                    prescription_id: id,
+                    state: 'single',
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+
+            notify('top_left', result.message, 'success');
+
+            if (this.singleSelectedToDelete) {
+                this.singleSelectedToDelete.remove();
+                this.singleSelectedToDelete = '';
+            }
+
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            dashboardController.loaderView.remove();
+        }
     }
 
-    // async save_patient_note(data_old) {
-    //     const btn_submit = document.querySelector('br-button[type="submit"]');
-    //     btn_submit.setAttribute('loading', true);
-
-
-    //     var formData = {
-    //         ...data_old,
-    //         visit_id: this.visit_id,
-    //         action: 'create',
-    //     }
-
-
-    //     try {
-    //         const response = await fetch('/api/patient/save_update_delete_patient_note', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(formData)
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error('failed To update vital. Server Error');
-    //         }
-
-    //         const result = await response.json();
-
-    //         if (result.success) {
-    //             notify('top_left', result.message, 'success');
-    //             // After successful creation, clear the popup and close it
-    //             dashboardController.addPatientNotePopUpView.close();
-
-    //             this.datas = [];
-    //             this.datas.push(result.data);
-
-    //             this.renderNoteCards()
-
-    //         } else {
-    //             notify('top_left', result.message, 'warning');
-    //         }
-    //     } catch (error) {
-    //         notify('top_left', error.message, 'error');
-    //     }
-    //     finally {
-    //         btn_submit.setAttribute('loading', false);
-    //     }
-    // }
 }

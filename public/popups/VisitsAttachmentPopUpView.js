@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { attachment_type_selects } from "../custom/customizing.js";
 import { notify } from "../script/index.js";
 
@@ -183,6 +184,7 @@ export class VisitsAttachmentPopUpView {
         formData.append('visit_id', this.visit_id);
         formData.append('attachment_type', attachmentType);
         formData.append('attachment_note', attachmentNote);
+
         this.files.forEach(file => {
             formData.append('files', file);
         });
@@ -193,11 +195,16 @@ export class VisitsAttachmentPopUpView {
                 body: formData
             });
 
-
             if (!response.ok) throw new Error('Upload failed');
 
             const result = await response.json();
+
             if (result.success) {
+                dashboardController.visitAttachmentsCardView.PreRender({
+                    visit_id: this.visit_id,
+                    data: result.data,
+                    state: this.state,
+                });
                 notify('top_left', result.message, 'success');
                 this.close();
             }

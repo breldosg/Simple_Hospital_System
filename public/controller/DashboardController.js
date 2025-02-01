@@ -53,6 +53,8 @@ import { VisitsVaccinePopUpView } from "../popups/VisitsVaccinePopUpView.js";
 import { VisitsPrescriptionPopUpView } from "../popups/VisitsPrescriptionPopUpView.js";
 import { VisitsAttachmentPopUpView } from "../popups/VisitsAttachmentPopUpView.js";
 import { VisitAttachmentsCardView } from "../cards/VisitAttachmentsCardView.js";
+import { ViewActiveRadiologyListView } from "../views/viewActiveRadiologyListView.js";
+import { SingleVisitRadiologyView } from "../views/SingleVisitRadiologyView.js";
 
 class DashboardController {
     // Loader View
@@ -125,6 +127,10 @@ class DashboardController {
     approvePharmacyOrderPopUpView = new ApprovePharmacyOrderPopUpView();
     singleVisitView = new SingleVisitView();
 
+
+    // Radiology Section
+    viewActiveRadiologyListView = new ViewActiveRadiologyListView();
+    singleVisitRadiologyView = new SingleVisitRadiologyView();
 
 
 }
