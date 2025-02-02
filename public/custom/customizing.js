@@ -14452,3 +14452,5 @@ export const fileCategories = {
     switch_icon_file_excel: ["xls", "xlsx"],
     switch_icon_file_csv: ["csv"]
 };
+
+// SingleVisitRadiologyView

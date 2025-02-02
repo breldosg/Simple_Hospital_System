@@ -112,6 +112,15 @@ export function date_formatter(ymd) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Intl.DateTimeFormat('en-US', options).format(dateee);
 }
+
+
+export function timeStamp_formatter(ymd) {
+    const dateee = new Date(ymd);
+    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    return new Intl.DateTimeFormat('en-US', options).format(dateee);
+}
+
+
 export function getCurrentDate() {
     const now = new Date();
     const year = now.getFullYear();

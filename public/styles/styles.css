@@ -56,7 +56,8 @@ a {
     text-decoration: none;
 }
 
-p {
+p,
+li {
     font-size: 12px;
 }
 
@@ -905,7 +906,7 @@ input {
                     }
 
                     .orders {
-                        width: 1%;
+                        width: 17%;
                     }
 
                     .department {
@@ -4946,6 +4947,18 @@ input {
                 height: 100%;
                 flex: none;
 
+                .btn {
+                    border: none;
+                    background-color: var(--pri_color);
+                    padding: 10px 35px;
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: var(--white);
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+
+                }
+
                 .left_card {
                     height: 100%;
                     background-color: var(--pure_white_background);
@@ -5026,7 +5039,7 @@ input {
                     .bottom {
                         height: calc(100% - 50px);
                         width: 100%;
-                        overflow: scroll;
+                        overflow: hidden;
                         display: flex;
                         gap: var(--main_padding);
 
@@ -5035,6 +5048,14 @@ input {
                             height: 100%;
                             flex: none;
                             padding-block: 10px;
+
+                        }
+
+                        .order_section {
+                            overflow-y: scroll;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
 
 
                             .order_card {
@@ -5052,7 +5073,7 @@ input {
                                     flex-direction: column;
                                     align-items: start;
                                     justify-content: center;
-                                    width: calc(100% - 26px);
+                                    width: 50%;
 
                                     .title {
                                         font-weight: 900;
@@ -5086,12 +5107,46 @@ input {
                             .order_card:hover {
                                 background: var(--pri_op1);
                             }
+                            
+                            .order_card.active {
+                                background: var(--pri_op1);
+                            }
 
                         }
 
-                        .list {
+                        .illness_section {
                             overflow-y: scroll;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 15px;
+
+
+                            .illness_card {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 8px;
+
+                                .head {
+                                    color: var(--pri_color);
+                                    padding-bottom: 10px;
+                                    font-weight: 700;
+                                    border-bottom: 2px solid var(--active_color);
+                                    font-size: 14px;
+                                }
+
+                                ul {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 5px;
+                                    font-weight: 600;
+                                    padding-left: 15px;
+                                    li{
+                                        width: 90%;
+                                    }
+                                }
+                            }
                         }
+
                     }
                 }
 
@@ -5174,7 +5229,7 @@ input {
                     .bottom {
                         height: calc(100% - 50px);
                         width: 100%;
-                        overflow: scroll;
+                        overflow: hidden;
                         display: flex;
                         gap: var(--main_padding);
 
@@ -5278,7 +5333,7 @@ input {
                                         align-items: center;
                                         gap: 10px;
 
-                                        .btn {
+                                        .icon_btn {
                                             width: 35px;
                                             height: 35px;
                                             display: flex;
@@ -5314,6 +5369,47 @@ input {
                                 .image_card:hover {
                                     background: var(--pri_op1);
                                 }
+                            }
+
+                            .report {
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 10px;
+
+                                .input_cont {
+                                    width: 100%;
+                                    height: 40%;
+
+                                    .textarea {
+                                        width: 100%;
+                                        height: calc(100% - 14px);
+                                        border: 2px solid var(--input_border);
+                                        padding: 10px;
+                                        border-radius: 8px;
+                                        resize: none;
+                                        overflow-y: scroll;
+                                        outline: none;
+                                    }
+                                }
+
+                                .btn_cont {
+                                    width: 100%;
+                                    height: 50px;
+                                    display: flex;
+                                    justify-content: end;
+                                    align-items: center;
+                                    gap: 10px;
+                                    flex: none;
+
+
+
+
+
+                                }
+
+
                             }
 
                         }
@@ -7004,7 +7100,7 @@ input {
         }
     }
 }
-}
+
 
 .btn_cont {
     display: flex;

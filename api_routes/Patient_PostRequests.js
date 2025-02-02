@@ -26,7 +26,7 @@ const ROUTE_CONFIG = {
     save_update_delete_patient_note: 480,
     save_clinical_note: 500,
     save_allergy: 510,
-    delete_allergy: 730,
+    delete_allergy: 720,
     save_next_visit_plan: 520,
 
     // Diagnostic Orders
@@ -64,7 +64,8 @@ const ROUTE_CONFIG = {
 
 
     // Radiology
-    search_visit_with_radiology_order: 720,
+    search_visit_with_radiology_order: 730,
+    single_visit_with_radiology_order_detail: 740,
 };
 
 
