@@ -541,14 +541,20 @@ export class SingleVisitRadiologyView {
 
         let isValid = true;
         form.forEach(input => {
-            var value = input.value.trim();
-            if (value == '') {
-                isValid = false;
-                input.classList.add('error');
+            if (input.hasAttribute('required')) {
+                var value = input.value.trim();
+                if (value == '') {
+                    isValid = false;
+                    input.classList.add('error');
+                }
+                else {
+                    input.classList.remove('error');
+                    data_to_submit[input.name] = value;
+                }
             }
-            else {
+            else{
                 input.classList.remove('error');
-                data_to_submit[input.name] = value;
+                data_to_submit[input.name] = input.value;
             }
         });
 
@@ -624,13 +630,15 @@ export class SingleVisitRadiologyView {
         report_form.innerHTML = '';
 
         const report_fields = ['comparison', 'findings', 'impression', 'recommendation'];
+        const required_fields = ['findings', 'impression'];
 
         report_fields.forEach(field => {
             const input_container = document.createElement('div');
             input_container.classList.add('input_cont');
+
             input_container.innerHTML = `
                 <p class="label">${field.charAt(0).toUpperCase() + field.slice(1)}</p>
-                <textarea name="${field}" class="textarea">${report_data[field] ?? ''}</textarea>
+                <textarea name="${field}" ${required_fields.includes(field) ? 'required' : ''} class="textarea">${report_data[field] ?? ''}</textarea>
             `;
             report_form.appendChild(input_container);
         })
@@ -670,10 +678,6 @@ export class SingleVisitRadiologyView {
         btn_cont.appendChild(submit_btn);
 
         report_form.appendChild(btn_cont);
-
-
-
-
     }
 
     top_card_view(data) {
