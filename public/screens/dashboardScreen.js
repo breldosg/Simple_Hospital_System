@@ -11,22 +11,21 @@ export class dashboardScreen {
     }
 
     async PreRender() {
-        console.log('name', this.Staff_name);
 
-        // if (this.Staff_name == "") {
+        // Fetch the staff data from the server using your API
         const StaffData = await this.fetchData();
         if (StaffData) {
             this.Staff_name = StaffData.name;
             this.staff_role = StaffData.role_name;
         }
-        // }
-        // else {
+
+        globalStates.setState({ user_data: StaffData });
+
 
         // Pre-rendering logic goes here
         this.render();
-        // this.listeners();
         this.setup()
-        // }
+
     }
 
     render() {
@@ -90,6 +89,9 @@ export class dashboardScreen {
             }
 
             const result = await response.json();
+            console.log(result);
+            
+
             return result.success ? result.data : null;
         } catch (error) {
             notify('top_left', error.message, 'error');

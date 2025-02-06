@@ -120,6 +120,12 @@ export function timeStamp_formatter(ymd) {
     return new Intl.DateTimeFormat('en-US', options).format(dateee);
 }
 
+// export function timeStamp_formatter(ymd) {
+//     const dateee = new Date(ymd);
+//     const options = { year: '2-digit', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+//     return new Intl.DateTimeFormat('en-US', options).format(dateee);
+// }
+
 
 export function getCurrentDate() {
     const now = new Date();
@@ -237,3 +243,29 @@ export async function download(url, file_name) {
     }
 
 }
+
+export const uploadWithProgress = (url, formData, onProgress) => {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+
+        // Track progress
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percentComplete = Math.round((event.loaded / event.total) * 100);
+                onProgress(percentComplete); // Call the progress callback
+            }
+        };
+
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve(JSON.parse(xhr.responseText)); // Resolve with the response
+            } else {
+                reject(new Error(xhr.statusText));
+            }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error'));
+        xhr.send(formData);
+    });
+};

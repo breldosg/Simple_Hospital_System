@@ -52,6 +52,21 @@
     transition: all 0.3s ease-in;
 }
 
+.example {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-weight: 600;
+
+    p {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--black-op2);
+    }
+}
+
 a {
     text-decoration: none;
 }
@@ -4838,6 +4853,7 @@ input {
             gap: 20px;
             overflow-y: scroll;
 
+
             .loader_cont {
                 border-radius: var(--main_border_r);
                 position: absolute;
@@ -4950,14 +4966,20 @@ input {
                 .btn {
                     border: none;
                     background-color: var(--pri_color);
-                    padding: 10px 35px;
+                    padding: 10px 10px;
                     font-weight: bold;
                     font-size: 12px;
                     color: var(--white);
                     cursor: pointer;
                     border-radius: var(--input_main_border_r);
-
+                    text-align: center;
+                    width: 103px;
                 }
+
+                .cancel {
+                    background-color: var(--gray_text);
+                }
+
 
                 .left_card {
                     height: 100%;
@@ -5098,6 +5120,14 @@ input {
                                         border-radius: 5px;
                                     }
 
+                                    .complete {
+                                        background-color: var(--success_color);
+                                    }
+
+                                    .approved {
+                                        background-color: var(--warning_color);
+                                    }
+
                                     .pending {
                                         background-color: var(--error_color);
                                     }
@@ -5107,7 +5137,7 @@ input {
                             .order_card:hover {
                                 background: var(--pri_op1);
                             }
-                            
+
                             .order_card.active {
                                 background: var(--pri_op1);
                             }
@@ -5140,7 +5170,8 @@ input {
                                     gap: 5px;
                                     font-weight: 600;
                                     padding-left: 15px;
-                                    li{
+
+                                    li {
                                         width: 90%;
                                     }
                                 }
@@ -5273,7 +5304,12 @@ input {
                                 }
                             }
 
-                            .image_list {
+                            .dragover {
+                                border-color: #00bcd4;
+                                background: #f0fdff;
+                            }
+
+                            .file_list {
                                 display: flex;
                                 flex-direction: column;
                                 gap: 10px;
@@ -5281,7 +5317,7 @@ input {
                                 overflow-y: scroll;
 
 
-                                .image_card {
+                                .file_card {
                                     display: flex;
                                     justify-content: space-between;
                                     width: 100%;
@@ -5297,6 +5333,8 @@ input {
                                         display: flex;
                                         align-items: center;
                                         gap: 10px;
+                                        width: 70%;
+
 
                                         .img_cont {
                                             width: 60px;
@@ -5316,15 +5354,27 @@ input {
                                         .info_cont {
                                             display: flex;
                                             flex-direction: column;
+                                            width: calc(100% - 60px);
 
                                             .title {
                                                 font-size: 16px;
                                                 font-weight: 900;
                                             }
+
+                                            p {
+                                                width: 100%;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                display: inline-block;
+                                            }
                                         }
 
+                                    }
 
-
+                                    .uploading {
+                                        width: 30%;
+                                        justify-content: end;
                                     }
 
                                     .action_side {
@@ -5363,10 +5413,30 @@ input {
                                                 color: var(--error_color);
                                             }
                                         }
+
+                                        .uploading_progress {
+                                            height: 100%;
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: center;
+                                            align-items: center;
+                                            /* gap: 5px; */
+
+                                            .title {
+                                                font-weight: 700;
+                                                font-size: 10px;
+                                            }
+
+                                            .counter {
+                                                font-weight: 900;
+                                                font-size: 16px;
+                                            }
+                                        }
+
                                     }
                                 }
 
-                                .image_card:hover {
+                                .file_card:hover {
                                     background: var(--pri_op1);
                                 }
                             }
@@ -5392,6 +5462,10 @@ input {
                                         overflow-y: scroll;
                                         outline: none;
                                     }
+
+                                    .error {
+                                        border-color: var(--error_color);
+                                    }
                                 }
 
                                 .btn_cont {
@@ -5403,12 +5477,15 @@ input {
                                     gap: 10px;
                                     flex: none;
 
+                                    .staff_data {
+                                        margin-right: auto;
 
-
-
-
+                                        .label {
+                                            font-weight: 600;
+                                            color: var(--gray_text);
+                                        }
+                                    }
                                 }
-
 
                             }
 
@@ -12722,3 +12799,4 @@ input {
 
 
 /* <div class="loader_cont active"><div class="loader"></div></div> */
+

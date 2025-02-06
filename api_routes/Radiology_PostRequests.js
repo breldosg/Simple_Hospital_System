@@ -7,62 +7,17 @@ const FormData = require('form-data');
 const fetch = require('node-fetch');
 const { createRouteHandler, user_agent_infos, get_cookie, check_cookie, ApiHost } = require('../utility/serverFunctions');
 
+
 // Route configuration object
 const ROUTE_CONFIG = {
-    // Patient Management
-    register_patient: 150,
-    search_patient: 160,
-    single_patient: 190,
-
-    // Visit Management
-    get_create_visit_open_data: 200,
-    create_visit: 180,
-    check_out_patient: 210,
-    onprogress_visits: 220,
-    single_visit_detail: 460,
-
-    // Clinical Documentation
-    save_vital: 470,
-    save_update_delete_patient_note: 480,
-    save_clinical_note: 500,
-    save_allergy: 510,
-    delete_allergy: 720,
-    save_next_visit_plan: 520,
-
-    // Diagnostic Orders
-    get_radiology_data: 530,
-    get_lab_test_data: 550,
-    save_radiology_order: 540,
-    save_lab_test_order: 560,
-    delete_lab_test_order: 570,
-    delete_radiology_test_order: 580,
-
-    // Diagnosis Management
-    create_delete_pre_diagnosis: 590,
-    create_delete_final_diagnosis: 600,
-
-    // Procedures and Devices
-    get_data_add_procedure_form: 610,
-    save_implantable_devices: 620,
-    delete_implantable_devices: 630,
-
-    // Vaccines
-    save_vaccine_order: 640,
-    delete_vaccine_order: 650,
-
-    // Procedures
-    save_procedure_order: 660,
-    delete_procedure_order: 670,
-
-    // Prescriptions
-    save_prescription: 680,
-    delete_prescription_order: 710,
-
-    // Attachments
-    upload_attachments: 690,
-    delete_attachment_order: 700,
-
+    search_visit_with_radiology_order: 730,
+    single_visit_with_radiology_order_detail: 740,
+    save_radiology_order_report: 750,
+    upload_attachments: 760,
+    delete_attachments_files: 770,
+    Submit_radiology_order: 780,
 };
+
 
 
 // Configure multer for file upload
@@ -98,6 +53,7 @@ const handleFileUpload = async (req, res) => {
         });
     }
 
+
     const user_cookie = get_cookie(req);
     const user_infos = JSON.stringify(user_agent_infos(req));
 
@@ -106,10 +62,8 @@ const handleFileUpload = async (req, res) => {
         const formData = new FormData();
 
         // Add files to form data
-        if (req.files && req.files.length > 0) {
-            for (const file of req.files) {
-                formData.append('files[]', fs.createReadStream(file.path), file.originalname);
-            }
+        if (req.file) { // For single file upload
+            formData.append('file', fs.createReadStream(req.file.path), req.file.originalname);
         }
 
         // Add key as form field
@@ -133,15 +87,12 @@ const handleFileUpload = async (req, res) => {
             body: formData
         });
 
-
         const data = await response.json();
 
         // Clean up uploaded files
-        if (req.files) {
-            req.files.forEach(file => {
-                fs.unlink(file.path, err => {
-                    if (err) console.error('Error deleting file:', err);
-                });
+        if (req.file) {
+            fs.unlink(req.file.path, err => {
+                if (err) console.error('Error deleting file:', err);
             });
         }
 
@@ -155,11 +106,9 @@ const handleFileUpload = async (req, res) => {
         console.error('Upload error:', error);
 
         // Clean up files in case of error
-        if (req.files) {
-            req.files.forEach(file => {
-                fs.unlink(file.path, err => {
-                    if (err) console.error('Error deleting file:', err);
-                });
+        if (req.file) {
+            fs.unlink(req.file.path, err => {
+                if (err) console.error('Error deleting file:', err);
             });
         }
 
@@ -172,7 +121,7 @@ const handleFileUpload = async (req, res) => {
 };
 
 // Register file upload route
-router.post('/upload_attachments', upload.array('files'), handleFileUpload);
+router.post('/upload_attachments', upload.single('file'), handleFileUpload);
 
 // Register all other routes
 Object.entries(ROUTE_CONFIG).forEach(([routeName, handlerCode]) => {

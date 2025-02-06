@@ -130,7 +130,7 @@ export class ViewActiveRadiologyListView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/patient/search_visit_with_radiology_order', {
+            const response = await fetch('/api/radiology/search_visit_with_radiology_order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

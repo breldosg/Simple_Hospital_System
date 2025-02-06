@@ -269,13 +269,6 @@ export class VisitsPrescriptionPopUpView {
 
         const data = await this.fetch_data(query.query);
 
-        // if (!tableBody) {
-        //     this.PreRender({
-        //         id: this.visit_id
-        //     });
-        //     return;
-        // }
-
         if (this.batchNumber === 1) {
             tableBody.innerHTML = '';
         }
