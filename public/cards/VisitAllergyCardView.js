@@ -63,7 +63,7 @@ export class VisitAllergyCardView {
                             <div class="edit_btn btn" id="edit_patient_allergy" >
                                 <span class='switch_icon_edit'></span>
                             </div>
-                            <div class="delete_btn btn" id="delete_patient_allergy" >
+                            <div class="delete_btn btn" title="Delete this allergy." id="delete_patient_allergy" >
                                 <span class='switch_icon_delete'></span>
                             </div>
                         </div>

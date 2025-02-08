@@ -179,7 +179,7 @@ export class VisitPreDiagnosisCardView {
                 </div>
             </div>
             <div class="right">
-                <div title="Delete this order." class="more_btn order_delete_btn">
+                <div title="Delete this diagnosis." class="more_btn order_delete_btn">
                     <span class='switch_icon_delete'></span>
                 </div>
             </div>

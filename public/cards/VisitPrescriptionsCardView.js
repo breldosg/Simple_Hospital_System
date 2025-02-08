@@ -58,7 +58,7 @@ export class VisitPrescriptionsCardView {
                     <p class="created_by">${date_formatter(data.created_at)}</p>
                 </div>
                 <div class="card_right">
-                    <div class="delete_btn btn">
+                    <div class="delete_btn btn" title="Delete this prescription.">
                         <span class="switch_icon_delete"></span>
                     </div>
                 </div>

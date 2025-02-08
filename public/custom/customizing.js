@@ -14453,4 +14453,34 @@ export const fileCategories = {
     switch_icon_file_csv: ["csv"]
 };
 
-// SingleVisitRadiologyView
+export const visit_type = [
+    {
+        value:'opd',
+        label:'Out Patient',
+    },
+    {
+        value:'ipd',
+        label:'In Patient',
+    },
+    {
+        value:'emergency',
+        label:'Emergency',
+    },
+    {
+        value:'wakin',
+        label:'Waking',
+    },
+];
+
+export const visit_priority = [
+    {
+        value:'normal',
+        label:'Normal',
+    },
+    {
+        value:'vip',
+        label:'VIP',
+    },
+
+];
+

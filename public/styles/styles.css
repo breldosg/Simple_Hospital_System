@@ -916,13 +916,22 @@ input {
                     }
 
                     .name {
-                        width: 45%;
+                        width: 20%;
                         text-align: left;
+                    }
+
+                    .priority {
+                        width: 15%;
+                    }
+
+                    .type {
+                        width: 10%;
                     }
 
                     .orders {
                         width: 17%;
                     }
+
 
                     .department {
                         width: 31%;
@@ -2615,12 +2624,8 @@ input {
                         padding: 5px;
 
                         .note_card {
-                            /* background-color: var(--hover_list_table); */
-                            -webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            /* border: 2px solid var(--black-op3); */
                             border-radius: var(--main_border_r);
-                            background-color: var(--pure_white_background);
+                            border: solid 1px var(--pri_border_color);
                             padding: var(--main_padding);
                             display: flex;
                             flex-direction: column;
@@ -2631,8 +2636,8 @@ input {
                             height: 100%;
                             overflow: hidden;
                             flex: none;
+                            cursor: pointer;
                             flex-grow: 1;
-                            box-shadow: 0 0 5px 0 #0000001d;
 
                             .card_head {
                                 display: flex;
@@ -2684,7 +2689,7 @@ input {
                         }
 
                         .note_card:hover {
-                            box-shadow: 0 0 5px 0 #0000003e;
+                            background: var(--pri_op1);
                         }
 
                     }
@@ -2922,6 +2927,13 @@ input {
                         /* ----------------------------------------------------------- */
 
                         .allergy_card_cont_cont {
+                            padding: 10px;
+
+                            .head_part {
+                                padding: 19px;
+                                padding-top: 10px;
+                                padding-bottom: 0px;
+                            }
 
                             .allergy_card_cont {
                                 display: flex;
@@ -2936,8 +2948,8 @@ input {
                                     width: 100%;
                                     padding: 20px;
                                     border-radius: var(--main_border_r);
-                                    /* border: 2px solid var(--input_border); */
-                                    box-shadow: 0 0 5px 0 #0000001d;
+                                    border: solid 1px var(--pri_border_color);
+                                    cursor: pointer;
 
                                     .top {
                                         border: none;
@@ -3029,7 +3041,7 @@ input {
                                 }
 
                                 .allergy_card:hover {
-                                    box-shadow: 0 0 5px 0 #0000003e;
+                                    background: var(--pri_op1);
                                 }
                             }
 
@@ -3514,7 +3526,8 @@ input {
                                     height: 90px;
                                     padding: 20px;
                                     border-radius: var(--main_border_r);
-                                    box-shadow: 0 0 5px 0 #0000001d;
+                                    /* box-shadow: 0 0 5px 0 #0000001d; */
+                                    border: solid 1px var(--pri_border_color);
                                     cursor: pointer;
 
                                     .left {
@@ -3624,7 +3637,7 @@ input {
                                 }
 
                                 .lab_test_card:hover {
-                                    box-shadow: 0 0 5px 0 #0000003e;
+                                    background: var(--pri_op1);
                                 }
                             }
 
@@ -3744,7 +3757,8 @@ input {
                                     height: 90px;
                                     padding: 20px;
                                     border-radius: var(--main_border_r);
-                                    box-shadow: 0 0 5px 0 #0000001d;
+                                    /* box-shadow: 0 0 5px 0 #0000001d; */
+                                    border: solid 1px var(--pri_border_color);
                                     cursor: pointer;
 
                                     .left {
@@ -3854,7 +3868,7 @@ input {
                                 }
 
                                 .pre_diagnosis_card:hover {
-                                    box-shadow: 0 0 5px 0 #0000003e;
+                                    background: var(--pri_op1);
                                 }
                             }
 
@@ -3974,7 +3988,8 @@ input {
                                     height: 90px;
                                     padding: 20px;
                                     border-radius: var(--main_border_r);
-                                    box-shadow: 0 0 5px 0 #0000001d;
+                                    /* box-shadow: 0 0 5px 0 #0000001d; */
+                                    border: solid 1px var(--pri_border_color);
                                     cursor: pointer;
 
                                     .left {
@@ -4086,7 +4101,7 @@ input {
                                 }
 
                                 .final_diagnosis_card:hover {
-                                    box-shadow: 0 0 5px 0 #0000003e;
+                                    background: var(--pri_op1);
                                 }
                             }
 
@@ -4695,6 +4710,14 @@ input {
                         /* -------------------------------------------------------- */
 
                         .prescription_order_card_cont_cont {
+                            padding: 10px;
+
+                            .head_part {
+                                padding: 19px;
+                                padding-top: 10px;
+                                padding-bottom: 0px;
+                            }
+
                             .prescription_card_cont {
                                 display: flex;
                                 flex-direction: column;
@@ -4757,7 +4780,7 @@ input {
                                         }
 
                                         .date {
-                                            font-size: 20px;
+                                            font-size: 14px;
                                             font-weight: 900;
                                         }
 
@@ -12799,4 +12822,3 @@ input {
 
 
 /* <div class="loader_cont active"><div class="loader"></div></div> */
-

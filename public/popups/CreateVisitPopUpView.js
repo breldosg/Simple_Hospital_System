@@ -1,5 +1,6 @@
 
 import { dashboardController } from "../controller/DashboardController.js";
+import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 
@@ -67,8 +68,7 @@ export class CreateVisitPopUpView {
             </div>
             <div class="input_group">
 
-
-                <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
+            <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
                     styles="
                 border-radius: var(--input_main_border_r);
                 width: 300px;
@@ -77,14 +77,10 @@ export class CreateVisitPopUpView {
                 background-color: transparent;
                 border: 2px solid var(--input_border);
             " labelStyles="font-size: 12px;">
-                    <br-option type="checkbox" value="out_patient">Out Patient</br-option>
-                    <br-option type="checkbox" value="in_patient">In Patient</br-option>
-                    <br-option type="checkbox" value="emergency">Emergency</br-option>
-                    <br-option type="checkbox" value="waking">Waking</br-option>
-                </br-select>
+            </br-select>
                 
                 
-                <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Type"
+            <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Priority"
                     styles="
                 border-radius: var(--input_main_border_r);
                 width: 300px;
@@ -93,9 +89,7 @@ export class CreateVisitPopUpView {
                 background-color: transparent;
                 border: 2px solid var(--input_border);
             " labelStyles="font-size: 12px;">
-                    <br-option type="checkbox" value="normal">Normal</br-option>
-                    <br-option type="checkbox" value="fast">Fast</br-option>
-                </br-select>
+            </br-select>
 
                 
                 <br-select required fontSize="13px" label="Department" name="department" placeholder="Select Department"
@@ -107,7 +101,7 @@ export class CreateVisitPopUpView {
                 background-color: transparent;
                 border: 2px solid var(--input_border);
             " labelStyles="font-size: 12px;">
-                </br-select>
+            </br-select>
 
 
                 <br-select required fontSize="13px" label="Doctors" name="doctors" placeholder="Select Doctors" styles="
@@ -161,25 +155,23 @@ export class CreateVisitPopUpView {
                 background-color: transparent;
                 border: 2px solid var(--input_border);
             " labelStyles="font-size: 12px;">
-                    <br-option type="checkbox" value="out_patient">Out Patient</br-option>
-                    <br-option type="checkbox" value="in_patient">In Patient</br-option>
-                    <br-option type="checkbox" value="emergency">Emergency</br-option>
-                    <br-option type="checkbox" value="waking">Waking</br-option>
+                    ${visit_type.map(type => `<br-option type="checkbox" value="${type.value}">${type.label}</br-option>`).join('')}
                 </br-select>
                 
                 
-                <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Type"
+                <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Priority"
                     styles="
                 border-radius: var(--input_main_border_r);
                 width: 300px;
                 padding: 10px;
                 height: 41px;
                 background-color: transparent;
+
                 border: 2px solid var(--input_border);
             " labelStyles="font-size: 12px;">
-                    <br-option type="checkbox" value="normal">Normal</br-option>
-                    <br-option type="checkbox" value="fast">Fast</br-option>
+                    ${visit_priority.map(priority => `<br-option type="checkbox" value="${priority.value}">${priority.label}</br-option>`).join('')}
                 </br-select>
+
 
                 
                 <br-select required fontSize="13px" label="Department" name="department" placeholder="Select Department"
