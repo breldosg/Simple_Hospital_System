@@ -13,6 +13,7 @@ export class SingleVisitRadiologyView {
         this.active_order_data = null;
         this.on_uploading_cards = [];
         this.card_to_delete = null;
+        this.edit_mode = true;
     }
 
     async PreRender(params) {
@@ -29,15 +30,24 @@ export class SingleVisitRadiologyView {
         this.on_uploading_cards = [];
         this.card_to_delete = null;
 
+        this.rendered_card = [];
+        this.visit_id = params.id;
+
         // Render initial structure
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('active');
 
         this.main_container = document.querySelector('.single_radiology_visit_cont');
-        this.rendered_card = [];
-        this.visit_id = params.id;
-        this.render(params.id);
+
+        // Render patient detail component
+        dashboardController.patientDetailComponent.PreRender({
+            container: this.main_container,
+            visit_id: this.visit_id,
+        })
+        
+        this.render(this.visit_id);
         this.add_listeners();
+
     }
 
     async render() {
@@ -46,7 +56,7 @@ export class SingleVisitRadiologyView {
         if (!visit_data) return;
 
         // Render top patient card
-        this.top_card_view(visit_data.patient_data);
+        // this.top_card_view(visit_data.patient_data);
 
         // Render orders
         this.render_orders(visit_data.radiology_orders);
@@ -69,34 +79,7 @@ export class SingleVisitRadiologyView {
     ViewReturn(loader = '') {
         return `
 <div class="single_radiology_visit_cont">
-    <div class="top_card">
-        <div class="Patient_imag">
-            <img src="" alt="">
-        </div>
-        <div class="patient_detail">
-            <div class="card name_card">
-                <div class="dit_group">
-                    <p class="name"></p>
-                    <p class="description"> Patient id: <span></span></p>
-                </div>
-                <button type="button" data_src="" class="edit_btn">
-                    <span class='switch_icon_edit'></span>
-                </button>
-            </div>
-            <div class="card">
-                ${['user', 'calendar_check', 'location_dot', 'phone', 'briefcase']
-                .map(icon => `
-                <div class="icon_card">
-                    <span class='switch_icon_${icon}'></span>
-                    <p></p>
-                </div>
-                `).join('')}
-            </div>
-        </div>
-        <div class="loader_cont ${loader}">
-            <div class="loader"></div>
-        </div>
-    </div>
+    
     <div class="more_visit_detail">
 
         <div class="left_card">
@@ -171,27 +154,37 @@ export class SingleVisitRadiologyView {
                 <div class="action">
                     <div class="status ${order.status}"></div>
                     <div class="action_btn_cont">
-                        <button type="submit" class="btn ${order.status == 'pending' ? 'disabled' : ''}">
-                        ${order.status === 'complete' ? 'Update' : 'Submit'}
+                        <button type="${order.status === 'complete' ? 'revert' : 'publish'}" class="btn ${order.status == 'pending' ? 'disabled' : ''}">
+                        ${order.status === 'complete' ? 'Revert' : 'Publish'}
                         </button>
                     </div>
                 </div>
             `;
 
-            const btn = card.querySelector('.action_btn_cont button')
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.submit_radiology_order(order.id)
-            });
+            const publishBtn = card.querySelector('.action_btn_cont button[type="publish"]')
+            if (publishBtn) {
+                publishBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.publish_radiology_order(order.id)
+                });
+            }
+
+            const revertBtn = card.querySelector('.action_btn_cont button[type="revert"]');
+            if (revertBtn) {
+                revertBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.revert_radiology_order(order.id)
+                });
+            }
 
             card.addEventListener('click', () => {
                 if (this.current_clicked) {
                     this.current_clicked.classList.remove('active');
                 }
+                this.edit_mode = order.status == 'complete' ? false : true;
                 this.active_order_data = order;
                 this.current_clicked = card;
                 card.classList.add('active');
-                btn.innerHTML = 'Submit';
                 this.render_order_infos_and_form(order.report, order.report_attachment);
             })
 
@@ -282,6 +275,7 @@ export class SingleVisitRadiologyView {
 
                 <div class="section list scroll_bar" id="attachments">
 
+                ${this.edit_mode ? `
                     <div class="dropzone" id="dropzone">
                         <div class="dropzone_content">
                             <div class="folder_icon">
@@ -294,6 +288,9 @@ export class SingleVisitRadiologyView {
                             <input type="file" id="file_input" max="5" multiple="" hidden="">
                         </div>
                     </div>
+                    `: ''
+
+            }
 
                     <div class="file_list scroll_bar">
 
@@ -303,39 +300,40 @@ export class SingleVisitRadiologyView {
 
         `;
 
-
         const browseBtn = bottom.querySelector('#browse_btn');
+        if (browseBtn) {
 
-        browseBtn.addEventListener('click', () => fileInput.click());
-        const fileInput = bottom.querySelector('#file_input');
-        fileInput.addEventListener('change', (e) => {
-            this.handleFiles(Array.from(e.target.files));
-        });
+            browseBtn.addEventListener('click', () => fileInput.click());
+            const fileInput = bottom.querySelector('#file_input');
+            fileInput.addEventListener('change', (e) => {
+                this.handleFiles(Array.from(e.target.files));
+            });
 
-        const dropzone = bottom.querySelector('#dropzone');
-
-        dropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            dropzone.classList.add('dragover');
-        });
+            const dropzone = bottom.querySelector('#dropzone');
 
 
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('dragover');
-        });
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.add('dragover');
+            });
 
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            dropzone.classList.remove('dragover');
-            this.handleFiles(Array.from(e.dataTransfer.files));
-        });
 
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('dragover');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.remove('dragover');
+                this.handleFiles(Array.from(e.dataTransfer.files));
+            });
+        }
 
         body.appendChild(bottom);
-        this.render_uploaded_attachments(attachments_data);
         this.render_report_view(report_data);
+        this.render_uploaded_attachments(attachments_data);
 
     }
 
@@ -552,7 +550,7 @@ export class SingleVisitRadiologyView {
                     data_to_submit[input.name] = value;
                 }
             }
-            else{
+            else {
                 input.classList.remove('error');
                 data_to_submit[input.name] = input.value;
             }
@@ -668,6 +666,7 @@ export class SingleVisitRadiologyView {
 
         const submit_btn = document.createElement('br-button');
         submit_btn.className = 'btn submit';
+        this.edit_mode ? '' : submit_btn.classList.add('disabled');
         submit_btn.setAttribute('type', 'submit');
         submit_btn.setAttribute('loader_width', '23');
         submit_btn.textContent = report_data.comparison ? 'Update' : 'Submit';
@@ -791,9 +790,9 @@ export class SingleVisitRadiologyView {
     }
 
 
-    async submit_radiology_order(id) {
+    async publish_radiology_order(id) {
         try {
-            const response = await fetch('/api/radiology/Submit_radiology_order', {
+            const response = await fetch('/api/radiology/publish_radiology_order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -827,6 +826,40 @@ export class SingleVisitRadiologyView {
         }
     }
 
+    async revert_radiology_order(id) {
+        try {
+            const response = await fetch('/api/radiology/revert_radiology_order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                    order_id: id,
+                })
+            });
 
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                this.single_radiology_data = result.data;
+
+                // clear all constructor and run example view
+                this.render_example();
+
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
 
 }

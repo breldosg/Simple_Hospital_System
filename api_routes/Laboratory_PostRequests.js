@@ -10,13 +10,13 @@ const { createRouteHandler, user_agent_infos, get_cookie, check_cookie, ApiHost 
 
 // Route configuration object
 const ROUTE_CONFIG = {
-    search_visit_with_radiology_order: 730,
-    single_visit_with_radiology_order_detail: 740,
-    save_radiology_order_report: 750,
-    upload_attachments: 760,
-    delete_attachments_files: 770,
-    publish_radiology_order: 780,
-    revert_radiology_order: 790,
+    search_visit_with_laboratory_order: 800,
+    // single_visit_with_radiology_order_detail: 740,
+    // save_radiology_order_report: 750,
+    // upload_attachments: 760,
+    // delete_attachments_files: 770,
+    // publish_radiology_order: 780,
+    // revert_radiology_order: 790,
 };
 
 

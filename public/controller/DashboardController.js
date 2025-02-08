@@ -55,6 +55,8 @@ import { VisitsAttachmentPopUpView } from "../popups/VisitsAttachmentPopUpView.j
 import { VisitAttachmentsCardView } from "../cards/VisitAttachmentsCardView.js";
 import { ViewActiveRadiologyListView } from "../views/viewActiveRadiologyListView.js";
 import { SingleVisitRadiologyView } from "../views/SingleVisitRadiologyView.js";
+import { ViewActiveLaboratoryListView } from "../views/ViewActiveLaboratoryListView.js";
+import { PatientDetailComponent } from "../views/PatientDetailComponent.js";
 
 class DashboardController {
     // Loader View
@@ -73,6 +75,7 @@ class DashboardController {
     singlePatientView = new SinglePatientView();
     createVisitPopUpView = new CreateVisitPopUpView();
     viewOnProgressView = new ViewOnProgressView();
+    patientDetailComponent = new PatientDetailComponent();
 
     //Patient Visit
     visitsClinicalEvaluationPopUpView = new VisitsClinicalEvaluationPopUpView();
@@ -87,7 +90,7 @@ class DashboardController {
     visitsVaccinePopUpView = new VisitsVaccinePopUpView();
     visitsPrescriptionPopUpView = new VisitsPrescriptionPopUpView();
     visitsAttachmentPopUpView = new VisitsAttachmentPopUpView();
-    
+
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();
     visitPatientNoteCardView = new VisitPatientNoteCardView();
@@ -103,8 +106,8 @@ class DashboardController {
     visitImplantableDevicesCardView = new VisitImplantableDevicesCardView();
     visitPreDiagnosisCardView = new VisitPreDiagnosisCardView();
     visitAttachmentsCardView = new VisitAttachmentsCardView();
-    
-    
+
+
     // Patient PopUp
     addVitalPopUpView = new AddVitalPopUpView();
     addPatientNotePopUpView = new AddPatientNotePopUpView();
@@ -132,6 +135,9 @@ class DashboardController {
     viewActiveRadiologyListView = new ViewActiveRadiologyListView();
     singleVisitRadiologyView = new SingleVisitRadiologyView();
 
+
+    // Laboratory Section
+    viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();
 
 }
 

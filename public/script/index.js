@@ -61,13 +61,14 @@ const routes = {
     '/store/viewinatakebatch': dashboardController.viewIntakeBatchView,
     '/store/viewinatakebatch/:id': dashboardController.singleIntakeBatchView,
     '/store/orderlist': dashboardController.viewOrderListView,
-
-
+    
     '/radiology': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits/:id': dashboardController.singleVisitRadiologyView,
-
-
+    
+    '/laboratory': dashboardController.viewActiveLaboratoryListView ,
+    '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView ,
+    
     '/notice': screenCollection.dashboardScreen,
     '/notice/viewnotice': screenCollection.dashboardScreen,
     '/notice/addnotice': screenCollection.dashboardScreen,

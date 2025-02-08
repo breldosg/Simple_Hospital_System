@@ -49,6 +49,7 @@ export class BrCustomNavigation extends HTMLElement {
             { label: 'Patients', link: '/patient' },
             { label: 'Pharmacy', link: '/pharmacy' },
             { label: 'Radiology', link: '/radiology' },
+            { label: 'Laboratory', link: '/laboratory' },
             { label: 'Store', link: '/store' },
             { label: 'Notice', link: '/notice' }
         ];
@@ -90,6 +91,12 @@ export class BrCustomNavigation extends HTMLElement {
                 type: '/radiology',
                 choices: [
                     { label: 'Active Visits', href: '/radiology/activevisits' },
+                ]
+            },
+            {
+                type: '/laboratory',
+                choices: [
+                    { label: 'Active Visits', href: '/laboratory/activevisits' },
                 ]
             },
             {

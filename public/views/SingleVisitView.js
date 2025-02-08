@@ -19,13 +19,24 @@ export class SingleVisitView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        this.rendered_card = [];
+        this.visit_id = params.id;
+
 
         // Render initial structure
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('active');
 
-        this.rendered_card = [];
-        this.visit_id = params.id;
+        // Render patient detail component
+        this.main_container = document.querySelector('.single_visit_cont');
+        dashboardController.patientDetailComponent.PreRender({
+            container: this.main_container,
+            visit_id: this.visit_id,
+        })
+
+
+
+
         this.render(params.id);
 
         // Remove any existing window click listener
@@ -40,7 +51,7 @@ export class SingleVisitView {
         if (!visit_data) return;
 
         // Render top patient card
-        this.top_card_view(visit_data.patient_data);
+        // this.top_card_view(visit_data.patient_data);
         console.log(visit_data);
 
 
@@ -164,34 +175,7 @@ export class SingleVisitView {
     ViewReturn(loader = '') {
         return `
 <div class="single_visit_cont">
-    <div class="top_card">
-        <div class="Patient_imag">
-            <img src="" alt="">
-        </div>
-        <div class="patient_detail">
-            <div class="card name_card">
-                <div class="dit_group">
-                    <p class="name"></p>
-                    <p class="description"> Patient id: <span></span></p>
-                </div>
-                <button type="button" data_src="" class="edit_btn">
-                    <span class='switch_icon_edit'></span>
-                </button>
-            </div>
-            <div class="card">
-                ${['user', 'calendar_check', 'location_dot', 'phone', 'briefcase']
-                .map(icon => `
-                <div class="icon_card">
-                    <span class='switch_icon_${icon}'></span>
-                    <p></p>
-                </div>
-                `).join('')}
-            </div>
-        </div>
-        <div class="loader_cont ${loader}">
-            <div class="loader"></div>
-        </div>
-    </div>
+    
     <div class="more_visit_detail"></div>
     <div class="more_visit_cards">
         ${['Clinical Notes', 'Diagnosis', 'Treatment Plan']
