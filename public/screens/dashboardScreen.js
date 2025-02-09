@@ -89,7 +89,7 @@ export class dashboardScreen {
             }
 
             const result = await response.json();
-            console.log(result);
+ 
             
 
             return result.success ? result.data : null;

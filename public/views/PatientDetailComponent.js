@@ -27,7 +27,7 @@ export class PatientDetailComponent {
     async render() {
         const patient_data = await this.fetchData();
 
-        console.log('p_data', patient_data);
+
         if (!patient_data) return;
 
         // Render top patient card
@@ -115,7 +115,7 @@ export class PatientDetailComponent {
 
     async fetchData() {
         try {
-            console.log('fetching data');
+
             const response = await fetch('/api/patient/single_visit_detail_by_patient_id_or_visit_id', {
                 method: 'POST',
                 headers: {

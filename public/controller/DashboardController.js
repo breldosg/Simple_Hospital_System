@@ -57,6 +57,7 @@ import { ViewActiveRadiologyListView } from "../views/viewActiveRadiologyListVie
 import { SingleVisitRadiologyView } from "../views/SingleVisitRadiologyView.js";
 import { ViewActiveLaboratoryListView } from "../views/ViewActiveLaboratoryListView.js";
 import { PatientDetailComponent } from "../views/PatientDetailComponent.js";
+import { VisitsRadiologyResultPopUpView } from "../popups/VisitsRadiologyResultPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -90,6 +91,8 @@ class DashboardController {
     visitsVaccinePopUpView = new VisitsVaccinePopUpView();
     visitsPrescriptionPopUpView = new VisitsPrescriptionPopUpView();
     visitsAttachmentPopUpView = new VisitsAttachmentPopUpView();
+    visitsRadiologyResultPopUpView = new VisitsRadiologyResultPopUpView();
+
 
     // Patient Visit View Cards
     visitVitalCardView = new VisitVitalCardView();

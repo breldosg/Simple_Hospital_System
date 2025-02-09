@@ -44,7 +44,7 @@ export class SingleVisitRadiologyView {
             container: this.main_container,
             visit_id: this.visit_id,
         })
-        
+
         this.render(this.visit_id);
         this.add_listeners();
 
@@ -290,7 +290,7 @@ export class SingleVisitRadiologyView {
                     </div>
                     `: ''
 
-            }
+                }
 
                     <div class="file_list scroll_bar">
 
@@ -487,7 +487,7 @@ export class SingleVisitRadiologyView {
                 <div class="open_btn icon_btn" title="Open Attachment">
                     <span class="switch_icon_arrow_up_right_from_square"></span>
                 </div>
-                <div class="delete_btn icon_btn" title="Delete Attachment">
+                <div class="delete_btn icon_btn ${this.edit_mode ? '' : 'disabled'}" title="Delete Attachment">
                     <span class="switch_icon_delete"></span>
                 </div>
             </div>
@@ -498,19 +498,22 @@ export class SingleVisitRadiologyView {
             file_card.querySelector('.open_btn').addEventListener('click', () => {
                 window.open(file.url, '_blank');
             });
-            file_card.querySelector('.delete_btn').addEventListener('click', () => {
-                dashboardController.confirmPopUpView.PreRender({
-                    callback: 'delete_radiology_report_attachment',
-                    parameter: file.id,
-                    title: 'Remove Attachment File',
-                    sub_heading: `Attachment For: ${file.file_name}`,
-                    description: 'Are you sure you want to remove this attachment?',
-                    ok_btn: 'Remove',
-                    cancel_btn: 'Cancel'
-                });
 
-                this.card_to_delete = file_card;
-            });
+            if (this.edit_mode) {
+                file_card.querySelector('.delete_btn').addEventListener('click', () => {
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'delete_radiology_report_attachment',
+                        parameter: file.id,
+                        title: 'Remove Attachment File',
+                        sub_heading: `Attachment For: ${file.file_name}`,
+                        description: 'Are you sure you want to remove this attachment?',
+                        ok_btn: 'Remove',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.card_to_delete = file_card;
+                });
+            }
 
             file_list.prepend(file_card);
         })
@@ -636,7 +639,7 @@ export class SingleVisitRadiologyView {
 
             input_container.innerHTML = `
                 <p class="label">${field.charAt(0).toUpperCase() + field.slice(1)}</p>
-                <textarea name="${field}" ${required_fields.includes(field) ? 'required' : ''} class="textarea">${report_data[field] ?? ''}</textarea>
+                <textarea name="${field}" ${required_fields.includes(field) ? 'required' : ''} class="textarea ${this.edit_mode ? '' : 'disabled'}">${report_data[field] ?? ''}</textarea>
             `;
             report_form.appendChild(input_container);
         })

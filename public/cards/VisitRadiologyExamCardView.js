@@ -21,35 +21,40 @@ export class VisitRadiologyExamCardView {
     }
 
     async PreRender(params = {}) {
-        const { data = [], visit_id, state = "creation" } = params;
+        const { visit_id, state = "creation" } = params;
+
 
         if (!document.querySelector('.update_cont')) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        console.log(params);
 
 
-        this.resetState(data, visit_id, state);
+        this.resetState(visit_id, state);
         this.render();
 
-        this.renderRadiologyCards();
+
+
     }
 
-    resetState(data, visit_id, state) {
-        this.datas = data;
+    resetState(visit_id, state) {
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
     }
 
-    render() {
+    async render() {
+
         if (this.state !== "creation") return;
+
+
+
 
         const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
         const addButton = container.querySelector('.add_card_btn');
         const card = this.createMainCard();
+
 
         if (addButton) {
             addButton.insertAdjacentElement('beforebegin', card);
@@ -58,7 +63,12 @@ export class VisitRadiologyExamCardView {
         }
 
         dashboardController.singleVisitView.add_to_rendered_card_array('visitRadiologyExamPopUpView');
+
+        this.data = await this.fetch_radiology_request(this.visit_id);
+        this.renderRadiologyCards(this.data);
+
     }
+
 
     createMainCard() {
         const card = document.createElement('div');
@@ -71,8 +81,15 @@ export class VisitRadiologyExamCardView {
                 </div>
                 <div class="btn_section"></div>
             </div>
-            <div class="body_part radiology_exam_cont"></div>
+            <div class="body_part radiology_exam_cont">
+                <div class="loader_cont active">
+                    <div class="dot_loader"></div>
+                </div>
+
+
+            </div>
         `;
+
 
         // Add the add button by default
         const btnSection = card.querySelector('.btn_section');
@@ -161,14 +178,17 @@ export class VisitRadiologyExamCardView {
             'switch_icon_check_box_outline_blank';
     }
 
-    renderRadiologyCards() {
+    renderRadiologyCards(data) {
         const container = document.querySelector('.radiology_exam_cont_cont .body_part');
 
+
+
         container.innerHTML = '';
-        this.datas.forEach(data => {
+        data.forEach(data => {
             const card = this.createRadiologyCard(data);
             container.prepend(card);
         });
+
     }
 
     createRadiologyCard(data) {
@@ -184,7 +204,7 @@ export class VisitRadiologyExamCardView {
                     <span class='switch_icon_check_box_outline_blank'></span>
                 </div>
                 <div class="word">
-                    <p class="title">${data.name}</p>
+                    <p class="title">${data.radiology_name}</p>
                     <p class="created_by">${data.created_by}</p>
                     <p class="date">${date_formatter(data.created_at)}</p>
                 </div>
@@ -197,6 +217,22 @@ export class VisitRadiologyExamCardView {
             </div>
         `;
 
+
+        card.addEventListener('click', (e) => {
+            if (data.status === 'complete') {
+                // radiology result popup
+                dashboardController.visitsRadiologyResultPopUpView.PreRender({
+                    data: data,
+                });
+            }
+            else {
+                notify('top_left', 'Order is not published yet.', 'warning');
+            }
+
+        });
+
+
+
         this.attachCardListeners(card, data, isPending);
         return card;
     }
@@ -206,6 +242,11 @@ export class VisitRadiologyExamCardView {
 
         const checkbox = card.querySelector('.radiology_check_box');
         const deleteBtn = card.querySelector('.order_delete_btn');
+
+
+
+
+
 
         checkbox.addEventListener('click', (e) => this.handleCheckboxClick(e, checkbox, data.id, card));
         deleteBtn.addEventListener('click', (e) => this.handleDeleteClick(e, deleteBtn, data, card));
@@ -441,5 +482,28 @@ export class VisitRadiologyExamCardView {
         checkbox.classList.add('checked');
         span.classList.remove('switch_icon_check_box_outline_blank');
         span.classList.add('switch_icon_indeterminate_check_box');
+    }
+
+    async fetch_radiology_request(visit_id) {
+        try {
+            const response = await fetch('/api/patient/get_radiology_test_order_list', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: visit_id,
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            return result.data;
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
     }
 }

@@ -100,7 +100,7 @@ export class SingleVisitView {
                 dataKey: 'radiology_order_data',
                 dataArray: 'order_data',
                 condition: (data) => data.success,
-                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+                // afterRender: () => this.rendered_card.push('visitRadiologyExamPopUpView')
             },
             {
                 method: dashboardController.visitLabExamCardView,
@@ -403,7 +403,7 @@ export class SingleVisitView {
 
     async fetchRadiologyData() {
         try {
-            const response = await fetch('/api/patient/get_radiology_data', {
+            const response = await fetch('/api/patient/get_all_radiology_data_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

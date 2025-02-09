@@ -29,7 +29,7 @@ export class VisitPrescriptionsCardView {
             else {
                 cont.appendChild(this.ViewReturn());
             }
-            dashboardController.singleVisitView.add_to_rendered_card_array('visitsProcedurePopUpView');
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitsPrescriptionPopUpView');
         }
 
         this.main_container = document.querySelector('.prescription_order_card_cont_cont');
@@ -40,8 +40,6 @@ export class VisitPrescriptionsCardView {
 
     renderPrescriptionCards() {
         const container = this.main_container.querySelector('.body_part')
-        console.log(this.datas);
-
 
         container.innerHTML = '';
 

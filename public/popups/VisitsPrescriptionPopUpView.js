@@ -22,6 +22,9 @@ export class VisitsPrescriptionPopUpView {
         console.log(params);
 
         this.visit_id = params.visit_id;
+        this.state = params.state;
+
+        
 
         // Clear all constructor variables
         this.selected_product = '';
@@ -212,7 +215,11 @@ export class VisitsPrescriptionPopUpView {
             }
             notify('top_left', 'Prescription Saved Successfully.', 'success');
             this.close();
-            dashboardController.visitsView.fetch_table_data();
+            dashboardController.visitPrescriptionsCardView.PreRender({
+                visit_id: this.visit_id,
+                state: this.state,
+                data: result.data
+            });
 
         } catch (error) {
             console.error('Error:', error);

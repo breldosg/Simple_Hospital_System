@@ -26,18 +26,23 @@ const ROUTE_CONFIG = {
     save_vital: 470,
     save_update_delete_patient_note: 480,
     save_clinical_note: 500,
-    save_allergy: 510,
-    delete_allergy: 720,
     save_next_visit_plan: 520,
 
+    // Allergy Management
+    save_allergy: 510,
+    delete_allergy: 720,
+
     // Diagnostic Orders
-    get_radiology_data: 530,
     get_lab_test_data: 550,
-    save_radiology_order: 540,
     save_lab_test_order: 560,
     delete_lab_test_order: 570,
+    
+    // Radiology Request Management
+    get_all_radiology_data_list: 530,
+    save_radiology_order: 540,
     delete_radiology_test_order: 580,
-
+    get_radiology_test_order_list: 541,
+    
     // Diagnosis Management
     create_delete_pre_diagnosis: 590,
     create_delete_final_diagnosis: 600,
