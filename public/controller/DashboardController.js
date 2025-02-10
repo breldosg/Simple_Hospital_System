@@ -58,6 +58,9 @@ import { SingleVisitRadiologyView } from "../views/SingleVisitRadiologyView.js";
 import { ViewActiveLaboratoryListView } from "../views/ViewActiveLaboratoryListView.js";
 import { PatientDetailComponent } from "../views/PatientDetailComponent.js";
 import { VisitsRadiologyResultPopUpView } from "../popups/VisitsRadiologyResultPopUpView.js";
+import { SingleVisitLaboratoryView } from "../views/SingleVisitLaboratoryView.js";
+import { ViewActivePharmacyListView } from "../views/ViewActivePharmacyListView.js";
+import { SingleVisitPharmacyView } from "../views/SingleVisitPharmacyView.js";
 
 class DashboardController {
     // Loader View
@@ -79,11 +82,13 @@ class DashboardController {
     patientDetailComponent = new PatientDetailComponent();
 
     //Patient Visit
+    singleVisitView = new SingleVisitView();
     visitsClinicalEvaluationPopUpView = new VisitsClinicalEvaluationPopUpView();
     visitAllergyPopUpView = new VisitAllergyPopUpView();
     visitFinalDiagnosisPopUpView = new VisitFinalDiagnosisPopUpView();
     visitPlanForNextVisitPopUpView = new VisitPlanForNextVisitPopUpView();
     visitRadiologyExamPopUpView = new VisitRadiologyExamPopUpView();
+
     visitLabTestOrdersPopUpView = new VisitLabTestOrdersPopUpView();
     visitsPreliminaryDiagnosisPopUpView = new VisitsPreliminaryDiagnosisPopUpView();
     visitsProcedurePopUpView = new VisitsProcedurePopUpView();
@@ -131,7 +136,8 @@ class DashboardController {
     viewOrderListView = new ViewOrderListView();
     placeOrderPopUpView = new PlaceOrderPopUpView();
     approvePharmacyOrderPopUpView = new ApprovePharmacyOrderPopUpView();
-    singleVisitView = new SingleVisitView();
+    viewActivePharmacyListView = new ViewActivePharmacyListView();
+    singleVisitPharmacyView = new SingleVisitPharmacyView();
 
 
     // Radiology Section
@@ -141,6 +147,7 @@ class DashboardController {
 
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();
+    singleVisitLaboratoryView = new SingleVisitLaboratoryView();
 
 }
 

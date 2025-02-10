@@ -84,9 +84,11 @@ export class BrCustomNavigation extends HTMLElement {
                     { label: 'View All Products', href: '/pharmacy/viewpharmacyproducts' },
                     { label: 'View All category', href: '/pharmacy/viewcategory' },
                     { label: 'Add category', href: '/pharmacy/addcategory' },
-                    { label: 'Order List', href: '/pharmacy/orderlist' }
+                    { label: 'Order List', href: '/pharmacy/orderlist' },
+                    { label: 'Active Visits', href: '/pharmacy/activevisits' }
                 ]
             },
+
             {
                 type: '/radiology',
                 choices: [

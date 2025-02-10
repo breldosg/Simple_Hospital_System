@@ -243,13 +243,15 @@ export class VisitRadiologyExamCardView {
         const checkbox = card.querySelector('.radiology_check_box');
         const deleteBtn = card.querySelector('.order_delete_btn');
 
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.handleCheckboxClick(e, checkbox, data.id, card)
+        });
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.handleDeleteClick(e, deleteBtn, data, card)
+        });
 
-
-
-
-
-        checkbox.addEventListener('click', (e) => this.handleCheckboxClick(e, checkbox, data.id, card));
-        deleteBtn.addEventListener('click', (e) => this.handleDeleteClick(e, deleteBtn, data, card));
     }
 
     handleDeleteClick(e, deleteBtn, data, card) {

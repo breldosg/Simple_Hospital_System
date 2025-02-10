@@ -5557,6 +5557,543 @@ input {
         }
 
 
+
+        /* ------------------------------------------------------- */
+
+        .single_pharmacy_visit_cont {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            overflow-y: scroll;
+
+
+            .loader_cont {
+                border-radius: var(--main_border_r);
+                position: absolute;
+            }
+
+            .top_card {
+                width: 100%;
+                background-color: var(--white);
+                /* height: 100px; */
+                border-radius: var(--main_border_r);
+                padding: 20px;
+                display: flex;
+                gap: 40px;
+                position: relative;
+
+                .Patient_imag {
+                    width: 108px;
+                    height: 108px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    background-color: var(--image_background);
+                    flex: none;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .patient_detail {
+                    width: 100%;
+                    display: flex;
+                    gap: 15px;
+                    flex-direction: column;
+
+                    .card {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        gap: 40px;
+                        flex-wrap: wrap;
+
+                        .name {
+                            font-size: 30px;
+                            font-weight: 900;
+                        }
+
+                        .edit_btn {
+                            cursor: pointer;
+                            border: none;
+                            background: none;
+                            width: 77px;
+                            height: 77px;
+                            /* background-color: red; */
+
+                            span {
+                                font-size: 24px;
+                                color: var(--main_background);
+                            }
+                        }
+
+                        .edit_btn:hover {
+                            span {
+                                font-size: 25px;
+                            }
+                        }
+
+                        .description {
+                            span {
+                                font-weight: 600;
+                            }
+                        }
+
+                        .icon_card {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+
+                            p {
+                                font-weight: 500;
+                                color: var(--gray_text);
+
+                                span {
+                                    color: var(--gray_text);
+                                    font-weight: 700;
+                                }
+                            }
+                        }
+
+
+                    }
+
+
+                    .name_card {
+                        justify-content: space-between;
+                    }
+
+                }
+            }
+
+            .more_visit_detail {
+                width: 100%;
+                display: flex;
+                gap: 20px;
+                height: 100%;
+                flex: none;
+
+                .btn {
+                    border: none;
+                    background-color: var(--pri_color);
+                    padding: 10px 20px;
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: var(--white);
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+                    text-align: center;
+                }
+
+                .cancel {
+                    background-color: var(--gray_text);
+                }
+
+
+                .simple_details {
+                    height: 100%;
+                    width: 30%;
+                    background-color: var(--pure_white_background);
+                    border-radius: var(--main_border_r);
+                    padding: var(--main_padding);
+                    overflow: auto;
+                    gap: 5px;
+                    flex: none;
+                    display: flex;
+                    flex-direction: column;
+
+                    .top {
+                        width: 100%;
+                        height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        .section_selection {
+                            padding: 10px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
+                            width: 45%;
+                            cursor: pointer;
+                            border-radius: var(--main_border_r);
+
+                            .line {
+                                width: 100%;
+                                height: 4px;
+                                border-radius: 3px;
+                                overflow: hidden;
+
+                                .line_in {
+                                    width: 0%;
+                                    height: 100%;
+                                    background-color: var(--pri_color);
+                                }
+
+                            }
+
+                            p {
+                                font-size: 14px;
+                                font-weight: 600;
+                            }
+                        }
+
+                        .section_selection.active {
+                            background-color: var(--pri_op2);
+
+                            p {
+                                color: var(--pri_color);
+                            }
+
+                            .line_in {
+                                width: 100%;
+                                -webkit-animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                                animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                            }
+                        }
+
+                        .section_selection:hover {
+                            background-color: var(--pri_op2);
+                            color: var(--white);
+                            border-radius: 5px;
+
+                            p {
+                                color: var(--pri_color);
+                            }
+
+                            .line_in {
+                                width: 100%;
+                                -webkit-animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                                animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                            }
+                        }
+                    }
+
+                    .bottom {
+                        height: calc(100% - 50px);
+                        width: 100%;
+                        overflow: hidden;
+                        display: flex;
+                        gap: var(--main_padding);
+
+                        .section {
+                            width: 100%;
+                            height: 100%;
+                            flex: none;
+                            padding-block: 10px;
+
+                        }
+
+                        .order_section {
+                            overflow-y: scroll;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
+
+
+                            .order_card {
+                                display: flex;
+                                justify-content: space-between;
+                                width: 100%;
+                                height: 90px;
+                                padding: 20px;
+                                border-radius: var(--main_border_r);
+                                border: solid 1px var(--pri_border_color);
+                                cursor: pointer;
+
+                                .info {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: start;
+                                    justify-content: center;
+                                    width: 50%;
+
+                                    .title {
+                                        font-weight: 900;
+                                        width: 100%;
+                                        white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        display: inline-block;
+                                    }
+
+                                    .created_by,
+                                    .date {
+                                        font-size: 10px;
+                                        width: 100%;
+                                        white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        display: inline-block;
+                                    }
+                                }
+
+
+                                .action {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: space-between;
+                                    height: 100%;
+                                    gap: 10px;
+
+                                    .status {
+                                        width: 10px;
+                                        height: 10px;
+                                        border-radius: 5px;
+                                    }
+
+                                    .complete {
+                                        background-color: var(--success_color);
+                                    }
+
+                                    .approved {
+                                        background-color: var(--warning_color);
+                                    }
+
+                                    .pending {
+                                        background-color: var(--error_color);
+                                    }
+                                }
+                            }
+
+                            .order_card:hover {
+                                background: var(--pri_op1);
+                            }
+
+                            .order_card.active {
+                                background: var(--pri_op1);
+                            }
+
+                        }
+
+                        .illness_section {
+                            overflow-y: scroll;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 15px;
+
+
+                            .illness_card {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 8px;
+
+                                .head {
+                                    color: var(--pri_color);
+                                    padding-bottom: 10px;
+                                    font-weight: 700;
+                                    border-bottom: 2px solid var(--active_color);
+                                    font-size: 14px;
+                                }
+
+                                ul {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 5px;
+                                    font-weight: 600;
+                                    padding-left: 15px;
+
+                                    li {
+                                        width: 90%;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                .main_card {
+                    height: 100%;
+                    width: calc(70% - 20px);
+                    flex: none;
+                    background-color: var(--pure_white_background);
+                    border-radius: var(--main_border_r);
+                    padding: var(--main_padding);
+                    overflow-y: auto;
+
+                    .top {
+                        width: 100%;
+                        height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+
+                    .bottom {
+                        width: 100%;
+                        height: calc(100% - 50px);
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+
+                        .medicine_list {
+                            width: 100%;
+                            height: 100%;
+                            overflow-y: scroll;
+
+                            .medical_table {
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 5px;
+
+
+                                /* table row use grid */
+
+                                .table_row {
+                                    display: grid;
+                                    grid-template-columns: 0.2fr 1.5fr 0.5fr 0.5fr 0.5fr 1fr;
+                                    gap: 10px;
+                                    height: 40px;
+
+                                    .table_cell {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        padding-inline: 10px;
+
+                                        span {
+                                            font-size: 12px;
+                                            color: var(--black-op2);
+                                        }
+                                    }
+
+                                    .name {
+                                        justify-content: start;
+                                    }
+
+                                }
+
+
+
+                                .table_head {
+                                    background-color: var(--pri_color);
+                                    border-radius: 5px 5px 0 0;
+                                    cursor: default;
+
+
+                                    .table_row {
+                                        height: 50px;
+
+                                        .table_cell {
+
+                                            p,
+                                            span {
+                                                font-weight: 600;
+                                                color: var(--white);
+                                                font-size: 13px;
+                                                cursor: default;
+                                            }
+
+                                            span {
+                                                font-size: 12px;
+
+                                            }
+                                        }
+
+                                    }
+
+
+
+
+
+
+
+                                }
+
+                                .table_body {
+                                    overflow-y: scroll;
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 5px;
+                                    /* height: calc(100% - 50px); */
+
+                                    .table_row {
+                                        height: auto;
+                                        padding-block: 10px;
+                                        cursor: pointer;
+                                        border-radius: var(--btn_border_r);
+
+                                        .name_cont {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 5px;
+                                            
+                                            .product_name {
+                                                font-size: 14px;
+                                            }
+
+                                            .instruction,
+                                            .duration {
+                                                font-weight: bold;
+                                                
+
+                                                span{
+                                                    color: currentColor;
+                                                }
+                                            }
+                                        }
+
+
+
+                                    }
+
+                                    .table_row:hover {
+                                        background-color: var(--hover_list_table);
+                                    }
+
+                                    .table_row.selected {
+                                        background-color: var(--hover_list_table);
+
+                                        .check_box{
+                                            span{
+                                                color: var(--pri_color);
+                                            }
+                                        }
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+
+                        .btn_cont {
+                            width: 100%;
+                            height: 50px;
+                            display: flex;
+                            justify-content: end;
+                            align-items: center;
+                            gap: 10px;
+                            flex: none;
+
+                            .staff_data {
+                                margin-right: auto;
+
+                                .label {
+                                    font-weight: 600;
+                                    color: var(--gray_text);
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+
+        }
+
+
     }
 
 
@@ -13117,8 +13654,12 @@ input {
     box-shadow: 0 0 0 0 var(--pri_color);
     animation: l1 1s infinite;
 
-  }
-  @keyframes l1 {
-      100% {box-shadow: 0 0 0 15px var(--pri_op2)}
-  }
+}
+
+@keyframes l1 {
+    100% {
+        box-shadow: 0 0 0 15px var(--pri_op2)
+    }
+}
+
 /* <div class="loader_cont active"><div class="loader"></div></div> */

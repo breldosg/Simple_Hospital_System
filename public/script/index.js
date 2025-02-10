@@ -52,6 +52,8 @@ const routes = {
     '/pharmacy/addcategory': dashboardController.addMedicineCategoryView,
     '/pharmacy/viewcategory/:id': dashboardController.singleMedicineCategoryView,
     '/pharmacy/orderlist': dashboardController.viewOrderListView,
+    '/pharmacy/activevisits': dashboardController.viewActivePharmacyListView,
+    '/pharmacy/activevisits/:id': dashboardController.singleVisitPharmacyView,
 
     '/store': dashboardController.viewMedicineView,
     '/store/viewpharmacyproducts': dashboardController.viewMedicineView,
@@ -68,7 +70,10 @@ const routes = {
     
     '/laboratory': dashboardController.viewActiveLaboratoryListView ,
     '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView ,
-    
+    '/laboratory/activevisits/:id': dashboardController.singleVisitLaboratoryView,
+
+
+
     '/notice': screenCollection.dashboardScreen,
     '/notice/viewnotice': screenCollection.dashboardScreen,
     '/notice/addnotice': screenCollection.dashboardScreen,
