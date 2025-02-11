@@ -19,11 +19,9 @@ export class SingleVisitPharmacyView {
         }
 
         // Update state but don't trigger render yet
-        this.current_clicked = null;
-        this.single_laboratory_data = null;
-        this.active_order_data = null;
-        this.on_uploading_cards = [];
-        this.card_to_delete = null;
+        this.single_pharmacy_visit_data = null;
+        this.selected_medicine_list = new Set();
+        this.valid_to_select = 0;
 
         this.rendered_card = [];
         this.visit_id = params.id;
@@ -135,7 +133,9 @@ export class SingleVisitPharmacyView {
                 </div>
                 
                 <div class="btn_cont">
-
+                    <div class="total_price">
+                        <p class="total_price_value">0</p>
+                    </div>
                     <button class="btn confirm_invoice">Confirm Invoice</button>
                 </div>
 
@@ -264,9 +264,11 @@ export class SingleVisitPharmacyView {
                         if (row.classList.contains('selected')) {
                             this.selected_medicine_list.delete(medicine);
                             this.change_card_to_unselect(row);
+                            this.update_total_price()
                         } else {
                             this.selected_medicine_list.add(medicine);
                             this.change_card_to_select(row);
+                            this.update_total_price()
                         }
 
                     } else {
@@ -278,7 +280,7 @@ export class SingleVisitPharmacyView {
             body.appendChild(row);
         });
 
-
+        this.update_total_price()
 
     }
 
@@ -339,6 +341,14 @@ export class SingleVisitPharmacyView {
             var check_box_all = this.main_container.querySelector('#check_box_all');
             check_box_all.querySelector('span').classList.replace('switch_icon_check_box_outline_blank', 'switch_icon_check_box');
         }
+    }
+
+    update_total_price() {
+        const total_price = this.main_container.querySelector('.total_price_value');
+        var array_of_medicine = Array.from(this.selected_medicine_list);
+        total_price.textContent = array_of_medicine.reduce((acc, medicine) =>
+            acc + medicine.price * medicine.amount, 0).toLocaleString('en-US',
+                { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 });
     }
 
     change_card_to_unselect(row) {
@@ -402,44 +412,47 @@ export class SingleVisitPharmacyView {
 
 
     async confirm_invoice() {
-        console.log(this.selected_medicine_list);
-        // try {
+        // extract only id from the array
+        var array_of_medicine = Array.from(this.selected_medicine_list);
+        var array_of_id = array_of_medicine.map(medicine => medicine.id);
 
-        //     const response = await fetch('/api/pharmacy/confirm_invoice', {
-        //         method: 'POST',
+        try {
 
-
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             visit_id: this.visit_id,
-        //             medicine_list: this.selected_medicine_list,
-        //         })
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error('Server Error');
-        //     }
-
-        //     const result = await response.json();
-
-        //     if (result.success) {
-        //         notify('top_left', result.message, 'success');
-        //         this.single_laboratory_data = result.data;
+            const response = await fetch('/api/pharmacy/confirm_invoice', {
+                method: 'POST',
 
 
-        //         // clear all constructor and run example view
-        //         this.render_example();
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                    products_ids: array_of_id,
+                })
+            });
 
-        //     } else {
-        //         notify('top_left', result.message, 'warning');
-        //         return null;
-        //     }
-        // } catch (error) {
-        //     notify('top_left', error.message, 'error');
-        //     return null;
-        // }
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                this.single_laboratory_data = result.data;
+                this.render_medicine_list(this.single_laboratory_data.pharmacy_orders)
+
+                // clear all constructor and run example view
+                // this.render_example();
+
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
     }
 
 }
