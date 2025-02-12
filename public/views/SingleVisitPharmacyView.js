@@ -418,7 +418,7 @@ export class SingleVisitPharmacyView {
 
         try {
 
-            const response = await fetch('/api/pharmacy/confirm_invoice', {
+            const response = await fetch('/api/pharmacy/confirm_pharmacy_invoice', {
                 method: 'POST',
 
 

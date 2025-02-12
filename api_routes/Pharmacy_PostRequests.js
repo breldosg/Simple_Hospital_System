@@ -44,6 +44,7 @@ const ROUTE_CONFIG = {
     // Pharmacy Visit Order Management
     search_visit_with_pharmacy_order: 830,
     single_pharmacy_visit_detail: 840,
+    confirm_pharmacy_invoice: 850,
 
 
 
