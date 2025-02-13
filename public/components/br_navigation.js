@@ -51,6 +51,7 @@ export class BrCustomNavigation extends HTMLElement {
             { label: 'Radiology', link: '/radiology' },
             { label: 'Laboratory', link: '/laboratory' },
             { label: 'Store', link: '/store' },
+            { label: 'Billing', link: '/billing' },
             { label: 'Notice', link: '/notice' }
         ];
 
@@ -109,6 +110,12 @@ export class BrCustomNavigation extends HTMLElement {
                     { label: 'Add category', href: '/store/addcategory' },
                     { label: 'View All batch', href: '/store/viewinatakebatch' },
                     { label: 'Pharmacy Orders', href: '/store/orderlist' }
+                ]
+            },
+            {
+                type: '/billing',
+                choices: [
+                    { label: 'View Active Bills', href: '/billing/activebills' },
                 ]
             },
             {

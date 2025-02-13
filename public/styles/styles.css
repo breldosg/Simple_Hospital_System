@@ -186,6 +186,7 @@ input {
     --error_background_color: #ad0e0065;
     --warning_color: #ffce20;
 
+    --warning_background_color:#f9f2d833;
 
     --white_error_color: #e9766b;
     --white_error_color_op1: #ffd0cc5e;
@@ -5949,7 +5950,7 @@ input {
 
                                 .table_row {
                                     display: grid;
-                                    grid-template-columns: 0.2fr 1.5fr 0.5fr 0.5fr 0.5fr 1fr;
+                                    grid-template-columns: 0.2fr 1.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
                                     gap: 10px;
                                     height: 40px;
 
@@ -6041,7 +6042,15 @@ input {
                                             }
                                         }
 
+                                        .paid{
+                                            font-weight: 600;
+                                            color: var(--success_color);
+                                        }
 
+                                        .unpaid{
+                                            font-weight: 600;
+                                            color: var(--error_color);
+                                        }
 
                                     }
 
@@ -6089,6 +6098,10 @@ input {
                                     font-weight: 600;
                                     font-size: 30px;
                                 }
+                            }
+
+                            .cancel_invoice{
+                                background-color: var(--error_color);
                             }
                         }
                     }

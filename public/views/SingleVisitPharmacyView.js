@@ -39,7 +39,7 @@ export class SingleVisitPharmacyView {
             visit_id: this.visit_id,
         })
 
-        this.render(this.visit_id);
+        await this.render(this.visit_id);
         this.add_listeners();
 
     }
@@ -74,9 +74,9 @@ export class SingleVisitPharmacyView {
         });
 
 
-        var confirm_invoice = this.main_container.querySelector('.confirm_invoice');
-        confirm_invoice.addEventListener('click', () => {
-            this.confirm_invoice();
+        var confirm_order = this.main_container.querySelector('.confirm_order');
+        confirm_order.addEventListener('click', () => {
+            this.confirm_order();
         });
 
 
@@ -111,6 +111,9 @@ export class SingleVisitPharmacyView {
                                 <div class="table_cell name">
                                     <p>Product</p>
                                 </div>
+                                <div class="table_cell">
+                                    <p>Paid Status</p>
+                                </div>
                                 <div class="table_cell quantity">
                                     <p>Quantity</p>
                                 </div>
@@ -136,7 +139,7 @@ export class SingleVisitPharmacyView {
                     <div class="total_price">
                         <p class="total_price_value">0</p>
                     </div>
-                    <button class="btn confirm_invoice">Confirm Invoice</button>
+                    <button class="btn confirm_order disabled">Confirm Order</button>
                 </div>
 
 
@@ -194,11 +197,16 @@ export class SingleVisitPharmacyView {
     render_medicine_list(medicine_list, uncheck_all = false) {
         const body = this.main_container.querySelector('#medicine_list_body');
         body.innerHTML = '';
+        console.log(medicine_list);
+
 
         this.valid_to_select = 0;
         medicine_list.forEach(medicine => {
             const hasEnoughStock = medicine.pharmacy_total_quantity >= medicine.amount;
-            if (hasEnoughStock) {
+            const isPaid = medicine.is_paid == 'true';
+            const isGiven = medicine.given == 'true';
+
+            if (hasEnoughStock && isPaid && !isGiven) {
                 this.valid_to_select++;
             }
 
@@ -207,7 +215,7 @@ export class SingleVisitPharmacyView {
             row.className = 'table_row';
 
 
-            if (hasEnoughStock && !uncheck_all) {
+            if (hasEnoughStock && !uncheck_all && isPaid && !isGiven) {
                 row.classList.add('selected');
                 this.selected_medicine_list.add(medicine);
             }
@@ -217,7 +225,7 @@ export class SingleVisitPharmacyView {
 
 
 
-            if (medicine.given == 'true') {
+            if (isGiven) {
                 row.classList.add('disabled');
             }
 
@@ -227,7 +235,7 @@ export class SingleVisitPharmacyView {
             row.innerHTML = `
         <div class="table_cell check_box">
 
-            ${hasEnoughStock && !uncheck_all ? `<span class='switch_icon_check_box'></span>` : `<span class='switch_icon_check_box_outline_blank'></span>`}
+            ${hasEnoughStock && !uncheck_all && isPaid && !isGiven ? `<span class='switch_icon_check_box'></span>` : `<span class='switch_icon_check_box_outline_blank'></span>`}
 
 
 
@@ -241,6 +249,9 @@ export class SingleVisitPharmacyView {
             </div>
 
 
+        </div>
+        <div class="table_cell">
+            <p class="${medicine.is_paid == 'true' ? 'paid' : 'unpaid'}">${medicine.is_paid == 'true' ? 'Paid' : 'Unpaid'}</p>
         </div>
         <div class="table_cell quantity">
             <p>${medicine.amount}</p>
@@ -258,21 +269,30 @@ export class SingleVisitPharmacyView {
         </div>
             `;
 
-            if (medicine.given == 'false') {
+            if (!isGiven) {
                 row.addEventListener('click', () => {
                     if (hasEnoughStock) {
-                        if (row.classList.contains('selected')) {
-                            this.selected_medicine_list.delete(medicine);
-                            this.change_card_to_unselect(row);
-                            this.update_total_price()
-                        } else {
-                            this.selected_medicine_list.add(medicine);
-                            this.change_card_to_select(row);
-                            this.update_total_price()
+                        if (!isPaid) {
+                            notify('top_left', `Order is not paid.`, 'warning');
+                        }
+                        else {
+                            if (row.classList.contains('selected')) {
+                                this.selected_medicine_list.delete(medicine);
+                                this.change_card_to_unselect(row);
+                                this.update_total_price()
+                                this.update_confirm_order_btn_state()
+                            } else {
+                                this.selected_medicine_list.add(medicine);
+                                this.change_card_to_select(row);
+                                this.update_total_price()
+                                this.update_confirm_order_btn_state()
+                            }
                         }
 
                     } else {
+
                         notify('top_left', `Insufficient stock.`, 'warning');
+
                     }
                 });
 
@@ -281,9 +301,21 @@ export class SingleVisitPharmacyView {
         });
 
         this.update_total_price()
-
+        this.update_confirm_order_btn_state()
     }
 
+    update_confirm_order_btn_state() {
+        var confirm_order = this.main_container.querySelector('.confirm_order');
+
+        if (this.selected_medicine_list.size > 0) {
+            confirm_order.classList.remove('disabled')
+        }
+        else {
+            confirm_order.classList.add('disabled')
+        }
+
+
+    }
 
     render_illness_info(illness) {
         const body = this.main_container.querySelector('#illness_section');
@@ -411,7 +443,7 @@ export class SingleVisitPharmacyView {
     }
 
 
-    async confirm_invoice() {
+    async confirm_order() {
         // extract only id from the array
         var array_of_medicine = Array.from(this.selected_medicine_list);
         var array_of_id = array_of_medicine.map(medicine => medicine.id);

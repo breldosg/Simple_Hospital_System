@@ -61,6 +61,7 @@ import { VisitsRadiologyResultPopUpView } from "../popups/VisitsRadiologyResultP
 import { SingleVisitLaboratoryView } from "../views/SingleVisitLaboratoryView.js";
 import { ViewActivePharmacyListView } from "../views/ViewActivePharmacyListView.js";
 import { SingleVisitPharmacyView } from "../views/SingleVisitPharmacyView.js";
+import { ViewActiveBillsListView } from "../views/ViewActiveBillsListView.js";
 
 class DashboardController {
     // Loader View
@@ -144,6 +145,8 @@ class DashboardController {
     viewActiveRadiologyListView = new ViewActiveRadiologyListView();
     singleVisitRadiologyView = new SingleVisitRadiologyView();
 
+    // Billing Section
+    viewActiveBillsListView = new ViewActiveBillsListView();
 
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();

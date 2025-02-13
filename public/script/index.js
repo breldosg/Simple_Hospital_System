@@ -72,7 +72,9 @@ const routes = {
     '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView ,
     '/laboratory/activevisits/:id': dashboardController.singleVisitLaboratoryView,
 
-
+    '/billing': dashboardController.viewActiveBillsListView,
+    '/billing/activebills': dashboardController.viewActiveBillsListView,
+    '/billing/activebills/:id': dashboardController.singleVisitBillingView,
 
     '/notice': screenCollection.dashboardScreen,
     '/notice/viewnotice': screenCollection.dashboardScreen,
