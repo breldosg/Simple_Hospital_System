@@ -36,7 +36,7 @@ export class SingleVisitLaboratoryView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('active');
 
-        this.main_container = document.querySelector('.single_radiology_visit_cont');
+        this.main_container = document.querySelector('.single_laboratory_visit_cont');
 
         // Render patient detail component
         dashboardController.patientDetailComponent.PreRender({
@@ -77,7 +77,7 @@ export class SingleVisitLaboratoryView {
 
     ViewReturn(loader = '') {
         return `
-<div class="single_radiology_visit_cont">
+<div class="single_laboratory_visit_cont">
     
     <div class="more_visit_detail">
 
@@ -132,6 +132,7 @@ export class SingleVisitLaboratoryView {
     render_orders(orders) {
         const body = this.main_container.querySelector('#order_section');
         body.innerHTML = '';
+        console.log(orders);
 
         orders.forEach(order => {
             const card = document.createElement('div');
@@ -146,7 +147,7 @@ export class SingleVisitLaboratoryView {
 
             card.innerHTML = `
                 <div class="info">
-                    <p class="title">${order.laboratory_name}</p>
+                    <p class="title">${order.lab_test_name}</p>
                     <p class="created_by">${order.created_by}</p>
                     <p class="date">${timeStamp_formatter(order.created_at)}</p>
                 </div>
@@ -186,7 +187,7 @@ export class SingleVisitLaboratoryView {
                 this.active_order_data = order;
                 this.current_clicked = card;
                 card.classList.add('active');
-                this.render_order_infos_and_form(order.report, order.report_attachment);
+                this.render_order_infos_and_form(order.lab_test_items, order.report_attachment);
             })
 
             body.appendChild(card);
@@ -291,7 +292,7 @@ export class SingleVisitLaboratoryView {
                     </div>
                     `: ''
 
-                }
+            }
 
                     <div class="file_list scroll_bar">
 
@@ -627,23 +628,40 @@ export class SingleVisitLaboratoryView {
     }
 
     render_report_view(report_data) {
+        console.log(report_data);
 
-        const report_form = this.main_container.querySelector('#report_form');
-        report_form.innerHTML = '';
+        const report_form_cont = this.main_container.querySelector('#report_form');
+        report_form_cont.innerHTML = '';
 
-        const report_fields = ['comparison', 'findings', 'impression', 'recommendation'];
-        const required_fields = ['findings', 'impression'];
+        const report_form = document.createElement('div');
+        report_form.classList.add('input_cont_cont');
+
+        const report_fields = report_data;
 
         report_fields.forEach(field => {
             const input_container = document.createElement('div');
             input_container.classList.add('input_cont');
+            console.log();
 
             input_container.innerHTML = `
-                <p class="label">${field.charAt(0).toUpperCase() + field.slice(1)}</p>
-                <textarea name="${field}" ${required_fields.includes(field) ? 'required' : ''} class="textarea ${this.edit_mode ? '' : 'disabled'}">${report_data[field] ?? ''}</textarea>
+                <div class="input_top">
+                    <p class="label">${field.name}</p>
+                    <p class="field_unit">${field.unit}</p>
+                </div>
+                <input type="text" name="${field}" value="${field.result ?? ''}"  class="textarea ${this.edit_mode ? '' : 'disabled'}"></input>
+                <div class="input_info_icon">
+                    <div class="meta_data">
+                        ${field.normal_range ? this.createTableFromJSON(JSON.parse(field.normal_range)) : ''}
+                    </div>
+                    
+                    <span class="switch_icon_info_outline"></span>
+                </div>
             `;
+            console.log(JSON.parse(field.normal_range));
+
             report_form.appendChild(input_container);
         })
+
 
         const btn_cont = document.createElement('div');
         btn_cont.classList.add('btn_cont');
@@ -656,7 +674,6 @@ export class SingleVisitLaboratoryView {
             `: ''}
             `;
 
-
         const cancel_btn = document.createElement('button');
         cancel_btn.className = 'btn cancel';
         cancel_btn.setAttribute('type', 'cancel');
@@ -666,7 +683,6 @@ export class SingleVisitLaboratoryView {
         });
 
         btn_cont.appendChild(cancel_btn);
-
 
         const submit_btn = document.createElement('br-button');
         submit_btn.className = 'btn submit';
@@ -680,7 +696,8 @@ export class SingleVisitLaboratoryView {
 
         btn_cont.appendChild(submit_btn);
 
-        report_form.appendChild(btn_cont);
+        report_form_cont.prepend(report_form);
+        report_form_cont.appendChild(btn_cont);
     }
 
     top_card_view(data) {
@@ -745,8 +762,6 @@ export class SingleVisitLaboratoryView {
             const result = await response.json();
 
             if (result.success) {
-
-
                 this.single_laboratory_data = result.data.radiology_orders;
                 return result.data;
             } else {
@@ -758,7 +773,6 @@ export class SingleVisitLaboratoryView {
             return null;
         }
     }
-
 
     async delete_laboratory_report_attachment(id) {
         try {
@@ -794,14 +808,11 @@ export class SingleVisitLaboratoryView {
         }
     }
 
-
     async publish_laboratory_order(id) {
         try {
-
             const response = await fetch('/api/laboratory/publish_laboratory_order', {
                 method: 'POST',
                 headers: {
-
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -837,7 +848,6 @@ export class SingleVisitLaboratoryView {
         try {
             const response = await fetch('/api/laboratory/revert_laboratory_order', {
                 method: 'POST',
-
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -857,7 +867,6 @@ export class SingleVisitLaboratoryView {
                 notify('top_left', result.message, 'success');
                 this.single_laboratory_data = result.data;
 
-
                 // clear all constructor and run example view
                 this.render_example();
 
@@ -870,5 +879,55 @@ export class SingleVisitLaboratoryView {
             return null;
         }
     }
+
+    createTableFromJSON(jsonData) {
+        let parsedData;
+
+        try {
+            parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+        } catch (error) {
+            console.error("Invalid JSON format", error);
+            return '<p style="color: red;">Invalid JSON</p>';
+        }
+
+        function generateTable(data) {
+            let table = `<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd; margin: 10px 0;">`;
+            table += `<thead><tr><th style="border: 1px solid #ddd; padding: 8px; background-color: #f7f7f7;">Key</th><th style="border: 1px solid #ddd; padding: 8px; background-color: #f7f7f7;">Value</th></tr></thead>`;
+            table += '<tbody>';
+            table += createRows(data);
+            table += '</tbody></table>';
+            return table;
+        }
+
+        function createRows(data, parentKey = '') {
+            let rows = '';
+            if (Array.isArray(data)) {
+                data.forEach((item, index) => {
+                    rows += createRows(item, `${parentKey}[${index}]`);
+                });
+            } else if (typeof data === 'object' && data !== null) {
+                Object.keys(data).forEach(key => {
+                    const cellKey = parentKey ? `${parentKey} > ${key}` : key;
+                    let cellValue = '';
+
+                    if (typeof data[key] === 'object') {
+                        cellValue = generateTable(data[key]);
+                    } else {
+                        cellValue = data[key];
+                    }
+
+                    rows += `
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; font-weight: bold;">${cellKey}</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;">${cellValue}</td>
+                    </tr>`;
+                });
+            }
+            return rows;
+        }
+
+        return generateTable(parsedData);
+    }
+
 
 }

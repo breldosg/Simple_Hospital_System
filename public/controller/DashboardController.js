@@ -62,6 +62,7 @@ import { SingleVisitLaboratoryView } from "../views/SingleVisitLaboratoryView.js
 import { ViewActivePharmacyListView } from "../views/ViewActivePharmacyListView.js";
 import { SingleVisitPharmacyView } from "../views/SingleVisitPharmacyView.js";
 import { ViewActiveBillsListView } from "../views/ViewActiveBillsListView.js";
+import { SingleVisitBillingView } from "../views/SingleVisitBillingView.js";
 
 class DashboardController {
     // Loader View
@@ -147,6 +148,7 @@ class DashboardController {
 
     // Billing Section
     viewActiveBillsListView = new ViewActiveBillsListView();
+    singleVisitBillingView = new SingleVisitBillingView();
 
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();
