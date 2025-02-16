@@ -63,6 +63,7 @@ import { ViewActivePharmacyListView } from "../views/ViewActivePharmacyListView.
 import { SingleVisitPharmacyView } from "../views/SingleVisitPharmacyView.js";
 import { ViewActiveBillsListView } from "../views/ViewActiveBillsListView.js";
 import { SingleVisitBillingView } from "../views/SingleVisitBillingView.js";
+import { VisitsLaboratoryResultPopUpView } from "../popups/VisitsLaboratoryResultPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -99,6 +100,7 @@ class DashboardController {
     visitsPrescriptionPopUpView = new VisitsPrescriptionPopUpView();
     visitsAttachmentPopUpView = new VisitsAttachmentPopUpView();
     visitsRadiologyResultPopUpView = new VisitsRadiologyResultPopUpView();
+    visitsLaboratoryResultPopUpView = new VisitsLaboratoryResultPopUpView();
 
 
     // Patient Visit View Cards

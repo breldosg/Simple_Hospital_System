@@ -21,54 +21,48 @@ export class VisitRadiologyExamCardView {
     }
 
     async PreRender(params = {}) {
-        const { visit_id, state = "creation" } = params;
-
+        const { data = [], visit_id, state = "creation" } = params;
 
         if (!document.querySelector('.update_cont')) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        this.resetState(data, visit_id, state);
 
+        // First render the main card structure
+        if (this.state === "creation") {
+            const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
+            const addButton = container.querySelector('.add_card_btn');
+            const card = this.createMainCard();
 
-        this.resetState(visit_id, state);
-        this.render();
+            if (addButton) {
+                addButton.insertAdjacentElement('beforebegin', card);
+            } else {
+                container.appendChild(card);
+            }
 
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitRadiologyExamPopUpView');
+        }
 
-
+        // Then initialize data and render the radiology cards
+        await this.initializeData();
+        this.renderRadiologyCards(this.data);
     }
 
-    resetState(visit_id, state) {
+    async resetState(data, visit_id, state) {
+        this.data = data;
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
     }
 
-    async render() {
-
-        if (this.state !== "creation") return;
-
-
-
-
-        const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
-        const addButton = container.querySelector('.add_card_btn');
-        const card = this.createMainCard();
-
-
-        if (addButton) {
-            addButton.insertAdjacentElement('beforebegin', card);
-        } else {
-            container.appendChild(card);
+    async initializeData() {
+        // Only fetch data if we're in creation state and no data was provided
+        if (this.state === "creation" && (!this.data || this.data.length === 0)) {
+            this.data = await this.fetch_radiology_request(this.visit_id);
         }
-
-        dashboardController.singleVisitView.add_to_rendered_card_array('visitRadiologyExamPopUpView');
-
-        this.data = await this.fetch_radiology_request(this.visit_id);
-        this.renderRadiologyCards(this.data);
-
     }
-
 
     createMainCard() {
         const card = document.createElement('div');
@@ -107,7 +101,7 @@ export class VisitRadiologyExamCardView {
 
 
         addBtn.addEventListener('click', () => {
-            const pendingIds = this.datas
+            const pendingIds = this.data
                 .filter(item => item.status === 'pending')
                 .map(item => item.exam_id);
 
@@ -434,23 +428,19 @@ export class VisitRadiologyExamCardView {
 
             if (state === 'single' && this.singleSelectedToDelete) {
                 this.singleSelectedToDelete.remove();
-                this.datas = this.datas.filter(item => item.id != this.singleSelectedToDelete_id);
+                this.data = this.data.filter(item => item.id != this.singleSelectedToDelete_id);
                 this.singleSelectedToDelete = '';
                 this.singleSelectedToDelete_id = '';
             } else {
                 // Update the view with new data for bulk deletion
-                // this.PreRender({
-                //     visit_id: this.visit_id,
-                //     state: 'modify',
-                //     data: result.data,
-                // });
-                this.selectedIds.clear();
-                this.datas = result.data;
+                this.PreRender({
+                    visit_id: this.visit_id,
+                    state: 'modify',
+                    data: result.data,
+                });
 
-                this.renderRadiologyCards();
                 // Exit selection mode
                 this.exitSelectionMode();
-
             }
 
             // Clear selected IDs after successful deletion

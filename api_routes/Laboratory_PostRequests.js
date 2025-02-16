@@ -12,11 +12,12 @@ const { createRouteHandler, user_agent_infos, get_cookie, check_cookie, ApiHost 
 const ROUTE_CONFIG = {
     search_visit_with_laboratory_order: 800,
     single_laboratory_visit_detail: 810,
-    // save_radiology_order_report: 750,
-    // upload_attachments: 760,
-    // delete_attachments_files: 770,
-    // publish_radiology_order: 780,
     revert_laboratory_order: 820,
+    upload_attachments: 870,
+    delete_attachments_files: 880,
+    publish_laboratory_order: 890,
+    save_laboratory_order_report: 900,
+    get_laboratory_test_order_list: 910,
 };
 
 

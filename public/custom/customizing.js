@@ -14459,10 +14459,6 @@ export const visit_type = [
         label:'Out Patient',
     },
     {
-        value:'ipd',
-        label:'In Patient',
-    },
-    {
         value:'emergency',
         label:'Emergency',
     },

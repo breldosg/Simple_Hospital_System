@@ -44,7 +44,7 @@ export class SingleVisitLaboratoryView {
             visit_id: this.visit_id,
         })
 
-        this.render(this.visit_id);
+        this.render();
         this.add_listeners();
 
     }
@@ -377,7 +377,7 @@ export class SingleVisitLaboratoryView {
         formData.append("order_id", order_id);
 
         const card = this.main_container.querySelector('#' + file_card_id);
-        uploadWithProgress('/api/radiology/upload_attachments', formData, (progress) => {
+        uploadWithProgress('/api/laboratory/upload_attachments', formData, (progress) => {
             if (this.active_order_data.id == order_id) {
                 const progress_bar = card.querySelector('.uploading_progress .counter');
                 progress_bar.innerHTML = `${progress}%`;
@@ -504,7 +504,7 @@ export class SingleVisitLaboratoryView {
             if (this.edit_mode) {
                 file_card.querySelector('.delete_btn').addEventListener('click', () => {
                     dashboardController.confirmPopUpView.PreRender({
-                        callback: 'delete_radiology_report_attachment',
+                        callback: 'delete_laboratory_report_attachment',
                         parameter: file.id,
                         title: 'Remove Attachment File',
                         sub_heading: `Attachment For: ${file.file_name}`,
@@ -539,30 +539,26 @@ export class SingleVisitLaboratoryView {
     }
 
     async validate_submit_report() {
-        const form = this.main_container.querySelectorAll('#report_form textarea');
-        var data_to_submit = {};
+        const form = this.main_container.querySelectorAll('#report_form input');
+        var data_to_submit = [];
 
-        let isValid = true;
+        let isValid = false;
         form.forEach(input => {
-            if (input.hasAttribute('required')) {
-                var value = input.value.trim();
-                if (value == '') {
-                    isValid = false;
-                    input.classList.add('error');
-                }
-                else {
-                    input.classList.remove('error');
-                    data_to_submit[input.name] = value;
-                }
-            }
-            else {
+            var value = input.value.trim();
+            if (value !== '') {
+                isValid = true;
                 input.classList.remove('error');
-                data_to_submit[input.name] = input.value;
+                // data_to_submit[input.name] = value;
+
+                data_to_submit.push({
+                    test_item_id: input.name,
+                    result: value
+                })
             }
         });
 
         if (!isValid) {
-            notify('top_left', 'Please fill all fields.', 'warning');
+            notify('top_left', 'Please Fill Required Fields.', 'warning');
             return;
         }
 
@@ -576,13 +572,13 @@ export class SingleVisitLaboratoryView {
         var active_data = this.active_order_data;
 
         var body_form = {
-            ...data,
+            items: data,
             visit_id: this.visit_id,
             order_id: this.active_order_data.id
         };
 
         try {
-            const response = await fetch('/api/radiology/save_radiology_order_report', {
+            const response = await fetch('/api/laboratory/save_laboratory_order_report', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -605,7 +601,7 @@ export class SingleVisitLaboratoryView {
             notify('top_left', result.message, 'success');
             this.single_laboratory_data.forEach(data => {
                 if (data.id == active_data.id) {
-                    data.report = result.data;
+                    data.lab_test_items = result.data;
                     data.status = 'approved';
                 }
             })
@@ -648,16 +644,15 @@ export class SingleVisitLaboratoryView {
                     <p class="label">${field.name}</p>
                     <p class="field_unit">${field.unit}</p>
                 </div>
-                <input type="text" name="${field}" value="${field.result ?? ''}"  class="textarea ${this.edit_mode ? '' : 'disabled'}"></input>
+                <input type="text" name="${field.id}" value="${field.result ?? ''}"  class="textarea ${this.edit_mode ? '' : 'disabled'}"></input>
                 <div class="input_info_icon">
-                    <div class="meta_data">
-                        ${field.normal_range ? this.createTableFromJSON(JSON.parse(field.normal_range)) : ''}
-                    </div>
+                    <p class="meta_data">
+                        ${field.normal_range && field.normal_range.trim() != '' ? field.normal_range : 'No Range To Show.'}
+                    </p>
                     
                     <span class="switch_icon_info_outline"></span>
                 </div>
             `;
-            console.log(JSON.parse(field.normal_range));
 
             report_form.appendChild(input_container);
         })
@@ -879,55 +874,5 @@ export class SingleVisitLaboratoryView {
             return null;
         }
     }
-
-    createTableFromJSON(jsonData) {
-        let parsedData;
-
-        try {
-            parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
-        } catch (error) {
-            console.error("Invalid JSON format", error);
-            return '<p style="color: red;">Invalid JSON</p>';
-        }
-
-        function generateTable(data) {
-            let table = `<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd; margin: 10px 0;">`;
-            table += `<thead><tr><th style="border: 1px solid #ddd; padding: 8px; background-color: #f7f7f7;">Key</th><th style="border: 1px solid #ddd; padding: 8px; background-color: #f7f7f7;">Value</th></tr></thead>`;
-            table += '<tbody>';
-            table += createRows(data);
-            table += '</tbody></table>';
-            return table;
-        }
-
-        function createRows(data, parentKey = '') {
-            let rows = '';
-            if (Array.isArray(data)) {
-                data.forEach((item, index) => {
-                    rows += createRows(item, `${parentKey}[${index}]`);
-                });
-            } else if (typeof data === 'object' && data !== null) {
-                Object.keys(data).forEach(key => {
-                    const cellKey = parentKey ? `${parentKey} > ${key}` : key;
-                    let cellValue = '';
-
-                    if (typeof data[key] === 'object') {
-                        cellValue = generateTable(data[key]);
-                    } else {
-                        cellValue = data[key];
-                    }
-
-                    rows += `
-                    <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; font-weight: bold;">${cellKey}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;">${cellValue}</td>
-                    </tr>`;
-                });
-            }
-            return rows;
-        }
-
-        return generateTable(parsedData);
-    }
-
 
 }

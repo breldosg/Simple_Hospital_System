@@ -1,11 +1,11 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { date_formatter, notify, timeStamp_formatter } from "../script/index.js";
 
 export class VisitLabExamCardView {
     constructor() {
         this.visit_id = null;
-        this.datas = [];
+        this.data = [];
         this.selectedIds = new Set();
         this.isSelectAllActive = false;
         this.singleSelectedToDelete = '';
@@ -28,32 +28,63 @@ export class VisitLabExamCardView {
         }
 
         this.resetState(data, visit_id, state);
-        this.render();
-        this.renderLabTestCards();
+
+
+        // First render the main card structure
+        if (this.state === "creation") {
+            const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
+            const addButton = container.querySelector('.add_card_btn');
+            const card = this.createMainCard();
+
+            if (addButton) {
+                addButton.insertAdjacentElement('beforebegin', card);
+            } else {
+                container.appendChild(card);
+            }
+
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitLabTestOrdersPopUpView');
+        }
+
+        // Then initialize data and render the lab test cards
+        await this.initializeData();
+        this.renderLabTestCards(this.data);
     }
 
-    resetState(data, visit_id, state) {
-        this.datas = data;
+    async resetState(data, visit_id, state) {
+        this.data = data;
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
     }
 
-    render() {
-        if (this.state !== "creation") return;
-
-        const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
-        const addButton = container.querySelector('.add_card_btn');
-        const card = this.createMainCard();
-
-        if (addButton) {
-            addButton.insertAdjacentElement('beforebegin', card);
-        } else {
-            container.appendChild(card);
+    async initializeData() {
+        // Only fetch data if we're in creation state and no data was provided
+        if (this.state === "creation" && (!this.data || this.data.length === 0)) {
+            this.data = await this.fetch_laboratory_request(this.visit_id);
+            console.log(this.data);
         }
+    }
 
-        dashboardController.singleVisitView.add_to_rendered_card_array('visitLabTestOrdersPopUpView');
+    async render() {
+
+        if (this.state === "creation") {
+            const container = document.querySelector('.single_visit_cont .more_visit_cards #diagnosis_group .card_group_cont');
+            const addButton = container.querySelector('.add_card_btn');
+            const card = this.createMainCard();
+
+            if (addButton) {
+                addButton.insertAdjacentElement('beforebegin', card);
+            } else {
+                container.appendChild(card);
+            }
+
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitLabTestOrdersPopUpView');
+
+        }
+        // Render lab test cards with current data
+        this.renderLabTestCards(this.data);
+
     }
 
     createMainCard() {
@@ -87,9 +118,12 @@ export class VisitLabExamCardView {
             e.stopPropagation();
 
 
-            const pendingIds = this.datas
+            const pendingIds = this.data
                 .filter(item => item.status === 'pending')
-                .map(item => item.test_id);
+                .map(item => item.lab_test_id);
+
+            console.log(pendingIds);
+
 
             dashboardController.visitLabTestOrdersPopUpView.PreRender({
                 visit_id: this.visit_id,
@@ -199,11 +233,10 @@ export class VisitLabExamCardView {
         });
     }
 
-    renderLabTestCards() {
+    renderLabTestCards(data_list) {
         const container = document.querySelector('.lab_test_cont_cont .body_part');
-
         container.innerHTML = '';
-        this.datas.forEach(data => {
+        data_list.forEach(data => {
             const card = this.createLabTestCard(data);
             container.prepend(card);
         });
@@ -219,6 +252,19 @@ export class VisitLabExamCardView {
         card.innerHTML = this.getLabTestCardTemplate(data, isPending);
         this.attachCardListeners(card, data, isPending);
 
+        card.addEventListener('click', (e) => {
+            if (data.status === 'complete') {
+                // radiology result popup
+                dashboardController.visitsLaboratoryResultPopUpView.PreRender({
+                    data: data,
+                });
+            }
+            else {
+                notify('top_left', 'Order is not published yet.', 'warning');
+            }
+
+        });
+
         return card;
     }
 
@@ -229,9 +275,9 @@ export class VisitLabExamCardView {
                     <span class='switch_icon_check_box_outline_blank'></span>
                 </div>
                 <div class="word">
-                    <p class="title">${data.name}</p>
+                    <p class="title">${data.lab_test_name}</p>
                     <p class="created_by">${data.created_by}</p>
-                    <p class="date">${date_formatter(data.created_at)}</p>
+                    <p class="date">${timeStamp_formatter(data.created_at)}</p>
                 </div>
             </div>
             <div class="right">
@@ -255,6 +301,7 @@ export class VisitLabExamCardView {
 
     handleCheckboxClick(e, checkbox, id) {
         e.preventDefault();
+        e.stopPropagation();
 
         const isChecked = checkbox.querySelector('span').classList.contains('switch_icon_check_box');
 
@@ -271,7 +318,7 @@ export class VisitLabExamCardView {
 
     handleDeleteClick(e, deleteBtn, data, card) {
         e.preventDefault();
-
+        e.stopPropagation();
 
         if (deleteBtn.classList.contains('inactive')) return;
 
@@ -373,7 +420,7 @@ export class VisitLabExamCardView {
         span.classList.add('switch_icon_indeterminate_check_box');
     }
 
-    async handleLabExamRequest(ids, state = 'multiple') {
+    async handleDeleteLabExamRequest(ids, state = 'multiple') {
         dashboardController.loaderView.render();
 
         try {
@@ -399,7 +446,7 @@ export class VisitLabExamCardView {
 
             if (state === 'single' && this.singleSelectedToDelete) {
                 this.singleSelectedToDelete.remove();
-                this.datas = this.datas.filter(item => item.id != this.singleSelectedToDelete_id);
+                this.data = this.data.filter(item => item.id != this.singleSelectedToDelete_id);
                 this.singleSelectedToDelete = '';
                 this.singleSelectedToDelete_id = '';
             } else {
@@ -426,10 +473,33 @@ export class VisitLabExamCardView {
     }
 
     remove_order_lab_exam_request(id) {
-        return this.handleLabExamRequest([id], 'single');
+        return this.handleDeleteLabExamRequest([id], 'single');
     }
 
     remove_lab_exam_request_bulk(ids) {
-        return this.handleLabExamRequest(ids, 'multiple');
+        return this.handleDeleteLabExamRequest(ids, 'multiple');
+    }
+
+    async fetch_laboratory_request(visit_id) {
+        try {
+            const response = await fetch('/api/laboratory/get_laboratory_test_order_list', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: visit_id,
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            return result.data;
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
     }
 }
