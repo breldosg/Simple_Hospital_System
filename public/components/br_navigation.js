@@ -89,7 +89,6 @@ export class BrCustomNavigation extends HTMLElement {
                     { label: 'Active Visits', href: '/pharmacy/activevisits' }
                 ]
             },
-
             {
                 type: '/radiology',
                 choices: [
@@ -116,6 +115,7 @@ export class BrCustomNavigation extends HTMLElement {
                 type: '/billing',
                 choices: [
                     { label: 'View Active Bills', href: '/billing/activebills' },
+                    { label: 'View Prices', href: '/billing/viewprices' },
                 ]
             },
             {

@@ -75,6 +75,7 @@ const routes = {
     '/billing': dashboardController.viewActiveBillsListView,
     '/billing/activebills': dashboardController.viewActiveBillsListView,
     '/billing/activebills/:id': dashboardController.singleVisitBillingView,
+    '/billing/viewprices': dashboardController.singleViewPricesVisitView,
 
     '/notice': screenCollection.dashboardScreen,
     '/notice/viewnotice': screenCollection.dashboardScreen,

@@ -14455,28 +14455,52 @@ export const fileCategories = {
 
 export const visit_type = [
     {
-        value:'opd',
-        label:'Out Patient',
+        value: 'opd',
+        label: 'Out Patient',
     },
     {
-        value:'emergency',
-        label:'Emergency',
+        value: 'emergency',
+        label: 'Emergency',
     },
     {
-        value:'wakin',
-        label:'Waking',
+        value: 'wakin',
+        label: 'Waking',
     },
 ];
 
 export const visit_priority = [
     {
-        value:'normal',
-        label:'Normal',
+        value: 'normal',
+        label: 'Normal',
     },
     {
-        value:'vip',
-        label:'VIP',
+        value: 'vip',
+        label: 'VIP',
     },
 
 ];
+
+export const view_price_cards = [
+    {
+        link: 'consultation',
+        icon: 'switch_icon_person_booth',
+        title: 'Consultation',
+    },
+    {
+        link: 'consultation',
+        icon: 'switch_icon_pills',
+        title: 'Pharmacy',
+    },
+    {
+        link: 'consultation',
+        icon: 'switch_icon_circle_radiation',
+        title: 'Radiology',
+    },
+    {
+        link: 'consultation',
+        icon: 'switch_icon_vial',
+        title: 'Laboratory',
+    },
+];
+
 
