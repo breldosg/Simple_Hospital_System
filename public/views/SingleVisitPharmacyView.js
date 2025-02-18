@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify, timeStamp_formatter, uploadWithProgress } from "../script/index.js";
+import { currency_formatter, date_formatter, notify, timeStamp_formatter, uploadWithProgress } from "../script/index.js";
 
 export class SingleVisitPharmacyView {
     constructor() {
@@ -262,10 +262,10 @@ export class SingleVisitPharmacyView {
 
         </div>
         <div class="table_cell">
-            <p>${medicine.price.toLocaleString('en-US', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+            <p>${currency_formatter(medicine.price)}</p>
         </div>
         <div class="table_cell">
-            <p>${(medicine.price * medicine.amount).toLocaleString('en-US', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+            <p>${currency_formatter(medicine.price * medicine.amount)}</p>
         </div>
             `;
 

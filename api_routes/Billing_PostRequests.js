@@ -11,6 +11,9 @@ const { createRouteHandler, user_agent_infos, get_cookie, check_cookie, ApiHost 
 // Route configuration object
 const ROUTE_CONFIG = {
     search_active_visit_with_bill_order: 860,
+    search_pharmacy_product_on_billing: 920,
+    search_radiology_test_on_billing: 940,
+    search_laboratory_test_on_billing: 980,
 };
 
 

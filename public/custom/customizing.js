@@ -14487,17 +14487,17 @@ export const view_price_cards = [
         title: 'Consultation',
     },
     {
-        link: 'consultation',
+        link: 'pharmacy',
         icon: 'switch_icon_pills',
         title: 'Pharmacy',
     },
     {
-        link: 'consultation',
+        link: 'radiology',
         icon: 'switch_icon_circle_radiation',
         title: 'Radiology',
     },
     {
-        link: 'consultation',
+        link: 'laboratory',
         icon: 'switch_icon_vial',
         title: 'Laboratory',
     },

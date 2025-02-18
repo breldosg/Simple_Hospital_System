@@ -7060,6 +7060,7 @@ input {
                 .icon {
                     background-color: var(--pri_color_op1);
                 }
+
                 background-color: var(--white-op1);
             }
         }
@@ -11554,6 +11555,137 @@ input {
         }
     }
 
+        /* ------------------------------------------------------- */
+
+        .update_pharmacy_product_price_popup {
+            padding: 50px;
+            border-radius: var(--main_border_r);
+            background-color: var(--white);
+            position: relative;
+    
+            .slides {
+                display: flex;
+                width: 640px;
+    
+                .slide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    /* margin-top: 20px; */
+                    padding: 10px;
+                    width: 640px;
+                    flex: none;
+    
+                    .head_cont {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+    
+                        .heading {
+                            font-size: 17px;
+                            font-weight: bold;
+                        }
+    
+                        .close_btn {
+                            width: 35px;
+                            height: 35px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 5px;
+                            flex: none;
+                            cursor: pointer;
+    
+                            span {
+                                font-size: 17px;
+                                /* color: var(--btn_hover_color); */
+                            }
+                        }
+    
+    
+                    }
+    
+                    .input_group {
+                        display: flex;
+                        gap: 20px;
+                        flex-wrap: wrap;
+                        width: 100%;
+    
+                        .inp_cont {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2px;
+    
+                            label {
+                                font-size: 13px;
+                                /* font-weight: bold; */
+                            }
+    
+                            input,
+                            select {
+                                border-radius: var(--input_main_border_r);
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                background-color: transparent;
+                                border: 2px solid var(--input_border);
+                            }
+    
+                            .password-container {
+                                border-radius: var(--input_main_border_r);
+                                background-color: var(--input_background);
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                width: 300px;
+                                padding: 10px;
+                                height: 41px;
+                                overflow: hidden;
+                                border: 2px solid var(--input_border);
+    
+                                .password-input {
+                                    width: calc(100% - 40px);
+                                    padding: 0px;
+                                    height: 100%;
+                                    border: none;
+                                    background: transparent;
+                                    border-radius: 0;
+                                }
+    
+                                .toggle-password {
+                                    cursor: pointer;
+                                    font-size: 18px;
+                                    width: 30px;
+                                    height: 41px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    /* background-color: rebeccapurple; */
+                                }
+                            }
+                        }
+                    }
+    
+                    .btn_cont {
+                        display: flex;
+                        width: 100%;
+                        justify-content: end;
+                        padding-top: 20px;
+    
+                        .btn_next {
+                            border: none;
+                            background-color: var(--pri_color);
+                            padding: 10px 20px;
+                            font-weight: bold;
+                            font-size: 12px;
+                            color: var(--white);
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+                        }
+                    }
+                }
+            }
+        }
 
     /* ------------------------------------------------------- */
 

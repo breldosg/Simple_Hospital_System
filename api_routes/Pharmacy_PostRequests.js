@@ -45,6 +45,7 @@ const ROUTE_CONFIG = {
     search_visit_with_pharmacy_order: 830,
     single_pharmacy_visit_detail: 840,
     confirm_pharmacy_invoice: 850,
+    update_pharmacy_product_price: 930,
 
 
 

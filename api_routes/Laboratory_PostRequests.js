@@ -18,6 +18,9 @@ const ROUTE_CONFIG = {
     publish_laboratory_order: 890,
     save_laboratory_order_report: 900,
     get_laboratory_test_order_list: 910,
+    update_laboratory_test_price: 990,
+    get_category: 970,
+
 };
 
 

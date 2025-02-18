@@ -17,6 +17,8 @@ const ROUTE_CONFIG = {
     delete_attachments_files: 770,
     publish_radiology_order: 780,
     revert_radiology_order: 790,
+    get_category: 950,
+    update_radiology_test_price: 960,
 };
 
 

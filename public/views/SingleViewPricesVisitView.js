@@ -2,6 +2,7 @@ import { dashboardController } from "../controller/DashboardController.js";
 import { view_price_cards } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify, timeStamp_formatter, uploadWithProgress } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class SingleViewPricesVisitView {
     constructor() {
@@ -23,72 +24,44 @@ export class SingleViewPricesVisitView {
 
         this.main_container = document.querySelector('.view_price_cont');
 
-        await this.render();
-    }
-
-    async render() {
-        // const visit_data = await this.fetchData();
-
-        // if (!visit_data) return;
-    }
-
-    add_listeners() {
+        this.render_cards()
 
     }
+
 
     ViewReturn() {
         return `
 <div class="view_price_cont">
 
-    ${view_price_cards.map(card => `
-    <div class="card">
-
-        <div class="icon">
-            <span class='${card.icon}'></span>
-        </div>
-
-        <div class="title_cont">
-            <p>${card.title}</p>
-        </div>
-
-    </div>
-    `).join('')}
 </div>
 `;
     }
 
-    async fetchData() {
-        try {
+    render_cards() {
+
+        this.main_container.innerHTML = '';
+
+        view_price_cards.forEach((card_data) => {
+            const card = document.createElement('div');
+            card.className = "card";
+
+            card.innerHTML = `
+                <div class="icon">
+                    <span class='${card_data.icon}'></span>
+                </div>
+
+                <div class="title_cont">
+                    <p>${card_data.title}</p>
+                </div>
+            `
+            card.addEventListener('click', (e) => {
+                frontRouter.navigate('/billing/viewprices/' + card_data.link);
+            })
 
 
-            const response = await fetch('/api/pharmacy/single_pharmacy_visit_detail', {
-                method: 'POST',
-                headers: {
+            this.main_container.appendChild(card)
+        })
 
-                    'Content-Type': 'application/json'
-
-                },
-                body: JSON.stringify({
-                    visit_id: this.visit_id,
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-                this.single_pharmacy_visit_data = result.data;
-                return result.data;
-            } else {
-                notify('top_left', result.message, 'warning');
-                return null;
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-            return null;
-        }
     }
+
 }

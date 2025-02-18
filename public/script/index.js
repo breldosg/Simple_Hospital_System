@@ -1,7 +1,8 @@
-import { frontRouter } from "/public/script/route.js";
+// import { frontRouter } from "/public/script/route.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { fileCategories } from "../custom/customizing.js";
+import { frontRouter } from "./route.js";
 
 
 
@@ -63,19 +64,22 @@ const routes = {
     '/store/viewinatakebatch': dashboardController.viewIntakeBatchView,
     '/store/viewinatakebatch/:id': dashboardController.singleIntakeBatchView,
     '/store/orderlist': dashboardController.viewOrderListView,
-    
+
     '/radiology': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits/:id': dashboardController.singleVisitRadiologyView,
-    
-    '/laboratory': dashboardController.viewActiveLaboratoryListView ,
-    '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView ,
+
+    '/laboratory': dashboardController.viewActiveLaboratoryListView,
+    '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView,
     '/laboratory/activevisits/:id': dashboardController.singleVisitLaboratoryView,
 
     '/billing': dashboardController.viewActiveBillsListView,
     '/billing/activebills': dashboardController.viewActiveBillsListView,
     '/billing/activebills/:id': dashboardController.singleVisitBillingView,
     '/billing/viewprices': dashboardController.singleViewPricesVisitView,
+    '/billing/viewprices/pharmacy': dashboardController.viewBillingMedicineView,
+    '/billing/viewprices/radiology': dashboardController.viewBillingRadiologyView,
+    '/billing/viewprices/laboratory': dashboardController.viewBillingLaboratoryView,
 
     '/notice': screenCollection.dashboardScreen,
     '/notice/viewnotice': screenCollection.dashboardScreen,
@@ -278,3 +282,17 @@ export const uploadWithProgress = (url, formData, onProgress) => {
         xhr.send(formData);
     });
 };
+
+export const currency_formatter = (amount, with_symbol = true) => {
+    if (with_symbol) {
+        return amount.toLocaleString('en-US', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 })
+    }
+    else {
+        // remove the symbol and the last 2 digits
+        return amount.toLocaleString('en-US', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('TZS', '');
+    }
+}
+
+
+
+
