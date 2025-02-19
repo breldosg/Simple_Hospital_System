@@ -14468,6 +14468,18 @@ export const visit_type = [
     },
 ];
 
+export const doctor_type = [
+    {
+        value: 'DCT',
+        label: 'General Doctor(General Practitioner)',
+    },
+    {
+        value: 'SDCT',
+        label: 'Specialist Doctor',
+    },
+    
+];
+
 export const visit_priority = [
     {
         value: 'normal',
@@ -14500,6 +14512,11 @@ export const view_price_cards = [
         link: 'laboratory',
         icon: 'switch_icon_vial',
         title: 'Laboratory',
+    },
+    {
+        link: 'default',
+        icon: 'switch_icon_settings_applications',
+        title: 'Default Prices',
     },
 ];
 

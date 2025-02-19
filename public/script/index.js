@@ -77,9 +77,11 @@ const routes = {
     '/billing/activebills': dashboardController.viewActiveBillsListView,
     '/billing/activebills/:id': dashboardController.singleVisitBillingView,
     '/billing/viewprices': dashboardController.singleViewPricesVisitView,
+    '/billing/viewprices/consultation': dashboardController.viewBillingConsultationView,
     '/billing/viewprices/pharmacy': dashboardController.viewBillingMedicineView,
     '/billing/viewprices/radiology': dashboardController.viewBillingRadiologyView,
     '/billing/viewprices/laboratory': dashboardController.viewBillingLaboratoryView,
+    '/billing/viewprices/default': dashboardController.viewBillingDefaultPriceView,
 
     '/notice': screenCollection.dashboardScreen,
     '/notice/viewnotice': screenCollection.dashboardScreen,
@@ -284,12 +286,14 @@ export const uploadWithProgress = (url, formData, onProgress) => {
 };
 
 export const currency_formatter = (amount, with_symbol = true) => {
+    var amount_num = parseFloat(amount);
+
     if (with_symbol) {
-        return amount.toLocaleString('en-US', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 })
+        return amount_num.toLocaleString('en-US', { style: 'currency', currency: 'TZS' })
     }
     else {
         // remove the symbol and the last 2 digits
-        return amount.toLocaleString('en-US', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('TZS', '');
+        return amount_num.toLocaleString('en-US', { style: 'currency', currency: 'TZS' }).replace('TZS', '');
     }
 }
 

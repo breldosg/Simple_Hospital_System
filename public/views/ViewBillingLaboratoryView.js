@@ -4,7 +4,7 @@ import { currency_formatter, notify } from "../script/index.js";
 
 export class ViewBillingLaboratoryView {
     constructor() {
-        window.search_medicine = this.search_medicine.bind(this);
+        window.laboratory_search_medicine = this.search_medicine.bind(this);
         this.medicineData = [];
         this.batchNumber = 1;
         this.total_page_num = 1;
@@ -25,6 +25,8 @@ export class ViewBillingLaboratoryView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
+        this.main_component = document.querySelector('.billing_table_laboratory_cont');
+
         // Get the current path, default to '/users' if on '/dashboard'
         const rawPath = window.location.pathname.toLowerCase();
 
@@ -39,10 +41,10 @@ export class ViewBillingLaboratoryView {
     attachEventListeners() {
 
         // Open Close Filter Section buttons
-        var open_close = document.querySelector('.medicine_cont .heading_cont');
+        var open_close = this.main_component.querySelector('.heading_cont');
         open_close.addEventListener('click', () => {
-            const filter_section = document.querySelector('.medicine_cont .medicine_top');
-            var open_close_btn = document.querySelector('.medicine_cont #open_close_search');
+            const filter_section = this.main_component.querySelector('.medicine_top');
+            var open_close_btn = this.main_component.querySelector('#open_close_search');
 
             if (open_close_btn.classList.contains('closed')) {
                 open_close_btn.classList.remove('closed');
@@ -55,16 +57,8 @@ export class ViewBillingLaboratoryView {
 
         });
 
-
-        // add btn
-        document.querySelector('.add_btn').addEventListener('click', () => {
-            dashboardController.createLaboratoryTestPopUpView.PreRender();
-        });
-
         // Pagination buttons
-        document.querySelector('.main_btn.next').addEventListener('click', async () => {
-
-
+        this.main_component.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
                 this.page_shift = true;
@@ -72,7 +66,7 @@ export class ViewBillingLaboratoryView {
             }
         });
 
-        document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+        this.main_component.querySelector('.main_btn.prev').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber > 1) {
                 this.batchNumber -= 1;
                 this.page_shift = true;
@@ -105,7 +99,7 @@ export class ViewBillingLaboratoryView {
             };
             this.category_elements = roles(this.categoryData);
 
-            document.querySelector('.search_containers').innerHTML = this.searchRadiologyView();
+            this.main_component.querySelector('.search_containers').innerHTML = this.searchRadiologyView();
 
             // clear the variables
             this.category_elements = '';
@@ -132,14 +126,14 @@ export class ViewBillingLaboratoryView {
     }
 
     populateTable(laboratoryData) {
-        const tableBody = document.querySelector('.table_body');
+        const tableBody = this.main_component.querySelector('.table_body');
         tableBody.innerHTML = '';  // Clear table before populating
 
 
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
-        const current_page = document.querySelector('.current_page');
+        const show_count = this.main_component.querySelector('.show_count');
+        const total_data = this.main_component.querySelector('.total_data');
+        const total_page = this.main_component.querySelector('.total_page');
+        const current_page = this.main_component.querySelector('.current_page');
 
         show_count.innerText = laboratoryData.showData;
         total_data.innerText = laboratoryData.total;
@@ -157,7 +151,6 @@ export class ViewBillingLaboratoryView {
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${test.name}</p>
                     <p class="name">${test.category == null ? 'No Category' : test.category}</p>
-                    <p class="type">${test.type}</p>
                     <p class="remain">${currency_formatter(test.price)}</p>
                     <p class="status">${test.status}</p>
                     <div class="action d_flex flex__c_c">
@@ -237,7 +230,7 @@ export class ViewBillingLaboratoryView {
     }
 
     loadingContent() {
-        const tableBody = document.querySelector('.table_body');
+        const tableBody = this.main_component.querySelector('.table_body');
         tableBody.innerHTML = `
             <div class="start_page deactivate">
                 <p>No Test Found</p>
@@ -247,23 +240,23 @@ export class ViewBillingLaboratoryView {
     }
 
     displayNoDataMessage() {
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
-        const current_page = document.querySelector('.current_page');
+        const show_count = this.main_component.querySelector('.show_count');
+        const total_data = this.main_component.querySelector('.total_data');
+        const total_page = this.main_component.querySelector('.total_page');
+        const current_page = this.main_component.querySelector('.current_page');
 
         current_page.innerText = 1;
         show_count.innerText = 0;
         total_data.innerText = 0;
         total_page.innerText = 1;
-        document.querySelector('.start_page').style.display = 'flex';
-        document.querySelector('.table_body .loader_cont').classList.remove('active');
+        this.main_component.querySelector('.start_page').style.display = 'flex';
+        this.main_component.querySelector('.table_body .loader_cont').classList.remove('active');
         this.total_page_num = 1;
     }
 
     searchRadiologyView() {
         return `
-        <br-form callback="search_medicine">
+        <br-form callback="laboratory_search_medicine">
             <div class="medicine_content">
                 <br-input label="Test Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter test name" styles="
                             border-radius: var(--input_main_border_r);
@@ -299,7 +292,7 @@ export class ViewBillingLaboratoryView {
     }
 
     loading_and_nodata_view() {
-        document.querySelector('.medicine_cont .table_body').innerHTML = `
+        this.main_component.querySelector('.table_body').innerHTML = `
         <div class="start_page deactivate">
             <p>No Test Found</p>
         </div>
@@ -309,7 +302,7 @@ export class ViewBillingLaboratoryView {
 
     ViewReturn() {
         return `
-    <div class="medicine_cont">
+    <div class="billing_table_laboratory_cont">
     
     <div class="medicine_top closed">
     <div class="heading_cont">
@@ -361,11 +354,7 @@ export class ViewBillingLaboratoryView {
     <div class="main_section medicine_table_out">
     
         <div class="in_table_top d_flex flex__u_s">
-            <h4>Test List</h4>
-
-            <div class="add_btn" title="Create Test" id="open_add_product_popup">
-                <span class="switch_icon_add"></span>
-            </div>
+            <h4>Laboratory Test List</h4>
         </div>
         <div class="outpatient_table">
     
@@ -373,7 +362,6 @@ export class ViewBillingLaboratoryView {
                 <p class="id">SN</p>
                 <p class="name">Name</p>
                 <p class="name">Category</p>
-                <p class="type">Type</p>
                 <p class="remain">Price</p>
                 <p class="status">Status</p>
                 <div class="action"></div>

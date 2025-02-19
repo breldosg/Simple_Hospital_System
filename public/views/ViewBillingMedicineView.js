@@ -4,7 +4,7 @@ import { currency_formatter, notify } from "../script/index.js";
 
 export class ViewBillingMedicineView {
     constructor() {
-        window.search_medicine = this.search_medicine.bind(this);
+        window.pharmacy_search_medicine = this.search_medicine.bind(this);
         this.medicineData = [];
         this.batchNumber = 1;
         this.total_page_num = 1;
@@ -24,6 +24,9 @@ export class ViewBillingMedicineView {
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
+        
+
+        this.mainContainer = document.querySelector('.billing_table_medicine_cont');
 
         // Get the current path, default to '/users' if on '/dashboard'
         const rawPath = window.location.pathname.toLowerCase();
@@ -37,12 +40,11 @@ export class ViewBillingMedicineView {
     }
 
     attachEventListeners() {
-
         // Open Close Filter Section buttons
-        var open_close = document.querySelector('.medicine_cont .heading_cont');
+        var open_close = this.mainContainer.querySelector('.heading_cont');
         open_close.addEventListener('click', () => {
-            const filter_section = document.querySelector('.medicine_cont .medicine_top');
-            var open_close_btn = document.querySelector('.medicine_cont #open_close_search');
+            const filter_section = this.mainContainer.querySelector('.medicine_top');
+            var open_close_btn = this.mainContainer.querySelector('#open_close_search');
 
             if (open_close_btn.classList.contains('closed')) {
                 open_close_btn.classList.remove('closed');
@@ -52,19 +54,10 @@ export class ViewBillingMedicineView {
                 open_close_btn.classList.add('closed');
                 filter_section.classList.add('closed');
             }
-
-        });
-
-
-        // add btn
-        document.querySelector('.add_btn').addEventListener('click', () => {
-            dashboardController.createProductPopUpView.PreRender();
         });
 
         // Pagination buttons
-        document.querySelector('.main_btn.next').addEventListener('click', async () => {
-
-
+        this.mainContainer.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
                 this.page_shift = true;
@@ -72,7 +65,7 @@ export class ViewBillingMedicineView {
             }
         });
 
-        document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+        this.mainContainer.querySelector('.main_btn.prev').addEventListener('click', async () => {
             if (!this.isLoading && this.batchNumber > 1) {
                 this.batchNumber -= 1;
                 this.page_shift = true;
@@ -86,11 +79,9 @@ export class ViewBillingMedicineView {
         this.isLoading = true;
         this.loading_and_nodata_view();
 
-
         if (!this.page_shift) {
             const categoryData = await this.fetchCategory(); // Fetch category data only once
             this.categoryData = categoryData || [];
-
 
             const roles = (category_raw) => {
                 var rolesElem = `
@@ -105,12 +96,11 @@ export class ViewBillingMedicineView {
             };
             this.category_elements = roles(this.categoryData);
 
-            document.querySelector('.search_containers').innerHTML = this.searchMedicineView();
+            this.mainContainer.querySelector('.search_containers').innerHTML = this.searchMedicineView();
 
             // clear the variables
             this.category_elements = '';
             this.categoryData = '';
-
         }
 
         const medicineData = await this.fetchData(); // Fetch data
@@ -122,31 +112,27 @@ export class ViewBillingMedicineView {
     }
 
     render() {
-
         if (this.medicineData.medicineList && this.medicineData.medicineList.length > 0) {
             this.populateTable(this.medicineData);
         } else {
             this.displayNoDataMessage();
         }
-
     }
 
     populateTable(medicineData) {
-        const tableBody = document.querySelector('.table_body');
+        const tableBody = this.mainContainer.querySelector('.table_body');
         tableBody.innerHTML = '';  // Clear table before populating
 
-
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
-        const current_page = document.querySelector('.current_page');
+        const show_count = this.mainContainer.querySelector('.show_count');
+        const total_data = this.mainContainer.querySelector('.total_data');
+        const total_page = this.mainContainer.querySelector('.total_page');
+        const current_page = this.mainContainer.querySelector('.current_page');
 
         show_count.innerText = medicineData.showData;
         total_data.innerText = medicineData.total;
         total_page.innerText = medicineData.pages;
         current_page.innerText = medicineData.batch;
         this.total_page_num = medicineData.pages;
-
 
         medicineData.medicineList.forEach((medicine, index) => {
             const row = document.createElement('div');
@@ -168,7 +154,6 @@ export class ViewBillingMedicineView {
             // add event listener to the edit price btn
             row.querySelector('.edit_price_btn').addEventListener('click', () => {
                 dashboardController.updatePharmacyProductPricePopUpView.PreRender(medicine);
-                console.log('edit price btn clicked', medicine);
             });
 
             tableBody.appendChild(row);
@@ -237,7 +222,7 @@ export class ViewBillingMedicineView {
     }
 
     loadingContent() {
-        const tableBody = document.querySelector('.table_body');
+        const tableBody = this.mainContainer.querySelector('.table_body');
         tableBody.innerHTML = `
             <div class="start_page deactivate">
                 <p>No Product Found</p>
@@ -247,23 +232,23 @@ export class ViewBillingMedicineView {
     }
 
     displayNoDataMessage() {
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
-        const current_page = document.querySelector('.current_page');
+        const show_count = this.mainContainer.querySelector('.show_count');
+        const total_data = this.mainContainer.querySelector('.total_data');
+        const total_page = this.mainContainer.querySelector('.total_page');
+        const current_page = this.mainContainer.querySelector('.current_page');
 
         current_page.innerText = 1;
         show_count.innerText = 0;
         total_data.innerText = 0;
         total_page.innerText = 1;
-        document.querySelector('.start_page').style.display = 'flex';
-        document.querySelector('.table_body .loader_cont').classList.remove('active');
+        this.mainContainer.querySelector('.start_page').style.display = 'flex';
+        this.mainContainer.querySelector('.table_body .loader_cont').classList.remove('active');
         this.total_page_num = 1;
     }
 
     searchMedicineView() {
         return `
-        <br-form callback="search_medicine">
+        <br-form callback="pharmacy_search_medicine">
             <div class="medicine_content">
                 <br-input label="Product Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter product name" styles="
                             border-radius: var(--input_main_border_r);
@@ -292,14 +277,13 @@ export class ViewBillingMedicineView {
                     <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
                 </div> 
 
-
             </div>
         </br-form>
             `;
     }
 
     loading_and_nodata_view() {
-        document.querySelector('.medicine_cont .table_body').innerHTML = `
+        this.mainContainer.querySelector('.table_body').innerHTML = `
         <div class="start_page deactivate">
             <p>No Product Found</p>
         </div>
@@ -309,7 +293,7 @@ export class ViewBillingMedicineView {
 
     ViewReturn() {
         return `
-    <div class="medicine_cont">
+    <div class="billing_table_medicine_cont">
     
     <div class="medicine_top closed">
     <div class="heading_cont">
@@ -362,10 +346,6 @@ export class ViewBillingMedicineView {
     
         <div class="in_table_top d_flex flex__u_s">
             <h4>Product List</h4>
-
-            <div class="add_btn" title="Create Product" id="open_add_product_popup">
-                <span class="switch_icon_add"></span>
-            </div>
         </div>
         <div class="outpatient_table">
     

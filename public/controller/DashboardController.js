@@ -71,6 +71,11 @@ import { ViewBillingRadiologyView } from "../views/ViewBillingRadiologyView.js";
 import { UpdateRadiologyTestPricePopUpView } from "../popups/UpdateRadiologyTestPricePopUpView.js";
 import { ViewBillingLaboratoryView } from "../views/ViewBillingLaboratoryView.js";
 import { UpdateLaboratoryTestPricePopUpView } from "../popups/UpdateLaboratoryTestPricePopUpView.js";
+import { ViewBillingConsultationView } from "../views/ViewBillingConsultationView.js";
+import { CreateVisitPricePopUp } from "../popups/CreateVisitPricePopUp.js";
+import { UpdateConsultationPricePopUpView } from "../popups/UpdateConsultationPricePopUpView.js";
+import { ViewBillingDefaultPriceView } from "../views/ViewBillingDefaultPriceView.js";
+import { UpdateDefaultPricePopUpView } from "../popups/UpdateDefaultPricePopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -162,11 +167,17 @@ class DashboardController {
     viewBillingMedicineView = new ViewBillingMedicineView();
     viewBillingRadiologyView = new ViewBillingRadiologyView();
     viewBillingLaboratoryView = new ViewBillingLaboratoryView();
+    viewBillingConsultationView = new ViewBillingConsultationView();
+    viewBillingDefaultPriceView = new ViewBillingDefaultPriceView();
+
 
     // Billing PopUp
     updatePharmacyProductPricePopUpView = new UpdatePharmacyProductPricePopUpView();
     updateRadiologyTestPricePopUpView = new UpdateRadiologyTestPricePopUpView();
     updateLaboratoryTestPricePopUpView = new UpdateLaboratoryTestPricePopUpView();
+    createVisitPricePopUp = new CreateVisitPricePopUp();
+    updateConsultationPricePopUpView = new UpdateConsultationPricePopUpView();
+    updateDefaultPricePopUpView = new UpdateDefaultPricePopUpView();
 
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();

@@ -14,8 +14,14 @@ const ROUTE_CONFIG = {
     search_pharmacy_product_on_billing: 920,
     search_radiology_test_on_billing: 940,
     search_laboratory_test_on_billing: 980,
-};
+    search_consultation_for_billing: 1000,
+    create_visit_price: 1010,
+    update_consultation_price: 1020,
+    delete_consultation_price: 1030,
+    search_default_prices_for_billing: 1040,
+    update_default_price: 1050,
 
+};
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
@@ -145,3 +151,4 @@ router.use((err, req, res, next) => {
 });
 
 module.exports = router;
+

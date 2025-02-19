@@ -120,7 +120,7 @@ export class ViewMedicineCategoryView {
             const total_data = document.querySelector('.total_data');
             const total_page = document.querySelector('.total_page');
             const current_page = document.querySelector('.current_page');
-            
+
             current_page.innerText = 1;
             show_count.innerText = 0;
             total_data.innerText = 0;
