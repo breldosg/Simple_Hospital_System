@@ -20,7 +20,7 @@ const ROUTE_CONFIG = {
     delete_consultation_price: 1030,
     search_default_prices_for_billing: 1040,
     update_default_price: 1050,
-
+    get_single_visit_bill_data: 1060,
 };
 
 // Configure multer for file upload

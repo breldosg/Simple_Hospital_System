@@ -90,10 +90,6 @@ export class SingleVisitPharmacyView {
     <div class="more_visit_detail">
 
         <div class="main_card">
-
-            <!-- <div class="example">
-                <p>No Order Selected</p>
-            </div> -->
             
             <div class="top">
                 <h4 class="heading">Assigned Medicine</h4>
