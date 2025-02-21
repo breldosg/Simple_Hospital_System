@@ -76,6 +76,7 @@ import { CreateVisitPricePopUp } from "../popups/CreateVisitPricePopUp.js";
 import { UpdateConsultationPricePopUpView } from "../popups/UpdateConsultationPricePopUpView.js";
 import { ViewBillingDefaultPriceView } from "../views/ViewBillingDefaultPriceView.js";
 import { UpdateDefaultPricePopUpView } from "../popups/UpdateDefaultPricePopUpView.js";
+import { CreateInvoiceAndPayBillPopUpView } from "../popups/CreateInvoiceAndPayBillPopUpView.js";
 
 class DashboardController {
     // Loader View
@@ -178,6 +179,7 @@ class DashboardController {
     createVisitPricePopUp = new CreateVisitPricePopUp();
     updateConsultationPricePopUpView = new UpdateConsultationPricePopUpView();
     updateDefaultPricePopUpView = new UpdateDefaultPricePopUpView();
+    createInvoiceAndPayBillPopUpView = new CreateInvoiceAndPayBillPopUpView();
 
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();

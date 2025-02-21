@@ -21,6 +21,7 @@ const ROUTE_CONFIG = {
     search_default_prices_for_billing: 1040,
     update_default_price: 1050,
     get_single_visit_bill_data: 1060,
+    create_invoice_and_pay_bill: 1070,
 };
 
 // Configure multer for file upload
