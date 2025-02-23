@@ -4,7 +4,6 @@ import { currency_formatter, date_formatter, getCurrentDate, notify } from "../s
 
 export class CreateInvoiceAndPayBillPopUpView {
     constructor() {
-        window.create_invoice_popup_form = this.create_invoice.bind(this);
     }
 
     async PreRender(params) {
@@ -73,19 +72,18 @@ export class CreateInvoiceAndPayBillPopUpView {
         </div>
         
         <div class="receipt_footer">
+    ${this.bill_data.status == 'not_paid' ? `
+        <br-button loader_width="23" class="btn_primary pay_now_btn" type="submit">Pay Now</br-button>
+        ` : `
         <br-button loader_width="23" class="btn_primary print_invoice_btn" type="submit">Print Invoice</br-button>
-        
+        `
+        }
+
         </div>
 </div>
 `;
     }
 
-    // ${this.bill_data.status == 'not_paid' ? `
-    //     <br-button loader_width="23" class="btn_primary pay_now_btn" type="submit">Pay Now</br-button>
-    //     ` : `
-    //     <br-button loader_width="23" class="btn_primary print_invoice_btn" type="submit">Print Invoice</br-button>
-    //     `
-    //     }
 
 
     render_items(items) {
@@ -108,88 +106,19 @@ export class CreateInvoiceAndPayBillPopUpView {
         const pay_now_btn = this.main_container.querySelector('.pay_now_btn');
         if (pay_now_btn) {
             pay_now_btn.addEventListener('click', () => {
-                this.create_invoice()
+                this.create_invoice_and_pay_bill()
             });
         }
 
         const print_invoice_btn = this.main_container.querySelector('.print_invoice_btn');
         if (print_invoice_btn) {
             print_invoice_btn.addEventListener('click', async () => {
-                // await this.print_invoice(this.main_container)
-                console.log('print invoice');
-                this.printDiv(this.main_container);
+                this.print_receipt(this.main_container);
             });
         }
     }
 
-    async print_invoice() {
-
-        try {
-            // Request screen recording permission
-            const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-
-            // Create video element to capture frame
-            const video = document.createElement("video");
-            video.srcObject = stream;
-            video.autoplay = true;
-
-            video.onloadedmetadata = async () => {
-                // Create canvas
-                const canvas = document.createElement("canvas");
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                const ctx = canvas.getContext("2d");
-
-                // Draw current frame from video
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                // Convert to image
-                const imageData = canvas.toDataURL("image/png");
-
-                // Stop the stream after capturing
-                stream.getTracks().forEach(track => track.stop());
-
-                // Create screenshot container dynamically
-                let container = document.getElementById("screenshotContainer");
-                if (!container) {
-                    container = document.createElement("div");
-                    container.id = "screenshotContainer";
-                    container.innerHTML = `<h3>Screenshot:</h3><img id="screenshotImage" alt="Captured Screenshot">`;
-                    document.body.appendChild(container);
-                }
-
-                // Apply styles dynamically
-                const style = document.createElement("style");
-                style.innerHTML = `
-                        #screenshotContainer {
-                            margin-top: 20px;
-                            padding: 10px;
-                            text-align: center;
-                            border: 1px dashed gray;
-                            background-color: #f9f9f9;
-                        }
-                        #screenshotImage {
-                            margin-top: 10px;
-                            width: auto;
-                            max-width: 100%;
-                        }
-                    `;
-                document.head.appendChild(style);
-
-                // Display the captured image
-                document.getElementById("screenshotImage").src = imageData;
-            };
-
-        } catch (error) {
-            console.error("Error capturing screenshot:", error);
-        }
-
-
-    }
-
-
-
-    async create_invoice() {
+    async create_invoice_and_pay_bill() {
         const btn_submit = this.main_container.querySelector('.pay_now_btn');
         btn_submit.setAttribute('loading', true);
 
@@ -229,8 +158,10 @@ export class CreateInvoiceAndPayBillPopUpView {
                     visit_id: this.params.visit_id,
                 })
 
+
+
                 // this.close_popup()
-                // dashboardController.viewBillingMedicineView.fetchAndRenderData();
+                dashboardController.singleVisitBillingView.render()
 
             } else {
                 notify('top_left', result.message, 'warning');
@@ -250,7 +181,7 @@ export class CreateInvoiceAndPayBillPopUpView {
         cont.innerHTML = '';
     }
 
-    style() {
+    receipt_style() {
         return `
 
         
@@ -415,9 +346,7 @@ export class CreateInvoiceAndPayBillPopUpView {
     `;
     }
 
-
-
-    printDiv(div) {
+    print_receipt(div) {
         
         // Create iframe  
         var iframe = document.createElement('iframe');
@@ -434,7 +363,7 @@ export class CreateInvoiceAndPayBillPopUpView {
                 <head>  
                     <title>Print</title>  
                     <style>  
-                        ${this.style()}
+                        ${this.receipt_style()}
                     </style>  
                 </head>  
                 <body>${div.outerHTML}</body>  

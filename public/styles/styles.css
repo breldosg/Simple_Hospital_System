@@ -48,7 +48,7 @@
     font-style: italic;
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -8718,6 +8718,8 @@ input {
                                         justify-content: start;
                                     }
 
+
+
                                 }
 
 
@@ -8749,12 +8751,6 @@ input {
 
                                     }
 
-
-
-
-
-
-
                                 }
 
                                 .table_body {
@@ -8770,34 +8766,71 @@ input {
                                         cursor: pointer;
                                         border-radius: var(--btn_border_r);
 
-                                        .name_cont {
-                                            display: flex;
-                                            flex-direction: column;
-                                            gap: 5px;
+                                        .pill {
+                                            padding: 5px 10px;
+                                            border-radius: 20px;
+                                            font-weight: 600;
+                                            font-size: 10px;
+                                            color: var(--white);
+                                        }
 
-                                            .product_name {
-                                                font-size: 14px;
-                                            }
+                                        .pill.paid {
+                                            background-color: var(--success_color);
+                                        }
 
-                                            .instruction,
-                                            .duration {
-                                                font-weight: bold;
+                                        .pill.unpaid {
+                                            background-color: var(--error_color);
+                                        }
 
+                                        .info_icon {
+                                            cursor: pointer;
 
-                                                span {
-                                                    color: currentColor;
-                                                }
+                                            span {
+                                                font-size: 17px;
+                                                color: var(--pri_color);
                                             }
                                         }
 
-                                        .paid {
-                                            font-weight: 600;
-                                            color: var(--success_color);
+                                        .info_icon.restricted {
+                                            span {
+                                                color: var(--error_color);
+                                            }
                                         }
 
-                                        .unpaid {
-                                            font-weight: 600;
-                                            color: var(--error_color);
+                                        .info_icon {
+                                            position: relative;
+                                
+                                            .tooltip {
+                                                visibility: hidden;
+                                                position: absolute;
+                                                /* left: 50%; */
+                                                right: 35%;
+                                                transform: translateX(-50%);
+                                                background-color: #333;
+                                                color: white;
+                                                padding: 8px 12px;
+                                                border-radius: 4px;
+                                                font-size: 12px;
+                                                white-space: nowrap;
+                                                z-index: 1;
+                                                bottom: -10px;
+                                                transform: translateY(100%) translateX(0%);
+                                            }
+                                
+                                            .tooltip::after {
+                                                content: "";
+                                                position: absolute;
+                                                top: -6px;
+                                                right: 0%;
+                                                transform: translateX(-50%);
+                                                border-width: 0 6px 6px 6px;
+                                                border-style: solid;
+                                                border-color: transparent transparent #333 transparent;
+                                            }
+                                
+                                            .tooltip_icon_cont:hover~.tooltip {
+                                                visibility: visible;
+                                            }
                                         }
 
                                     }
@@ -8860,6 +8893,10 @@ input {
 
 
         }
+
+
+
+
 
 
         /* ------------------------------------------------------- */
@@ -13688,18 +13725,18 @@ input {
             border-bottom: 1px dashed #ddd;
 
             h2 {
-                color:var(--pri_color);
+                color: var(--pri_color);
                 /* margin-bottom: 1rem; */
                 /* font-size: 1.5rem; */
             }
 
-            .top_row{
+            .top_row {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 1rem;
 
-                .close_btn{
+                .close_btn {
                     width: 35px;
                     height: 35px;
                     display: flex;
@@ -13708,17 +13745,18 @@ input {
                     border-radius: 5px;
                     flex: none;
                     cursor: pointer;
-                    
 
-                    span{
+
+                    span {
                         font-size: 17px;
                         /* color: var(--btn_hover_color); */
                     }
                 }
 
-                .close_btn:hover{
+                .close_btn:hover {
                     background-color: var(--pri_op);
-                    span{
+
+                    span {
                         color: var(--pri_color);
                     }
                 }
@@ -13738,7 +13776,7 @@ input {
                 margin-bottom: 1rem;
                 padding-right: 10px;
 
-                span:last-child{
+                span:last-child {
                     text-align: end;
                 }
             }
@@ -13749,7 +13787,7 @@ input {
                 max-height: 300px;
                 overflow-y: auto;
                 padding-right: 10px;
-    
+
                 .item {
                     display: grid;
                     grid-template-columns: 2fr 1fr 1fr;
@@ -13757,11 +13795,11 @@ input {
                     gap: 15px;
                     border-bottom: 1px solid #eee;
 
-                    span:last-child{
+                    span:last-child {
                         text-align: end;
                     }
                 }
-        
+
                 .item:last-child {
                     border-bottom: none;
                 }
@@ -13794,7 +13832,7 @@ input {
                 align-items: end;
                 justify-content: space-between;
 
-                .total_label{
+                .total_label {
                     font-size: 30px;
                     font-weight: bold;
                 }
@@ -13802,12 +13840,12 @@ input {
 
         }
 
-        .receipt_footer{
+        .receipt_footer {
             display: flex;
             justify-content: center;
             padding-top: 50px;
 
-            .btn_primary{
+            .btn_primary {
                 padding: 7px 20px;
                 background-color: var(--pri_color);
                 color: var(--white);

@@ -54,6 +54,7 @@ export class SingleVisitBillingView {
 
         bills_list.forEach(bill => {
             const isPaid = bill.is_paid == 1;
+            const is_restricted = bill.restriction.status;
             const row = document.createElement('div');
             row.classList.add('table_row');
             row.dataset.billId = bill.id;
@@ -62,6 +63,9 @@ export class SingleVisitBillingView {
 
             if (!isPaid) {
                 this.valid_to_select++;
+            }
+            else {
+                // row.classList.add('disabled');
             }
 
             if (!isPaid && !uncheck_all) {
@@ -81,16 +85,20 @@ export class SingleVisitBillingView {
                     <p>${bill.quantity}</p>
                 </div>
                 <div class="table_cell quantity">
-                    <p>${currency_formatter(bill.price)}</p>
+                    <p>${currency_formatter(bill.price, false)}</p>
                 </div>
                 <div class="table_cell">
-                    <p>${currency_formatter(bill.total_price)}</p>
+                    <p>${currency_formatter(bill.total_price, false)}</p>
                 </div>
                 <div class="table_cell">
-                    <p>${bill.is_paid ? 'Paid' : 'Unpaid'}</p>
+                    ${bill.is_paid ? `<p class="pill paid">Paid</p>` : `<p class="pill unpaid">Unpaid</p>`}
                 </div>
-                <div class="table_cell">
-                    <p>${bill.restriction.status ? 'Active' : 'Inactive'}</p>
+                <div class="table_cell info_icon ${is_restricted ? 'restricted' : ''}" 
+                    ">
+                    <div class="tooltip_icon_cont">
+                        <span class='switch_icon_info_outline'></span>
+                    </div>
+                    <div class="tooltip">${is_restricted ? bill.restriction.message : 'No restrictions'}</div>
                 </div>
             `;
 
@@ -371,6 +379,8 @@ export class SingleVisitBillingView {
             check_box_all_span.classList.replace('switch_icon_check_box_outline_blank', 'switch_icon_check_box');
         }
     }
+
+
 }
 
 
