@@ -379,6 +379,101 @@ input {
     opacity: 0.2;
 }
 
+/* .simple_details {
+    height: 100%;
+    width: 30%;
+    background-color: var(--pure_white_background);
+    border-radius: var(--main_border_r);
+    padding: var(--main_padding);
+    overflow: auto;
+    gap: 5px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+
+    .top {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .heading {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--black);
+        }
+    }
+
+    .middle {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-right: 5px;
+
+        .invoice_card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 12px 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+            .invoice_header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 8px;
+
+                .left {
+                    .invoice_number {
+                        font-weight: 500;
+                        font-size: 14px;
+                        color: var(--black);
+                        margin-bottom: 4px;
+                    }
+
+                    .date {
+                        font-size: 12px;
+                        color: var(--gray_text);
+                    }
+                }
+
+                .right {
+                    .status {
+                        padding: 4px 12px;
+                        border-radius: 15px;
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+
+                    .paid {
+                        background-color: #E8F5E9;
+                        color: #2E7D32;
+                    }
+
+                    .pending {
+                        background-color: #FFF3E0;
+                        color: #E65100;
+                    }
+                }
+            }
+
+            .invoice_body {
+                .total {
+                    .amount {
+                        font-size: 15px;
+                        font-weight: 600;
+                        color: var(--black);
+                    }
+                }
+            }
+        }
+    }
+} */
+
+
+
 .main_container {
     display: flex;
     flex-direction: column;
@@ -4915,7 +5010,6 @@ input {
                                             align-items: center;
                                         }
                                     }
-
                                 }
 
                                 .btn_section {
@@ -7908,197 +8002,77 @@ input {
                         align-items: center;
                         justify-content: space-between;
 
-                        .section_selection {
-                            padding: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 5px;
-                            width: 45%;
-                            cursor: pointer;
-                            border-radius: var(--main_border_r);
-
-                            .line {
-                                width: 100%;
-                                height: 4px;
-                                border-radius: 3px;
-                                overflow: hidden;
-
-                                .line_in {
-                                    width: 0%;
-                                    height: 100%;
-                                    background-color: var(--pri_color);
-                                }
-
-                            }
-
-                            p {
-                                font-size: 14px;
-                                font-weight: 600;
-                            }
-                        }
-
-                        .section_selection.active {
-                            background-color: var(--pri_op2);
-
-                            p {
-                                color: var(--pri_color);
-                            }
-
-                            .line_in {
-                                width: 100%;
-                                -webkit-animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                                animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            }
-                        }
-
-                        .section_selection:hover {
-                            background-color: var(--pri_op2);
-                            color: var(--white);
-                            border-radius: 5px;
-
-                            p {
-                                color: var(--pri_color);
-                            }
-
-                            .line_in {
-                                width: 100%;
-                                -webkit-animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                                animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            }
+                        .heading {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black);
                         }
                     }
 
-                    .bottom {
-                        height: calc(100% - 50px);
-                        width: 100%;
-                        overflow: hidden;
+                    .middle {
+                        flex: 1;
+                        overflow-y: auto;
                         display: flex;
-                        gap: var(--main_padding);
+                        flex-direction: column;
+                        gap: 10px;
+                        padding-right: 5px;
 
-                        .section {
-                            width: 100%;
-                            height: 100%;
-                            flex: none;
-                            padding-block: 10px;
+                        .invoice_card {
+                            background-color: var(--white);
+                            border-radius: 8px;
+                            padding: 12px 15px;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-                        }
-
-                        .order_section {
-                            overflow-y: scroll;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 5px;
-
-
-                            .order_card {
+                            .invoice_header {
                                 display: flex;
                                 justify-content: space-between;
-                                width: 100%;
-                                height: 90px;
-                                padding: 20px;
-                                border-radius: var(--main_border_r);
-                                border: solid 1px var(--pri_border_color);
-                                cursor: pointer;
+                                align-items: flex-start;
+                                margin-bottom: 8px;
 
-                                .info {
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: start;
-                                    justify-content: center;
-                                    width: 50%;
-
-                                    .title {
-                                        font-weight: 900;
-                                        width: 100%;
-                                        white-space: nowrap;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
-                                        display: inline-block;
+                                .left {
+                                    .invoice_number {
+                                        font-weight: 500;
+                                        font-size: 14px;
+                                        color: var(--black);
+                                        margin-bottom: 4px;
                                     }
 
-                                    .created_by,
                                     .date {
-                                        font-size: 10px;
-                                        width: 100%;
-                                        white-space: nowrap;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
-                                        display: inline-block;
+                                        font-size: 12px;
+                                        color: var(--gray_text);
                                     }
                                 }
 
-
-                                .action {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: space-between;
-                                    height: 100%;
-                                    gap: 10px;
-
+                                .right {
                                     .status {
-                                        width: 10px;
-                                        height: 10px;
-                                        border-radius: 5px;
+                                        padding: 4px 12px;
+                                        border-radius: 15px;
+                                        font-size: 12px;
+                                        font-weight: 500;
                                     }
 
-                                    .complete {
-                                        background-color: var(--success_color);
-                                    }
-
-                                    .approved {
-                                        background-color: var(--warning_color);
+                                    .paid {
+                                        background-color: #E8F5E9;
+                                        color: #2E7D32;
                                     }
 
                                     .pending {
-                                        background-color: var(--error_color);
+                                        background-color: #FFF3E0;
+                                        color: #E65100;
                                     }
                                 }
                             }
 
-                            .order_card:hover {
-                                background: var(--pri_op1);
-                            }
-
-                            .order_card.active {
-                                background: var(--pri_op1);
-                            }
-
-                        }
-
-                        .illness_section {
-                            overflow-y: scroll;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 15px;
-
-
-                            .illness_card {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 8px;
-
-                                .head {
-                                    color: var(--pri_color);
-                                    padding-bottom: 10px;
-                                    font-weight: 700;
-                                    border-bottom: 2px solid var(--active_color);
-                                    font-size: 14px;
-                                }
-
-                                ul {
-                                    display: flex;
-                                    flex-direction: column;
-                                    gap: 5px;
-                                    font-weight: 600;
-                                    padding-left: 15px;
-
-                                    li {
-                                        width: 90%;
+                            .invoice_body {
+                                .total {
+                                    .amount {
+                                        font-size: 15px;
+                                        font-weight: 600;
+                                        color: var(--black);
                                     }
                                 }
                             }
                         }
-
                     }
                 }
 
@@ -8162,7 +8136,6 @@ input {
                                     .name {
                                         justify-content: start;
                                     }
-
                                 }
 
 
@@ -8463,197 +8436,103 @@ input {
                         align-items: center;
                         justify-content: space-between;
 
-                        .section_selection {
-                            padding: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 5px;
-                            width: 45%;
+                        .heading {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black);
+                        }
+                    }
+
+                    .middle {
+                        flex: 1;
+                        overflow-y: auto;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                        padding-right: 5px;
+                        position: relative;
+
+                        .invoice_card {
+                            background-color: var(--white);
+                            border-radius: 8px;
+                            padding: 12px 15px;
+                            border: 1px solid var(--pri_border_color);
                             cursor: pointer;
-                            border-radius: var(--main_border_r);
 
-                            .line {
-                                width: 100%;
-                                height: 4px;
-                                border-radius: 3px;
-                                overflow: hidden;
+                            .invoice_header {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: flex-start;
+                                margin-bottom: 8px;
 
-                                .line_in {
-                                    width: 0%;
-                                    height: 100%;
-                                    background-color: var(--pri_color);
+                                .left {
+                                    .invoice_number {
+                                        font-weight: 800;
+                                        font-size: 16px;
+                                        color: var(--black);
+                                        margin-bottom: 4px;
+                                    }
+
+                                    .date {
+                                        font-size: 12px;
+                                        color: var(--gray_text);
+                                    }
                                 }
 
+                                .right {
+                                    .status {
+                                        padding: 4px 12px;
+                                        border-radius: 15px;
+                                        font-size: 12px;
+                                        font-weight: 500;
+                                    }
+
+                                    .paid {
+                                        font-weight: 600;
+                                        color: var(--success_color);
+                                    }
+
+                                    .canceled {
+                                        font-weight: 600;
+                                        color: var(--error_color);
+                                    }
+                                }
                             }
 
-                            p {
-                                font-size: 14px;
-                                font-weight: 600;
+                            .invoice_body {
+                                width: 100%;
+
+                                .total {
+                                    width: 100%;
+                                    display: flex;
+                                    justify-content: flex-end;
+
+                                    .amount {
+                                        text-align: right;
+                                        font-size: 15px;
+                                        font-weight: 600;
+                                        color: var(--black);
+                                    }
+                                }
                             }
                         }
 
-                        .section_selection.active {
-                            background-color: var(--pri_op2);
-
-                            p {
-                                color: var(--pri_color);
-                            }
-
-                            .line_in {
-                                width: 100%;
-                                -webkit-animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                                animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            }
-                        }
-
-                        .section_selection:hover {
-                            background-color: var(--pri_op2);
-                            color: var(--white);
-                            border-radius: 5px;
-
-                            p {
-                                color: var(--pri_color);
-                            }
-
-                            .line_in {
-                                width: 100%;
-                                -webkit-animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                                animation: scale-in-hor-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-                            }
+                        .invoice_card:hover {
+                            background-color: var(--hover_list_table);
                         }
                     }
 
                     .bottom {
-                        height: calc(100% - 50px);
                         width: 100%;
-                        overflow: hidden;
                         display: flex;
-                        gap: var(--main_padding);
+                        justify-content: end;
+                        height: 50px;
+                        align-items: end;
 
-                        .section {
-                            width: 100%;
-                            height: 100%;
-                            flex: none;
-                            padding-block: 10px;
-
+                        p {
+                            font-weight: 600;
+                            font-size: 25px;
                         }
-
-                        .order_section {
-                            overflow-y: scroll;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 5px;
-
-
-                            .order_card {
-                                display: flex;
-                                justify-content: space-between;
-                                width: 100%;
-                                height: 90px;
-                                padding: 20px;
-                                border-radius: var(--main_border_r);
-                                border: solid 1px var(--pri_border_color);
-                                cursor: pointer;
-
-                                .info {
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: start;
-                                    justify-content: center;
-                                    width: 50%;
-
-                                    .title {
-                                        font-weight: 900;
-                                        width: 100%;
-                                        white-space: nowrap;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
-                                        display: inline-block;
-                                    }
-
-                                    .created_by,
-                                    .date {
-                                        font-size: 10px;
-                                        width: 100%;
-                                        white-space: nowrap;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
-                                        display: inline-block;
-                                    }
-                                }
-
-
-                                .action {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: space-between;
-                                    height: 100%;
-                                    gap: 10px;
-
-                                    .status {
-                                        width: 10px;
-                                        height: 10px;
-                                        border-radius: 5px;
-                                    }
-
-                                    .complete {
-                                        background-color: var(--success_color);
-                                    }
-
-                                    .approved {
-                                        background-color: var(--warning_color);
-                                    }
-
-                                    .pending {
-                                        background-color: var(--error_color);
-                                    }
-                                }
-                            }
-
-                            .order_card:hover {
-                                background: var(--pri_op1);
-                            }
-
-                            .order_card.active {
-                                background: var(--pri_op1);
-                            }
-
-                        }
-
-                        .illness_section {
-                            overflow-y: scroll;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 15px;
-
-
-                            .illness_card {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 8px;
-
-                                .head {
-                                    color: var(--pri_color);
-                                    padding-bottom: 10px;
-                                    font-weight: 700;
-                                    border-bottom: 2px solid var(--active_color);
-                                    font-size: 14px;
-                                }
-
-                                ul {
-                                    display: flex;
-                                    flex-direction: column;
-                                    gap: 5px;
-                                    font-weight: 600;
-                                    padding-left: 15px;
-
-                                    li {
-                                        width: 90%;
-                                    }
-                                }
-                            }
-                        }
-
                     }
                 }
 
@@ -8758,6 +8637,8 @@ input {
                                     display: flex;
                                     flex-direction: column;
                                     gap: 5px;
+                                    height: 100%;
+                                    position: relative;
                                     /* height: calc(100% - 50px); */
 
                                     .table_row {
@@ -8799,7 +8680,7 @@ input {
 
                                         .info_icon {
                                             position: relative;
-                                
+
                                             .tooltip {
                                                 visibility: hidden;
                                                 position: absolute;
@@ -8816,7 +8697,7 @@ input {
                                                 bottom: -10px;
                                                 transform: translateY(100%) translateX(0%);
                                             }
-                                
+
                                             .tooltip::after {
                                                 content: "";
                                                 position: absolute;
@@ -8827,7 +8708,7 @@ input {
                                                 border-style: solid;
                                                 border-color: transparent transparent #333 transparent;
                                             }
-                                
+
                                             .tooltip_icon_cont:hover~.tooltip {
                                                 visibility: visible;
                                             }

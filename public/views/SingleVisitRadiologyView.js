@@ -181,7 +181,7 @@ export class SingleVisitRadiologyView {
                 if (this.current_clicked) {
                     this.current_clicked.classList.remove('active');
                 }
-                this.edit_mode = order.status == 'complete' ? false : true;
+                this.edit_mode = order.status == 'complete' || order.status == 'pending' ? false : true;
                 this.active_order_data = order;
                 this.current_clicked = card;
                 card.classList.add('active');
@@ -290,7 +290,7 @@ export class SingleVisitRadiologyView {
                     </div>
                     `: ''
 
-                }
+            }
 
                     <div class="file_list scroll_bar">
 

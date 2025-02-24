@@ -35,14 +35,25 @@ export class SingleVisitBillingView {
     }
 
     async render() {
-        const visit_data = await this.fetchData();
-
-        if (!visit_data) return;
-        this.render_bills_list(visit_data);
-        this.add_listeners();
+        this.pre_render_bills_list();
+        this.render_invoices()
     }
 
-    render_bills_list(bills_list, uncheck_all = false) {
+    async pre_render_bills_list() {
+        this.render_loader('#bills_list_body');
+        const visit_data = await this.fetchData();
+
+        if (!visit_data) {
+            this.render_no_bill_data();
+            return;
+        }
+        await this.render_bills_list(visit_data);
+
+        this.add_listeners();
+
+    }
+
+    async render_bills_list(bills_list, uncheck_all = false) {
         const body = this.main_container.querySelector('#bills_list_body');
         body.innerHTML = '';
 
@@ -54,28 +65,27 @@ export class SingleVisitBillingView {
 
         bills_list.forEach(bill => {
             const isPaid = bill.is_paid == 1;
-            const is_restricted = bill.restriction.status;
+            const is_restricted = isPaid ? false : bill.restriction.status;
             const row = document.createElement('div');
+
             row.classList.add('table_row');
             row.dataset.billId = bill.id;
             row.dataset.price = bill.total_price;
 
 
-            if (!isPaid) {
+            if (!isPaid && !is_restricted) {
                 this.valid_to_select++;
             }
-            else {
-                // row.classList.add('disabled');
-            }
 
-            if (!isPaid && !uncheck_all) {
+
+            if (!isPaid && !uncheck_all && !is_restricted) {
                 row.classList.add('selected');
                 this.selectedBills.add(bill);
             }
 
             row.innerHTML = `
                 <div class="table_cell check_box" id="check_box_all">
-                    ${!isPaid && !uncheck_all ? `<span class='switch_icon_check_box'></span>` : `<span class='switch_icon_check_box_outline_blank'></span>`}
+                    ${!isPaid && !uncheck_all && !is_restricted ? `<span class='switch_icon_check_box'></span>` : `<span class='switch_icon_check_box_outline_blank'></span>`}
                 </div>
                 <div class="table_cell name">
                     <p>${bill.name}</p>
@@ -104,20 +114,25 @@ export class SingleVisitBillingView {
 
             row.addEventListener('click', () => {
 
-                if (isPaid) {
-                    notify('top_left', `Bill is already paid.`, 'warning');
+                if (is_restricted) {
+                    notify('top_left', bill.restriction.message, 'warning');
                 }
                 else {
-                    if (row.classList.contains('selected')) {
-                        this.selectedBills.delete(bill);
-                        this.change_card_to_unselect(row);
-                        this.update_total_price()
-                        this.update_confirm_order_btn_state()
-                    } else {
-                        this.selectedBills.add(bill);
-                        this.change_card_to_select(row);
-                        this.update_total_price()
-                        this.update_confirm_order_btn_state()
+                    if (isPaid) {
+                        notify('top_left', `Bill is already paid.`, 'warning');
+                    }
+                    else {
+                        if (row.classList.contains('selected')) {
+                            this.selectedBills.delete(bill);
+                            this.change_card_to_unselect(row);
+                            this.update_total_price()
+                            this.update_confirm_order_btn_state()
+                        } else {
+                            this.selectedBills.add(bill);
+                            this.change_card_to_select(row);
+                            this.update_total_price()
+                            this.update_confirm_order_btn_state()
+                        }
                     }
                 }
 
@@ -210,7 +225,9 @@ export class SingleVisitBillingView {
                         </div>
                         <div class="table_body scroll_bar" id="bills_list_body">
 
-                        
+                            <div class="loader_cont active">
+                                <div class="loader"></div>
+                            </div>
 
 
                         </div>
@@ -235,36 +252,16 @@ export class SingleVisitBillingView {
         <div class="simple_details">
 
             <div class="top">
-                <div class="section_selection active left_section_switcher" data_src="illness_section">
-                    <p>Illness Info</p>
-                    <div class="line">
-                        <div class="line_in"></div>
-                    </div>
-                </div>
-                <div class="section_selection left_section_switcher" data_src="medical_history_section">
-                    <p>Medical History</p>
-                    <div class="line">
-                        <div class="line_in"></div>
-                    </div>
+                <h4 class="heading">All Invoices</h4>
+            </div>
+            <div class="middle invoices_list scroll_bar">
+                
+                <div class="loader_cont active">
+                    <div class="loader"></div>
                 </div>
             </div>
-
             <div class="bottom">
-
-                <div class="section illness_section scroll_bar" id="illness_section">
-
-                </div>
-
-                <div class="section medical_history_section scroll_bar" id="medical_history_section">
-
-                    
-
-                </div>
-
-
-                
-
-
+                <p class="total_paid"></p>
             </div>
 
         </div>
@@ -277,17 +274,91 @@ export class SingleVisitBillingView {
 `;
     }
 
-    render_example() {
-        const body = this.main_container.querySelector('.right_card');
+
+    render_no_invoice_data() {
+        const body = this.main_container.querySelector('.invoices_list');
         body.innerHTML = `
                 <div class="example">
-                    <p>No Order Selected</p>
+                    <p>No Invoice Found</p>
+                </div>
+                `;
+    }
+
+    render_no_bill_data() {
+        const body = this.main_container.querySelector('#bills_list_body');
+        body.innerHTML = `
+                <div class="example">
+                    <p>No Bill Found</p>
                 </div>
             `;
+    }
 
-        this.render_orders(this.single_radiology_data);
-        this.current_clicked = null;
-        this.active_order_data = null;
+    render_loader(class_name) {
+        const body = this.main_container.querySelector(class_name);
+        body.innerHTML = `
+            <div class="loader_cont active">
+                <div class="loader"></div>
+            </div>
+        `;
+    }
+
+
+    async render_invoices() {
+        // render loader
+        this.render_loader('.invoices_list');
+
+        // fetch data
+        const invoices_data = await this.fetch_single_visit_invoices();
+
+        // render invoices
+        const body = this.main_container.querySelector('.invoices_list');
+        body.innerHTML = '';
+        const total_paid = this.main_container.querySelector('.total_paid');
+
+        if (!invoices_data || invoices_data.length == 0) {
+            this.render_no_invoice_data();
+            total_paid.textContent = currency_formatter(0);
+            return;
+        }
+
+
+
+        // calculate total paid
+        var total_paid_value = 0;
+
+        // render invoices
+        invoices_data.forEach(invoice => {
+            const invoice_card = document.createElement('div');
+            invoice_card.classList.add('invoice_card');
+
+            invoice_card.innerHTML = `
+                        <div class="invoice_header">
+                            <div class="left">
+                                <div class="invoice_number">#INV-${invoice.id}</div>
+                                <div class="date">${timeStamp_formatter(invoice.created_at)}</div>
+                            </div>
+                            <div class="right">
+                                <span class="status ${invoice.status.toLowerCase()}">${invoice.status.toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="invoice_body">
+                            <div class="total">
+                                <span class="amount">${currency_formatter(invoice.total_price)}</span>
+                            </div>
+                        </div>
+                `
+            invoice_card.addEventListener('click', () => {
+                dashboardController.createInvoiceAndPayBillPopUpView.PreRender({
+                    visit_id: this.visit_id,
+                    bills: invoice,
+                });
+            });
+            total_paid_value += parseFloat(invoice.total_price);
+            body.appendChild(invoice_card);
+        });
+
+        // render total paid
+        total_paid.textContent = currency_formatter(total_paid_value);
 
     }
 
@@ -315,11 +386,11 @@ export class SingleVisitBillingView {
                 return result.data;
             } else {
                 notify('top_left', result.message, 'warning');
-                return null;
+                return false;
             }
         } catch (error) {
             notify('top_left', error.message, 'error');
-            return null;
+            return false;
         }
     }
 
@@ -380,6 +451,37 @@ export class SingleVisitBillingView {
         }
     }
 
+    async fetch_single_visit_invoices() {
+        try {
+            const response = await fetch('/api/billing/get_single_visit_invoices', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+            console.log(result);
+
+            if (result.success) {
+                this.single_billing_visit_invoices = result;
+                return result.data;
+            } else {
+                notify('top_left', result.message, 'warning');
+                return false;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return false;
+        }
+    }
 
 }
 

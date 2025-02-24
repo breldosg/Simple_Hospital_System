@@ -13,6 +13,7 @@ export class CreateInvoiceAndPayBillPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        console.log(params);
         this.params = params;
         this.bill_data = this.params.bills;
 
@@ -83,8 +84,6 @@ export class CreateInvoiceAndPayBillPopUpView {
 </div>
 `;
     }
-
-
 
     render_items(items) {
         var items_list = this.main_container.querySelector('.items-list');
