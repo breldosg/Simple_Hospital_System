@@ -446,7 +446,7 @@ export class SingleVisitPharmacyView {
 
         try {
 
-            const response = await fetch('/api/pharmacy/confirm_pharmacy_invoice', {
+            const response = await fetch('/api/pharmacy/give_prescription_order_to_patient', {
                 method: 'POST',
 
 
@@ -467,8 +467,8 @@ export class SingleVisitPharmacyView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                this.single_laboratory_data = result.data;
-                this.render_medicine_list(this.single_laboratory_data.pharmacy_orders)
+                this.single_pharmacy_visit_data.pharmacy_orders = result.data;
+                this.render_medicine_list(result.data)
 
                 // clear all constructor and run example view
                 // this.render_example();

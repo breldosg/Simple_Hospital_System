@@ -1,0 +1,22 @@
+===== Store Batch
+1- single Batch view functionality not complete 
+2- add product in batch popup not start with pre fetch data and search btn  
+3- Batch view table the closed status styles are not complete  
+
+====== Pharmacy
+1- add product order popup not start with pre fetch data  
+2- order list view table the action status styles are not complete  
+3- add create category btn move to list table
+3- add cancel order btn to action on list table
+
+===== Laboratory 
+1- list of active visit not styled well
+2- report normal range hint pop not styled well
+
+
+
+
+
+** Backend** 
+1- The active visit on radiology, laboratory and pharmacy list pagination shows incorrect count (e.g. "showing 1 data of 7" when actual count differs) - Need to fix pagination count calculation in backend to match actual number of records
+

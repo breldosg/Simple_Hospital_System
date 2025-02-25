@@ -43,7 +43,7 @@ export class CreateInvoiceAndPayBillPopUpView {
                 </div>
             </div>
             <div class="receipt-info">
-                <p class="invoice_number">Invoice No: ${this.bill_data.id ?? ''}</p>
+                <p class="invoice_number">Invoice: #INV-${this.bill_data.id ?? ''}</p>
                 <p class="date">Date: ${this.bill_data.created_at ?? ''}</p>
                 <p class="payment-method">Served by: ${this.bill_data.served_by ?? ''}</p>
             </div>
