@@ -2,12 +2,13 @@ import { dashboardController } from "../controller/DashboardController.js";
 import { allergySeverity, allergyTypes } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class VisitAllergyPopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
-        this.state="creation"
+        this.state = "creation"
         window.save_allergy = this.save_allergy.bind(this);
     }
 
@@ -19,7 +20,7 @@ export class VisitAllergyPopUpView {
         }
 
         this.visit_id = params.visit_id ? params.visit_id : '';
-        this.state = params.state? params.state : "creation";
+        this.state = params.state ? params.state : "creation";
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -184,12 +185,25 @@ export class VisitAllergyPopUpView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (result.success) {
                 notify('top_left', result.message, 'success');
                 this.close();
                 dashboardController.visitAllergyCardView.PreRender({
                     visit_id: this.visit_id,
-                    state:this.state,
+                    state: this.state,
                     data: result.data,
                 });
                 // dashboardController.visitAllergyPopUpView.close();

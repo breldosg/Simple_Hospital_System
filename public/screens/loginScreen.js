@@ -83,7 +83,20 @@ export class loginScreen {
                 throw new Error('Login failed. Server Error');
             }
 
-            const result = await response.json(); // assuming server responds with JSON data
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+            // assuming server responds with JSON data
 
             if (result.success) {
                 frontRouter.navigate('/dashboard');

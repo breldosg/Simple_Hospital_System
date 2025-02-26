@@ -2,6 +2,7 @@ import { dashboardController } from "../controller/DashboardController.js";
 import { visit_add_card_btn } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify, timeStamp_formatter, uploadWithProgress } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class SingleVisitRadiologyView {
     constructor() {
@@ -594,6 +595,19 @@ export class SingleVisitRadiologyView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
 
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
@@ -742,6 +756,19 @@ export class SingleVisitRadiologyView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (result.success) {
 
 
@@ -776,6 +803,19 @@ export class SingleVisitRadiologyView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
@@ -812,6 +852,19 @@ export class SingleVisitRadiologyView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (result.success) {
                 notify('top_left', result.message, 'success');
                 this.single_radiology_data = result.data;
@@ -847,6 +900,19 @@ export class SingleVisitRadiologyView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
 
             if (result.success) {
                 notify('top_left', result.message, 'success');

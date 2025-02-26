@@ -38,6 +38,7 @@ const routes = {
     '/users/userlist': dashboardController.staffListView,
     '/users/adduser': dashboardController.addUserView,
     '/users/attendance': dashboardController.attendanceView,
+    '/users/account': dashboardController.userProfileView,
 
     '/patient': dashboardController.viewPatientView,
     '/patient/viewpatient': dashboardController.viewPatientView,

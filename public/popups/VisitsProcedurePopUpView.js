@@ -3,6 +3,7 @@ import { diagnosisArray, duration_unit, visitsProcedurePopUpViewStageDatas, side
     "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class VisitsProcedurePopUpView {
     constructor() {
@@ -634,6 +635,19 @@ export class VisitsProcedurePopUpView {
                 throw new Error('Fail to Save Note. Server Error');
             }
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             if (result.success) {
                 dashboardController.visitProceduresCardView.PreRender({
                     visit_id: this.visit_id,

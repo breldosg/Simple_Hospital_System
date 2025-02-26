@@ -77,6 +77,7 @@ import { UpdateConsultationPricePopUpView } from "../popups/UpdateConsultationPr
 import { ViewBillingDefaultPriceView } from "../views/ViewBillingDefaultPriceView.js";
 import { UpdateDefaultPricePopUpView } from "../popups/UpdateDefaultPricePopUpView.js";
 import { CreateInvoiceAndPayBillPopUpView } from "../popups/CreateInvoiceAndPayBillPopUpView.js";
+import { UserProfileView } from "../views/UserProfileView.js";
 
 class DashboardController {
     // Loader View
@@ -88,6 +89,7 @@ class DashboardController {
     staffListView = new StaffListView();
     addUserView = new AddUserView();
     attendanceView = new AttendanceView();
+    userProfileView = new UserProfileView();
 
     // Patient Views
     viewPatientView = new ViewPatientView();

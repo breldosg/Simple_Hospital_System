@@ -181,6 +181,11 @@ const createRouteHandler = (routeName, handlerCode) => {
             // console.log(req);
             
             const result = await RequestHandler(req, handlerCode, req.body);
+            if (result.status == 401) {
+                console.log('token delete');
+                
+                // delete_cookie(res);
+            }
             return res.status(200).json(result);
         } catch (error) {
             console.error(`Error in /${routeName} route:`, error);

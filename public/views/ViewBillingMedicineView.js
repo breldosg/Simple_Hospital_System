@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { currency_formatter, notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class ViewBillingMedicineView {
     constructor() {
@@ -24,7 +25,7 @@ export class ViewBillingMedicineView {
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
-        
+
 
         this.mainContainer = document.querySelector('.billing_table_medicine_cont');
 
@@ -182,6 +183,19 @@ export class ViewBillingMedicineView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             return result.success ? result.data : null;
         } catch (error) {
             console.error('Error:', error);
@@ -204,6 +218,19 @@ export class ViewBillingMedicineView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             return result.success ? result.data : null;
         } catch (error) {
             console.error('Error:', error);

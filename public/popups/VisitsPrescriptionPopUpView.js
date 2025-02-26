@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, getCurrentDate, decodeHTML, notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class VisitsPrescriptionPopUpView {
     constructor() {
@@ -24,7 +25,7 @@ export class VisitsPrescriptionPopUpView {
         this.visit_id = params.visit_id;
         this.state = params.state;
 
-        
+
 
         // Clear all constructor variables
         this.selected_product = '';
@@ -209,6 +210,19 @@ export class VisitsPrescriptionPopUpView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
                 return;
@@ -250,6 +264,19 @@ export class VisitsPrescriptionPopUpView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             return result.success ? result.data : [];
         } catch (error) {
             console.error('Error:', error);

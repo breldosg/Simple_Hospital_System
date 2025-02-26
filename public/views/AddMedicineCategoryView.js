@@ -1,5 +1,6 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class AddMedicineCategoryView {
     constructor() {
@@ -89,6 +90,19 @@ export class AddMedicineCategoryView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
 
             if (result.success) {
                 notify('top_left', result.message, 'success');

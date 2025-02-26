@@ -1,6 +1,7 @@
 // import { notify } from "../script.js";
 
 import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 
 export class dashboardScreen {
@@ -17,7 +18,9 @@ export class dashboardScreen {
         if (StaffData) {
             this.Staff_name = StaffData.name;
             this.staff_role = StaffData.role_name;
+            this.staff_role_id = StaffData.role;
         }
+
 
         globalStates.setState({ user_data: StaffData });
 
@@ -38,7 +41,7 @@ export class dashboardScreen {
 
                     <!-- -----------------------Navigation come here------------------- -->
                     
-                    <br-navigation name="${this.Staff_name}" role="${this.staff_role}"></br-navigation>
+                    <br-navigation name="${this.Staff_name}" role_id="${this.staff_role_id}" role="${this.staff_role}"></br-navigation>
 
                     
                 </div>
@@ -88,9 +91,18 @@ export class dashboardScreen {
                 throw new Error('Server Error');
             }
 
+
+
             const result = await response.json();
- 
-            
+
+            if (result.status == 401) {
+                console.log('login');
+                frontRouter.navigate('/login');
+            }
+
+
+
+
 
             return result.success ? result.data : null;
         } catch (error) {

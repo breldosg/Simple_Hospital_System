@@ -2,6 +2,7 @@ import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit, side_slide_selector_data, side_slide_selector_data_role_icon_name } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class VisitsProcedurePopUpView {
     constructor() {
@@ -421,7 +422,13 @@ export class VisitsProcedurePopUpView {
                 }); if (!response.ok) {
                     throw new
                         Error('Fail to Save Note. Server Error');
-                } const result = await response.json(); if (result.success) {
+                } const result = await response.json();
+
+                if (result.status == 401) {
+                    frontRouter.navigate('/login');
+                }
+
+                if (result.success) {
                     dashboardController.visitPreDiagnosisCardView.PreRender({
                         visit_id: this.visit_id, data: result.data, state:
                             this.state,

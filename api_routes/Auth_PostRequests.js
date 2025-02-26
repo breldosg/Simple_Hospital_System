@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { check_cookie, get_cookie, user_agent_infos, ApiHost, set_cookie } = require('../utility/serverFunctions');
+const { check_cookie, get_cookie, user_agent_infos, ApiHost, set_cookie, delete_cookie } = require('../utility/serverFunctions');
 
 
 router.post('/registerStaff', async (req, res) => {
@@ -100,6 +100,52 @@ router.post('/login', async (req, res) => {
 
 
 })
+
+router.post('/logout', async (req, res) => {
+    if (check_cookie(req)) {
+        const user_cookie = get_cookie(req);
+        const user_infos = JSON.stringify(user_agent_infos(req));
+
+        const body_data = {
+            key: 120,
+            data: JSON.stringify({}),
+            user_agent_infos: user_infos,
+        }
+
+        try {
+            const res2 = await fetch(ApiHost, {
+                "method": 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user_cookie}`
+                },
+                body: JSON.stringify(body_data)
+            })
+
+            const data = await res2.json();
+
+
+            if (data.success) {
+                delete_cookie(res);
+                res.send(data);
+            }
+            else {
+                res.send(data);
+            }
+
+        }
+        catch (e) {
+            console.log(e);
+            res.send({ success: false, message: "Server error", status: "error" });
+        }
+    }
+    else {
+        res.sendStatus(401);
+        res.send({ success: false, message: "Unauthorized Access", status: "error" });
+    }
+})
+
+
 
 
 module.exports = router

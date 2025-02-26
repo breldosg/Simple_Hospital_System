@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { currency_formatter, date_formatter, getCurrentDate, notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class CreateInvoiceAndPayBillPopUpView {
     constructor() {
@@ -78,7 +79,7 @@ export class CreateInvoiceAndPayBillPopUpView {
         ` : `
         <br-button loader_width="23" class="btn_primary print_invoice_btn" type="submit">Print Invoice</br-button>
         `
-        }
+            }
 
         </div>
 </div>
@@ -146,6 +147,19 @@ export class CreateInvoiceAndPayBillPopUpView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             console.log(result);
 
 
@@ -346,7 +360,7 @@ export class CreateInvoiceAndPayBillPopUpView {
     }
 
     print_receipt(div) {
-        
+
         // Create iframe  
         var iframe = document.createElement('iframe');
         iframe.style.position = 'absolute';

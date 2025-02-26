@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class VisitPreDiagnosisCardView {
     constructor() {
@@ -269,7 +270,7 @@ export class VisitPreDiagnosisCardView {
 
     renderSelectionControls() {
         const body_part = document.querySelector('.pre_diagnosis_cont_cont .pre_diagnosis_cont');
-        const container = document.querySelector('.pre_diagnosis_cont_cont .top_heading'); 
+        const container = document.querySelector('.pre_diagnosis_cont_cont .top_heading');
         const btnSection = document.querySelector('.pre_diagnosis_cont_cont .btn_section');
 
         body_part.classList.add('selectionMode');
@@ -336,7 +337,7 @@ export class VisitPreDiagnosisCardView {
     exitSelectionMode() {
         const body_part = document.querySelector('.pre_diagnosis_cont_cont .pre_diagnosis_cont');
         const cards = body_part.querySelectorAll('.pre_diagnosis_card');
-        
+
         this.deselectAll(cards);
         body_part.classList.remove('selectionMode');
         // Remove selection controls
@@ -371,6 +372,19 @@ export class VisitPreDiagnosisCardView {
             if (!response.ok) throw new Error('Server Error');
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
                 return;

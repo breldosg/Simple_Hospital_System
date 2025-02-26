@@ -247,6 +247,12 @@ export class VisitClinicalEvaluationCardView {
 
     // const result = await response.json();
 
+// if (result.status == 401) {
+//                 frontRouter.navigate('/login');
+//             }
+
+            
+
     // if (result.success) {
     // notify('top_left', result.message, 'success');
     // // After successful creation, clear the popup and close it

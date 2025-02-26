@@ -2,6 +2,7 @@ import { dashboardController } from "../controller/DashboardController.js";
 import { visit_add_card_btn } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class SingleVisitView {
     constructor() {
@@ -355,6 +356,19 @@ export class SingleVisitView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (result.success) {
                 return result.data;
             } else {
@@ -419,6 +433,19 @@ export class SingleVisitView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (result.success) {
                 globalStates.setState({ radiology_data_exists: true });
                 globalStates.setState({ radiology_data: result.data });
@@ -460,6 +487,19 @@ export class SingleVisitView {
 
             const result = await response.json();
 
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
             if (result.success) {
                 globalStates.setState({ lab_test_data_exists: true });
                 globalStates.setState({ lab_test_data: result.data });
@@ -500,6 +540,19 @@ export class SingleVisitView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
 
             if (result.success) {
                 globalStates.setState({ add_procedure_form_exists: true });

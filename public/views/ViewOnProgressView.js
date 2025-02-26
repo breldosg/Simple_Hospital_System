@@ -124,7 +124,7 @@ export class ViewOnProgressView {
             })
         });
 
-        
+
 
     }
 
@@ -218,6 +218,19 @@ export class ViewOnProgressView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             return result.success ? result.data : null;
         } catch (error) {
             console.error('Error:', error);
@@ -245,6 +258,19 @@ export class ViewOnProgressView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
             return result;
         } catch (error) {
             console.error('Error:', error);

@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class SinglePatientView {
     constructor() {
@@ -28,7 +29,7 @@ export class SinglePatientView {
         const cont = document.querySelector('.update_cont');
         const patient_data = await this.fetchData(id); // Wait for fetchData to complete
 
-        this.patient_name=patient_data.name;
+        this.patient_name = patient_data.name;
 
         if (patient_data) {
             cont.innerHTML = this.ViewReturn(patient_data);
@@ -184,6 +185,19 @@ export class SinglePatientView {
             }
 
             const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
 
             if (result.success) {
                 return result.data;
