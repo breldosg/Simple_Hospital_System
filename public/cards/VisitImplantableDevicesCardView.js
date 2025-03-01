@@ -8,6 +8,7 @@ export class VisitImplantableDevicesCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        this.visit_status = null;
         window.remove_implantable_devices_request = this.remove_implantable_devices_request.bind(this);
     }
 
@@ -20,7 +21,7 @@ export class VisitImplantableDevicesCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
-
+        this.visit_status = params.visit_status ? params.visit_status : "active";
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
             const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont .add_card_btn');
@@ -123,9 +124,9 @@ export class VisitImplantableDevicesCardView {
             <div class="head_part">
                 <h4 class="heading">Implantable Devices</h4>
 
-                <div class="add_btn" id="add_patient_device" >
+                ${this.visit_status == "active" ? `<div class="add_btn" id="add_patient_device" >
                     <span class='switch_icon_add'></span>
-                </div>
+                </div>` : ``}
             </div>
 
             <div class="body_part device_card_cont">
@@ -133,14 +134,17 @@ export class VisitImplantableDevicesCardView {
         `;
 
         const add_btn = card.querySelector('.implantable_devices_card_cont_cont #add_patient_device');
-        add_btn.addEventListener('click', () => {
-            dashboardController.visitsImplementableDevicePopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    state: 'modify',
-                }
-            );
-        })
+        if (add_btn) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.visitsImplementableDevicePopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        state: 'modify',
+                        visit_status: this.visit_status,
+                    }
+                );
+            })
+        }
 
         return card;
     }
@@ -164,7 +168,7 @@ export class VisitImplantableDevicesCardView {
 
             const result = await response.json();
 
-if (result.status == 401) {
+            if (result.status == 401) {
                 setTimeout(() => {
                     document.body.style.transition = 'opacity 0.5s ease';
                     document.body.style.opacity = '0';
@@ -175,7 +179,7 @@ if (result.status == 401) {
                 }, 500);
             }
 
-            
+
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
                 return;
@@ -197,5 +201,5 @@ if (result.status == 401) {
         }
     }
 
-    
+
 }

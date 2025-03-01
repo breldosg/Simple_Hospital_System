@@ -5,23 +5,33 @@ export const visit_add_card_btn = [
         cards: [
             {
                 component: 'visitsClinicalEvaluationPopUpView',
-                title: 'Clinical Evaluation'
+                title: 'Clinical Evaluation',
+                active_if: [],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitsPreliminaryDiagnosisPopUpView',
-                title: 'Preliminary Diagnosis'
+                title: 'Preliminary Diagnosis',
+                active_if: ['visitsClinicalEvaluationPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitAllergyPopUpView',
-                title: 'Allergy'
+                title: 'Allergy',
+                active_if: [],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitPlanForNextVisitPopUpView',
-                title: 'Plan for Next Visit'
+                title: 'Plan for Next Visit',
+                active_if: [],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitsAttachmentPopUpView',
-                title: 'Attachments'
+                title: 'Attachments',
+                active_if: [],
+                operator_roles: ['ICT', 'DCT', 'SDCT', 'NRS']
             },
         ],
     },
@@ -30,15 +40,21 @@ export const visit_add_card_btn = [
         cards: [
             {
                 component: 'visitRadiologyExamPopUpView',
-                title: 'Radiology Exam'
+                title: 'Radiology Exam',
+                active_if: ['visitsPreliminaryDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitLabTestOrdersPopUpView',
-                title: 'Laboratory Test'
+                title: 'Laboratory Test',
+                active_if: ['visitsPreliminaryDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitFinalDiagnosisPopUpView',
-                title: 'Final Diagnosis'
+                title: 'Final Diagnosis',
+                active_if: ['visitsPreliminaryDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
         ],
     },
@@ -47,22 +63,38 @@ export const visit_add_card_btn = [
         cards: [
             {
                 component: 'visitsPrescriptionPopUpView',
-                title: 'Prescriptions'
+                title: 'Prescriptions',
+                active_if: ['visitFinalDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitsProcedurePopUpView',
-                title: 'Procedures'
+                title: 'Procedures',
+                active_if: ['visitFinalDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitsVaccinePopUpView',
-                title: 'Vaccine'
+                title: 'Vaccine',
+                active_if: [],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
                 component: 'visitsImplementableDevicePopUpView',
-                title: 'Implantable Devices'
+                title: 'Implantable Devices',
+                active_if: ['visitFinalDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
             },
         ],
     },
+];
+
+// who to see add btn in Visit View 
+export const whoToSeeAddBtn = [
+    'ICT',
+    'DCT',
+    'SDCT',
+    'NRS',
 ];
 
 
@@ -14477,7 +14509,7 @@ export const doctor_type = [
         value: 'SDCT',
         label: 'Specialist Doctor',
     },
-    
+
 ];
 
 export const visit_priority = [

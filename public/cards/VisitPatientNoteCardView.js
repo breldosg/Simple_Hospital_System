@@ -17,6 +17,7 @@ export class VisitPatientNoteCardView {
         this.deleteNote = this.deleteNote.bind(this);
         this.renderNoteCards = this.renderNoteCards.bind(this);
         this.updateState = this.updateState.bind(this);
+        this.visit_status = null;
 
         window.save_patient_note = this.save_patient_note;
     }
@@ -40,7 +41,8 @@ export class VisitPatientNoteCardView {
         this.state = {
             ...this.state,
             notes: params.data || [],
-            visitId: params.visit_id
+            visitId: params.visit_id,
+            visit_status: params.visit_status ? params.visit_status : "active"
         };
 
         // Create and mount the component
@@ -224,9 +226,9 @@ export class VisitPatientNoteCardView {
                 <div class="full_screen">
                     <div class="head_part">
                         <h4 class="heading">Patient Note</h4>
-                        <div class="add_btn" id="add_patient_note_btn">
+                        ${this.visit_status == "active" ? `<div class="add_btn" id="add_patient_note_btn">
                             <span class='switch_icon_add'></span>
-                        </div>
+                        </div>` : ``}
                     </div>
                     <div class="body_part patient_note_cards_cont"></div>
                 </div>
@@ -234,9 +236,11 @@ export class VisitPatientNoteCardView {
         `;
 
         const addBtn = card.querySelector('#add_patient_note_btn');
-        addBtn.addEventListener('click', () => {
-            dashboardController.addPatientNotePopUpView.PreRender();
-        });
+        if (addBtn) {
+            addBtn.addEventListener('click', () => {
+                dashboardController.addPatientNotePopUpView.PreRender();
+            });
+        }
 
         return card;
     }

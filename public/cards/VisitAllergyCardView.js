@@ -10,8 +10,8 @@ export class VisitAllergyCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        this.visit_status = null;
         window.remove_allergy_request = this.remove_allergy_request.bind(this);
-
     }
 
     async PreRender(params = []) {
@@ -21,9 +21,12 @@ export class VisitAllergyCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        console.log(params);
+        
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.visit_status = params.visit_status ? params.visit_status : "active";
 
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
@@ -141,9 +144,9 @@ export class VisitAllergyCardView {
             <div class="head_part">
                 <h4 class="heading">Allergy</h4>
 
-                <div class="add_btn" id="add_patient_allergy" >
+                ${this.visit_status == "active" ? `<div class="add_btn" id="add_patient_allergy" >
                     <span class='switch_icon_add'></span>
-                </div>
+                </div>` : ``}
             </div>
 
             <div class="body_part allergy_card_cont">
@@ -156,14 +159,17 @@ export class VisitAllergyCardView {
 
 
         const add_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
-        add_btn.addEventListener('click', () => {
-            dashboardController.visitAllergyPopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    state: 'modify',
-                }
-            );
-        })
+        if (add_btn) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.visitAllergyPopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        state: 'modify',
+                        visit_status: this.visit_status,
+                    }
+                );
+            })
+        }
 
         return card;
 

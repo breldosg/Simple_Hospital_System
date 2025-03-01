@@ -1,5 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { visit_add_card_btn } from "../custom/customizing.js";
+import { visit_add_card_btn, whoToSeeAddBtn } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -11,6 +11,9 @@ export class SingleVisitView {
         this.rendered_card = [];
         this.add_card_deleted = null;
         this.current_clicked = null;
+        this.add_cards_container = [];
+        this.staff_role = '';
+        this.visit_detail_data = null;
     }
 
     async PreRender(params) {
@@ -22,7 +25,7 @@ export class SingleVisitView {
 
         this.rendered_card = [];
         this.visit_id = params.id;
-
+        this.staff_role = globalStates.getState('user_data').role;
 
         // Render initial structure
         const cont = document.querySelector('.update_cont');
@@ -34,8 +37,6 @@ export class SingleVisitView {
             container: this.main_container,
             visit_id: this.visit_id,
         })
-
-
 
 
         this.render(params.id);
@@ -51,8 +52,8 @@ export class SingleVisitView {
 
         if (!visit_data) return;
 
-        // Render top patient card
-        // this.top_card_view(visit_data.patient_data);
+        this.visit_detail_data = visit_data.visit_detail.visit_data;
+
         console.log(visit_data);
 
 
@@ -162,13 +163,16 @@ export class SingleVisitView {
             config.method.PreRender({
                 data: config.dataArray ? data[config.dataArray] : undefined,
                 visit_id: this.visit_id,
+                visit_status: this.visit_detail_data.status,
             });
 
             if (config.afterRender) config.afterRender();
         });
 
         // Render add buttons
-        this.render_add_btn();
+        if (whoToSeeAddBtn.includes(this.staff_role) && this.visit_detail_data.status == 'active') {
+            this.render_add_btn();
+        }
 
         this.fetch_Dataset();
     }
@@ -192,12 +196,24 @@ export class SingleVisitView {
     }
 
     render_add_btn() {
+
+        //delete the existing add card btn
+        this.add_cards_container.forEach(container => {
+            container.remove();
+        });
+
+        this.add_cards_container = [];
+
+        //create new add card btn
         visit_add_card_btn.forEach(btn => {
             const body = document.querySelector(`.single_visit_cont #${btn.body_container_id} .card_group_cont`);
             if (!body) return;
 
             const cards_cont = this.createAddCardButton(btn);
             body.appendChild(cards_cont);
+
+            //add the new add card btn to the array
+            this.add_cards_container.push(cards_cont);
         });
     }
 
@@ -228,7 +244,19 @@ export class SingleVisitView {
             option.className = 'option';
             option.innerText = card.title;
 
-            if (this.rendered_card.includes(card.component)) {
+            var is_role_support = !card.operator_roles.includes(this.staff_role);
+            var is_component_rendered = this.rendered_card.includes(card.component);
+            var is_restricted = false;
+
+
+            card.active_if.forEach(active_if => {
+                if (!this.rendered_card.includes(active_if)) {
+                    is_restricted = true;
+                }
+            });
+
+
+            if (is_component_rendered || is_role_support || is_restricted) {
                 option.classList.add('disabled');
             } else {
                 this.setupCardOptionListener(option, card, cards_cont);
@@ -280,51 +308,6 @@ export class SingleVisitView {
             this.add_card_deleted = cards_cont;
             window.addEventListener('click', this.handleWindowClick);
         });
-    }
-
-    top_card_view(data) {
-        const body = document.querySelector('.single_visit_cont .top_card');
-        body.innerHTML = `
-<div class="Patient_imag">
-    <img src="${data ? data.Patient_img : ''}" alt="">
-</div>
-
-<div class="patient_detail">
-    <div class="card name_card">
-        <div class="dit_group">
-            <p class="name">${data ? data.name : ''}</p>
-            <p class="description"> Patient id: <span>${data ? data.id : ''}</span></p>
-        </div>
-        <button type="button" data_src="${data ? data.id : ''}" class="edit_btn">
-            <span class='switch_icon_edit'></span>
-        </button>
-    </div>
-
-    <div class="card">
-        ${[
-                { icon: 'user', value: data ? data.gender : '' },
-                {
-                    icon: 'calendar_check',
-                    value: data ? `${date_formatter(data.dob)} (${data.age.amount} ${data.age.unit})` : ''
-                },
-                {
-                    icon: 'location_dot',
-                    value: data ? `${data.address} (${data.nationality})` : ''
-                },
-                {
-                    icon: 'phone',
-                    value: data ? `${data.phone} / ${data.alt_phone}` : ''
-                },
-                { icon: 'briefcase', value: data ? data.occupation : '' }
-            ].map(item => `
-        <div class="icon_card">
-            <span class='switch_icon_${item.icon}'></span>
-            <p>${item.value}</p>
-        </div>
-        `).join('')}
-    </div>
-</div>
-`;
     }
 
     handleWindowClick = (e) => {
@@ -384,12 +367,16 @@ export class SingleVisitView {
     add_to_rendered_card_array(value) {
         this.rendered_card.push(value);
 
-        if (this.current_clicked != null) {
-            this.current_clicked.classList.add('disabled');
-
-            // Use the saved handleClick reference to remove the event listener
-            this.current_clicked.removeEventListener('click', this.current_clicked.handleClick);
+        // Render add buttons
+        if (whoToSeeAddBtn.includes(this.staff_role) && this.visit_detail_data.status == 'active') {
+            this.render_add_btn();
         }
+        // if (this.current_clicked != null) {
+        //     this.current_clicked.classList.add('disabled');
+
+        //     // Use the saved handleClick reference to remove the event listener
+        //     this.current_clicked.removeEventListener('click', this.current_clicked.handleClick);
+        // }
     }
 
     // fetch future used dataset from server

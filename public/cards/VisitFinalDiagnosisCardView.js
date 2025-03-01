@@ -9,7 +9,7 @@ export class VisitFinalDiagnosisCardView {
         this.datas = [];
         this.selectedIds = new Set();
         this.isSelectAllActive = false;
-
+        this.visit_status = null;
 
         // Bind methods
         this.remove_final_diagnosis_request = this.remove_final_diagnosis_request.bind(this);
@@ -30,18 +30,19 @@ export class VisitFinalDiagnosisCardView {
 
         console.log(params);
 
-        this.resetState(data, visit_id, state);
+        this.resetState(data, visit_id, state, params.visit_status);
         this.render();
 
         this.renderSingleCards();
     }
 
-    resetState(data, visit_id, state) {
+    resetState(data, visit_id, state, visit_status) {
         this.datas = data;
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
+        this.visit_status = visit_status ? visit_status : "active";
     }
 
     render() {
@@ -76,7 +77,9 @@ export class VisitFinalDiagnosisCardView {
 
         // Add the add button by default
         const btnSection = card.querySelector('.btn_section');
-        btnSection.appendChild(this.createAddButton());
+        if (this.visit_status == "active") {
+            btnSection.appendChild(this.createAddButton());
+        }
 
         return card;
     }
@@ -93,6 +96,7 @@ export class VisitFinalDiagnosisCardView {
             dashboardController.visitFinalDiagnosisPopUpView.PreRender({
                 visit_id: this.visit_id,
                 state: 'modify',
+                visit_status: this.visit_status,
             });
         });
 
@@ -373,7 +377,7 @@ export class VisitFinalDiagnosisCardView {
 
             const result = await response.json();
 
-if (result.status == 401) {
+            if (result.status == 401) {
                 setTimeout(() => {
                     document.body.style.transition = 'opacity 0.5s ease';
                     document.body.style.opacity = '0';
@@ -384,7 +388,7 @@ if (result.status == 401) {
                 }, 500);
             }
 
-            
+
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
                 return;

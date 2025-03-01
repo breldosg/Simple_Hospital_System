@@ -16,11 +16,13 @@ export class VisitClinicalEvaluationCardView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+        console.log(params);
 
 
         this.data = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.visit_status = params.visit_status ? params.visit_status : "active";
 
         if (this.state == "creation") {
             const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont.add_card_btn');
@@ -39,6 +41,8 @@ export class VisitClinicalEvaluationCardView {
         this.renderClinicalEvaluationCards();
 
     }
+
+
     renderClinicalEvaluationCards() {
 
         if (this.data == "") return;
@@ -182,9 +186,11 @@ export class VisitClinicalEvaluationCardView {
 <div class="head_part">
     <h4 class="heading">Clinical Evaluation</h4>
 
-    <div class="add_btn" id="add_patient_clinical_note">
-        <span class='switch_icon_edit'></span>
-    </div>
+    ${this.visit_status == "active" ? `
+        <div class="add_btn" id="add_patient_clinical_note">
+            <span class='switch_icon_edit'></span>
+        </div>
+        ` : ``}
 </div>
 
 <div class="body_part clinical_note_cont">
@@ -198,79 +204,23 @@ export class VisitClinicalEvaluationCardView {
 
 
         const edit_btn = card.querySelector('.clinical_note_cont_cont #add_patient_clinical_note');
-        edit_btn.addEventListener('click', () => {
-            dashboardController.visitsClinicalEvaluationPopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    data: this.data,
-                    state: "update",
-                }
-            );
-        })
-
+        if (edit_btn) {
+            edit_btn.addEventListener('click', () => {
+                dashboardController.visitsClinicalEvaluationPopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        data: this.data,
+                        state: "update",
+                        visit_status: this.visit_status,
+                    }
+                );
+            })
+        }
         return card;
-
     }
 
     attachListeners() {
-        // const cancel_btn = document.querySelector('br-button[type="cancel"]');
-
-        // cancel_btn.addEventListener('click', () => {
-        // this.close();
-        // });
     }
 
-    // async save_patient_note(data_old) {
-    // const btn_submit = document.querySelector('br-button[type="submit"]');
-    // btn_submit.setAttribute('loading', true);
 
-
-    // var formData = {
-    // ...data_old,
-    // visit_id: this.visit_id,
-    // action: 'create',
-    // }
-
-
-    // try {
-    // const response = await fetch('/api/patient/save_update_delete_patient_note', {
-    // method: 'POST',
-    // headers: {
-    // 'Content-Type': 'application/json'
-    // },
-    // body: JSON.stringify(formData)
-    // });
-
-    // if (!response.ok) {
-    // throw new Error('failed To update vital. Server Error');
-    // }
-
-    // const result = await response.json();
-
-// if (result.status == 401) {
-//                 frontRouter.navigate('/login');
-//             }
-
-            
-
-    // if (result.success) {
-    // notify('top_left', result.message, 'success');
-    // // After successful creation, clear the popup and close it
-    // dashboardController.addPatientNotePopUpView.close();
-
-    // this.datas = [];
-    // this.datas.push(result.data);
-
-    // this.renderNoteCards()
-
-    // } else {
-    // notify('top_left', result.message, 'warning');
-    // }
-    // } catch (error) {
-    // notify('top_left', error.message, 'error');
-    // }
-    // finally {
-    // btn_submit.setAttribute('loading', false);
-    // }
-    // }
 }

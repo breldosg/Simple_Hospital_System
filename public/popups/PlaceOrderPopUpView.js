@@ -30,6 +30,8 @@ export class PlaceOrderPopUpView {
         cont.innerHTML = this.ViewReturn('active');
 
         this.attachListeners()
+        await this.Search_medicine_and_consumable_on_place_order_popup('');
+
     }
 
 

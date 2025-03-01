@@ -11,6 +11,7 @@ export class VisitLabExamCardView {
         this.isSelectAllActive = false;
         this.singleSelectedToDelete = '';
         this.singleSelectedToDelete_id = '';
+        this.visit_status = null;
 
         // Bind methods
         this.remove_order_lab_exam_request = this.remove_order_lab_exam_request.bind(this);
@@ -22,13 +23,13 @@ export class VisitLabExamCardView {
     }
 
     async PreRender(params = {}) {
-        const { data = [], visit_id, state = "creation" } = params;
+        const { data = [], visit_id, state = "creation", visit_status } = params;
 
         if (!document.querySelector('.update_cont')) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.resetState(data, visit_id, state);
+        this.resetState(data, visit_id, state, params.visit_status);
 
 
         // First render the main card structure
@@ -51,12 +52,13 @@ export class VisitLabExamCardView {
         this.renderLabTestCards(this.data);
     }
 
-    async resetState(data, visit_id, state) {
+    async resetState(data, visit_id, state, visit_status) {
         this.data = data;
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
+        this.visit_status = visit_status ? visit_status : "active";
     }
 
     async initializeData() {
@@ -104,7 +106,9 @@ export class VisitLabExamCardView {
 
         // Add the add button by default
         const btnSection = card.querySelector('.btn_section');
-        btnSection.appendChild(this.createAddButton());
+        if (this.visit_status == "active") {
+            btnSection.appendChild(this.createAddButton());
+        }
 
         return card;
     }
@@ -130,6 +134,7 @@ export class VisitLabExamCardView {
                 visit_id: this.visit_id,
                 state: 'modify',
                 data: pendingIds,
+                visit_status: this.visit_status,
             });
         });
 

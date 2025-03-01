@@ -1,4 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
+import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -109,6 +110,12 @@ export class ViewActiveLaboratoryListView {
 
         PatientData.VisitList.forEach((patient, index) => {
 
+            // filter and show only visit type label
+            const visit_type_detail = visit_type.find(type => type.value === patient.visit_type);
+
+            // filter and show only visit priority label
+            const visit_priority_detail = visit_priority.find(priority => priority.value === patient.visit_priority);
+
             const row = document.createElement('div');
             row.className = 'tr d_flex flex__c_a';
             row.setAttribute('title', patient.patient_name);
@@ -116,6 +123,8 @@ export class ViewActiveLaboratoryListView {
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.patient_name}</p>
                     <p class="orders">${patient.laboratory_orders}</p>
+                    <p class="priority">${visit_priority_detail.label}</p>
+                    <p class="type">${visit_type_detail.label}</p>
                     <p class="department">${patient.department_name}</p>
             `
 
@@ -157,6 +166,7 @@ export class ViewActiveLaboratoryListView {
                     }, 500);
                 }, 500);
             }
+            console.log(result);
 
 
             return result.success ? result.data : null;
@@ -182,6 +192,8 @@ export class ViewActiveLaboratoryListView {
                     <p class="id">SN</p>
                     <p class="name">Patient Name</p>
                     <p class="orders">Orders</p>
+                    <p class="priority">Visit Priority</p>
+                    <p class="type">Visit Type</p>
                     <p class="department">Department</p>
                 </div>
                 <div class="table_body d_flex flex__co">
@@ -199,7 +211,8 @@ export class ViewActiveLaboratoryListView {
                     </div>
                 </div>
             </div>
-        </div>`;
+        </div>
+        `;
     }
 }
 

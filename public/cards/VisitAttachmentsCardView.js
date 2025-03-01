@@ -8,6 +8,7 @@ export class VisitAttachmentsCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        this.visit_status = null;
         window.remove_attachment_request = this.remove_attachment_request.bind(this);
     }
 
@@ -20,6 +21,7 @@ export class VisitAttachmentsCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.visit_status = params.visit_status ? params.visit_status : "active";
 
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
@@ -140,9 +142,9 @@ ${data.note ? `
             <div class="head_part">
                 <h4 class="heading">Attachments</h4>
 
-                <div class="add_btn" id="add_attachment">
+                ${this.visit_status == "active" ? `<div class="add_btn" id="add_attachment">
                     <span class='switch_icon_add'></span>
-                </div>
+                </div>` : ``}
             </div>
 
             <div class="body_part attachment_card_cont scroll_bar">
@@ -191,14 +193,17 @@ ${data.note ? `
         `;
 
         const add_btn = card.querySelector('#add_attachment');
-        add_btn.addEventListener('click', () => {
-            dashboardController.visitsAttachmentPopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    state: 'modify',
-                }
-            );
-        })
+        if (add_btn) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.visitsAttachmentPopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        state: 'modify',
+                        visit_status: this.visit_status,
+                    }
+                );
+            })
+        }
 
         return card;
     }
@@ -220,7 +225,7 @@ ${data.note ? `
 
             const result = await response.json();
 
-if (result.status == 401) {
+            if (result.status == 401) {
                 setTimeout(() => {
                     document.body.style.transition = 'opacity 0.5s ease';
                     document.body.style.opacity = '0';
@@ -231,7 +236,7 @@ if (result.status == 401) {
                 }, 500);
             }
 
-            
+
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
                 return;

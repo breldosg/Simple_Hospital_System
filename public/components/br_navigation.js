@@ -68,6 +68,10 @@ export class BrCustomNavigation extends HTMLElement {
                 { label: 'Patients', link: '/patient' },
                 { label: 'Notice', link: '/notice' }
             ],
+            'NRS': [
+                { label: 'Patients', link: '/patient' },
+                { label: 'Notice', link: '/notice' }
+            ],
             // Admin/ICT role
             'ICT': [
                 { label: 'Users', link: '/users' },
@@ -114,6 +118,22 @@ export class BrCustomNavigation extends HTMLElement {
         // Define navigation sections per role
         const roleNavigationSections = {
             'DCT': [
+                {
+                    type: '/patient',
+                    choices: [
+                        { label: 'View Patient', href: '/patient/viewpatient' },
+                        { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    ]
+                },
+
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ],
+            'NRS': [
                 {
                     type: '/patient',
                     choices: [
