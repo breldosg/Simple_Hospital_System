@@ -8,6 +8,7 @@ export class VisitVitalCardView {
         window.AddVital = this.AddVital.bind(this);
         this.visit_id = null;
         this.data = [];
+        this.edit_mode = false;
     }
 
     async PreRender(params) {
@@ -19,6 +20,13 @@ export class VisitVitalCardView {
 
         this.data = params.data ? params.data : [];
         this.visit_id = params.visit_id;
+        this.edit_mode = false;
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        console.log(params);
+
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
 
         const cont = document.querySelector('.single_visit_cont .more_visit_detail');
         cont.classList.add('active');
@@ -74,7 +82,7 @@ export class VisitVitalCardView {
             <div class="head_part">
                 <h4 class="heading">Vital Sign</h4>
 
-                <div class="add_btn" id="edit_vital_sign">
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="edit_vital_sign">
                     <span class='switch_icon_mode_edit'></span>
                 </div>
             </div>
@@ -86,12 +94,14 @@ export class VisitVitalCardView {
             `;
 
         const edit_btn = card.querySelector('#edit_vital_sign');
-        edit_btn.addEventListener('click', () => {
-            dashboardController.addVitalPopUpView.PreRender({
-                visit_id: this.visit_id,
-                vital_data: this.data
+        if (this.edit_mode) {
+            edit_btn.addEventListener('click', () => {
+                dashboardController.addVitalPopUpView.PreRender({
+                    visit_id: this.visit_id,
+                    vital_data: this.data
+                })
             })
-        })
+        }
 
         return card;
 

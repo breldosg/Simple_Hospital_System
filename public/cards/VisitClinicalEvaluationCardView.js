@@ -8,6 +8,7 @@ export class VisitClinicalEvaluationCardView {
         // window.save_patient_note = this.save_patient_note.bind(this);
         this.visit_id = null;
         this.data = [];
+        this.edit_mode = false;
     }
 
     async PreRender(params) {
@@ -22,8 +23,11 @@ export class VisitClinicalEvaluationCardView {
         this.data = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
-        this.visit_status = params.visit_status ? params.visit_status : "active";
-
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
         if (this.state == "creation") {
             const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont.add_card_btn');
             if (add_btn) {
@@ -186,11 +190,11 @@ export class VisitClinicalEvaluationCardView {
 <div class="head_part">
     <h4 class="heading">Clinical Evaluation</h4>
 
-    ${this.visit_status == "active" ? `
-        <div class="add_btn" id="add_patient_clinical_note">
+    
+        <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_patient_clinical_note">
             <span class='switch_icon_edit'></span>
         </div>
-        ` : ``}
+        
 </div>
 
 <div class="body_part clinical_note_cont">
@@ -204,7 +208,7 @@ export class VisitClinicalEvaluationCardView {
 
 
         const edit_btn = card.querySelector('.clinical_note_cont_cont #add_patient_clinical_note');
-        if (edit_btn) {
+        if (this.edit_mode) {
             edit_btn.addEventListener('click', () => {
                 dashboardController.visitsClinicalEvaluationPopUpView.PreRender(
                     {

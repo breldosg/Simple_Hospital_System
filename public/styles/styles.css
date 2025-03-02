@@ -90,6 +90,11 @@ h4 {
     opacity: 0.5;
 }
 
+.visibility_hidden {
+    pointer-events: none;
+    visibility: hidden;
+}
+
 .scroll_bar::-webkit-scrollbar-thumb {
     background-color: var(--pri_color);
     border-radius: var(--input_main_border_r);
@@ -6438,8 +6443,7 @@ input {
                 background: var(--pure_white_background);
                 border-radius: 8px;
 
-                .profile-input:focus
-                {
+                .profile-input:focus {
                     outline: none;
                     border-color: var(--pri_color);
                     box-shadow: 0 0 0 2px var(--pri_op2);

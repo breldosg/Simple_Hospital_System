@@ -9,6 +9,7 @@ export class VisitAttachmentsCardView {
         this.datas = [];
         this.state = "creation";
         this.visit_status = null;
+        this.edit_mode = false;
         window.remove_attachment_request = this.remove_attachment_request.bind(this);
     }
 
@@ -21,8 +22,11 @@ export class VisitAttachmentsCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
-        this.visit_status = params.visit_status ? params.visit_status : "active";
-
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
             const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont .add_card_btn');
@@ -32,7 +36,7 @@ export class VisitAttachmentsCardView {
             else {
                 cont.appendChild(this.ViewReturn());
             }
-            dashboardController.singleVisitView.add_to_rendered_card_array('visitsVaccinePopUpView');
+            dashboardController.singleVisitView.add_to_rendered_card_array('visitsAttachmentPopUpView');
         }
 
         this.main_cont = document.querySelector('.attachment_card_cont_cont');
@@ -73,9 +77,9 @@ export class VisitAttachmentsCardView {
                                     <span class='switch_icon_file_download1'></span>
                                 </div>
     
-                                <div class="btn delete_btn" title="Remove Attachment">
+                                ${this.edit_mode ? `<div class="btn delete_btn" title="Remove Attachment">
                                     <span class='switch_icon_delete'></span>
-                                </div>
+                                </div>` : ``}
                             </div>
 
                         </div>
@@ -106,9 +110,10 @@ ${data.note ? `
                 });
                 // delete listener
                 const delete_btn = card.querySelector('.delete_btn');
-                delete_btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                if (delete_btn) {
+                    delete_btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
 
                     dashboardController.confirmPopUpView.PreRender({
                         callback: 'remove_attachment_request',
@@ -122,7 +127,8 @@ ${data.note ? `
 
                     this.singleSelectedToDelete = card;
 
-                });
+                    });
+                }
 
                 container.prepend(card);
             })
@@ -142,9 +148,9 @@ ${data.note ? `
             <div class="head_part">
                 <h4 class="heading">Attachments</h4>
 
-                ${this.visit_status == "active" ? `<div class="add_btn" id="add_attachment">
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_attachment">
                     <span class='switch_icon_add'></span>
-                </div>` : ``}
+                </div>
             </div>
 
             <div class="body_part attachment_card_cont scroll_bar">
@@ -193,7 +199,7 @@ ${data.note ? `
         `;
 
         const add_btn = card.querySelector('#add_attachment');
-        if (add_btn) {
+        if (this.edit_mode) {
             add_btn.addEventListener('click', () => {
                 dashboardController.visitsAttachmentPopUpView.PreRender(
                     {

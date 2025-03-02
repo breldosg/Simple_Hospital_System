@@ -8,6 +8,7 @@ export class VisitVaccineCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        this.edit_mode = false;
         window.remove_vaccine_request = this.remove_vaccine_request.bind(this);
     }
 
@@ -20,6 +21,11 @@ export class VisitVaccineCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
 
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
@@ -55,7 +61,7 @@ export class VisitVaccineCardView {
                             <p class="created_by">${data.created_by}</p>
                         </div>
                         <div class="right">
-                            <div class="delete_btn btn" id="delete_patient_vaccine">
+                            <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" id="delete_patient_vaccine">
                                 <span class='switch_icon_delete'></span>
                             </div>
                         </div>
@@ -81,21 +87,23 @@ export class VisitVaccineCardView {
 
                 // delete listener
                 const delete_btn = card.querySelector('.delete_btn');
-                delete_btn.addEventListener('click', () => {
+                if (this.edit_mode) {
+                    delete_btn.addEventListener('click', () => {
 
-                    dashboardController.confirmPopUpView.PreRender({
-                        callback: 'remove_vaccine_request',
-                        parameter: data.id,
-                        title: 'Remove Vaccine Record',
-                        sub_heading: `Vaccine: ${data.vaccine_name}`,
-                        description: 'Are you sure you want to remove this vaccine record?',
-                        ok_btn: 'Remove',
-                        cancel_btn: 'Cancel'
+                        dashboardController.confirmPopUpView.PreRender({
+                            callback: 'remove_vaccine_request',
+                            parameter: data.id,
+                            title: 'Remove Vaccine Record',
+                            sub_heading: `Vaccine: ${data.vaccine_name}`,
+                            description: 'Are you sure you want to remove this vaccine record?',
+                            ok_btn: 'Remove',
+                            cancel_btn: 'Cancel'
+                        });
+
+                        this.singleSelectedToDelete = card;
+
                     });
-
-                    this.singleSelectedToDelete = card;
-
-                });
+                }
 
                 container.prepend(card);
             })
@@ -115,7 +123,7 @@ export class VisitVaccineCardView {
             <div class="head_part">
                 <h4 class="heading">Vaccines</h4>
 
-                <div class="add_btn" id="add_patient_vaccine">
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_patient_vaccine">
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
@@ -125,14 +133,16 @@ export class VisitVaccineCardView {
         `;
 
         const add_btn = card.querySelector('.vaccine_card_cont_cont #add_patient_vaccine');
-        add_btn.addEventListener('click', () => {
-            dashboardController.visitsVaccinePopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    state: 'modify',
-                }
-            );
-        })
+        if (this.edit_mode) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.visitsVaccinePopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        state: 'modify',
+                    }
+                );
+            })
+        }
 
         return card;
     }

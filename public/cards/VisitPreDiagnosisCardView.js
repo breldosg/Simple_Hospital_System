@@ -9,7 +9,7 @@ export class VisitPreDiagnosisCardView {
         this.datas = [];
         this.selectedIds = new Set();
         this.isSelectAllActive = false;
-
+        this.edit_mode = false;
 
         // Bind methods
         this.remove_pre_diagnosis_request = this.remove_pre_diagnosis_request.bind(this);
@@ -22,7 +22,7 @@ export class VisitPreDiagnosisCardView {
     }
 
     async PreRender(params = {}) {
-        const { data = [], visit_id, state = "creation" } = params;
+        const { data = [], visit_id, state = "creation", visit_status } = params;
 
         if (!document.querySelector('.update_cont')) {
             await screenCollection.dashboardScreen.PreRender();
@@ -30,18 +30,23 @@ export class VisitPreDiagnosisCardView {
 
         console.log(params);
 
-        this.resetState(data, visit_id, state);
+        this.resetState(data, visit_id, state, visit_status);
         this.render();
 
         this.renderSingleCards();
     }
 
-    resetState(data, visit_id, state) {
+    resetState(data, visit_id, state, visit_status) {
         this.datas = data;
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
+        this.visit_status = visit_status ? visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
     }
 
     render() {
@@ -84,17 +89,20 @@ export class VisitPreDiagnosisCardView {
     createAddButton() {
         const addBtn = document.createElement('div');
         addBtn.className = 'add_btn';
+        if (!this.edit_mode) {
+            addBtn.classList.add("visibility_hidden");
+        }
         addBtn.id = 'add_pre_diagnosis_exam';
         addBtn.innerHTML = '<span class="switch_icon_add"></span>';
 
-
-
-        addBtn.addEventListener('click', () => {
-            dashboardController.visitsPreliminaryDiagnosisPopUpView.PreRender({
-                visit_id: this.visit_id,
-                state: 'modify',
+        if (this.edit_mode) {
+            addBtn.addEventListener('click', () => {
+                dashboardController.visitsPreliminaryDiagnosisPopUpView.PreRender({
+                    visit_id: this.visit_id,
+                    state: 'modify',
+                });
             });
-        });
+        }
 
         return addBtn;
     }
@@ -180,13 +188,15 @@ export class VisitPreDiagnosisCardView {
                 </div>
             </div>
             <div class="right">
-                <div title="Delete this diagnosis." class="more_btn order_delete_btn">
+                <div title="Delete this diagnosis." class="more_btn order_delete_btn ${this.edit_mode ? "" : "visibility_hidden"}">
                     <span class='switch_icon_delete'></span>
                 </div>
             </div>
         `;
 
-        this.attachCardListeners(card, data);
+        if (this.edit_mode) {
+            this.attachCardListeners(card, data);
+        }
         return card;
     }
 

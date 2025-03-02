@@ -9,6 +9,7 @@ export class VisitPlanForNextVisitCardView {
         this.visit_id = null;
         this.data = [];
         this.state = "creation";
+        this.edit_mode = false;
     }
 
     async PreRender(params = []) {
@@ -21,8 +22,11 @@ export class VisitPlanForNextVisitCardView {
         this.data = params.data ? params.data : "";
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
-
- 
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
 
 
         if (this.data != null) {
@@ -81,7 +85,7 @@ export class VisitPlanForNextVisitCardView {
             <div class="head_part">
                 <h4 class="heading">Plan for Next Visit</h4>
 
-                <div class="add_btn" id="add_next_visit_plan" >
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_next_visit_plan" >
                     <span class='switch_icon_edit'></span>
                 </div>
             </div>
@@ -96,15 +100,17 @@ export class VisitPlanForNextVisitCardView {
 
 
         const edit_btn = card.querySelector('.next_visit_plan_cont_cont #add_next_visit_plan');
-        edit_btn.addEventListener('click', () => {
-            dashboardController.visitPlanForNextVisitPopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
+        if (this.edit_mode) {
+            edit_btn.addEventListener('click', () => {
+                dashboardController.visitPlanForNextVisitPopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
                     data: this.data,
                     state: "update",
                 }
-            );
-        })
+                );
+            })
+        }
 
         return card;
 

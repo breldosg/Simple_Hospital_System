@@ -249,11 +249,19 @@ export class SingleVisitView {
             var is_restricted = false;
 
 
+
             card.active_if.forEach(active_if => {
                 if (!this.rendered_card.includes(active_if)) {
                     is_restricted = true;
                 }
             });
+
+            // console.log('card', card.title);
+            // console.log('is_component_rendered', is_component_rendered);
+            // console.log('is_role_support', is_role_support);
+            // console.log('is_restricted', is_restricted);
+            // console.log('rendered_card', this.rendered_card);
+
 
 
             if (is_component_rendered || is_role_support || is_restricted) {

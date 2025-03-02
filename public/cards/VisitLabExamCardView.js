@@ -12,7 +12,7 @@ export class VisitLabExamCardView {
         this.singleSelectedToDelete = '';
         this.singleSelectedToDelete_id = '';
         this.visit_status = null;
-
+        this.edit_mode = false;
         // Bind methods
         this.remove_order_lab_exam_request = this.remove_order_lab_exam_request.bind(this);
         this.remove_lab_exam_request_bulk = this.remove_lab_exam_request_bulk.bind(this);
@@ -58,7 +58,11 @@ export class VisitLabExamCardView {
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
-        this.visit_status = visit_status ? visit_status : "active";
+        this.visit_status = visit_status ? visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
     }
 
     async initializeData() {
@@ -106,9 +110,9 @@ export class VisitLabExamCardView {
 
         // Add the add button by default
         const btnSection = card.querySelector('.btn_section');
-        if (this.visit_status == "active") {
-            btnSection.appendChild(this.createAddButton());
-        }
+
+        btnSection.appendChild(this.createAddButton());
+
 
         return card;
     }
@@ -116,27 +120,32 @@ export class VisitLabExamCardView {
     createAddButton() {
         const addBtn = document.createElement('div');
         addBtn.className = 'add_btn';
+        if (!this.edit_mode) {
+            addBtn.classList.add("visibility_hidden");
+        }
         addBtn.id = 'add_lab_test';
         addBtn.innerHTML = '<span class="switch_icon_add"></span>';
 
-        addBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+        if (this.edit_mode) {
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
 
 
-            const pendingIds = this.data
-                .filter(item => item.status === 'pending')
-                .map(item => item.lab_test_id);
+                const pendingIds = this.data
+                    .filter(item => item.status === 'pending')
+                    .map(item => item.lab_test_id);
 
-            console.log(pendingIds);
+                console.log(pendingIds);
 
 
-            dashboardController.visitLabTestOrdersPopUpView.PreRender({
-                visit_id: this.visit_id,
-                state: 'modify',
-                data: pendingIds,
-                visit_status: this.visit_status,
+                dashboardController.visitLabTestOrdersPopUpView.PreRender({
+                    visit_id: this.visit_id,
+                    state: 'modify',
+                    data: pendingIds,
+                    visit_status: this.visit_status,
+                });
             });
-        });
+        }
 
         return addBtn;
     }
@@ -256,7 +265,9 @@ export class VisitLabExamCardView {
         const isPending = data.status === 'pending';
 
         card.innerHTML = this.getLabTestCardTemplate(data, isPending);
-        this.attachCardListeners(card, data, isPending);
+        if (this.edit_mode) {
+            this.attachCardListeners(card, data, isPending);
+        }
 
         card.addEventListener('click', (e) => {
             if (data.status === 'complete') {
@@ -288,9 +299,9 @@ export class VisitLabExamCardView {
             </div>
             <div class="right">
                 <div title="${data.status}" class="status ${data.status}"></div>
-                <div title="Delete this order." class="more_btn order_delete_btn ${isPending ? '' : 'inactive'}">
+                ${this.edit_mode ? `<div title="Delete this order." class="more_btn order_delete_btn ${isPending ? '' : 'inactive'}">
                     <span class='switch_icon_delete'></span>
-                </div>
+                </div>` : ``}
             </div>
         `;
     }

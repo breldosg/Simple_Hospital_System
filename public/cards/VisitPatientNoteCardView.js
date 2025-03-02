@@ -18,7 +18,7 @@ export class VisitPatientNoteCardView {
         this.renderNoteCards = this.renderNoteCards.bind(this);
         this.updateState = this.updateState.bind(this);
         this.visit_status = null;
-
+        this.edit_mode = false;
         window.save_patient_note = this.save_patient_note;
     }
 
@@ -37,13 +37,20 @@ export class VisitPatientNoteCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
         // Update state but don't trigger render yet
         this.state = {
             ...this.state,
             notes: params.data || [],
             visitId: params.visit_id,
-            visit_status: params.visit_status ? params.visit_status : "active"
+            edit_mode: this.edit_mode
         };
+
+
 
         // Create and mount the component
         const cont = document.querySelector('.single_visit_cont .more_visit_detail');
@@ -68,7 +75,7 @@ export class VisitPatientNoteCardView {
                     <p class="title">${data.created_by}</p>
                 </div>
                 <div class="card_actions">
-                    <div class="delete_btn btn" data-note-id="${data.id}">
+                    <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" data-note-id="${data.id}">
                         <span class='switch_icon_delete'></span>
                     </div>
                 </div>
@@ -226,9 +233,9 @@ export class VisitPatientNoteCardView {
                 <div class="full_screen">
                     <div class="head_part">
                         <h4 class="heading">Patient Note</h4>
-                        ${this.visit_status == "active" ? `<div class="add_btn" id="add_patient_note_btn">
+                        <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_patient_note_btn">
                             <span class='switch_icon_add'></span>
-                        </div>` : ``}
+                        </div>
                     </div>
                     <div class="body_part patient_note_cards_cont"></div>
                 </div>
@@ -236,7 +243,7 @@ export class VisitPatientNoteCardView {
         `;
 
         const addBtn = card.querySelector('#add_patient_note_btn');
-        if (addBtn) {
+        if (this.edit_mode) {
             addBtn.addEventListener('click', () => {
                 dashboardController.addPatientNotePopUpView.PreRender();
             });

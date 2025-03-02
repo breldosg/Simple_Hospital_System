@@ -11,6 +11,7 @@ export class VisitAllergyCardView {
         this.datas = [];
         this.state = "creation";
         this.visit_status = null;
+        this.edit_mode = false;
         window.remove_allergy_request = this.remove_allergy_request.bind(this);
     }
 
@@ -21,12 +22,15 @@ export class VisitAllergyCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        console.log(params);
-        
+
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
-        this.visit_status = params.visit_status ? params.visit_status : "active";
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
 
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #clinical_group .card_group_cont');
@@ -64,10 +68,10 @@ export class VisitAllergyCardView {
                             <p class="created_by">${data.created_by}</p>
                         </div>
                         <div class="right">
-                            <div class="edit_btn btn" id="edit_patient_allergy" >
+                            <div style="display: none;" class="edit_btn btn" id="edit_patient_allergy" >
                                 <span class='switch_icon_edit'></span>
                             </div>
-                            <div class="delete_btn btn" title="Delete this allergy." id="delete_patient_allergy" >
+                            <div class="delete_btn btn ${this.visit_status == "active" ? "" : "visibility_hidden"}" title="Delete this allergy." id="delete_patient_allergy" >
                                 <span class='switch_icon_delete'></span>
                             </div>
                         </div>
@@ -105,23 +109,25 @@ export class VisitAllergyCardView {
                     `;
 
                 const delete_btn = card.querySelector('.delete_btn');
-                delete_btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                if (this.visit_status == "active") {
+                    delete_btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
 
-                    dashboardController.confirmPopUpView.PreRender({
-                        callback: 'remove_allergy_request',
-                        parameter: data.id,
-                        title: 'Remove Allergy',
-                        sub_heading: `Allergy: ${data.allergy_type}`,
-                        description: 'Are you sure you want to remove this allergy?',
-                        ok_btn: 'Remove',
-                        cancel_btn: 'Cancel'
+                        dashboardController.confirmPopUpView.PreRender({
+                            callback: 'remove_allergy_request',
+                            parameter: data.id,
+                            title: 'Remove Allergy',
+                            sub_heading: `Allergy: ${data.allergy_type}`,
+                            description: 'Are you sure you want to remove this allergy?',
+                            ok_btn: 'Remove',
+                            cancel_btn: 'Cancel'
+                        });
+
+                        this.singleSelectedToDelete = card;
+
                     });
-
-                    this.singleSelectedToDelete = card;
-
-                });
+                }
 
 
                 container.prepend(card);
@@ -144,9 +150,9 @@ export class VisitAllergyCardView {
             <div class="head_part">
                 <h4 class="heading">Allergy</h4>
 
-                ${this.visit_status == "active" ? `<div class="add_btn" id="add_patient_allergy" >
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_patient_allergy" >
                     <span class='switch_icon_add'></span>
-                </div>` : ``}
+                </div>
             </div>
 
             <div class="body_part allergy_card_cont">
@@ -159,7 +165,7 @@ export class VisitAllergyCardView {
 
 
         const add_btn = card.querySelector('.allergy_card_cont_cont #add_patient_allergy');
-        if (add_btn) {
+        if (this.edit_mode) {
             add_btn.addEventListener('click', () => {
                 dashboardController.visitAllergyPopUpView.PreRender(
                     {
@@ -192,7 +198,7 @@ export class VisitAllergyCardView {
 
             const result = await response.json();
 
-if (result.status == 401) {
+            if (result.status == 401) {
                 setTimeout(() => {
                     document.body.style.transition = 'opacity 0.5s ease';
                     document.body.style.opacity = '0';
@@ -203,7 +209,7 @@ if (result.status == 401) {
                 }, 500);
             }
 
-            
+
             if (!result.success) {
                 notify('top_left', result.message, 'warning');
                 return;

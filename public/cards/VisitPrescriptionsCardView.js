@@ -8,6 +8,7 @@ export class VisitPrescriptionsCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        this.edit_mode = false;
         window.remove_prescription_order_request = this.remove_prescription_order_request.bind(this);
     }
 
@@ -20,6 +21,11 @@ export class VisitPrescriptionsCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.edit_mode = false;
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
 
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
@@ -57,14 +63,14 @@ export class VisitPrescriptionsCardView {
                     <p class="created_by">${date_formatter(data.created_at)}</p>
                 </div>
                 <div class="card_right">
-                    <div class="delete_btn btn" title="Delete this prescription.">
+                    <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" title="Delete this prescription.">
                         <span class="switch_icon_delete"></span>
                     </div>
                 </div>
             </div>
 
             <div class="data">
-                <p class="head">Amount:</p>
+                <p class="head">Quantity:</p>
                 <p class="description">${data.amount}</p>
             </div>
 
@@ -83,21 +89,23 @@ export class VisitPrescriptionsCardView {
 
 
                 const remove_btn = card.querySelector('.delete_btn');
-                remove_btn.addEventListener('click', () => {
+                if (this.edit_mode) {
+                    remove_btn.addEventListener('click', () => {
 
-                    dashboardController.confirmPopUpView.PreRender({
-                        callback: 'remove_prescription_order_request',
-                        parameter: data.id,
-                        title: 'Remove Procedure Order',
-                        sub_heading: `Order For: ${data.procedure_name}`,
-                        description: 'Are you sure you want to remove this procedure order?',
-                        ok_btn: 'Remove',
-                        cancel_btn: 'Cancel'
+                        dashboardController.confirmPopUpView.PreRender({
+                            callback: 'remove_prescription_order_request',
+                            parameter: data.id,
+                            title: 'Remove Procedure Order',
+                            sub_heading: `Order For: ${data.procedure_name}`,
+                            description: 'Are you sure you want to remove this procedure order?',
+                            ok_btn: 'Remove',
+                            cancel_btn: 'Cancel'
+                        });
+
+                        this.singleSelectedToDelete = card;
+
                     });
-
-                    this.singleSelectedToDelete = card;
-
-                });
+                }
 
 
                 container.prepend(card);
@@ -116,7 +124,7 @@ export class VisitPrescriptionsCardView {
             <div class="head_part">
                 <h4 class="heading">Prescription Orders</h4>
 
-                <div class="add_btn">
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}">
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
@@ -127,14 +135,16 @@ export class VisitPrescriptionsCardView {
         `;
 
         const add_btn = card.querySelector('.add_btn');
-        add_btn.addEventListener('click', () => {
-            dashboardController.visitsPrescriptionPopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    state: 'modify',
-                }
-            );
-        })
+        if (this.edit_mode) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.visitsPrescriptionPopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        state: 'modify',
+                    }
+                );
+            })
+        }
 
         return card;
     }

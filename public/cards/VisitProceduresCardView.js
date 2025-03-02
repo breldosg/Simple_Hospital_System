@@ -8,6 +8,7 @@ export class VisitProceduresCardView {
         this.visit_id = null;
         this.datas = [];
         this.state = "creation";
+        this.edit_mode = false;
         window.remove_procedure_order_request = this.remove_procedure_order_request.bind(this);
     }
 
@@ -20,6 +21,11 @@ export class VisitProceduresCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
 
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
@@ -63,21 +69,26 @@ export class VisitProceduresCardView {
 
                 const delete_btn = document.createElement('div');
                 delete_btn.className = 'delete_btn btn';
+                if (!this.edit_mode) {
+                    delete_btn.classList.add("visibility_hidden");
+                }
                 delete_btn.id = 'delete_patient_device';
                 delete_btn.innerHTML = '<span class="switch_icon_delete"></span>';
-                delete_btn.addEventListener('click', () => {
-                    dashboardController.confirmPopUpView.PreRender({
-                        callback: 'remove_procedure_order_request',
-                        parameter: data.id,
-                        title: 'Remove Procedure Order',
-                        sub_heading: `Order For: ${data.procedure_name}`,
-                        description: 'Are you sure you want to remove this procedure order?',
-                        ok_btn: 'Remove',
-                        cancel_btn: 'Cancel'
-                    });
+                if (this.edit_mode) {
+                    delete_btn.addEventListener('click', () => {
+                        dashboardController.confirmPopUpView.PreRender({
+                            callback: 'remove_procedure_order_request',
+                            parameter: data.id,
+                            title: 'Remove Procedure Order',
+                            sub_heading: `Order For: ${data.procedure_name}`,
+                            description: 'Are you sure you want to remove this procedure order?',
+                            ok_btn: 'Remove',
+                            cancel_btn: 'Cancel'
+                        });
 
-                    this.singleSelectedToDelete = card;
-                });
+                        this.singleSelectedToDelete = card;
+                    });
+                }
                 right.appendChild(delete_btn);
 
                 top.appendChild(right);
@@ -130,7 +141,7 @@ export class VisitProceduresCardView {
             <div class="head_part">
                 <h4 class="heading">Procedure Orders</h4>
 
-                <div class="add_btn" id="add_procedure_order">
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_procedure_order">
                     <span class='switch_icon_add'></span>
                 </div>
             </div>
@@ -140,14 +151,16 @@ export class VisitProceduresCardView {
         `;
 
         const add_btn = card.querySelector('.procedure_order_card_cont_cont #add_procedure_order');
-        add_btn.addEventListener('click', () => {
-            dashboardController.visitsProcedurePopUpView.PreRender(
-                {
-                    visit_id: this.visit_id,
-                    state: 'modify',
-                }
-            );
-        })
+        if (this.edit_mode) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.visitsProcedurePopUpView.PreRender(
+                    {
+                        visit_id: this.visit_id,
+                        state: 'modify',
+                    }
+                );
+            })
+        }
 
         return card;
     }

@@ -9,7 +9,7 @@ export class VisitRadiologyExamCardView {
         this.datas = [];
         this.selectedIds = new Set();
         this.isSelectAllActive = false;
-
+        this.edit_mode = false;
 
         // Bind methods
         this.remove_order_radiology_exam_request = this.remove_order_radiology_exam_request.bind(this);
@@ -22,13 +22,13 @@ export class VisitRadiologyExamCardView {
     }
 
     async PreRender(params = {}) {
-        const { data = [], visit_id, state = "creation" } = params;
+        const { data = [], visit_id, state = "creation", visit_status } = params;
 
         if (!document.querySelector('.update_cont')) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.resetState(data, visit_id, state);
+        this.resetState(data, visit_id, state, visit_status);
 
         // First render the main card structure
         if (this.state === "creation") {
@@ -50,12 +50,17 @@ export class VisitRadiologyExamCardView {
         this.renderRadiologyCards(this.data);
     }
 
-    async resetState(data, visit_id, state) {
+    async resetState(data, visit_id, state, visit_status) {
         this.data = data;
         this.visit_id = visit_id;
         this.state = state;
         this.isSelectAllActive = false;
         this.selectedIds.clear();
+        this.edit_mode = false;
+        this.visit_status = visit_status ? visit_status : "checked_out";
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
     }
 
     async initializeData() {
@@ -96,22 +101,26 @@ export class VisitRadiologyExamCardView {
     createAddButton() {
         const addBtn = document.createElement('div');
         addBtn.className = 'add_btn';
+        if (!this.edit_mode) {
+            addBtn.classList.add("visibility_hidden");
+        }
         addBtn.id = 'add_radiology_exam';
         addBtn.innerHTML = '<span class="switch_icon_add"></span>';
 
 
+        if (this.edit_mode) {
+            addBtn.addEventListener('click', () => {
+                const pendingIds = this.data
+                    .filter(item => item.status === 'pending')
+                    .map(item => item.exam_id);
 
-        addBtn.addEventListener('click', () => {
-            const pendingIds = this.data
-                .filter(item => item.status === 'pending')
-                .map(item => item.exam_id);
-
-            dashboardController.visitRadiologyExamPopUpView.PreRender({
-                visit_id: this.visit_id,
-                state: 'modify',
-                data: pendingIds,
+                dashboardController.visitRadiologyExamPopUpView.PreRender({
+                    visit_id: this.visit_id,
+                    state: 'modify',
+                    data: pendingIds,
+                });
             });
-        });
+        }
 
         return addBtn;
     }
@@ -206,9 +215,9 @@ export class VisitRadiologyExamCardView {
             </div>
             <div class="right">
                 <div title="${data.status}" class="status ${data.status}"></div>
-                <div title="Delete this order." class="more_btn order_delete_btn ${isPending ? '' : 'inactive'}">
+                ${this.edit_mode ? `<div title="Delete this order." class="more_btn order_delete_btn ${isPending ? '' : 'inactive'}">
                     <span class='switch_icon_delete'></span>
-                </div>
+                </div>` : ``}
             </div>
         `;
 
@@ -227,8 +236,9 @@ export class VisitRadiologyExamCardView {
         });
 
 
-
-        this.attachCardListeners(card, data, isPending);
+        if (this.edit_mode) {
+            this.attachCardListeners(card, data, isPending);
+        }
         return card;
     }
 

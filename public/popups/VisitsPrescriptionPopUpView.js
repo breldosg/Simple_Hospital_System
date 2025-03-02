@@ -96,7 +96,7 @@ export class VisitsPrescriptionPopUpView {
                     border: 2px solid var(--input_border);
                     " labelStyles="font-size: 12px;" disable="true"></br-input>
 
-                    <br-input required name="amount" label="Amount" type="number" styles="
+                    <br-input required name="amount" label="Quantity" type="number" styles="
                     border-radius: var(--input_main_border_r);
                     width: 400px;
                     padding: 10px;
@@ -414,7 +414,7 @@ export class VisitsPrescriptionPopUpView {
             </div>
 
             <div class="data">
-                <p class="head">Amount:</p>
+                <p class="head">Quantity:</p>
                 <p class="description">${data.amount}</p>
             </div>
 

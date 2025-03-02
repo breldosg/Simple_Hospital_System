@@ -9,6 +9,7 @@ export class VisitImplantableDevicesCardView {
         this.datas = [];
         this.state = "creation";
         this.visit_status = null;
+        this.edit_mode = false;
         window.remove_implantable_devices_request = this.remove_implantable_devices_request.bind(this);
     }
 
@@ -21,7 +22,11 @@ export class VisitImplantableDevicesCardView {
         this.datas = params.data ? params.data : [];
         this.visit_id = params.visit_id;
         this.state = params.state ? params.state : "creation";
-        this.visit_status = params.visit_status ? params.visit_status : "active";
+        this.visit_status = params.visit_status ? params.visit_status : "checked_out";
+        this.edit_mode = false;
+        if (this.visit_status == "active") {
+            this.edit_mode = true;
+        }
         if (this.state == "creation") {
             const cont = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont');
             const add_btn = document.querySelector('.single_visit_cont .more_visit_cards #treatment_group .card_group_cont .add_card_btn');
@@ -59,7 +64,7 @@ export class VisitImplantableDevicesCardView {
                             <!-- <div class="edit_btn btn" id="edit_patient_device" >
                                 <span class='switch_icon_edit'></span>
                             </div> -->
-                            <div class="delete_btn btn" id="delete_patient_device" >
+                            <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" id="delete_patient_device" >
                                 <span class='switch_icon_delete'></span>
                             </div>
                         </div>
@@ -90,7 +95,8 @@ export class VisitImplantableDevicesCardView {
 
                 // delete listener
                 const delete_btn = card.querySelector('.delete_btn');
-                delete_btn.addEventListener('click', () => {
+                if (this.edit_mode) {
+                    delete_btn.addEventListener('click', () => {
 
                     dashboardController.confirmPopUpView.PreRender({
                         callback: 'remove_implantable_devices_request',
@@ -104,7 +110,8 @@ export class VisitImplantableDevicesCardView {
 
                     this.singleSelectedToDelete = card;
 
-                });
+                    });
+                }
 
                 container.prepend(card);
             })
@@ -124,9 +131,9 @@ export class VisitImplantableDevicesCardView {
             <div class="head_part">
                 <h4 class="heading">Implantable Devices</h4>
 
-                ${this.visit_status == "active" ? `<div class="add_btn" id="add_patient_device" >
+                <div class="add_btn ${this.edit_mode ? "" : "visibility_hidden"}" id="add_patient_device" >
                     <span class='switch_icon_add'></span>
-                </div>` : ``}
+                </div>
             </div>
 
             <div class="body_part device_card_cont">
@@ -134,7 +141,7 @@ export class VisitImplantableDevicesCardView {
         `;
 
         const add_btn = card.querySelector('.implantable_devices_card_cont_cont #add_patient_device');
-        if (add_btn) {
+        if (this.edit_mode) {
             add_btn.addEventListener('click', () => {
                 dashboardController.visitsImplementableDevicePopUpView.PreRender(
                     {
