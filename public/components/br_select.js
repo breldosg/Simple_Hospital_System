@@ -84,12 +84,12 @@ export class BrCustomSelect extends HTMLElement {
             label { ${labelStyles} }
             .selected-value {  border: 1px solid #ccc; cursor: pointer; background: #fff; display: flex; justify-content: space-between; align-items: center; ${additionalStyles} }
             .selected-value_in {white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
-            .select-dropdown { display: none; position: absolute; left: 0; right: 0; border: 1px solid #ccc; background: #fff; max-height: 300px; overflow-y: auto; z-index: 1000; }
-            .selected-value.error { border-color: #EE5D50; }
-            .select-search { width: 100%; padding: 10px; border: none; border-bottom: 1px solid #ccc; outline: none; }
+            .select-dropdown { display: none; position: absolute; left: 0; right: 0; border: 1px solid #ccc; background: var(--pure_white_background); max-height: 300px; overflow-y: auto; z-index: 1000; }
+            .selected-value.error { border-color: var(--error_color); }
+            .select-search { width: 100%; padding: 10px; border: none; background: var(--pure_white_background); border-bottom: 1px solid #ccc; outline: none; }
             .select-options { list-style: none; padding: 0; margin: 0; }
             .option { padding: 10px; cursor: pointer; }
-            .option:hover { background: #f0f0f0; }
+            .option:hover { background: var(--pri_op); }
             .select-dropdown::-webkit-scrollbar-thumb { background-color: var(--gray_text); border-radius: var(--input_main_border_r);}
             .select-dropdown::-webkit-scrollbar { width: 5px; }
             .arrow{ transition:all 0.3s ease}

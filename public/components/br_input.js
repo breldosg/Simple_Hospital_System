@@ -191,7 +191,7 @@ export class BrCustomInput extends HTMLElement {
                 top: 100%;
                 transform: translateX(-50%);
                 position: absolute;
-                background-color: white;
+                background-color: var(--pure_white_background);
                 z-index: 1;
                 max-height: 150px;
                 overflow-y: auto;
@@ -225,7 +225,7 @@ export class BrCustomInput extends HTMLElement {
                     }
                     
                     .option:hover {
-                        background-color: #f3f5f6;
+                        background-color: var(--pri_op);
                     }
                 }
             }

@@ -51,7 +51,7 @@ import { VisitsProcedurePopUpView } from "../popups/VisitsProcedurePopUpView.js"
 import { VisitsImplementableDevicePopUpView } from "../popups/VisitsImplementableDevicePopUpView.js";
 import { VisitsVaccinePopUpView } from "../popups/VisitsVaccinePopUpView.js";
 import { VisitsPrescriptionPopUpView } from "../popups/VisitsPrescriptionPopUpView.js";
-import { VisitsAttachmentPopUpView } from "../popups/VisitsAttachmentPopUpView.js";
+import { VisitsAttachmentPopUpView } from "../popups/VisitAttachmentPopUpView.js";
 import { VisitAttachmentsCardView } from "../cards/VisitAttachmentsCardView.js";
 import { ViewActiveRadiologyListView } from "../views/viewActiveRadiologyListView.js";
 import { SingleVisitRadiologyView } from "../views/SingleVisitRadiologyView.js";

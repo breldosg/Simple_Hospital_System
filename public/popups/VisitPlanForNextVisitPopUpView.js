@@ -21,6 +21,7 @@ export class VisitPlanForNextVisitPopUpView {
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : "creation";
         this.plan_data = params.data ? params.data : '';
+        this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
         console.log(params);
 
@@ -163,6 +164,7 @@ export class VisitPlanForNextVisitPopUpView {
                     visit_id: this.visit_id,
                     data: result.data,
                     state: this.state,
+                    visit_status: this.visit_status
                 });
                 notify('top_left', result.message, 'success');
                 this.close();

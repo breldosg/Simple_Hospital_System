@@ -24,7 +24,7 @@ export class VisitsPrescriptionPopUpView {
 
         this.visit_id = params.visit_id;
         this.state = params.state;
-
+        this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
 
         // Clear all constructor variables
@@ -232,7 +232,8 @@ export class VisitsPrescriptionPopUpView {
             dashboardController.visitPrescriptionsCardView.PreRender({
                 visit_id: this.visit_id,
                 state: this.state,
-                data: result.data
+                data: result.data,
+                visit_status: this.visit_status
             });
 
         } catch (error) {

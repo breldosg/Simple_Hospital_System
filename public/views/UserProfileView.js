@@ -92,7 +92,7 @@ export class UserProfileView {
                     <div class="form-content">
                         <div class="form-group">
                             <p>Date of Birth</p>
-                            <input type="date" id="date_of_birth" class="profile-input" value="2025-01-01" />
+                            <input type="date" id="date_of_birth" class="profile-input"/>
                         </div>
 
                         <div class="form-group">

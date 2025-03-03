@@ -21,6 +21,7 @@ export class VisitAllergyPopUpView {
 
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : "creation";
+        this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -205,6 +206,7 @@ export class VisitAllergyPopUpView {
                     visit_id: this.visit_id,
                     state: this.state,
                     data: result.data,
+                    visit_status: this.visit_status
                 });
                 // dashboardController.visitAllergyPopUpView.close();
                 // this.datas = result.data;

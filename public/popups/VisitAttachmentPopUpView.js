@@ -13,6 +13,7 @@ export class VisitsAttachmentPopUpView {
     async PreRender(params = '') {
         this.visit_id = params.visit_id || '';
         this.state = params.state || 'creation';
+        this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
         const popup = document.querySelector('.popup');
         popup.classList.add('active');
@@ -218,6 +219,7 @@ export class VisitsAttachmentPopUpView {
                     visit_id: this.visit_id,
                     data: result.data,
                     state: this.state,
+                    visit_status: this.visit_status
                 });
                 notify('top_left', result.message, 'success');
                 this.close();

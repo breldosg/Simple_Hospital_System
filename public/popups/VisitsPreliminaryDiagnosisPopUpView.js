@@ -23,6 +23,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : 'creation';
         this.added_diagnosis.clear();
+        this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -266,6 +267,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
                     visit_id: this.visit_id,
                     data: result.data,
                     state: this.state,
+                    visit_status: this.visit_status
                 });
                 notify('top_left', result.message, 'success');
                 console.log(result.data);

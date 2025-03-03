@@ -1,7 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
-import { ROLES } from "../config/roles.js";
 
 export class BrCustomNavigation extends HTMLElement {
     constructor() {
@@ -66,22 +65,235 @@ export class BrCustomNavigation extends HTMLElement {
     }
 
     createMainNavItems(roleId) {
-        const role = ROLES[roleId] || { navItems: [] };
-        return role.navItems.map((item, index) =>
+        // Define navigation items per role
+        const roleNavItems = {
+            // Doctor role
+            'DCT': [
+                { label: 'Patients', link: '/patient' },
+                { label: 'Notice', link: '/notice' }
+            ],
+            'NRS': [
+                { label: 'Patients', link: '/patient' },
+                { label: 'Notice', link: '/notice' }
+            ],
+            // Admin/ICT role
+            'ICT': [
+                { label: 'Users', link: '/users' },
+                { label: 'Patients', link: '/patient' },
+                { label: 'Pharmacy', link: '/pharmacy' },
+                { label: 'Radiology', link: '/radiology' },
+                { label: 'Laboratory', link: '/laboratory' },
+                { label: 'Store', link: '/store' },
+                { label: 'Billing', link: '/billing' },
+                { label: 'Notice', link: '/notice' }
+            ],
+            // Pharmacist role
+            'RPT': [
+                { label: 'Pharmacy', link: '/pharmacy' },
+                { label: 'Store', link: '/store' },
+                { label: 'Notice', link: '/notice' }
+            ],
+            // Lab technician role
+            'LBT': [
+                { label: 'Laboratory', link: '/laboratory' },
+                { label: 'Notice', link: '/notice' }
+            ],
+            // Radiologist role
+            'RDT': [
+                { label: 'Radiology', link: '/radiology' },
+                { label: 'Notice', link: '/notice' }
+            ],
+            // Billing role
+            'BIL': [
+                { label: 'Billing', link: '/billing' },
+                { label: 'Notice', link: '/notice' }
+            ]
+        };
+
+        // Get navigation items for the role, fallback to empty array if role not found
+        const navItems = roleNavItems[roleId] || [];
+
+        return navItems.map((item, index) =>
             `<div link="${item.link}" class="nav_item ${index === 0 ? 'active' : ''}">${item.label}</div>`
         ).join('');
     }
 
     createNavigationChoices(roleId) {
-        const role = ROLES[roleId] || { navigationSections: [] };
-        
+        // Define navigation sections per role
+        const roleNavigationSections = {
+            'DCT': [
+                {
+                    type: '/patient',
+                    choices: [
+                        { label: 'View Patient', href: '/patient/viewpatient' },
+                        { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    ]
+                },
+
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ],
+            'NRS': [
+                {
+                    type: '/patient',
+                    choices: [
+                        { label: 'View Patient', href: '/patient/viewpatient' },
+                        { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    ]
+                },
+
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ],
+            'ICT': [
+                {
+                    type: '/users',
+                    choices: [
+                        { label: 'User List', href: '/users/userlist' },
+                        { label: 'Add User', href: '/users/adduser' },
+                        { label: 'Attendance', href: '/users/attendance' }
+                    ]
+                },
+                {
+                    type: '/patient',
+                    choices: [
+                        { label: 'View Patient', href: '/patient/viewpatient' },
+                        { label: 'Add Patient', href: '/patient/addpatient' },
+                        { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    ]
+                },
+                {
+                    type: '/pharmacy',
+                    choices: [
+                        { label: 'View All Products', href: '/pharmacy/viewpharmacyproducts' },
+                        { label: 'View All category', href: '/pharmacy/viewcategory' },
+                        { label: 'Add category', href: '/pharmacy/addcategory' },
+                        { label: 'Order List', href: '/pharmacy/orderlist' },
+                        { label: 'Active Visits', href: '/pharmacy/activevisits' }
+                    ]
+                },
+                {
+                    type: '/radiology',
+                    choices: [
+                        { label: 'Active Visits', href: '/radiology/activevisits' },
+                    ]
+                },
+                {
+                    type: '/laboratory',
+                    choices: [
+                        { label: 'Active Visits', href: '/laboratory/activevisits' },
+                    ]
+                },
+                {
+                    type: '/store',
+                    choices: [
+                        { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                        { label: 'View All category', href: '/store/viewcategory' },
+                        { label: 'Add category', href: '/store/addcategory' },
+                        { label: 'View All batch', href: '/store/viewinatakebatch' },
+                        { label: 'Pharmacy Orders', href: '/store/orderlist' }
+                    ]
+                },
+                {
+                    type: '/billing',
+                    choices: [
+                        { label: 'View Active Bills', href: '/billing/activebills' },
+                        { label: 'View Prices', href: '/billing/viewprices' },
+                    ]
+                },
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' },
+                        { label: 'Add notice', href: '/notice/addnotice' }
+                    ]
+                }
+            ],
+            'RPT': [
+                {
+                    type: '/pharmacy',
+                    choices: [
+                        { label: 'View All Products', href: '/pharmacy/viewpharmacyproducts' },
+                        { label: 'View All category', href: '/pharmacy/viewcategory' },
+                        { label: 'Active Visits', href: '/pharmacy/activevisits' }
+                    ]
+                },
+                {
+                    type: '/store',
+                    choices: [
+                        { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                        { label: 'View All batch', href: '/store/viewinatakebatch' }
+                    ]
+                },
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ],
+            'LBT': [
+                {
+                    type: '/laboratory',
+                    choices: [
+                        { label: 'Active Visits', href: '/laboratory/activevisits' }
+                    ]
+                },
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ],
+            'RDT': [
+                {
+                    type: '/radiology',
+                    choices: [
+                        { label: 'Active Visits', href: '/radiology/activevisits' }
+                    ]
+                },
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ],
+            'BIL': [
+                {
+                    type: '/billing',
+                    choices: [
+                        { label: 'View Active Bills', href: '/billing/activebills' },
+                        { label: 'View Prices', href: '/billing/viewprices' }
+                    ]
+                },
+                {
+                    type: '/notice',
+                    choices: [
+                        { label: 'View All notice', href: '/notice/viewnotice' }
+                    ]
+                }
+            ]
+        };
+
+        const navigationSections = roleNavigationSections[roleId] || [];
+
         return `
             <div class="choice_collection">
-                ${role.navigationSections.map(section => `
+                ${navigationSections.map(section => `
                     <div class="nav_collection ${section.type === '/users' ? 'active' : ''}" type="${section.type}">
                         ${section.choices.map(choice =>
-                            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
-                        ).join('')}
+            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
+        ).join('')}
                     </div>
                 `).join('')}
             </div>
@@ -246,6 +458,7 @@ export class BrCustomNavigation extends HTMLElement {
 
             .menu-item:hover {
                 background-color: var(--pri_op);
+                color: var(--pri_color);
             }
 
             .icon-sign-out {

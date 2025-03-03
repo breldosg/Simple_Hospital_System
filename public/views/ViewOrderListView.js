@@ -162,7 +162,7 @@ export class ViewOrderListView {
                     action_btn = rowRequest.status === 'denied' ? deniedBtn : approvedBtn;
                 }
 
-                console.log(rowRequest.status);
+
 
 
             }

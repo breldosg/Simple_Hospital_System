@@ -31,7 +31,7 @@ export class BrCustomOption extends HTMLElement {
                     ${styles}
                     }
                     :host(:hover) {
-                        background:rgb(199, 199, 210);
+                        background:var(--pri_op);
                         transform: scale(1.001);
                         ${HoverStyle}
                     }

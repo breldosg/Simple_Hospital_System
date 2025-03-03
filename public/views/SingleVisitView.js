@@ -54,7 +54,7 @@ export class SingleVisitView {
 
         this.visit_detail_data = visit_data.visit_detail.visit_data;
 
-        console.log(visit_data);
+ 
 
 
         // Render various card views
@@ -153,7 +153,6 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
-
         ];
 
         cardRenderConfig.forEach(config => {
@@ -256,14 +255,6 @@ export class SingleVisitView {
                 }
             });
 
-            // console.log('card', card.title);
-            // console.log('is_component_rendered', is_component_rendered);
-            // console.log('is_role_support', is_role_support);
-            // console.log('is_restricted', is_restricted);
-            // console.log('rendered_card', this.rendered_card);
-
-
-
             if (is_component_rendered || is_role_support || is_restricted) {
                 option.classList.add('disabled');
             } else {
@@ -286,6 +277,7 @@ export class SingleVisitView {
                     data: [],
                     state: 'creation',
                     visit_id: this.visit_id,
+                    visit_status: this.visit_detail_data.status
                 });
             } else {
                 console.error(`PreRender method not found for component: ${card.component}`);

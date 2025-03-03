@@ -21,6 +21,7 @@ export class VisitsClinicalEvaluationPopUpView {
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.evaluation_data = params.data ? params.data : '';
         this.state = params.state ? params.state : 'creation';
+        this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -241,6 +242,7 @@ export class VisitsClinicalEvaluationPopUpView {
                     visit_id: this.visit_id,
                     data: result.data,
                     state: this.state,
+                    visit_status: this.visit_status
                 });
                 notify('top_left', result.message, 'success');
                 this.close();

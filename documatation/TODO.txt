@@ -14,6 +14,10 @@
 2- report normal range hint pop not styled well
 
 
+====== Visit View
+1- add check history btn
+
+
 
 
 
