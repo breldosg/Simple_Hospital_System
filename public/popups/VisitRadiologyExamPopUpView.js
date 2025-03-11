@@ -65,8 +65,11 @@ export class VisitRadiologyExamPopUpView {
             </div>
 
             <div class="left_body_cont">
-                <div class="group_category_cont">
+                <div class="group_category_cont_cont">
+
+                    <div class="group_category_cont scroll_bar">
                     
+                    </div>
                 </div>
 
                 <div class="group_category_list">

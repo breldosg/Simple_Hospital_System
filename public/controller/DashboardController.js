@@ -78,6 +78,8 @@ import { ViewBillingDefaultPriceView } from "../views/ViewBillingDefaultPriceVie
 import { UpdateDefaultPricePopUpView } from "../popups/UpdateDefaultPricePopUpView.js";
 import { CreateInvoiceAndPayBillPopUpView } from "../popups/CreateInvoiceAndPayBillPopUpView.js";
 import { UserProfileView } from "../views/UserProfileView.js";
+import { RadiologyExamsListView } from "../views/RadiologyExamsListView.js";
+import { LaboratoryTestListView } from "../views/LaboratoryTestListView.js";
 
 class DashboardController {
     // Loader View
@@ -162,6 +164,7 @@ class DashboardController {
     // Radiology Section
     viewActiveRadiologyListView = new ViewActiveRadiologyListView();
     singleVisitRadiologyView = new SingleVisitRadiologyView();
+    radiologyExamsListView = new RadiologyExamsListView();
 
     // Billing Section
     viewActiveBillsListView = new ViewActiveBillsListView();
@@ -186,6 +189,8 @@ class DashboardController {
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();
     singleVisitLaboratoryView = new SingleVisitLaboratoryView();
+    laboratoryTestListView = new LaboratoryTestListView();
+
 
 }
 

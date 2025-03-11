@@ -69,10 +69,12 @@ const routes = {
     '/radiology': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits/:id': dashboardController.singleVisitRadiologyView,
+    '/radiology/examslist': dashboardController.radiologyExamsListView,
 
     '/laboratory': dashboardController.viewActiveLaboratoryListView,
     '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView,
     '/laboratory/activevisits/:id': dashboardController.singleVisitLaboratoryView,
+    '/laboratory/testlist': dashboardController.laboratoryTestListView,
 
     '/billing': dashboardController.viewActiveBillsListView,
     '/billing/activebills': dashboardController.viewActiveBillsListView,

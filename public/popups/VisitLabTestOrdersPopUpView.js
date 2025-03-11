@@ -67,15 +67,14 @@ export class VisitLabTestOrdersPopUpView {
             </div>
 
             <div class="left_body_cont">
-                <div class="group_category_cont">
+                <div class="group_category_cont_cont">
+                    <div class="group_category_cont scroll_bar">
                     
+                    </div>
                 </div>
 
                 <div class="group_category_list">
-                    <div class="lab_order_list_item selected" data_src="x_ray_1">
-                        <p>X-Ray 1</p>
-                        <span class='switch_icon_check_box'></span>
-                    </div>
+                    
 
                 </div>
 
