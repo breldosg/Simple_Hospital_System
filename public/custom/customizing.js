@@ -14495,8 +14495,8 @@ export const visit_type = [
         label: 'Emergency',
     },
     {
-        value: 'wakin',
-        label: 'Waking',
+        value: 'walkin',
+        label: 'Walking',
     },
 ];
 

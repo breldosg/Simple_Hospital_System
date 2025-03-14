@@ -144,7 +144,7 @@ export class BrCustomSelect extends HTMLElement {
     updateSelectedOption(elements) {
         const matchedElement = elements.find(el => el.getAttribute('value') === this.default_value);
         if (matchedElement) {
-            this.selectedElement.textContent = matchedElement.textContent;
+            this.update_input.textContent = matchedElement.textContent;
             this.selectedElement.setAttribute('value', matchedElement.getAttribute('value'));
         }
     }

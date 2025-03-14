@@ -92,7 +92,8 @@ export const ROLES = {
                 type: '/radiology',
                 choices: [
                     { label: 'Active Visits', href: '/radiology/activevisits' },
-                    { label: 'Exams List', href: '/radiology/examslist' }
+                    { label: 'Exams List', href: '/radiology/examslist' },
+                    { label: 'Exams Category List', href: '/radiology/examscategorylist' }
                 ]
             },
             {
@@ -173,7 +174,7 @@ export const ROLES = {
             {
                 type: '/laboratory',
                 choices: [
-                    { label: 'Active Visits', href: '/laboratory/activevisits' },
+                    { label: 'Active Visits', href: '/laboratory/activevisits'},
                     { label: 'Test List', href: '/laboratory/testlist' },
                 ]
             },
@@ -198,7 +199,8 @@ export const ROLES = {
                 type: '/radiology',
                 choices: [
                     { label: 'Active Visits', href: '/radiology/activevisits' },
-                    { label: 'Exams List', href: '/radiology/examslist' }
+                    { label: 'Exams List', href: '/radiology/examslist' },
+                    { label: 'Exams Category List', href: '/radiology/examscategorylist' }
                 ]
             },
             {

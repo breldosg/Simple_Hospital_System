@@ -1,11 +1,13 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { currency_formatter, notify } from "../script/index.js";
+import { currency_formatter, date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class RadiologyExamsListView {
+export class RadiologyExamsCategoryListView {
     constructor() {
         window.radiology_search_exam_list = this.search_medicine.bind(this);
+        window.delete_radiology_category = this.delete_category.bind(this);
+        this.row_to_delete = '';
         this.medicineData = [];
         this.batchNumber = 1;
         this.total_page_num = 1;
@@ -61,7 +63,7 @@ export class RadiologyExamsListView {
         // Create Radiology Examination Button
         var create_radiology_examination = this.main_component.querySelector('#open_add_product_popup');
         create_radiology_examination.addEventListener('click', () => {
-            dashboardController.createRadiologyExaminationPopUp.PreRender();
+            dashboardController.createRadiologyCategoryPopUp.PreRender();
         });
 
         // Pagination buttons
@@ -87,50 +89,19 @@ export class RadiologyExamsListView {
         this.isLoading = true;
         this.loading_and_nodata_view();
 
-
-        if (!this.page_shift) {
-            const categoryData = await this.fetchCategory(); // Fetch category data only once
-            this.categoryData = categoryData || [];
-
-
-            const roles = (category_raw) => {
-                var rolesElem = `
-                <br-option type="checkbox" value=" ">Select Category</br-option>
-                `;
-                category_raw.forEach(data => {
-                    rolesElem += `
-                    <br-option type="checkbox" value="${data.id}">${data.name}</br-option>
-                `;
-                });
-                return rolesElem;
-            };
-            this.category_elements = roles(this.categoryData);
-
-            this.main_component.querySelector('.search_containers').innerHTML = this.searchRadiologyView();
-
-            // clear the variables
-            this.category_elements = '';
-            this.categoryData = '';
-
-        }
-
         const radiologyData = await this.fetchData(); // Fetch data
         this.medicineData = radiologyData || [];
-        this.render();
 
-        this.isLoading = false;
-        this.page_shift = false;
-    }
-
-    render() {
-
-        if (this.medicineData.radiologyList && this.medicineData.radiologyList.length > 0) {
+        if (this.medicineData.categoryList && this.medicineData.categoryList.length > 0) {
             this.populateTable(this.medicineData);
         } else {
             this.displayNoDataMessage();
         }
 
+        this.isLoading = false;
+        this.page_shift = false;
     }
+
 
     populateTable(radiologyData) {
         const tableBody = this.main_component.querySelector('.table_body');
@@ -149,45 +120,44 @@ export class RadiologyExamsListView {
         this.total_page_num = radiologyData.pages;
 
 
-        radiologyData.radiologyList.forEach((test, index) => {
+        radiologyData.categoryList.forEach((category, index) => {
             const row = document.createElement('div');
             row.className = 'tr d_flex flex__c_a';
-            row.setAttribute('title', test.name);
+            row.setAttribute('title', category.name);
+            row.setAttribute('data_src', category.id);
 
             row.innerHTML = `
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-                    <p class="name">${test.name}</p>
-                    <p class="name">${test.category == null ? 'No Category' : test.category}</p>
-                    <p class="remain">${currency_formatter(test.price)}</p>
-                    <p class="status ${test.status == 'active' ? 'active' : 'inactive'}">${test.status}</p>
+                    <p class="name">${category.name}</p>
+                    <p class="name">${category.created_by == null ? 'Default' : category.created_by}</p>
+                    <p class="remain">${date_formatter(category.created_at)}</p>
+                    <p class="status">${category.tests}</p>
                     <div class="action d_flex flex__c_c">
-                        <button class="main_btn edit_price_btn">Edit</button>
+                        <button type="button" id="Delete_btn" class="main_btn error ${category.tests > 0 ? 'disabled' : ''}">Delete</button>
                     </div>
             `;
 
-            // add event listener to the edit price btn
-            row.querySelector('.edit_price_btn').addEventListener('click', () => {
-                dashboardController.createRadiologyExaminationPopUp.PreRender({
-                    id: test.id,
-                    name: test.name,
-                    category: test.category_id,
-                    price: test.price,
-                    status: test.status
-                });
-            });
 
-            // add event listener to the activate/deactivate btn
-            var activate_btn = row.querySelector('.activate_btn');
-            if (activate_btn) {
-                activate_btn.addEventListener('click', () => {
-                    console.log('activate btn clicked', test);
-                });
-            }
-
-            var deactivate_btn = row.querySelector('.deactivate_btn');
-            if (deactivate_btn) {
-                deactivate_btn.addEventListener('click', () => {
-                    console.log('deactivate btn clicked', test);
+            // Add event listener to delete button
+            const deleteBtn = row.querySelector('#Delete_btn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    
+                    if (deleteBtn.classList.contains('delete_active')) {
+                        this.row_to_delete = row;
+                        const categoryId = row.getAttribute('data_src');
+                        const categoryName = row.getAttribute('title');
+                        
+                        dashboardController.confirmDeletePopUpView.PreRender({
+                            callback: 'delete_radiology_category',
+                            data: categoryName,
+                            title: 'Category',
+                            params: categoryId
+                        });
+                    } else if (deleteBtn.classList.contains('delete_inactive')) {
+                        notify('top_left', 'Cannot delete category, it has exams assigned to it.', 'warning');
+                    }
                 });
             }
 
@@ -200,7 +170,7 @@ export class RadiologyExamsListView {
 
     async fetchData() {
         try {
-            const response = await fetch('/api/billing/search_radiology_test_on_billing', {
+            const response = await fetch('/api/radiology/search_radiology_category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -208,7 +178,6 @@ export class RadiologyExamsListView {
                 body: JSON.stringify({
                     query: this.searchTerm,
                     batch: this.batchNumber,
-                    category: this.category_value
                 })
             });
 
@@ -229,6 +198,7 @@ export class RadiologyExamsListView {
                 }, 500);
             }
 
+            console.log(result.data);
 
             return result.success ? result.data : null;
         } catch (error) {
@@ -237,46 +207,10 @@ export class RadiologyExamsListView {
             return null;
         }
     }
-
-    async fetchCategory() {
-        try {
-            const response = await fetch('/api/radiology/get_category', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-
-            return result.success ? result.data : null;
-        } catch (error) {
-            console.error('Error:', error);
-            notify('top_left', error.message, 'error');
-            return null;
-        }
-    }
-
+    
     async search_medicine(data) {
         this.loadingContent();
         this.searchTerm = data.query;
-        this.category_value = data.category;
         this.batchNumber = 1; // Reset to first batch on search
         this.page_shift = true;
         await this.fetchAndRenderData();
@@ -307,43 +241,6 @@ export class RadiologyExamsListView {
         this.total_page_num = 1;
     }
 
-    searchRadiologyView() {
-        return `
-        <br-form callback="radiology_search_exam_list">
-            <div class="medicine_content">
-                <br-input label="Test Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter exam name" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 400px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 12px;"></br-input>
-
-                
-                <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
-                                    border-radius: var(--input_main_border_r);
-                                    width: 400px;
-                                    padding: 10px;
-                                    height: 41px;
-                                    background-color: transparent;
-                                    border: 2px solid var(--input_border);
-                                    " labelStyles="font-size: 12px;">
-
-                                    ${this.category_elements}
-
-                    </br-select>
-        
-                <div class="med_btn_cont">
-                    <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
-                </div> 
-
-
-            </div>
-        </br-form>
-            `;
-    }
-
     loading_and_nodata_view() {
         this.main_component.querySelector('.table_body').innerHTML = `
         <div class="start_page deactivate">
@@ -367,9 +264,9 @@ export class RadiologyExamsListView {
 
             </div>
     <div class="search_containers">
-        <div>
+        <br-form callback="radiology_search_exam_list">
             <div class="medicine_content">
-                <br-input label="Exam Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter exam name" styles="
+                <br-input label="Test Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter category name" styles="
                             border-radius: var(--input_main_border_r);
                             width: 400px;
                             padding: 10px;
@@ -377,29 +274,14 @@ export class RadiologyExamsListView {
                             background-color: transparent;
                             border: 2px solid var(--input_border);
                             " labelStyles="font-size: 12px;"></br-input>
-
-                
-                <br-select search name="category" fontSize="13px" label="Category" value="${this.category_value}" placeholder="Select Category" styles="
-                                    border-radius: var(--input_main_border_r);
-                                    width: 400px;
-                                    padding: 10px;
-                                    height: 41px;
-                                    background-color: transparent;
-                                    border: 2px solid var(--input_border);
-                                    " labelStyles="font-size: 12px;">
-
-                                    ${this.category_elements}
-
-                    </br-select>
         
                 <div class="med_btn_cont">
                     <br-button loader_width="23" class="btn_next" type="submit" >Search</br-button>
                 </div> 
 
-                <div class="loader_cont active"><div class="loader"></div></div>
 
             </div>
-        </div>
+        </br-form>
     </div>
     
     </div>
@@ -417,9 +299,9 @@ export class RadiologyExamsListView {
             <div class="table_head tr d_flex flex__c_a">
                 <p class="id">SN</p>
                 <p class="name">Name</p>
-                <p class="name">Category</p>
-                <p class="remain">Price</p>
-                <p class="status">Status</p>
+                <p class="name">Created By</p>
+                <p class="remain">Created At</p>
+                <p class="status">Exams</p>
                 <div class="action"></div>
             </div>
     
@@ -446,4 +328,50 @@ export class RadiologyExamsListView {
     </div>
         `;
     }
+
+    async delete_category(id) {
+        dashboardController.loaderView.render();
+        try {
+            const response = await fetch('/api/radiology/delete_radiology_category', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+            if (result.success) {
+                this.row_to_delete.remove();
+                notify('top_left', result.message, 'success');
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        } finally {
+            dashboardController.loaderView.remove();
+        }
+    }
 }
+

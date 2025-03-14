@@ -46,7 +46,7 @@ const routes = {
     '/patient/activevisit': dashboardController.viewOnProgressView,
     '/patient/viewpatient/:id': dashboardController.singlePatientView,
     '/patient/activevisit/:id': dashboardController.singleVisitView,
-
+    '/patient/visithistory/:id': dashboardController.singleVisitHistoryView,
 
     '/pharmacy': dashboardController.viewMedicineView,
     '/pharmacy/viewpharmacyproducts': dashboardController.viewMedicineView,
@@ -70,6 +70,7 @@ const routes = {
     '/radiology/activevisits': dashboardController.viewActiveRadiologyListView,
     '/radiology/activevisits/:id': dashboardController.singleVisitRadiologyView,
     '/radiology/examslist': dashboardController.radiologyExamsListView,
+    '/radiology/examscategorylist': dashboardController.radiologyExamsCategoryListView,
 
     '/laboratory': dashboardController.viewActiveLaboratoryListView,
     '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView,

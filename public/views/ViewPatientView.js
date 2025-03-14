@@ -284,8 +284,6 @@ export class ViewPatientView {
 
                             <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
     
-    
-    
                     <div class="add_btn" title="Create Patient" id="open_add_patient_popup">
                         <span class="switch_icon_add"></span>
                     </div>

@@ -19,6 +19,12 @@ const ROUTE_CONFIG = {
     revert_radiology_order: 790,
     get_category: 950,
     update_radiology_test_price: 960,
+    create_examination: 1100,
+    update_examination: 1110,
+    search_radiology_category: 1120,
+    update_radiology_category: 1130,
+    create_radiology_category: 1140,
+    delete_radiology_category: 1150,
 };
 
 

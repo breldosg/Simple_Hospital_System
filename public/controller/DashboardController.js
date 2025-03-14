@@ -80,6 +80,9 @@ import { CreateInvoiceAndPayBillPopUpView } from "../popups/CreateInvoiceAndPayB
 import { UserProfileView } from "../views/UserProfileView.js";
 import { RadiologyExamsListView } from "../views/RadiologyExamsListView.js";
 import { LaboratoryTestListView } from "../views/LaboratoryTestListView.js";
+import { SingleVisitHistoryView } from "../views/SingleVisitHistoryView.js";
+import { CreateRadiologyExaminationPopUp } from "../popups/CreateRadiologyExaminationPopUp.js";
+import { RadiologyExamsCategoryListView } from "../views/RadiologyExamsCategoryListView.js";
 
 class DashboardController {
     // Loader View
@@ -118,6 +121,7 @@ class DashboardController {
     visitsAttachmentPopUpView = new VisitsAttachmentPopUpView();
     visitsRadiologyResultPopUpView = new VisitsRadiologyResultPopUpView();
     visitsLaboratoryResultPopUpView = new VisitsLaboratoryResultPopUpView();
+    singleVisitHistoryView = new SingleVisitHistoryView();
 
 
     // Patient Visit View Cards
@@ -165,6 +169,8 @@ class DashboardController {
     viewActiveRadiologyListView = new ViewActiveRadiologyListView();
     singleVisitRadiologyView = new SingleVisitRadiologyView();
     radiologyExamsListView = new RadiologyExamsListView();
+    createRadiologyExaminationPopUp = new CreateRadiologyExaminationPopUp();
+    radiologyExamsCategoryListView = new RadiologyExamsCategoryListView();
 
     // Billing Section
     viewActiveBillsListView = new ViewActiveBillsListView();

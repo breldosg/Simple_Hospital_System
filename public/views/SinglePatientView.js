@@ -7,22 +7,22 @@ export class SinglePatientView {
     constructor() {
         this.patient_id = null;
         this.patient_name = null;
-
+        this.currentPage = 1;
+        this.pageSize = 10;
+        this.hasMore = true;
     }
+
     async PreRender(params) {
-        // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
         this.main_container = document.querySelector('.single_patient_cont');
         this.patient_id = params.id;
-
 
         // Render patient detail component
         dashboardController.patientDetailComponent.PreRender({
@@ -32,66 +32,29 @@ export class SinglePatientView {
 
         // Now call render which will fetch data and populate it
         this.render();
+        this.addEventListeners();
     }
 
     async render() {
-        // Initialize properties
-        this.currentPage = 1;
-        this.pageSize = 10;
-        this.hasMore = true;
-
-        // Load sample data (for demonstration)
-        this.loadSampleVisits();
-
-        // Attach event listeners
-        // this.attach_listeners();
+        const visits = await this.fetchData();
+        if (visits) {
+            this.renderVisits(visits.visitsList);
+            this.hasMore = visits.batch < visits.pages;
+            this.attachLoadMoreListener();
+        }
     }
 
-    loadSampleVisits() {
-        const sampleVisits = [
-            {
-                visit_id: "V2023001",
-                visit_date: "2024-03-15",
-                doctor_name: "Dr. Sarah Wilson",
-                reason: "Regular checkup and blood pressure monitoring",
-                diagnosis: "Mild hypertension, prescribed lifestyle changes and medication adjustment",
-                status: "completed"
-            },
-            {
-                visit_id: "V2023002",
-                visit_date: "2024-03-10",
-                doctor_name: "Dr. James Rodriguez",
-                reason: "Persistent cough and fever",
-                diagnosis: "Upper respiratory tract infection, prescribed antibiotics",
-                status: "ongoing"
-            },
-            {
-                visit_id: "V2023003",
-                visit_date: "2024-03-05",
-                doctor_name: "Dr. Emily Chen",
-                reason: "Annual physical examination",
-                diagnosis: "Generally healthy, recommended increased physical activity",
-                status: "completed"
-            },
-            {
-                visit_id: "V2023004",
-                visit_date: "2024-02-28",
-                doctor_name: "Dr. Michael Brown",
-                reason: "Follow-up for diabetes management",
-                diagnosis: "Blood sugar levels stable, continuing current treatment plan",
-                status: "pending"
-            },
-            {
-                visit_id: "V2023005",
-                visit_date: "2024-02-20",
-                doctor_name: "Dr. Lisa Thompson",
-                reason: "Joint pain in right knee",
-                diagnosis: "Early signs of osteoarthritis, prescribed physical therapy",
-                status: "ongoing"
-            }
-        ];
-
-        this.renderVisits(sampleVisits);
+    addEventListeners() {
+        const dateRangePicker = this.main_container.querySelector('br-date-range-picker');
+        const btn_search = this.main_container.querySelector('.btn_search');
+        
+        btn_search.addEventListener('click', () => {
+            const fromDate = dateRangePicker.startDate;
+            const toDate = dateRangePicker.endDate;
+            
+            console.log('From:', fromDate);
+            console.log('To:', toDate);
+        });
     }
 
     ViewReturn() {
@@ -100,19 +63,31 @@ export class SinglePatientView {
     <div class="visit_list">
         <div class="visit_list_top_part">
             <p class="heading">Visit History</p>
-            
+
+            <div class="date_range_picker_container">
+                <div class="date_range_picker_container_inner">
+                    <br-date-range-picker 
+                        mode="range" 
+                        placeholder="Select Date Range" 
+                        locale="en-US"
+                        theme="light"
+                    ></br-date-range-picker>
+                </div>
+                <br-button loader_width="23" class="btn_search" type="submit">
+                    <span class="switch_icon_magnifying_glass"></span>
+                </br-button>
+            </div>
         </div>
 
         <div class="visit_list_bottom_part">
             <div class="timeline">
-
                 <!-- Visits timeline will be populated here -->
             </div>
-            <div class="load_more_container">
+            <div class="load_more_container" style="display: none;">
                 <button class="load_more_btn">Load More</button>
             </div>
             <div class="no_visits_message" style="display: none;">
-                No visits found in the selected date range
+                No visits found
             </div>
         </div>
     </div>
@@ -120,46 +95,39 @@ export class SinglePatientView {
 `;
     }
 
-    // attach_listeners() {
-    //     const searchBtn = document.querySelector('.search_btn');
-    //     const loadMoreBtn = document.querySelector('.load_more_btn');
-    //     const exportCsvBtn = document.querySelector('.export_csv');
-    //     const exportPdfBtn = document.querySelector('.export_pdf');
+    attachLoadMoreListener() {
+        const loadMoreBtn = document.querySelector('.load_more_btn');
+        const loadMoreContainer = document.querySelector('.load_more_container');
 
-    //     searchBtn.addEventListener('click', () => {
-    //         const fromDate = document.querySelector('.from_date').value;
-    //         const toDate = document.querySelector('.to_date').value;
-    //         this.currentPage = 1;
-    //         this.loadVisits(fromDate, toDate);
-    //     });
+        if (this.hasMore) {
+            loadMoreContainer.style.display = 'flex';
+            loadMoreBtn.addEventListener('click', async () => {
+                this.currentPage++;
+                const newVisits = await this.fetchData();
+                if (newVisits) {
+                    this.renderVisits(newVisits.visitsList);
+                    this.hasMore = newVisits.batch < newVisits.pages;
+                    if (!this.hasMore) {
+                        loadMoreContainer.style.display = 'none';
+                    }
+                }
+            });
+        } else {
+            loadMoreContainer.style.display = 'none';
+        }
+    }
 
-    //     loadMoreBtn.addEventListener('click', () => {
-    //         this.currentPage++;
-    //         const fromDate = document.querySelector('.from_date').value;
-    //         const toDate = document.querySelector('.to_date').value;
-    //         this.loadVisits(fromDate, toDate);
-    //     });
-
-    //     // document.querySelector('.visits_grid').addEventListener('click', (e) => {
-    //     //     if (e.target.classList.contains('view_details_btn')) {
-    //     //         const visitId = e.target.dataset.visitId;
-    //     //         this.showVisitDetails(visitId);
-    //     //     }
-    //     // });
-
-    //     exportCsvBtn.addEventListener('click', () => this.exportData('csv'));
-    //     exportPdfBtn.addEventListener('click', () => this.exportData('pdf'));
-    // }
-
-    async fetchData(id) {
+    async fetchData() {
         try {
-            const response = await fetch('/api/patient/single_patient', {
+            const response = await fetch('/api/patient/search_list_of_patient_visit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    patient_id: id,
+                    patient_id: this.patient_id,
+                    page: this.currentPage,
+                    limit: this.pageSize
                 })
             });
 
@@ -180,8 +148,6 @@ export class SinglePatientView {
                 }, 500);
             }
 
-
-
             if (result.success) {
                 return result.data;
             } else {
@@ -194,210 +160,89 @@ export class SinglePatientView {
         }
     }
 
-    style() {
-        return `
-        .single_patient_cont {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px;
-            overflow: auto;
-
-            .visit_list {
-                width: 100%;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-
-                .timeline {
-                    position: relative;
-                    padding: 20px;
-                    padding-left: 40px;
-
-                    &:before {
-                        content: '';
-                        position: absolute;
-                        left: 20px;
-                        top: 0;
-                        bottom: 0;
-                        width: 2px;
-                        background: #e0e0e0;
-                    }
-
-                    .timeline-item {
-                        position: relative;
-                        margin-bottom: 30px;
-                        
-                        .timeline-dot {
-                            position: absolute;
-                            left: -34px;
-                            width: 20px;
-                            height: 20px;
-                            border-radius: 50%;
-                            background: white;
-                            border: 2px solid;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            &.completed { border-color: #2e7d32; }
-                            &.ongoing { border-color: #ef6c00; }
-                            &.pending { border-color: #616161; }
-
-                            i {
-                                font-size: 8px;
-                                &.completed { color: #2e7d32; }
-                                &.ongoing { color: #ef6c00; }
-                                &.pending { color: #616161; }
-                            }
-                        }
-
-                        .timeline-date {
-                            font-size: 0.9em;
-                            color: #666;
-                            margin-bottom: 8px;
-                            i {
-                                margin-right: 5px;
-                            }
-                        }
-
-                        .timeline-content {
-                            background: white;
-                            border-radius: 8px;
-                            padding: 15px;
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                            border: 1px solid #eee;
-
-                            .timeline-header {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                margin-bottom: 10px;
-
-                                .visit-id {
-                                    font-weight: 600;
-                                    color: #444;
-                                }
-
-                                .status-badge {
-                                    padding: 4px 12px;
-                                    border-radius: 12px;
-                                    font-size: 12px;
-                                    
-                                    &.completed { 
-                                        background: #e8f5e9; 
-                                        color: #2e7d32; 
-                                    }
-                                    &.ongoing { 
-                                        background: #fff3e0; 
-                                        color: #ef6c00; 
-                                    }
-                                    &.pending { 
-                                        background: #f5f5f5; 
-                                        color: #616161; 
-                                    }
-                                }
-                            }
-
-                            .timeline-body {
-                                .doctor-info {
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 8px;
-                                    color: #666;
-                                    margin-bottom: 10px;
-                                }
-
-                                .visit-info {
-                                    margin: 15px 0;
-
-                                    .reason, .diagnosis {
-                                        margin-bottom: 10px;
-
-                                        label {
-                                            font-weight: 500;
-                                            color: #444;
-                                            margin-bottom: 4px;
-                                            display: block;
-                                        }
-
-                                        p {
-                                            color: #666;
-                                            font-size: 0.9em;
-                                            line-height: 1.4;
-                                        }
-                                    }
-                                }
-
-                                .view_details_btn {
-                                    padding: 8px 16px;
-                                    border: none;
-                                    border-radius: 6px;
-                                    background: var(--primary-color);
-                                    color: white;
-                                    cursor: pointer;
-                                    transition: background 0.2s ease;
-
-                                    &:hover {
-                                        background: var(--primary-color-dark);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    `;
-    }
-
     renderVisits(visits) {
         const timeline = document.querySelector('.timeline');
-        const visitsHTML = visits.map(visit => `
-            <div class="timeline-item">
+        const noVisitsMessage = document.querySelector('.no_visits_message');
+
+        if (!visits || visits.length === 0) {
+            timeline.innerHTML = '';
+            noVisitsMessage.style.display = 'block';
+            return;
+        }
+
+        noVisitsMessage.style.display = 'none';
+        
+        // Clear existing content if it's first page
+        if (this.currentPage === 1) {
+            timeline.innerHTML = '';
+        }
+
+        visits.forEach(visit => {
+            // Create main timeline item container
+            const timelineItem = document.createElement('div');
+            timelineItem.className = 'timeline-item';
+            timelineItem.setAttribute('data-visit-id', visit.id);
+
+            // Add click event to the entire card
+            timelineItem.addEventListener('click', () => {
+                this.handleVisitClick(visit);
+            });
+
+            timelineItem.innerHTML = `
                 <div class="timeline-dot-container">
-                    <div class="timeline-dot ${visit.status == 'completed' ?'active':''}"></div>
+                    <div class="timeline-dot ${visit.status}"></div>
                 </div>
                 <div class="timeline-date">
-                    
-                    <p>${date_formatter(new Date(visit.visit_date))}</p>
+                    <p>${date_formatter(new Date(visit.created_at))}</p>
                 </div>
                 <div class="timeline-content">
                     <div class="timeline-header">
-                        <p class="visit-id">#${visit.visit_id}</p>
-                        ${
-                            visit.status == 'completed' ? `
-                                <span class="status-badge completed">Active</span>
-                            ` : ''
+                        <p class="visit-id">#${visit.id}</p>
+                        ${visit.status == 'active' ? 
+                            `<span class="status-badge active">Current Visit</span>` 
+                            : ''
                         }
                     </div>
                     <div class="timeline-body">
                         <div class="doctor-info">
+                            <span class='switch_icon_user_doctor'></span>
                             <p class="doctor-name">${visit.doctor_name}</p>
                         </div>
                         <div class="visit-info">
-                            <div class="reason">
-                                <p class="label">Reason:</p>
-                                <p class="text">${visit.reason}</p>
+                            <div class="department">
+                                <p class="label">Department:</p>
+                                <p>${visit.department_name}</p>
                             </div>
                             <div class="diagnosis">
-                                <p class="label">Diagnosis:</p>
-                                <p class="text">${visit.diagnosis || '-'}</p>
+                                <p class="label">Final Diagnosis:</p>
+                                <p>${visit.final_diagnosis || '-'}</p>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
 
-        if (this.currentPage === 1) {
-            timeline.innerHTML = visitsHTML;
-        } else {
-            timeline.insertAdjacentHTML('beforeend', visitsHTML);
-        }
+            // Add hover effect class
+            timelineItem.classList.add('timeline-item-hoverable');
+
+            // Append the timeline item to the timeline
+            timeline.appendChild(timelineItem);
+        });
     }
 
+    // Add the handler for visit clicks
+    handleVisitClick(visit) {
+        console.log('Visit clicked:', visit);
+        // You can navigate to visit details or show a modal here
+        // For example:
+        // frontRouter.navigate(`/visit/${visit.id}`);
+        // or
+        // this.showVisitDetails(visit);
+        frontRouter.navigate('/patient/visithistory/' + visit.id);
+        // dashboardController.singleVisitHistoryView.PreRender({
+        //     container: this.main_container,
+        //     visit_id: visit.id,
+        //     patient_id: this.patient_id,
+        // })
+    }
 }
