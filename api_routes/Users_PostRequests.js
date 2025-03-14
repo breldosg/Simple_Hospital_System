@@ -15,7 +15,10 @@ const ROUTE_CONFIG = {
     change_user_account_state: 320,
 
     // System Data
-    first_data: 170
+    first_data: 170,
+
+    // User Profile
+    get_staff_profile: 1130
 };
 
 

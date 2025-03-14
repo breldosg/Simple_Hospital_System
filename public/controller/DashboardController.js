@@ -1,8 +1,6 @@
 // import { staffListView } from "../views/StaffListView.js";
 
 import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
-import { AddPatientView } from "../views/AddPatientView.js";
-import { AddUserView } from "../views/AddUserView.js";
 import { AttendanceView } from "../views/AttendanceView.js";
 import { ConfirmDeletePopUpView } from "../popups/ConfirmDeletePopUpView.js";
 import { CreateProductPopUpView } from "../popups/CreateProductPopUpView.js";
@@ -83,8 +81,14 @@ import { LaboratoryTestListView } from "../views/LaboratoryTestListView.js";
 import { SingleVisitHistoryView } from "../views/SingleVisitHistoryView.js";
 import { CreateRadiologyExaminationPopUp } from "../popups/CreateRadiologyExaminationPopUp.js";
 import { RadiologyExamsCategoryListView } from "../views/RadiologyExamsCategoryListView.js";
-
+import { AddPatientViewPopup } from "../popups/AddPatientViewPopup.js";
+import { DashboardView } from "../views/DashboardView.js";
+import { AddUserViewPopup } from "../popups/AddUserViewPopup.js";
 class DashboardController {
+
+    // Dashboard View   
+    dashboardView = new DashboardView();
+
     // Loader View
     loaderView = new LoaderView();
     confirmDeletePopUpView = new ConfirmDeletePopUpView();
@@ -92,17 +96,18 @@ class DashboardController {
 
     // Staff Views
     staffListView = new StaffListView();
-    addUserView = new AddUserView();
     attendanceView = new AttendanceView();
     userProfileView = new UserProfileView();
+    addUserViewPopup = new AddUserViewPopup();
 
+    
     // Patient Views
     viewPatientView = new ViewPatientView();
-    addPatientView = new AddPatientView();
     singlePatientView = new SinglePatientView();
     createVisitPopUpView = new CreateVisitPopUpView();
     viewOnProgressView = new ViewOnProgressView();
     patientDetailComponent = new PatientDetailComponent();
+    addPatientViewPopup = new AddPatientViewPopup();
 
     //Patient Visit
     singleVisitView = new SingleVisitView();

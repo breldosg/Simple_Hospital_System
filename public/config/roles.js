@@ -11,8 +11,8 @@ export const ROLES = {
             {
                 type: '/patient',
                 choices: [
-                    { label: 'View Patient', href: '/patient/viewpatient' },
-                    { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    { label: 'View All Patient', href: '/patient/viewpatient' },
+                    { label: 'Active Visits', href: '/patient/activevisit' }
                 ]
             },
             {
@@ -24,6 +24,29 @@ export const ROLES = {
         ]
     },
 
+    // Receptionist role
+    RPT: {
+        name: 'Receptionist',
+        navItems: [
+            { label: 'Patients', link: '/patient' },
+            { label: 'Notice', link: '/notice' }
+        ],
+        navigationSections: [
+            {
+                type: '/patient',
+                choices: [
+                    { label: 'View All Patient', href: '/patient/viewpatient' },
+                    { label: 'Active Visits', href: '/patient/activevisit' }
+                ]
+            },
+            {
+                type: '/notice',
+                choices: [
+                    { label: 'View All notice', href: '/notice/viewnotice' }
+                ]
+            }
+        ]
+    },
     // Nurse role
     NRS: {
         name: 'Nurse',
@@ -35,8 +58,8 @@ export const ROLES = {
             {
                 type: '/patient',
                 choices: [
-                    { label: 'View Patient', href: '/patient/viewpatient' },
-                    { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    { label: 'View All Patient', href: '/patient/viewpatient' },
+                    { label: 'Active Visits', href: '/patient/activevisit' }
                 ]
             },
             {
@@ -66,16 +89,14 @@ export const ROLES = {
                 type: '/users',
                 choices: [
                     { label: 'User List', href: '/users/userlist' },
-                    { label: 'Add User', href: '/users/adduser' },
                     { label: 'Attendance', href: '/users/attendance' }
                 ]
             },
             {
                 type: '/patient',
                 choices: [
-                    { label: 'View Patient', href: '/patient/viewpatient' },
-                    { label: 'Add Patient', href: '/patient/addpatient' },
-                    { label: 'On Progress Visits', href: '/patient/activevisit' }
+                    { label: 'View All Patient', href: '/patient/viewpatient' },
+                    { label: 'Active Visits', href: '/patient/activevisit' }
                 ]
             },
             {
@@ -131,7 +152,7 @@ export const ROLES = {
     },
 
     // Pharmacist role
-    RPT: {
+    RMS: {
         name: 'Pharmacist',
         navItems: [
             { label: 'Pharmacy', link: '/pharmacy' },
@@ -174,7 +195,7 @@ export const ROLES = {
             {
                 type: '/laboratory',
                 choices: [
-                    { label: 'Active Visits', href: '/laboratory/activevisits'},
+                    { label: 'Active Visits', href: '/laboratory/activevisits' },
                     { label: 'Test List', href: '/laboratory/testlist' },
                 ]
             },
@@ -235,4 +256,29 @@ export const ROLES = {
             }
         ]
     }
-}; 
+};
+
+// Role definitions for ViewPatientView btns and actions
+export const VIEW_PATIENT_BTNS = {
+    DCT: {
+        btn_role: ['view_visit', 'view_patient'],
+        btn_action: ['view_visit', 'view_patient']
+    },
+    NRS: {
+        btn_role: ['view_visit', 'view_patient'],
+        btn_action: ['view_visit', 'view_patient']
+    },
+    RPT: {
+        btn_role: ['create_visit', 'checkout', 'view_patient'],
+        btn_action: ['view_patient']
+    },
+    ICT: {
+        btn_role: ['view_visit', 'create_visit', 'checkout', 'view_patient'],
+        btn_action: ['view_visit', 'view_patient']
+    }
+}
+
+export const ALLOW_TO_ADD_PATIENT = ['ICT', 'RPT'];
+export const ALLOW_TO_ADD_VISIT = ['ICT', 'RPT'];
+export const ALLOW_TO_CHECKOUT = ['ICT', 'RPT'];
+

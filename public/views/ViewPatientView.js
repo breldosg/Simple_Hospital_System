@@ -1,3 +1,4 @@
+import { ALLOW_TO_ADD_PATIENT, VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, decodeHTML, notify } from "../script/index.js";
@@ -12,6 +13,7 @@ export class ViewPatientView {
         this.show_count_num = 0; // Keep track of current batch
         this.searchTerm = '';  // Store the current search term
         window.checkout_request = this.checkout_request.bind(this);
+
     }
 
     async PreRender() {
@@ -22,8 +24,14 @@ export class ViewPatientView {
         }
 
 
+        // get user role in global state
+        this.user_data = globalStates.getState('user_data');
+
+
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
+
+        this.main_container = document.querySelector('.outpatient_table_out');
 
         // Fetch the initial batch of Patient data
         await this.fetchAndRenderData();
@@ -32,7 +40,7 @@ export class ViewPatientView {
 
     attachEventListeners() {
         // Search input event listener
-        const searchInput = document.querySelector('.search_cont input');
+        const searchInput = this.main_container.querySelector('.search_cont input');
         searchInput.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter') {
                 this.searchTerm = searchInput.value;
@@ -41,8 +49,22 @@ export class ViewPatientView {
             }
         });
 
+        const searchBtn = this.main_container.querySelector('.btn_search');
+        searchBtn.addEventListener('click', async () => {
+            this.searchTerm = searchInput.value;
+            this.batchNumber = 1; // Reset to batch 1 when searching
+            await this.fetchAndRenderData();
+        });
+
+        const add_patient = this.main_container.querySelector('#open_add_patient_popup');
+        if (add_patient) {
+            add_patient.addEventListener('click', () => {
+                dashboardController.addPatientViewPopup.PreRender();
+            });
+        }
+
         // Pagination buttons
-        document.querySelector('.main_btn.next').addEventListener('click', async () => {
+        this.main_container.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
                 await this.fetchAndRenderData();
@@ -51,7 +73,7 @@ export class ViewPatientView {
             // await this.fetchAndRenderData();
         });
 
-        document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+        this.main_container.querySelector('.main_btn.prev').addEventListener('click', async () => {
             if (this.batchNumber > 1) {
                 this.batchNumber -= 1;
                 await this.fetchAndRenderData();
@@ -73,28 +95,28 @@ export class ViewPatientView {
         if (this.PatientData.PatientList && this.PatientData.PatientList.length > 0) {
             this.populateTable(this.PatientData);
         } else {
-            const show_count = document.querySelector('.show_count');
-            const total_data = document.querySelector('.total_data');
-            const total_page = document.querySelector('.total_page');
+            const show_count = this.main_container.querySelector('.show_count');
+            const total_data = this.main_container.querySelector('.total_data');
+            const total_page = this.main_container.querySelector('.total_page');
             show_count.innerText = 0;
             total_data.innerText = 0;
             total_page.innerText = 1;
             this.total_page_num = 1;
             this.show_count_num = 0;
             this.total_data_num = 0;
-            document.querySelector('.start_page').style.display = 'flex'; // No data message
+            this.main_container.querySelector('.start_page').style.display = 'flex'; // No data message
         }
-        document.querySelector('.loader_cont').classList.remove('active');
+        // this.main_container.querySelector('.loader_cont').classList.remove('active');
     }
 
     populateTable(PatientData) {
-        const tableBody = document.querySelector('.table_body');
+        const tableBody = this.main_container.querySelector('.table_body');
         tableBody.innerHTML = ''; // Clear table before populating
 
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
-        const current_page = document.querySelector('.current_page');
+        const show_count = this.main_container.querySelector('.show_count');
+        const total_data = this.main_container.querySelector('.total_data');
+        const total_page = this.main_container.querySelector('.total_page');
+        const current_page = this.main_container.querySelector('.current_page');
 
         show_count.innerText = PatientData.showData;
         total_data.innerText = PatientData.total;
@@ -104,9 +126,17 @@ export class ViewPatientView {
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
 
-        var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error co_visit">CheckOut</button>';
-        var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn v_visit">View Visit</button>';
-        var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn c_visit">Create Visit</button>';
+
+        var buttons = {
+            checkout: '<button type="button" id="checkOut_btn" class="main_btn error co_visit">CheckOut</button>',
+            view_visit: '<button type="button" id="viewVisit_btn" class="main_btn v_visit">View Visit</button>',
+            create_visit: '<button type="button" id="createVisit_btn" class="main_btn c_visit">Create Visit</button>',
+            view_patient: '<button type="button" id="viewPatient_btn" class="main_btn v_patient">View Patient</button>'
+        }
+
+
+        const allowed_btns = VIEW_PATIENT_BTNS[this.user_data.role].btn_role;
+
 
         PatientData.PatientList.forEach((patient, index) => {
             const row = document.createElement('div');
@@ -122,6 +152,7 @@ export class ViewPatientView {
                 var date = '';
             }
 
+
             row.innerHTML = `
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                     <p class="name">${patient.name}</p>
@@ -130,7 +161,10 @@ export class ViewPatientView {
                     <p class="name">${patient.created_by}</p>
                     <p class="date">${date}</p>
                     <div class="action d_flex flex__c_c">
-                        ${patient.visit_status === 'active' ? view_visit_btn + checkout_btn : create_visit_btn}
+                            ${patient.visit_status === 'active' ?
+                    (allowed_btns.includes('view_visit') ? buttons.view_visit : '') +
+                    (allowed_btns.includes('checkout') ? buttons.checkout : '') :
+                    allowed_btns.includes('create_visit') ? buttons.create_visit : buttons.view_patient}
                     </div>
             `;
 
@@ -226,7 +260,7 @@ export class ViewPatientView {
     }
 
     loadingContent() {
-        const tableBody = document.querySelector('.outpatient_table_out .table_body');
+        const tableBody = this.main_container.querySelector('.table_body');
         tableBody.innerHTML = `
     <div class="start_page deactivate">
         <p>No Patient Found</p>
@@ -282,11 +316,14 @@ export class ViewPatientView {
                 <h4>Patient List</h4>
                 <div class="search_cont">
 
-                            <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+                    <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                            <span class="switch_icon_magnifying_glass"></span>
+                    </br-button>
     
-                    <div class="add_btn" title="Create Patient" id="open_add_patient_popup">
-                        <span class="switch_icon_add"></span>
-                    </div>
+                    ${ALLOW_TO_ADD_PATIENT.includes(this.user_data.role) ?
+                '<div class="add_btn" title="Create Patient" id="open_add_patient_popup"> <span class="switch_icon_add"></span></div>' : ''}
                 </div>
             </div>
             <div class="outpatient_table">
@@ -323,73 +360,3 @@ export class ViewPatientView {
     }
 }
 
-
-// ViewReturn() {
-//     return `
-//     <div class="main_section outpatient_table_out">
-//         <div class="in_table_top d_flex flex__u_b">
-//             <h4>Patient List</h4>
-//             <div class="search_cont">
-//                 <!-- <div class="input_search">
-//                         <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
-
-//                     </div> -->
-
-//                 <br-form  callback="Search_medicine_and_consumable_on_place_order_popupo">
-//                     <div class="input_search close">
-//                         <br-input placeholder="Search by name or id" name="query" type="text" styles="
-//                     border-radius: var(--input_main_border_r);
-//                     width: 350px;
-//                     padding: 10px;
-//                     height: 41px;
-//                     background-color: transparent;
-//                     border: 2px solid var(--input_border);
-//                     margin
-//                     " labelStyles="font-size: 12px;"></br-input>
-
-
-//                         <br-button title="Search Patient" loader_width="23" class="btn_search" type="submit">
-//                             <span class='switch_icon_magnifying_glass'></span>
-//                         </br-button>
-
-
-//                     </div>
-//                 </br-form>
-
-//                 <div class="add_btn" title="Create Patient" id="open_add_patient_popup">
-//                     <span class="switch_icon_add"></span>
-//                 </div>
-//             </div>
-//         </div>
-//         <div class="outpatient_table">
-//             <div class="table_head tr d_flex flex__c_a">
-//                 <p class="id">SN</p>
-//                 <p class="name">Name</p>
-//                 <p class="gender">Gender</p>
-//                 <p class="phone">Phone Number</p>
-//                 <p class="name">Created By</p>
-//                 <p class="date">Created Date</p>
-//                 <div class="action"></div>
-//             </div>
-//             <div class="table_body d_flex flex__co">
-//                 <div class="start_page deactivate">
-//                     <p>No Patient Found</p>
-//                 </div>
-//                 <div class="loader_cont active">
-//                     <div class="loader"></div>
-//                 </div>
-//             </div>
-//             <div class="table_footer d_flex flex__e_b">
-//                 <p>Show <span class='show_count'>${this.show_count_num}</span> data of <span
-//                         class="total_data">${this.total_data_num}</span></p>
-//                 <div class="pagenation d_flex flex__c_c">
-//                     <button type="button" class="main_btn prev">Prev</button>
-//                     <p class="page_no d_flex flex__c_c"><span class="current_page">${this.batchNumber}</span>/<span
-//                             class="total_page">${this.total_page_num}</span></p>
-//                     <button type="button" class="main_btn next">Next</button>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-//     `;
-//     }

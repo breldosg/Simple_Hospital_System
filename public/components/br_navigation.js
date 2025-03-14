@@ -32,6 +32,7 @@ export class BrCustomNavigation extends HTMLElement {
         return `
             <div class="top">
                 <div class="nav_cont">
+                    <a href="/dashboard" link="/dashboard" data-link class="nav_item"><span class='switch_icon_home'></span></a>
                     ${this.createMainNavItems(this.getAttribute('role_id'))}
                 </div>
                 <div class="staff_cont" id="user_profile">
@@ -74,14 +75,14 @@ export class BrCustomNavigation extends HTMLElement {
 
     createNavigationChoices(roleId) {
         const role = ROLES[roleId] || { navigationSections: [] };
-        
+
         return `
             <div class="choice_collection">
                 ${role.navigationSections.map(section => `
                     <div class="nav_collection ${section.type === '/users' ? 'active' : ''}" type="${section.type}">
                         ${section.choices.map(choice =>
-                            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
-                        ).join('')}
+            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
+        ).join('')}
                     </div>
                 `).join('')}
             </div>
@@ -317,8 +318,10 @@ export class BrCustomNavigation extends HTMLElement {
         const links = this.shadowRoot.querySelectorAll('a');
 
         links.forEach(link => {
+ 
             link.addEventListener('click', (e) => {
-                if (e.target.tagName.toLowerCase() === 'a' && e.target.hasAttribute('data-link')) {
+
+                if (link.hasAttribute('data-link')) {
                     e.preventDefault();
                     links.forEach(rLink => {
                         rLink.classList.remove('active');
@@ -396,6 +399,7 @@ export class BrCustomNavigation extends HTMLElement {
         pathParts.shift(); // remove empty string at the beginning
 
         navs.forEach(nav => {
+            
             const navPath = nav.getAttribute('link').toLowerCase();
 
             if (navPath === '/' + pathParts[0]) {
@@ -452,7 +456,7 @@ export class BrCustomNavigation extends HTMLElement {
         // Set initial theme from localStorage or OS preference
         const savedTheme = localStorage.getItem('theme');
         let theme;
-        
+
         if (savedTheme) {
             theme = savedTheme;
         } else {
@@ -460,7 +464,7 @@ export class BrCustomNavigation extends HTMLElement {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 theme = 'dark_mode';
             } else {
-                theme = 'light_mode'; 
+                theme = 'light_mode';
             }
             localStorage.setItem('theme', theme);
         }
@@ -487,7 +491,7 @@ export class BrCustomNavigation extends HTMLElement {
 
             const result = await response.json();
 
-            console.log(result);
+ 
 
 
             if (result.status == 401) {

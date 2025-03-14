@@ -48,6 +48,7 @@ export class BrCustomInput extends HTMLElement {
     render() {
         let type = this.getAttribute('type') || 'text';
         type = type == 'tel' ? 'number' : type;
+        type = type == 'ST_password' ? 'password' : type;
         const placeholder = this.hasAttribute('placeholder') ? `placeholder="${this.getAttribute('placeholder')}"` : '';
         const value = this.hasAttribute('value') ? `value="${this.getAttribute('value')}"` : '';
         const required = this.hasAttribute('required') ? 'required' : '';
@@ -257,6 +258,9 @@ export class BrCustomInput extends HTMLElement {
                 isValid = value.trim() !== '';
                 break;
             case 'password':
+                isValid = value.length >= 8 // Minimum length
+                break;
+            case 'ST_password':
                 // Password validation rules
                 isValid = value.length >= 8 && // Minimum length
                     /[A-Z]/.test(value) && // At least one uppercase letter

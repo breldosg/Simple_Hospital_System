@@ -1,32 +1,29 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { getCurrentDate, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class AddPatientView {
+export class AddPatientViewPopup {
     constructor() {
         window.register_patient = this.register_patient.bind(this)
     }
 
     async PreRender() {
+        // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.render();
-    }
-
-    render() {
-        const cont = document.querySelector('.update_cont');
-
+        const cont = document.querySelector('.popup');
+        cont.classList.add('active');
         cont.innerHTML = this.ViewReturn();
 
     }
 
-
     ViewReturn() {
         return `
-<div class="container add_patient">
+<div class="container add_patient_popup">
     <!-- <div class="top_bars">
                         <div class="bar active">
                             <p class="num">1</p>
@@ -123,6 +120,7 @@ export class AddPatientView {
 
 
                 <div class="btn_cont">
+                    <br-button loader_width="23" class="btn_next cancel" type="cancel" >Cancel</br-button>
                     <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
                 </div>
 
@@ -134,7 +132,6 @@ export class AddPatientView {
 </div>
 `;
     }
-
 
     async register_patient(data) {
         const btn_submit = document.querySelector('br-button[type="submit"]');
@@ -170,10 +167,12 @@ export class AddPatientView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                frontRouter.navigate(`/patient/viewpatient/${result.data.patient_file_number}`);
+                this.close()
+                dashboardController.viewPatientView.fetchAndRenderData();
             } else {
                 notify('top_left', result.message, 'warning');
             }
+
         } catch (error) {
             console.error('Error:', error);
             notify('top_left', error.message, 'error');
@@ -183,7 +182,10 @@ export class AddPatientView {
         }
     }
 
+    close() {
+        const cont = document.querySelector('.popup');
+        cont.classList.remove('active');
+        cont.innerHTML = '';
+    }
 
 }
-
-// export const staffListView = new StaffListView();

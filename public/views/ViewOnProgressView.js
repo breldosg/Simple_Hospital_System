@@ -1,3 +1,4 @@
+import { VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
@@ -40,6 +41,13 @@ export class ViewOnProgressView {
             }
         });
 
+        const searchBtn = document.querySelector('.btn_search');
+        searchBtn.addEventListener('click', async () => {
+            this.searchTerm = searchInput.value;
+            this.batchNumber = 1; // Reset to batch 1 when searching
+            await this.fetchAndRenderData();
+        });
+
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (this.batchNumber < this.total_page_num) {
@@ -58,75 +66,7 @@ export class ViewOnProgressView {
         });
     }
 
-    row_listener() {
-        // listeners for each row
-        const rows = document.querySelectorAll('.table_body .tr');
-        rows.forEach((row) => {
-            row.addEventListener('click', async () => {
-                const patientId = row.getAttribute('data_src');
-                frontRouter.navigate('/patient/viewpatient/' + patientId);
-            })
 
-            row.querySelector('#viewVisit_btn').addEventListener('click', async (event) => {
-                event.stopPropagation();
-                const v_Id = row.getAttribute('data_src_v');
-
-                frontRouter.navigate('/patient/activevisit/' + v_Id);
-            });
-        });
-
-        const createVisit_btn = document.querySelectorAll('#createVisit_btn');
-
-        createVisit_btn.forEach(btn => {
-            btn.addEventListener('click', async (event) => {
-                // disable propagation
-                event.stopPropagation();
-
-                // get the btn closest with class tr
-                const btnParent = btn.closest('.tr');
-                const patientId = btnParent.getAttribute('data_src');
-                const patientName = btnParent.getAttribute('title');
-
-                dashboardController.createVisitPopUpView.PreRender(
-                    {
-                        id: patientId,
-                        p_name: patientName,
-                    })
-
-            })
-        });
-
-        const checkOut_btn = document.querySelectorAll('#checkOut_btn');
-
-        checkOut_btn.forEach(btn => {
-            btn.addEventListener('click', async (event) => {
-                // disable propagation
-                event.stopPropagation();
-                // Get the btn closest with class tr
-                const btnParent = btn.closest('.tr');
-                const patientId = btnParent.getAttribute('data_src');
-
-                dashboardController.loaderView.render();
-
-                const checkOut_response = await this.checkout_request(patientId);
-
-                if (checkOut_response.success) {
-                    notify('top_left', checkOut_response.message, 'success');
-                    await this.fetchAndRenderData();
-
-                } else {
-                    notify('top_left', checkOut_response.message, 'error');
-                }
-
-                dashboardController.loaderView.remove();
-
-
-            })
-        });
-
-
-
-    }
 
     async fetchAndRenderData() {
         const cont = document.querySelector('.update_cont');
@@ -175,29 +115,92 @@ export class ViewOnProgressView {
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
 
-        var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
-        var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
-        var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
+        // var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
+        // var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
+        // var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
+
+        var buttons = {
+            checkout: '<button type="button" id="checkOut_btn" class="main_btn co_visit error">CheckOut</button>',
+            view_visit: '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>',
+            create_visit: '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>',
+            view_patient: '<button type="button" id="viewPatient_btn" class="main_btn v_patien">View Patient</button>'
+        }
+
+        // get user role in global state
+        var user_data = globalStates.getState('user_data');
+
+        const allowed_btns = VIEW_PATIENT_BTNS[user_data.role].btn_role;
+        const allowed_actions = VIEW_PATIENT_BTNS[user_data.role].btn_action;
+
 
 
         PatientData.VisitList.forEach((patient, index) => {
-            const row = `
-                <div class="tr d_flex flex__c_a" data_src="${patient.patient_id}" data_src_v="${patient.id}"" title="${patient.patient_name}">
-                    <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
-                    <p class="name">${patient.patient_name}</p>
-                    <p class="gender">${patient.stage}</p>
-                    <p class="name">${patient.doctor_name}</p>
-                    <p class="phone">${patient.created_by}</p>
-                    <p class="date">${patient.department_name}</p>
-                    <div class="action d_flex flex__c_c">
-                        ${patient.visit_status === 'active' ? view_visit_btn + checkout_btn : create_visit_btn}
-                    </div>
+            const rowDiv = document.createElement('div');
+            rowDiv.className = "tr d_flex flex__c_a";
+            rowDiv.setAttribute('data_src', patient.patient_id);
+            rowDiv.setAttribute('data_src_v', patient.id);
+            rowDiv.setAttribute('title', patient.patient_name);
+
+            rowDiv.innerHTML = `
+                <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
+                <p class="name">${patient.patient_name}</p>
+                <p class="gender">${patient.stage}</p>
+                <p class="name">${patient.doctor_name}</p>
+                <p class="phone">${patient.created_by}</p>
+                <p class="date">${patient.department_name}</p>
+                <div class="action d_flex flex__c_c">
+                    ${patient.visit_status === 'active' ? allowed_btns.includes('checkout') ? buttons.checkout : '' : ''}
+                    ${buttons.view_patient}
                 </div>
             `;
-            tableBody.insertAdjacentHTML('beforeend', row);
+
+            rowDiv.addEventListener('click', async () => {
+                if (allowed_actions.includes('view_visit')) {
+                    frontRouter.navigate('/patient/activevisit/' + patient.id);
+                }
+                else if (allowed_actions.includes('view_patient')) {
+                    frontRouter.navigate('/patient/viewpatient/' + patient.patient_id);
+                }
+            });
+
+            rowDiv.querySelector('#viewPatient_btn').addEventListener('click', async (event) => {
+                event.stopPropagation();
+                frontRouter.navigate('/patient/viewpatient/' + patient.patient_id);
+            });
+
+            const checkOut_btn = rowDiv.querySelector('#checkOut_btn');
+            if (checkOut_btn) {
+                checkOut_btn.addEventListener('click', async (event) => {
+                    // disable propagation
+                    event.stopPropagation();
+                    // Get the btn closest with class tr
+                    const btnParent = rowDiv.closest('.tr');
+                    const patientId = btnParent.getAttribute('data_src');
+
+                    dashboardController.loaderView.render();
+
+                    const checkOut_response = await this.checkout_request(patientId);
+
+                    if (checkOut_response.success) {
+                        notify('top_left', checkOut_response.message, 'success');
+                        await this.fetchAndRenderData();
+
+                    } else {
+                        notify('top_left', checkOut_response.message, 'error');
+                    }
+
+                    dashboardController.loaderView.remove();
+
+
+                })
+            }
+
+
+
+
+            tableBody.appendChild(rowDiv);
         });
 
-        this.row_listener();
     }
 
     async fetchData() {
@@ -287,6 +290,9 @@ export class ViewOnProgressView {
                 <h4>Active Visit List</h4>
                 <div class="search_cont">
                     <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                            <span class="switch_icon_magnifying_glass"></span>
+                    </br-button>
                 </div>
             </div>
             <div class="outpatient_table">
@@ -314,7 +320,8 @@ export class ViewOnProgressView {
                     </div>
                 </div>
             </div>
-        </div>`;
+        </div>
+        `;
     }
 }
 

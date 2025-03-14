@@ -32,17 +32,15 @@ class NotFoundScreen {
 const routes = {
     '/': new HomeScreen(),
     '/login': screenCollection.loginScreen,
-    '/dashboard': dashboardController.staffListView,
+    '/dashboard': dashboardController.dashboardView,
 
     '/users': dashboardController.staffListView,
     '/users/userlist': dashboardController.staffListView,
-    '/users/adduser': dashboardController.addUserView,
     '/users/attendance': dashboardController.attendanceView,
     '/users/account': dashboardController.userProfileView,
 
     '/patient': dashboardController.viewPatientView,
     '/patient/viewpatient': dashboardController.viewPatientView,
-    '/patient/addpatient': dashboardController.addPatientView,
     '/patient/activevisit': dashboardController.viewOnProgressView,
     '/patient/viewpatient/:id': dashboardController.singlePatientView,
     '/patient/activevisit/:id': dashboardController.singleVisitView,

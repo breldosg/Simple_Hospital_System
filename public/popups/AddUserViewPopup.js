@@ -1,8 +1,9 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class AddUserView {
+export class AddUserViewPopup {
     constructor() {
         window.registerUser = this.registerUser.bind(this);
     }
@@ -14,12 +15,14 @@ export class AddUserView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-
-        const cont = document.querySelector('.update_cont');
+        const cont = document.querySelector('.popup');
+        cont.classList.add('active');
         cont.innerHTML = this.ViewReturn('', 'active');
 
+        this.main_container = document.querySelector('.add_user_popup');
         // Now call render which will fetch data and populate it
         this.render();
+        this.addEventListeners();
     }
 
     async render() {
@@ -28,7 +31,7 @@ export class AddUserView {
 
         if (roles_raw) {
             // Create roles elements
-            const roles = (role_raw) => {
+            const options = (role_raw) => {
                 var rolesElem = "";
                 role_raw.forEach(data => {
                     rolesElem += `
@@ -38,8 +41,18 @@ export class AddUserView {
                 return rolesElem;
             };
 
+            const role_selector = this.main_container.querySelector('#role_selector');
+            role_selector.innerHTML = options(roles_raw.roles);
+
+            const department_selector = this.main_container.querySelector('#department_selector');
+            department_selector.innerHTML = options(roles_raw.departments);
+
+            // remove loader
+            const loader = this.main_container.querySelector('.loader_cont');
+            loader.remove();
+
             // Replace loader and insert the content
-            cont.innerHTML = this.ViewReturn(roles(roles_raw));
+            // cont.innerHTML = this.ViewReturn(roles(roles_raw));
         } else {
             // Handle case where no roles were returned, or an error occurred.
             cont.innerHTML = '<3>Error fetching roles data. Please try again.</3>';
@@ -48,71 +61,52 @@ export class AddUserView {
 
     ViewReturn(roles, loader = '') {
         return `
-        <div class="container add_user">
+        <div class="container add_user_popup">
             <br-form class="slides" callback="registerUser" btn_class="add_user_btn">
                 <div class="slide">
                     <p class="heading">Staff information</p>
                     <div class="input_group">
                         <br-input label="Full name" name="name" type="text" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
+                            ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
 
+                        <br-input label="Email" name="email" type="email" styles="
+                            ${this.input_styles()}
+                        " labelStyles="font-size: 12px;" required ></br-input>
+
+                        <br-input label="Username" name="user_name" type="text" styles="
+                            ${this.input_styles()}
+                        " labelStyles="font-size: 12px;" required ></br-input>
+
                         <br-select required fontSize="13px" label="Gender" name="gender" placeholder="Select Gender" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
+                            ${this.input_styles()}
                         " labelStyles="font-size: 12px;">
                             <br-option value="Male">Male</br-option>
                             <br-option value="Female">Female</br-option>
                         </br-select>
 
-                        <br-input label="Username" name="user_name" type="text" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 12px;" required ></br-input>
-
-                        <br-select required fontSize="13px" label="Role" name="role" placeholder="Select Role" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
+                        <br-select required fontSize="13px" id="role_selector" label="Role" name="role" placeholder="Select Role" styles="
+                            ${this.input_styles()}
                         " labelStyles="font-size: 12px;">
-                            ${roles}
+                            
+                        </br-select>
+                        <br-select required fontSize="13px" id="department_selector" label="Department" name="department" placeholder="Select Department" styles="
+                            ${this.input_styles()}
+                        " labelStyles="font-size: 12px;">
+                            
                         </br-select>
 
+                        <br-input label="Specialist" type="text" name="specialist" styles="
+                            ${this.input_styles()}
+                        " labelStyles="font-size: 12px;"></br-input>
+
                         <br-input label="Phone number" type="tel" name="phone" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
+                            ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
 
-                        <br-input label="Password" name="pass" type="password" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        " labelStyles="font-size: 12px;" required></br-input>
 
                         <div class="btn_cont">
+                            <br-button loader_width="23" class="btn_next cancel_btn" type="close" >Cancel</br-button>
                             <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
                         </div>
                     </div>
@@ -123,6 +117,13 @@ export class AddUserView {
             </div>
         </div>
         `;
+    }
+
+    addEventListeners() {
+        const cancel_btn = this.main_container.querySelector('.cancel_btn');
+        cancel_btn.addEventListener('click', () => {
+            this.close_popup();
+        });
     }
 
     async registerUser(data) {
@@ -159,6 +160,8 @@ export class AddUserView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
+                this.close_popup();
+                dashboardController.staffListView.fetchAndRenderData();
             } else {
                 notify('top_left', result.message, 'warning');
             }
@@ -169,6 +172,13 @@ export class AddUserView {
             btn_submit.setAttribute('loading', false);
         }
     }
+
+    close_popup() {
+        const popup_cont = document.querySelector('.popup');
+        popup_cont.innerHTML = '';
+        popup_cont.classList.remove('active');
+    }
+
 
     async fetchData() {
         try {
@@ -209,5 +219,16 @@ export class AddUserView {
             return null;
         }
     }
+
+    input_styles() {
+        return `
+        border-radius: var(--input_main_border_r);
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);`;
+    }
+
 }
 

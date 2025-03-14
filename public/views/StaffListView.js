@@ -39,6 +39,18 @@ export class StaffListView {
             }
         });
 
+        const search_btn = document.querySelector('.btn_search');
+        search_btn.addEventListener('click', async () => {
+            this.searchTerm = searchInput.value;
+            this.batchNumber = 1; // Reset to batch 1 when searching
+            await this.fetchAndRenderData();
+        });
+
+        const add_staff_btn = document.querySelector('#open_add_staff_popup');
+        add_staff_btn.addEventListener('click', async () => {
+            dashboardController.addUserViewPopup.PreRender();
+        });
+
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (this.batchNumber < this.total_page_num) {
@@ -55,6 +67,9 @@ export class StaffListView {
                 await this.fetchAndRenderData();
             }
         });
+
+
+
     }
 
     async fetchAndRenderData() {
@@ -277,6 +292,10 @@ export class StaffListView {
                 <h4>Staff List</h4>
                 <div class="search_cont">
                     <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                            <span class="switch_icon_magnifying_glass"></span>
+                    </br-button>
+                    <div class="add_btn" title="Create Staff" id="open_add_staff_popup"> <span class="switch_icon_add"></span></div>
                 </div>
             </div>
             <div class="outpatient_table">
