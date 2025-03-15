@@ -49,7 +49,6 @@ const routes = {
     '/pharmacy': dashboardController.viewMedicineView,
     '/pharmacy/viewpharmacyproducts': dashboardController.viewMedicineView,
     '/pharmacy/viewcategory': dashboardController.viewMedicineCategoryView,
-    '/pharmacy/addcategory': dashboardController.addMedicineCategoryView,
     '/pharmacy/viewcategory/:id': dashboardController.singleMedicineCategoryView,
     '/pharmacy/orderlist': dashboardController.viewOrderListView,
     '/pharmacy/activevisits': dashboardController.viewActivePharmacyListView,

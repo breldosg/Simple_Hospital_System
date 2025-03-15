@@ -81,8 +81,8 @@ export class BrCustomNavigation extends HTMLElement {
                 ${role.navigationSections.map(section => `
                     <div class="nav_collection ${section.type === '/users' ? 'active' : ''}" type="${section.type}">
                         ${section.choices.map(choice =>
-            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
-        ).join('')}
+                            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
+                        ).join('')}
                     </div>
                 `).join('')}
             </div>
@@ -142,11 +142,19 @@ export class BrCustomNavigation extends HTMLElement {
                 font-weight: bold;
                 color: var(--white);
                 font-size: 14px;
+                
+                span{
+                    color: var(--white);
+                }
             }
 
             .nav_item.active {
                 background-color: var(--pure_white_background);
                 color: var(--main_text);
+
+                span{
+                    color: var(--main_text);
+                }
             }
 
         }
@@ -318,9 +326,10 @@ export class BrCustomNavigation extends HTMLElement {
         const links = this.shadowRoot.querySelectorAll('a');
 
         links.forEach(link => {
- 
-            link.addEventListener('click', (e) => {
 
+            link.addEventListener('click', (e) => {
+                console.log(link);
+                
                 if (link.hasAttribute('data-link')) {
                     e.preventDefault();
                     links.forEach(rLink => {
@@ -328,7 +337,7 @@ export class BrCustomNavigation extends HTMLElement {
                     })
                     link.classList.add('active');
 
-                    frontRouter.navigate(e.target.getAttribute('href'));
+                    frontRouter.navigate(link.getAttribute('href'));
                 }
             });
         })
@@ -399,7 +408,7 @@ export class BrCustomNavigation extends HTMLElement {
         pathParts.shift(); // remove empty string at the beginning
 
         navs.forEach(nav => {
-            
+
             const navPath = nav.getAttribute('link').toLowerCase();
 
             if (navPath === '/' + pathParts[0]) {
@@ -491,7 +500,7 @@ export class BrCustomNavigation extends HTMLElement {
 
             const result = await response.json();
 
- 
+
 
 
             if (result.status == 401) {

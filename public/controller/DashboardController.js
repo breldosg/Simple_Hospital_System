@@ -1,6 +1,6 @@
 // import { staffListView } from "../views/StaffListView.js";
 
-import { AddMedicineCategoryView } from "../views/AddMedicineCategoryView.js";
+import { AddMedicineCategoryViewPopup } from "../views/AddMedicineCategoryViewPopup.js";
 import { AttendanceView } from "../views/AttendanceView.js";
 import { ConfirmDeletePopUpView } from "../popups/ConfirmDeletePopUpView.js";
 import { CreateProductPopUpView } from "../popups/CreateProductPopUpView.js";
@@ -84,6 +84,7 @@ import { RadiologyExamsCategoryListView } from "../views/RadiologyExamsCategoryL
 import { AddPatientViewPopup } from "../popups/AddPatientViewPopup.js";
 import { DashboardView } from "../views/DashboardView.js";
 import { AddUserViewPopup } from "../popups/AddUserViewPopup.js";
+import { CreateRadiologyCategoryPopUp } from "../popups/CreateRadiologyCategoryPopUp.js";
 class DashboardController {
 
     // Dashboard View   
@@ -100,7 +101,7 @@ class DashboardController {
     userProfileView = new UserProfileView();
     addUserViewPopup = new AddUserViewPopup();
 
-    
+
     // Patient Views
     viewPatientView = new ViewPatientView();
     singlePatientView = new SinglePatientView();
@@ -155,7 +156,7 @@ class DashboardController {
     // Pharmacy And Store Views
     viewMedicineView = new ViewMedicineView();
     viewMedicineCategoryView = new ViewMedicineCategoryView();
-    addMedicineCategoryView = new AddMedicineCategoryView();
+    // addMedicineCategoryView = new AddMedicineCategoryView();
     singleMedicineCategoryView = new SingleMedicineCategoryView();
     updateCategoryPopUpView = new UpdateCategoryPopUpView();
     viewIntakeBatchView = new ViewIntakeBatchView();
@@ -168,6 +169,7 @@ class DashboardController {
     approvePharmacyOrderPopUpView = new ApprovePharmacyOrderPopUpView();
     viewActivePharmacyListView = new ViewActivePharmacyListView();
     singleVisitPharmacyView = new SingleVisitPharmacyView();
+    addMedicineCategoryViewPopup = new AddMedicineCategoryViewPopup();
 
 
     // Radiology Section
@@ -176,6 +178,7 @@ class DashboardController {
     radiologyExamsListView = new RadiologyExamsListView();
     createRadiologyExaminationPopUp = new CreateRadiologyExaminationPopUp();
     radiologyExamsCategoryListView = new RadiologyExamsCategoryListView();
+    createRadiologyCategoryPopUp = new CreateRadiologyCategoryPopUp();
 
     // Billing Section
     viewActiveBillsListView = new ViewActiveBillsListView();

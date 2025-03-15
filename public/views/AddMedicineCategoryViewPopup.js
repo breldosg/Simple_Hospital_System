@@ -1,8 +1,9 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class AddMedicineCategoryView {
+export class AddMedicineCategoryViewPopup {
     constructor() {
         window.register_medicine_category = this.register_medicine_category.bind(this)
     }
@@ -13,20 +14,26 @@ export class AddMedicineCategoryView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-
-
-        const cont = document.querySelector('.update_cont');
+        const cont = document.querySelector('.popup');
+        cont.classList.add('active');
         cont.innerHTML = this.ViewReturn('', 'active');
 
-        // Now call render which will fetch data and populate it
-        this.render();
+        // Add listeners
+        this.addListeners();
     }
 
-    async render() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
+    addListeners() {
+        const close_btn = document.querySelector('.close_popup');
+        close_btn.addEventListener('click', () => {
+            this.close_popup();
+        })
     }
 
+    close_popup() {
+        const popup_cont = document.querySelector('.popup');
+        popup_cont.innerHTML = '';
+        popup_cont.classList.remove('active');
+    }
 
     ViewReturn(loader = '') {
         return `
@@ -58,6 +65,7 @@ export class AddMedicineCategoryView {
                                 " labelStyles="font-size: 12px;"></br-input>
 
                 <div class="btn_cont">
+                    <br-button loader_width="23" class="btn_next close_popup error" type="cancel" >Cancel</br-button>
                     <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
                 </div>  
             </div>
@@ -106,9 +114,8 @@ export class AddMedicineCategoryView {
 
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                const form = document.querySelector('#add_category_form');
-                form.reset();
-
+                dashboardController.viewMedicineCategoryView.fetchAndRenderData();
+                this.close_popup();
             } else {
                 notify('top_left', result.message, 'warning');
             }

@@ -1311,216 +1311,7 @@ body {
             }
         }
 
-        /* ------------------------------------------------------- */
-
-        .attendence_cont {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-
-            .attendence_top {
-                width: 100%;
-                background-color: var(--pure_white_background);
-                /* height: 100px; */
-                border-radius: 10px;
-                padding: 20px;
-
-                .attendence_content {
-                    margin-top: 20px;
-                    display: flex;
-                    gap: 30px;
-                }
-            }
-
-            .main_section {
-                height: 100%;
-                width: 100%;
-                padding: 20px;
-                background-color: var(--pure_white_background);
-                border-radius: 10px;
-
-                .in_section_top {
-                    height: 50px;
-                }
-            }
-
-            .attendence_table_out {
-                .d_flex {
-                    display: flex;
-                }
-
-                .flex__u_b {
-                    justify-content: space-between;
-                }
-
-                .flex__c_a {
-                    align-items: center;
-                    justify-content: space-around;
-                }
-
-                .flex__c_c {
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .flex__e_b {
-                    align-items: flex-end;
-                    justify-content: space-between;
-                }
-
-                .flex__co {
-                    flex-direction: column;
-                }
-
-                .in_table_top {
-                    height: 50px;
-
-                    .search_cont {
-                        input {
-                            border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                        }
-                    }
-                }
-
-                .outpatient_table {
-                    height: calc(100% - 50px);
-
-                    .table_head {
-                        background-color: var(--pri_color);
-                        height: 50px;
-                        border-radius: 5px 5px 0 0;
-
-                        p {
-                            font-weight: 600;
-                            color: var(--white);
-                            font-size: 13px;
-                            cursor: default;
-                        }
-                    }
-
-                    .tr {
-                        gap: 2px;
-
-                        p {
-                            flex: none;
-                            text-align: center;
-                        }
-
-                        .id {
-                            width: 5%;
-                        }
-
-                        .name {
-                            width: 14%;
-                            text-align: left;
-                        }
-
-                        .gender {
-                            width: 10%;
-                        }
-
-                        .role {
-                            width: 15%;
-                        }
-
-                        .date {
-                            width: 15%;
-                        }
-
-                        .phone {
-                            width: 11%;
-                        }
-
-                        .action {
-                            width: 10%;
-
-                            .main_btn {
-                                background-color: var(--error_color);
-                            }
-                        }
-                    }
-
-                    .table_body {
-                        padding-block: 5px;
-                        gap: 5px;
-                        overflow-y: scroll;
-                        height: calc(100% - 130px);
-
-                        .tr {
-                            flex: none;
-                            height: 40px;
-                            cursor: pointer;
-
-                            p {
-                                white-space: nowrap;
-                                text-overflow: ellipsis;
-                                overflow: hidden;
-                                display: inline-block;
-                            }
-
-                            .main_btn {
-                                height: 30px;
-                                padding-inline: 10px;
-                            }
-                        }
-
-                        .tr:hover {
-                            background-color: var(--hover_list_table);
-                        }
-
-                        .start_page {
-                            width: 100%;
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            p {
-                                font-size: 16px;
-                                font-weight: 600;
-                                color: var(--black-op2);
-                            }
-                        }
-                    }
-
-                    .table_footer {
-                        height: 80px;
-
-                        p {
-                            font-size: 14px;
-                            font-weight: bold;
-                        }
-
-                        .pagenation {
-                            gap: 10px;
-                            align-self: flex-end;
-
-                            .page_no {
-                                width: 40px;
-                                height: 40px;
-                                border-radius: 5px;
-                                border: 1px solid var(--border_color);
-                            }
-
-                            .main_btn {
-                                height: 40px;
-                                width: 62px;
-                                font-weight: bold;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+     
 
         /* ------------------------------------------------------- */
 
@@ -1961,6 +1752,297 @@ body {
             }
         }
 
+
+            /* ------------------------------------------------------- */
+
+            .attendance_cont {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                overflow-y: scroll;
+    
+                .medicine_top {
+                    width: 100%;
+                    background-color: var(--pure_white_background);
+                    /* height: 100px; */
+                    border-radius: 10px;
+                    padding: 20px;
+    
+                    .heading_cont {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        cursor: pointer;
+    
+                        .open_close_filter {
+                            width: 35px;
+                            height: 35px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            flex: none;
+    
+                            span {
+                                font-size: 20px;
+                                /* color: var(--btn_hover_color); */
+                            }
+                        }
+    
+    
+                        .open_close_filter.closed {
+                            transform: rotate(180deg);
+                        }
+    
+                    }
+    
+                    .medicine_content {
+                        margin-top: 20px;
+                        display: flex;
+                        gap: 30px;
+                        flex-wrap: wrap;
+                        position: relative;
+    
+                        .loader_cont {
+                            position: absolute;
+                        }
+                    }
+                }
+    
+                .medicine_top.closed {
+    
+                    .search_containers {
+                        display: none;
+                    }
+    
+                }
+    
+                .med_btn_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: end;
+                    align-items: end;
+    
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 20px;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+                }
+    
+                .main_section {
+                    height: 100%;
+                    width: 100%;
+                    padding: 20px;
+                    background-color: var(--pure_white_background);
+                    border-radius: 10px;
+    
+                    .in_section_top {
+                        height: 50px;
+                    }
+                }
+    
+                .medicine_table_out {
+                    overflow-y: scroll;
+    
+                    .d_flex {
+                        display: flex;
+                    }
+    
+                    .flex__u_b {
+                        justify-content: space-between;
+                    }
+    
+                    .flex__c_a {
+                        align-items: center;
+                        justify-content: space-around;
+                    }
+    
+                    .flex__c_c {
+                        align-items: center;
+                        justify-content: center;
+                    }
+    
+                    .flex__e_b {
+                        align-items: flex-end;
+                        justify-content: space-between;
+                    }
+    
+                    .flex__co {
+                        flex-direction: column;
+                    }
+    
+                    .in_table_top {
+                        height: 50px;
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+    
+                        .add_btn {
+                            width: 35px;
+                            height: 35px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 5px;
+                            flex: none;
+    
+                            span {
+                                font-size: 20px;
+                                /* color: var(--btn_hover_color); */
+                            }
+                        }
+    
+                        .add_btn:hover {
+                            background-color: var(--pri_op);
+                            cursor: pointer;
+    
+                            span {
+                                color: var(--light_pri_color);
+                            }
+                        }
+                    }
+    
+                    .outpatient_table {
+                        height: calc(100% - 50px);
+    
+                        .table_head {
+                            background-color: var(--pri_color);
+                            height: 50px;
+                            border-radius: 5px 5px 0 0;
+    
+                            p {
+                                font-weight: 600;
+                                color: var(--white);
+                                font-size: 13px;
+                                cursor: default;
+                            }
+                        }
+    
+                        .tr {
+                            gap: 2px;
+    
+                            p {
+                                flex: none;
+                                text-align: center;
+                            }
+    
+                            .id {
+                                width: 5%;
+                            }
+    
+                            .name {
+                                width: 28%;
+                                text-align: left;
+                            }
+    
+                            .type {
+                                width: 9%;
+                                text-transform: capitalize;
+                            }
+    
+                            .status {
+                                width: 10%;
+                                text-transform: capitalize;
+                            }
+    
+                            .remain {
+                                width: 10%;
+                            }
+    
+                            .action {
+                                width: 10%;
+    
+                                .error {
+                                    background-color: var(--error_color);
+                                }
+                            }
+                        }
+    
+                        .table_body {
+                            padding-block: 5px;
+                            gap: 5px;
+                            overflow-y: scroll;
+                            height: calc(100% - 130px);
+    
+                            .tr {
+                                flex: none;
+                                height: 40px;
+                                cursor: pointer;
+    
+                                p {
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    display: inline-block;
+                                }
+    
+                                .main_btn {
+                                    height: 30px;
+                                    padding-inline: 10px;
+                                    width: 90px;
+                                }
+                            }
+    
+                            .tr:hover {
+                                background-color: var(--hover_list_table);
+                            }
+    
+                            .start_page {
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+    
+                                p {
+                                    font-size: 16px;
+                                    font-weight: 600;
+                                    color: var(--black-op2);
+                                }
+                            }
+                        }
+    
+                        .table_footer {
+                            height: 80px;
+    
+                            p {
+                                font-size: 14px;
+                                font-weight: bold;
+                            }
+    
+                            .pagenation {
+                                gap: 10px;
+                                align-self: flex-end;
+    
+                                .page_no {
+                                    width: 40px;
+                                    height: 40px;
+                                    border-radius: 5px;
+                                    border: 1px solid var(--border_color);
+                                }
+    
+                                .main_btn {
+                                    height: 40px;
+                                    width: 62px;
+                                    font-weight: bold;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    
 
         /* ------------------------------------------------------- */
 
@@ -7453,7 +7535,11 @@ body {
 
                 h1 {
                     margin: 0 0 5px 0;
-                    font-size: 24px;
+                    font-weight: 900;
+                }
+
+                p {
+                    font-size: 14px;
                 }
             }
 
@@ -7466,6 +7552,31 @@ body {
                 color: var(--light_pri_color);
             }
 
+            .edit_profile_btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 70px;
+                height: 70px;
+                border-radius: var(--main_border_r);
+                cursor: pointer;
+
+                span {
+                    /* background-color: var(--pri_color); */
+                    color: var(--main_text);
+                    font-size: 30px;
+                }
+
+            }
+
+            .edit_profile_btn:hover {
+                background-color: var(--pri_op);
+
+                span {
+                    color: var(--light_pri_color);
+                }
+
+            }
 
             .profile-tabs {
                 display: flex;
@@ -10486,6 +10597,10 @@ body {
         height: 50px;
 
         .search_cont {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+
             input {
                 border-radius: var(--input_main_border_r);
                 width: 300px;
@@ -10494,6 +10609,56 @@ body {
                 background-color: transparent;
                 border: 2px solid var(--input_border);
             }
+
+            .add_btn {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 5px;
+                flex: none;
+                margin-left: 20px;
+
+                span {
+                    font-size: 20px;
+                    /* color: var(--btn_hover_color); */
+                }
+
+            }
+
+            .input_search {
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                position: relative;
+            }
+
+            .add_btn:hover {
+                background-color: var(--pri_op);
+                cursor: pointer;
+            }
+
+            .input_search.close {
+                width: 50px;
+                overflow: hidden;
+            }
+
+            .btn_search {
+                background-color: var(--pri_color);
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                border-radius: var(--input_main_border_r);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                span {
+                    color: var(--white);
+                }
+            }
+
         }
     }
 
@@ -10771,18 +10936,23 @@ body {
             .btn_cont {
                 display: flex;
                 width: 100%;
-                justify-content: center;
+                justify-content: end;
                 padding-top: 20px;
+                gap: 20px;
 
                 .btn_next {
                     border: none;
                     background-color: var(--pri_color);
-                    padding: 10px 20px;
+                    padding: 10px 35px;
                     font-weight: bold;
                     font-size: 12px;
                     color: var(--white);
                     cursor: pointer;
                     border-radius: var(--input_main_border_r);
+                }
+
+                .error{
+                    background-color: var(--error_color);
                 }
             }
         }
@@ -12401,160 +12571,284 @@ body {
         }
     }
 
-            /* ---------------------------------------------------------- */
+    /* ---------------------------------------------------------- */
 
-            .add_user_popup {
-                padding: 50px;
-                border-radius: var(--main_border_r);
-                background-color: var(--pure_white_background);
-                position: relative;
-    
-                .loader_cont {
-                    border-radius: var(--main_border_r);
-                    position: absolute;
+    .create_radiology_category_popup {
+        padding: 30px;
+        border-radius: var(--main_border_r);
+        background-color: var(--pure_white_background);
+        position: relative;
+        min-width: 500px;
+        min-height: 200px;
+
+        .loader_cont {
+            border-radius: var(--main_border_r);
+            position: absolute;
+        }
+
+        .slides.anima {
+            animation: text-focus-in 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        }
+
+        .slides {
+            display: flex;
+            width: 440px;
+
+            .slide {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                /* margin-top: 20px; */
+                padding: 10px;
+                width: 440px;
+                flex: none;
+
+                .heading {
+                    font-size: 25px;
+                    font-weight: bold;
                 }
-    
-                .top_bars {
+
+                .input_group {
                     display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    gap: 10px;
-    
-                    .bar {
-                        display: flex;
-                        gap: 5px;
-                        padding-bottom: 5px;
-                        padding-inline: 2px;
-                        align-items: flex-end;
-                        font-weight: bolder;
-                        border-bottom: 2px solid var(--main_text);
-    
-                        .num {
-                            font-size: 20px;
-                            height: 24px;
-                        }
-    
-                        .num_word {
-                            font-size: 12px;
-                        }
-                    }
-    
-                    .bar.active {
-    
-                        .num,
-                        .num_word {
-                            color: var(--pri_color);
-                        }
-    
-                        border-color: var(--pri_color);
-                    }
-                }
-    
-                .slides {
-                    display: flex;
-                    width: 640px;
-    
-                    .slide {
+                    gap: 20px;
+                    flex-wrap: wrap;
+                    width: 100%;
+
+                    .inp_cont {
                         display: flex;
                         flex-direction: column;
-                        gap: 20px;
-                        /* margin-top: 20px; */
-                        padding: 10px;
-                        width: 640px;
-                        flex: none;
-    
-                        .heading {
-                            font-size: 17px;
-                            font-weight: bold;
+                        gap: 2px;
+
+                        label {
+                            font-size: 13px;
+                            /* font-weight: bold; */
                         }
-    
-                        .input_group {
-                            display: flex;
-                            gap: 20px;
-                            flex-wrap: wrap;
-                            width: 100%;
-    
-                            .inp_cont {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 2px;
-    
-                                label {
-                                    font-size: 13px;
-                                    /* font-weight: bold; */
-                                }
-    
-                                input,
-                                select {
-                                    border-radius: var(--input_main_border_r);
-                                    width: 300px;
-                                    padding: 10px;
-                                    height: 41px;
-                                    background-color: transparent;
-                                    border: 2px solid var(--input_border);
-                                }
-    
-                                .password-container {
-                                    border-radius: var(--input_main_border_r);
-                                    background-color: var(--input_background);
-                                    display: flex;
-                                    justify-content: space-between;
-                                    align-items: center;
-                                    width: 300px;
-                                    padding: 10px;
-                                    height: 41px;
-                                    overflow: hidden;
-                                    border: 2px solid var(--input_border);
-    
-                                    .password-input {
-                                        width: calc(100% - 40px);
-                                        padding: 0px;
-                                        height: 100%;
-                                        border: none;
-                                        background: transparent;
-                                        border-radius: 0;
-                                    }
-    
-                                    .toggle-password {
-                                        cursor: pointer;
-                                        font-size: 18px;
-                                        width: 30px;
-                                        height: 41px;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        /* background-color: rebeccapurple; */
-                                    }
-                                }
-                            }
+
+                        input,
+                        select {
+                            border-radius: var(--input_main_border_r);
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
                         }
-    
-                        .btn_cont {
+
+                        .password-container {
+                            border-radius: var(--input_main_border_r);
+                            background-color: var(--input_background);
                             display: flex;
-                            width: 100%;
-                            gap: 20px;
-                            justify-content: end;
-                            padding-top: 20px;
-    
-                            .btn_next {
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            overflow: hidden;
+                            border: 2px solid var(--input_border);
+
+                            .password-input {
+                                width: calc(100% - 40px);
+                                padding: 0px;
+                                height: 100%;
                                 border: none;
-                                background-color: var(--pri_color);
-                                padding: 10px 35px;
-                                font-weight: bold;
-                                font-size: 12px;
-                                color: var(--white);
-                                cursor: pointer;
-                                border-radius: var(--input_main_border_r);
+                                background: transparent;
+                                border-radius: 0;
                             }
 
-                            .cancel_btn{
-                                background-color: var(--error_color);
+                            .toggle-password {
+                                cursor: pointer;
+                                font-size: 18px;
+                                width: 30px;
+                                height: 41px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                /* background-color: rebeccapurple; */
                             }
                         }
+                    }
+                }
+
+                .btn_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: end;
+                    padding-top: 20px;
+                    gap: 20px;
+
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 35px;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+
+                    .cancel {
+                        background-color: var(--error_color);
                     }
                 }
             }
-    
+        }
+    }
+
+    /* ---------------------------------------------------------- */
+
+    .add_user_popup {
+        padding: 50px;
+        border-radius: var(--main_border_r);
+        background-color: var(--pure_white_background);
+        position: relative;
+
+        .loader_cont {
+            border-radius: var(--main_border_r);
+            position: absolute;
+        }
+
+        .top_bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            .bar {
+                display: flex;
+                gap: 5px;
+                padding-bottom: 5px;
+                padding-inline: 2px;
+                align-items: flex-end;
+                font-weight: bolder;
+                border-bottom: 2px solid var(--main_text);
+
+                .num {
+                    font-size: 20px;
+                    height: 24px;
+                }
+
+                .num_word {
+                    font-size: 12px;
+                }
+            }
+
+            .bar.active {
+
+                .num,
+                .num_word {
+                    color: var(--pri_color);
+                }
+
+                border-color: var(--pri_color);
+            }
+        }
+
+        .slides {
+            display: flex;
+            width: 640px;
+
+            .slide {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                /* margin-top: 20px; */
+                padding: 10px;
+                width: 640px;
+                flex: none;
+
+                .heading {
+                    font-size: 17px;
+                    font-weight: bold;
+                }
+
+                .input_group {
+                    display: flex;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                    width: 100%;
+
+                    .inp_cont {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+
+                        label {
+                            font-size: 13px;
+                            /* font-weight: bold; */
+                        }
+
+                        input,
+                        select {
+                            border-radius: var(--input_main_border_r);
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                        }
+
+                        .password-container {
+                            border-radius: var(--input_main_border_r);
+                            background-color: var(--input_background);
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            overflow: hidden;
+                            border: 2px solid var(--input_border);
+
+                            .password-input {
+                                width: calc(100% - 40px);
+                                padding: 0px;
+                                height: 100%;
+                                border: none;
+                                background: transparent;
+                                border-radius: 0;
+                            }
+
+                            .toggle-password {
+                                cursor: pointer;
+                                font-size: 18px;
+                                width: 30px;
+                                height: 41px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                /* background-color: rebeccapurple; */
+                            }
+                        }
+                    }
+                }
+
+                .btn_cont {
+                    display: flex;
+                    width: 100%;
+                    gap: 20px;
+                    justify-content: end;
+                    padding-top: 20px;
+
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 35px;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+
+                    .cancel_btn {
+                        background-color: var(--error_color);
+                    }
+                }
+            }
+        }
+    }
+
 
     /* ------------------------------------------------------- */
 

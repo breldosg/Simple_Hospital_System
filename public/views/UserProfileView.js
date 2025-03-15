@@ -1,9 +1,10 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, timeStamp_formatter } from "../script/index.js";
+import { date_formatter, notify, timeStamp_formatter } from "../script/index.js";
 
 export class UserProfileView {
     constructor() {
         this.activeTab = "My details"; // Default active tab
+        window.updatePassword = this.updatePassword.bind(this);
     }
 
     async PreRender() {
@@ -150,26 +151,26 @@ export class UserProfileView {
                 <h2>Password</h2>
                 <p>Please enter your current password to change your password.</p>
                 <div class="password-form">
-                    <br-form>
+                    <br-form callback="updatePassword" class="password_form">
                     <div class="form-group">
-                        <br-input label="Current Password" name="current_pass" type="password" styles="
+                        <br-input label="Current Password" name="current_password" type="password" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
                     </div>
                     <div class="form-group">
-                        <br-input label="New Password" name="new_pass" type="password" styles="
+                        <br-input label="New Password" name="new_password" type="password" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
                         <small>Your new password must be more than 8 characters.</small>
                     </div>
                     <div class="form-group">
-                        <br-input label="Confirm New Password" name="confirm_new_pass" type="password" styles="
+                        <br-input label="Confirm New Password" name="confirm_new_password" type="password" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn-cancel">Cancel</button>
-                        <button type="submit" class="btn-update">Update password</button>
+                        <br-button type="submit" class="btn-update">Update password</br-button>
                     </div>
                 </br-form>
                 </div>
@@ -210,6 +211,9 @@ export class UserProfileView {
                 <p class="profile-username">@${this.profileData.user_name}</p>
             </div>
             <div class="profile-actions">
+                <div class="edit_profile_btn">
+                    <span class='switch_icon_edit'></span>
+                </div>
             </div>
         </div>
         
@@ -270,6 +274,61 @@ export class UserProfileView {
                             height: 41px;
                             background-color: transparent;
                             border: 2px solid var(--input_border);`;
+    }
+
+    async updatePassword(data) {
+        const btn_submit = this.main_container.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
+
+        const password_form = this.main_container.querySelector('.password_form');
+
+        var confirm_new_password = data.confirm_new_password;
+        var new_password = data.new_password;
+
+        if (confirm_new_password != new_password) {
+            notify('top_left', 'New password and confirm new password do not match', 'warning');
+            btn_submit.setAttribute('loading', false);
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/users/reset_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                password_form.reset();
+
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            btn_submit.setAttribute('loading', false);
+        }
     }
 }
 

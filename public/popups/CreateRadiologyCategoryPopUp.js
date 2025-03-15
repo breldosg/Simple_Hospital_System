@@ -6,7 +6,7 @@ import { frontRouter } from "../script/route.js";
 
 export class CreateRadiologyCategoryPopUp {
     constructor() {
-        window.CreateRadiologyCategoryPopUp = this.CreateRadiologyCategory.bind(this);
+        window.CreateRadiologyCategoryPopUpFunction = this.CreateRadiologyCategory.bind(this);
         this.patient_id = null;
         this.isUpdate = false;
         this.categoryId = null;
@@ -24,8 +24,6 @@ export class CreateRadiologyCategoryPopUp {
             this.categoryData = {
                 id: params.id,
                 name: params.name,
-                category: params.category,
-                status: params.status
             };
         }
 
@@ -45,39 +43,14 @@ export class CreateRadiologyCategoryPopUp {
     }
 
     async render() {
-        const data = await this.fetchData(); // Wait for fetchData to complete
 
 
-        if (data) {
-            const options_elements = (dataArray) => {
-                if (!dataArray || !Array.isArray(dataArray)) {
-                    return ""; // Return empty string if data is not an array
-                }
+        // Replace loader and insert the content
+        this.main_container.innerHTML = this.update_view_after_loading(
+            this.categoryData
+        );
+        this.attachListeners();
 
-                var Elem = "";
-                dataArray.forEach(item => {
-                    Elem += `
-                        <br-option type="checkbox" value="${item.id}">${item.name}</br-option>
-                    `;
-                });
-                return Elem;
-            };
-
-            // Check the structure of the data and extract categories
-            var categories_data = data.categories || data || [];
-
-
-
-            // Replace loader and insert the content
-            this.main_container.innerHTML = this.update_view_after_loading(
-                options_elements(categories_data),
-                this.categoryData
-            );
-            this.attachListeners();
-        } else {
-            // Handle case where no data was returned, or an error occurred.
-            this.main_container.innerHTML = '<h3>Error fetching data. Please try again.</h3>';
-        }
     }
 
     ViewReturn(loader = '') {
@@ -112,7 +85,7 @@ export class CreateRadiologyCategoryPopUp {
         const submitText = this.isUpdate ? "Update" : "Submit";
 
         return `
-        <br-form class="slides anima" callback="CreateRadiologyCategoryPopUp">
+        <br-form class="slides anima" callback="CreateRadiologyCategoryPopUpFunction">
             <div class="slide">
                 <div>
                     <p class="heading">${title}</p>
@@ -147,9 +120,9 @@ export class CreateRadiologyCategoryPopUp {
 
     async CreateRadiologyCategory(data) {
         const btn_submit = this.main_container.querySelector('br-button[type="submit"]');
-        // btn_submit.setAttribute('loading', true);
+        btn_submit.setAttribute('loading', true);
 
-        const endpoint = this.isUpdate ? '/api/radiology/update_category' : '/api/radiology/create_category';
+        const endpoint = this.isUpdate ? '/api/radiology/update_radiology_category' : '/api/radiology/create_radiology_category';
 
         if (this.isUpdate) {
             data['id'] = this.categoryId;
@@ -199,43 +172,6 @@ export class CreateRadiologyCategoryPopUp {
         }
     }
 
-    async fetchData() {
-        try {
-            const response = await fetch('/api/radiology/get_category', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-            if (result.success) {
-                return result.data;
-            } else {
-                notify('top_left', result.message, 'warning');
-                return null;
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-            return null;
-        }
-    }
 
     close_popup() {
         const popup_cont = document.querySelector('.popup');

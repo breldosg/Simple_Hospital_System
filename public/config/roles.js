@@ -104,7 +104,6 @@ export const ROLES = {
                 choices: [
                     { label: 'View All Products', href: '/pharmacy/viewpharmacyproducts' },
                     { label: 'View All category', href: '/pharmacy/viewcategory' },
-                    { label: 'Add category', href: '/pharmacy/addcategory' },
                     { label: 'Order List', href: '/pharmacy/orderlist' },
                     { label: 'Active Visits', href: '/pharmacy/activevisits' }
                 ]
@@ -129,7 +128,6 @@ export const ROLES = {
                 choices: [
                     { label: 'View All Products', href: '/store/viewpharmacyproducts' },
                     { label: 'View All category', href: '/store/viewcategory' },
-                    { label: 'Add category', href: '/store/addcategory' },
                     { label: 'View All batch', href: '/store/viewinatakebatch' },
                     { label: 'Pharmacy Orders', href: '/store/orderlist' }
                 ]

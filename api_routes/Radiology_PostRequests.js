@@ -22,9 +22,9 @@ const ROUTE_CONFIG = {
     create_examination: 1100,
     update_examination: 1110,
     search_radiology_category: 1120,
-    update_radiology_category: 1130,
-    create_radiology_category: 1140,
-    delete_radiology_category: 1150,
+    create_radiology_category: 1160,
+    delete_radiology_category: 1170,
+    update_radiology_category: 1180,
 };
 
 

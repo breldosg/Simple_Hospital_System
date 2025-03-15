@@ -235,7 +235,7 @@ export class BrCustomInput extends HTMLElement {
     }
 
     togglePasswordVisibility() {
-        console.log('Toggle password visibility');
+ 
 
         const inputType = this.inputElement.getAttribute('type');
         const newType = inputType === 'password' ? 'text' : 'password';
@@ -258,7 +258,8 @@ export class BrCustomInput extends HTMLElement {
                 isValid = value.trim() !== '';
                 break;
             case 'password':
-                isValid = value.length >= 8 // Minimum length
+                isValid = value.length >= 8 && // Minimum length
+                        /[0-9]/.test(value) // At least one digit
                 break;
             case 'ST_password':
                 // Password validation rules

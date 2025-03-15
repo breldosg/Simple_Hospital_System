@@ -123,8 +123,6 @@ export class RadiologyExamsCategoryListView {
         radiologyData.categoryList.forEach((category, index) => {
             const row = document.createElement('div');
             row.className = 'tr d_flex flex__c_a';
-            row.setAttribute('title', category.name);
-            row.setAttribute('data_src', category.id);
 
             row.innerHTML = `
                     <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
@@ -133,22 +131,28 @@ export class RadiologyExamsCategoryListView {
                     <p class="remain">${date_formatter(category.created_at)}</p>
                     <p class="status">${category.tests}</p>
                     <div class="action d_flex flex__c_c">
-                        <button type="button" id="Delete_btn" class="main_btn error ${category.tests > 0 ? 'disabled' : ''}">Delete</button>
+                        <button type="button" id="Delete_btn" class="main_btn error ${category.tests > 0 ? 'disabled' : 'delete_active'}">Delete</button>
                     </div>
             `;
+
+            // row click to update the category
+            row.addEventListener('click', () => {
+                dashboardController.createRadiologyCategoryPopUp.PreRender(category);
+            });
 
 
             // Add event listener to delete button
             const deleteBtn = row.querySelector('#Delete_btn');
             if (deleteBtn) {
                 deleteBtn.addEventListener('click', (event) => {
+                    console.log(deleteBtn);
                     event.stopPropagation();
-                    
+
                     if (deleteBtn.classList.contains('delete_active')) {
                         this.row_to_delete = row;
-                        const categoryId = row.getAttribute('data_src');
-                        const categoryName = row.getAttribute('title');
-                        
+                        const categoryId = category.id;
+                        const categoryName = category.name;
+
                         dashboardController.confirmDeletePopUpView.PreRender({
                             callback: 'delete_radiology_category',
                             data: categoryName,
@@ -207,7 +211,7 @@ export class RadiologyExamsCategoryListView {
             return null;
         }
     }
-    
+
     async search_medicine(data) {
         this.loadingContent();
         this.searchTerm = data.query;

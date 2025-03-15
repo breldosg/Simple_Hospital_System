@@ -18,7 +18,13 @@ const ROUTE_CONFIG = {
     first_data: 170,
 
     // User Profile
-    get_staff_profile: 1130
+    get_staff_profile: 1130,
+
+    // User Profile
+    reset_password: 1140,
+
+    // User Management
+    search_attendance: 1150,
 };
 
 
