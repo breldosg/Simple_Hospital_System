@@ -41,6 +41,13 @@ export class ViewActiveRadiologyListView {
             }
         });
 
+        const searchBtn = document.querySelector('.btn_search');
+        searchBtn.addEventListener('click', async () => {
+            this.searchTerm = searchInput.value;
+            this.batchNumber = 1; // Reset to batch 1 when searching
+            await this.fetchAndRenderData();
+        });
+
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (this.batchNumber < this.total_page_num) {
@@ -189,6 +196,10 @@ export class ViewActiveRadiologyListView {
                 <h4>Active Visit List With Order</h4>
                 <div class="search_cont">
                     <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                            <span class="switch_icon_magnifying_glass"></span>
+                    </br-button>
+                    
                 </div>
             </div>
             <div class="outpatient_table">

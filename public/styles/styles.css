@@ -868,7 +868,7 @@ body {
 
                 .search_cont {
                     display: flex;
-                    gap: 25px;
+                    gap: 10px;
                     align-items: center;
 
                     input {
@@ -888,6 +888,7 @@ body {
                         justify-content: center;
                         border-radius: 5px;
                         flex: none;
+                        margin-left: 20px;
 
                         span {
                             font-size: 20px;
@@ -914,12 +915,8 @@ body {
                     }
 
                     .btn_search {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        border: none;
                         background-color: var(--pri_color);
-                        width: 50px;
+                        width: 40px;
                         height: 40px;
                         cursor: pointer;
                         border-radius: var(--input_main_border_r);
@@ -1311,7 +1308,7 @@ body {
             }
         }
 
-     
+
 
         /* ------------------------------------------------------- */
 
@@ -1753,296 +1750,296 @@ body {
         }
 
 
-            /* ------------------------------------------------------- */
+        /* ------------------------------------------------------- */
 
-            .attendance_cont {
+        .attendance_cont {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            overflow-y: scroll;
+
+            .medicine_top {
                 width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: space-between;
-                gap: 20px;
-                overflow-y: scroll;
-    
-                .medicine_top {
-                    width: 100%;
-                    background-color: var(--pure_white_background);
-                    /* height: 100px; */
-                    border-radius: 10px;
-                    padding: 20px;
-    
-                    .heading_cont {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        cursor: pointer;
-    
-                        .open_close_filter {
-                            width: 35px;
-                            height: 35px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            cursor: pointer;
-                            flex: none;
-    
-                            span {
-                                font-size: 20px;
-                                /* color: var(--btn_hover_color); */
-                            }
-                        }
-    
-    
-                        .open_close_filter.closed {
-                            transform: rotate(180deg);
-                        }
-    
-                    }
-    
-                    .medicine_content {
-                        margin-top: 20px;
-                        display: flex;
-                        gap: 30px;
-                        flex-wrap: wrap;
-                        position: relative;
-    
-                        .loader_cont {
-                            position: absolute;
-                        }
-                    }
-                }
-    
-                .medicine_top.closed {
-    
-                    .search_containers {
-                        display: none;
-                    }
-    
-                }
-    
-                .med_btn_cont {
+                background-color: var(--pure_white_background);
+                /* height: 100px; */
+                border-radius: 10px;
+                padding: 20px;
+
+                .heading_cont {
                     display: flex;
-                    width: 100%;
-                    justify-content: end;
-                    align-items: end;
-    
-                    .btn_next {
-                        border: none;
-                        background-color: var(--pri_color);
-                        padding: 10px 20px;
-                        font-weight: bold;
-                        font-size: 12px;
-                        color: var(--white);
-                        cursor: pointer;
-                        border-radius: var(--input_main_border_r);
-                    }
-                }
-    
-                .main_section {
-                    height: 100%;
-                    width: 100%;
-                    padding: 20px;
-                    background-color: var(--pure_white_background);
-                    border-radius: 10px;
-    
-                    .in_section_top {
-                        height: 50px;
-                    }
-                }
-    
-                .medicine_table_out {
-                    overflow-y: scroll;
-    
-                    .d_flex {
+                    justify-content: space-between;
+                    align-items: center;
+                    cursor: pointer;
+
+                    .open_close_filter {
+                        width: 35px;
+                        height: 35px;
                         display: flex;
-                    }
-    
-                    .flex__u_b {
-                        justify-content: space-between;
-                    }
-    
-                    .flex__c_a {
-                        align-items: center;
-                        justify-content: space-around;
-                    }
-    
-                    .flex__c_c {
                         align-items: center;
                         justify-content: center;
+                        cursor: pointer;
+                        flex: none;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
                     }
-    
-                    .flex__e_b {
-                        align-items: flex-end;
-                        justify-content: space-between;
+
+
+                    .open_close_filter.closed {
+                        transform: rotate(180deg);
                     }
-    
-                    .flex__co {
-                        flex-direction: column;
+
+                }
+
+                .medicine_content {
+                    margin-top: 20px;
+                    display: flex;
+                    gap: 30px;
+                    flex-wrap: wrap;
+                    position: relative;
+
+                    .loader_cont {
+                        position: absolute;
                     }
-    
-                    .in_table_top {
-                        height: 50px;
-                        width: 100%;
+                }
+            }
+
+            .medicine_top.closed {
+
+                .search_containers {
+                    display: none;
+                }
+
+            }
+
+            .med_btn_cont {
+                display: flex;
+                width: 100%;
+                justify-content: end;
+                align-items: end;
+
+                .btn_next {
+                    border: none;
+                    background-color: var(--pri_color);
+                    padding: 10px 20px;
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: var(--white);
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+                }
+            }
+
+            .main_section {
+                height: 100%;
+                width: 100%;
+                padding: 20px;
+                background-color: var(--pure_white_background);
+                border-radius: 10px;
+
+                .in_section_top {
+                    height: 50px;
+                }
+            }
+
+            .medicine_table_out {
+                overflow-y: scroll;
+
+                .d_flex {
+                    display: flex;
+                }
+
+                .flex__u_b {
+                    justify-content: space-between;
+                }
+
+                .flex__c_a {
+                    align-items: center;
+                    justify-content: space-around;
+                }
+
+                .flex__c_c {
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .flex__e_b {
+                    align-items: flex-end;
+                    justify-content: space-between;
+                }
+
+                .flex__co {
+                    flex-direction: column;
+                }
+
+                .in_table_top {
+                    height: 50px;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .add_btn {
+                        width: 35px;
+                        height: 35px;
                         display: flex;
-                        justify-content: space-between;
                         align-items: center;
-    
-                        .add_btn {
-                            width: 35px;
-                            height: 35px;
+                        justify-content: center;
+                        border-radius: 5px;
+                        flex: none;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+                    }
+
+                    .add_btn:hover {
+                        background-color: var(--pri_op);
+                        cursor: pointer;
+
+                        span {
+                            color: var(--light_pri_color);
+                        }
+                    }
+                }
+
+                .outpatient_table {
+                    height: calc(100% - 50px);
+
+                    .table_head {
+                        background-color: var(--pri_color);
+                        height: 50px;
+                        border-radius: 5px 5px 0 0;
+
+                        p {
+                            font-weight: 600;
+                            color: var(--white);
+                            font-size: 13px;
+                            cursor: default;
+                        }
+                    }
+
+                    .tr {
+                        gap: 2px;
+
+                        p {
+                            flex: none;
+                            text-align: center;
+                        }
+
+                        .id {
+                            width: 5%;
+                        }
+
+                        .name {
+                            width: 28%;
+                            text-align: left;
+                        }
+
+                        .type {
+                            width: 9%;
+                            text-transform: capitalize;
+                        }
+
+                        .status {
+                            width: 10%;
+                            text-transform: capitalize;
+                        }
+
+                        .remain {
+                            width: 10%;
+                        }
+
+                        .action {
+                            width: 10%;
+
+                            .error {
+                                background-color: var(--error_color);
+                            }
+                        }
+                    }
+
+                    .table_body {
+                        padding-block: 5px;
+                        gap: 5px;
+                        overflow-y: scroll;
+                        height: calc(100% - 130px);
+
+                        .tr {
+                            flex: none;
+                            height: 40px;
+                            cursor: pointer;
+
+                            p {
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                            }
+
+                            .main_btn {
+                                height: 30px;
+                                padding-inline: 10px;
+                                width: 90px;
+                            }
+                        }
+
+                        .tr:hover {
+                            background-color: var(--hover_list_table);
+                        }
+
+                        .start_page {
+                            width: 100%;
+                            height: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            border-radius: 5px;
-                            flex: none;
-    
-                            span {
-                                font-size: 20px;
-                                /* color: var(--btn_hover_color); */
-                            }
-                        }
-    
-                        .add_btn:hover {
-                            background-color: var(--pri_op);
-                            cursor: pointer;
-    
-                            span {
-                                color: var(--light_pri_color);
+
+                            p {
+                                font-size: 16px;
+                                font-weight: 600;
+                                color: var(--black-op2);
                             }
                         }
                     }
-    
-                    .outpatient_table {
-                        height: calc(100% - 50px);
-    
-                        .table_head {
-                            background-color: var(--pri_color);
-                            height: 50px;
-                            border-radius: 5px 5px 0 0;
-    
-                            p {
-                                font-weight: 600;
-                                color: var(--white);
-                                font-size: 13px;
-                                cursor: default;
-                            }
+
+                    .table_footer {
+                        height: 80px;
+
+                        p {
+                            font-size: 14px;
+                            font-weight: bold;
                         }
-    
-                        .tr {
-                            gap: 2px;
-    
-                            p {
-                                flex: none;
-                                text-align: center;
-                            }
-    
-                            .id {
-                                width: 5%;
-                            }
-    
-                            .name {
-                                width: 28%;
-                                text-align: left;
-                            }
-    
-                            .type {
-                                width: 9%;
-                                text-transform: capitalize;
-                            }
-    
-                            .status {
-                                width: 10%;
-                                text-transform: capitalize;
-                            }
-    
-                            .remain {
-                                width: 10%;
-                            }
-    
-                            .action {
-                                width: 10%;
-    
-                                .error {
-                                    background-color: var(--error_color);
-                                }
-                            }
-                        }
-    
-                        .table_body {
-                            padding-block: 5px;
-                            gap: 5px;
-                            overflow-y: scroll;
-                            height: calc(100% - 130px);
-    
-                            .tr {
-                                flex: none;
+
+                        .pagenation {
+                            gap: 10px;
+                            align-self: flex-end;
+
+                            .page_no {
+                                width: 40px;
                                 height: 40px;
-                                cursor: pointer;
-    
-                                p {
-                                    white-space: nowrap;
-                                    text-overflow: ellipsis;
-                                    overflow: hidden;
-                                    display: inline-block;
-                                }
-    
-                                .main_btn {
-                                    height: 30px;
-                                    padding-inline: 10px;
-                                    width: 90px;
-                                }
+                                border-radius: 5px;
+                                border: 1px solid var(--border_color);
                             }
-    
-                            .tr:hover {
-                                background-color: var(--hover_list_table);
-                            }
-    
-                            .start_page {
-                                width: 100%;
-                                height: 100%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-    
-                                p {
-                                    font-size: 16px;
-                                    font-weight: 600;
-                                    color: var(--black-op2);
-                                }
-                            }
-                        }
-    
-                        .table_footer {
-                            height: 80px;
-    
-                            p {
-                                font-size: 14px;
+
+                            .main_btn {
+                                height: 40px;
+                                width: 62px;
                                 font-weight: bold;
-                            }
-    
-                            .pagenation {
-                                gap: 10px;
-                                align-self: flex-end;
-    
-                                .page_no {
-                                    width: 40px;
-                                    height: 40px;
-                                    border-radius: 5px;
-                                    border: 1px solid var(--border_color);
-                                }
-    
-                                .main_btn {
-                                    height: 40px;
-                                    width: 62px;
-                                    font-weight: bold;
-                                }
                             }
                         }
                     }
                 }
             }
-    
+        }
+
 
         /* ------------------------------------------------------- */
 
@@ -10951,7 +10948,7 @@ body {
                     border-radius: var(--input_main_border_r);
                 }
 
-                .error{
+                .error {
                     background-color: var(--error_color);
                 }
             }
