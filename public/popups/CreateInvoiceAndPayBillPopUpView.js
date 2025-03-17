@@ -202,7 +202,7 @@ export class CreateInvoiceAndPayBillPopUpView {
             padding: 0;
             margin: 0;
             box-sizing: border-box;
-            font-family: "DM Sans";
+            font-family: "DM Sans", sans-serif;
             color: var(--main_text);
             transition: all 0.3s ease-in;
         }
@@ -211,9 +211,8 @@ export class CreateInvoiceAndPayBillPopUpView {
     .create_invoice_and_pay_bill_popup {
         border-radius: var(--main_border_r);
         background-color: var(--white);
-        padding: 2rem;
-        width: 50%;
-        max-width: 450px;
+        padding: 10px;
+        width: 100%;
 
         p{
             font-size: 12px;
@@ -228,7 +227,7 @@ export class CreateInvoiceAndPayBillPopUpView {
             h2 {
                 color:var(--pri_color);
                 /* margin-bottom: 1rem; */
-                /* font-size: 1.5rem; */
+                /* font-size: 13px; */
             }
 
             .top_row{
@@ -238,6 +237,7 @@ export class CreateInvoiceAndPayBillPopUpView {
                 margin-bottom: 1rem;
 
                 .close_btn{
+                    display: none;
                     width: 35px;
                     height: 35px;
                     display: flex;
@@ -331,7 +331,7 @@ export class CreateInvoiceAndPayBillPopUpView {
                 justify-content: space-between;
 
                 .total_label{
-                    font-size: 30px;
+                    font-size: 20px;
                     font-weight: bold;
                 }
             }
@@ -339,20 +339,7 @@ export class CreateInvoiceAndPayBillPopUpView {
         }
 
         .receipt_footer{
-            display: flex;
-            justify-content: center;
-            padding-top: 50px;
-
-            .btn_primary{
-                padding: 7px 20px;
-                background-color: var(--pri_color);
-                color: var(--white);
-                border: none;
-                border-radius: var(--input_main_border_r);
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: bold;
-            }
+            display: none;
         }
 
     }

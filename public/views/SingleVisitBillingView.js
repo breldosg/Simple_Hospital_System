@@ -36,6 +36,7 @@ export class SingleVisitBillingView {
     }
 
     async render() {
+        this.selectedBills.clear();
         this.pre_render_bills_list();
         this.render_invoices()
     }
@@ -274,7 +275,6 @@ export class SingleVisitBillingView {
 </div>
 `;
     }
-
 
     render_no_invoice_data() {
         const body = this.main_container.querySelector('.invoices_list');

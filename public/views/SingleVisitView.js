@@ -54,7 +54,7 @@ export class SingleVisitView {
 
         this.visit_detail_data = visit_data.visit_detail.visit_data;
 
- 
+
 
 
         // Render various card views

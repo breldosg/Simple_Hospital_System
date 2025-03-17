@@ -71,54 +71,34 @@ export class CreateVisitPopUpView {
 
             <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
                     styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                ${this.input_style()}
             " labelStyles="font-size: 12px;">
             </br-select>
                 
                 
             <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Priority"
                     styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                ${this.input_style()}
             " labelStyles="font-size: 12px;">
             </br-select>
 
                 
                 <br-select required fontSize="13px" label="Department" name="department" placeholder="Select Department"
                     styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                    ${this.input_style()}
             " labelStyles="font-size: 12px;">
             </br-select>
 
 
                 <br-select required fontSize="13px" label="Doctors" name="doctors" placeholder="Select Doctors" styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                ${this.input_style()}
             " labelStyles="font-size: 12px;">
                 </br-select>
 
 
                 <div class="btn_cont">
-                    <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
-                    <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
+                <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
+                <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
                 </div>
 
 
@@ -149,12 +129,7 @@ export class CreateVisitPopUpView {
 
                 <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
                     styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                    ${this.input_style()}
             " labelStyles="font-size: 12px;">
                     ${visit_type.map(type => `<br-option type="checkbox" value="${type.value}">${type.label}</br-option>`).join('')}
                 </br-select>
@@ -162,47 +137,31 @@ export class CreateVisitPopUpView {
                 
                 <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Priority"
                     styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-
-                border: 2px solid var(--input_border);
+                    ${this.input_style()}
             " labelStyles="font-size: 12px;">
                     ${visit_priority.map(priority => `<br-option type="checkbox" value="${priority.value}">${priority.label}</br-option>`).join('')}
                 </br-select>
 
 
-                
-                <br-select required fontSize="13px" label="Department" name="department" placeholder="Select Department"
+
+                <br-select required fontSize="13px" search='true' label="Department" name="department" placeholder="Select Department"
                     styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                    ${this.input_style()}
             " labelStyles="font-size: 12px;">
                     ${departments ? departments : ''}
                 </br-select>
 
 
-                <br-select required fontSize="13px" label="Doctors" name="doctors" placeholder="Select Doctors" styles="
-                border-radius: var(--input_main_border_r);
-                width: 300px;
-                padding: 10px;
-                height: 41px;
-                background-color: transparent;
-                border: 2px solid var(--input_border);
+                <br-select required fontSize="13px" search='true' label="Doctors" name="doctors" placeholder="Select Doctors" styles="
+                ${this.input_style()}
             " labelStyles="font-size: 12px;">
                     ${doctors ? doctors : ''}
                 </br-select>
 
 
                 <div class="btn_cont">
-                    <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
-                    <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
+                <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
+                <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
                 </div>
 
 
@@ -317,5 +276,16 @@ export class CreateVisitPopUpView {
             notify('top_left', error.message, 'error');
             return null;
         }
+    }
+
+    input_style(){
+        return `
+            border-radius: var(--input_main_border_r);
+            width: 300px;
+            padding: 10px;
+            height: 41px;
+            background-color: transparent;
+            border: 2px solid var(--input_border);
+                `;
     }
 }

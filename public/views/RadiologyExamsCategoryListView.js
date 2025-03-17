@@ -1,3 +1,4 @@
+import { ALLOW_TO_ADD_UPDATE_EXAM_CATEGORY, ALLOW_TO_OPEN_RADIOLOGY_EXAM_CATEGORY } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { currency_formatter, date_formatter, notify } from "../script/index.js";
@@ -5,7 +6,7 @@ import { frontRouter } from "../script/route.js";
 
 export class RadiologyExamsCategoryListView {
     constructor() {
-        window.radiology_search_exam_list = this.search_medicine.bind(this);
+        window.radiology_search_exam_category_list = this.search_medicine.bind(this);
         window.delete_radiology_category = this.delete_category.bind(this);
         this.row_to_delete = '';
         this.medicineData = [];
@@ -25,10 +26,19 @@ export class RadiologyExamsCategoryListView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        // get role from global state
+        this.role = globalStates.getState('user_data').role;
+
+        if(!ALLOW_TO_OPEN_RADIOLOGY_EXAM_CATEGORY.includes(this.role)){
+            notify('top_left', 'You are not authorized to access this page.', 'warning');
+            frontRouter.navigate('/dashboard');
+            return;
+        }
+
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
-        this.main_component = document.querySelector('.radiology_search_exam_list');
+        this.main_component = document.querySelector('.radiology_search_exam_category_list');
 
         // Get the current path, default to '/users' if on '/dashboard'
         const rawPath = window.location.pathname.toLowerCase();
@@ -62,9 +72,11 @@ export class RadiologyExamsCategoryListView {
 
         // Create Radiology Examination Button
         var create_radiology_examination = this.main_component.querySelector('#open_add_product_popup');
-        create_radiology_examination.addEventListener('click', () => {
-            dashboardController.createRadiologyCategoryPopUp.PreRender();
-        });
+        if (create_radiology_examination) {
+            create_radiology_examination.addEventListener('click', () => {
+                dashboardController.createRadiologyCategoryPopUp.PreRender();
+            });
+        }
 
         // Pagination buttons
         this.main_component.querySelector('.main_btn.next').addEventListener('click', async () => {
@@ -137,7 +149,11 @@ export class RadiologyExamsCategoryListView {
 
             // row click to update the category
             row.addEventListener('click', () => {
-                dashboardController.createRadiologyCategoryPopUp.PreRender(category);
+                if (ALLOW_TO_ADD_UPDATE_EXAM_CATEGORY.includes(this.role)) {
+                    dashboardController.createRadiologyCategoryPopUp.PreRender(category);
+                } else {
+                    notify('top_left', 'You are not authorized to update this category.', 'warning');
+                }
             });
 
 
@@ -147,7 +163,7 @@ export class RadiologyExamsCategoryListView {
                 deleteBtn.addEventListener('click', (event) => {
                     console.log(deleteBtn);
                     event.stopPropagation();
-
+                    if (ALLOW_TO_ADD_UPDATE_EXAM_CATEGORY.includes(this.role)) {
                     if (deleteBtn.classList.contains('delete_active')) {
                         this.row_to_delete = row;
                         const categoryId = category.id;
@@ -160,7 +176,10 @@ export class RadiologyExamsCategoryListView {
                             params: categoryId
                         });
                     } else if (deleteBtn.classList.contains('delete_inactive')) {
-                        notify('top_left', 'Cannot delete category, it has exams assigned to it.', 'warning');
+                            notify('top_left', 'Cannot delete category, it has exams assigned to it.', 'warning');
+                        }
+                    } else {
+                        notify('top_left', 'You are not authorized to delete this category.', 'warning');
                     }
                 });
             }
@@ -248,7 +267,7 @@ export class RadiologyExamsCategoryListView {
     loading_and_nodata_view() {
         this.main_component.querySelector('.table_body').innerHTML = `
         <div class="start_page deactivate">
-            <p>No Test Found</p>
+            <p>No Category Found</p>
         </div>
         <div class="loader_cont active"><div class="loader"></div></div>
                     `;
@@ -256,19 +275,18 @@ export class RadiologyExamsCategoryListView {
 
     ViewReturn() {
         return `
-    <div class="radiology_search_exam_list">
+    <div class="radiology_search_exam_category_list">
     
     <div class="medicine_top closed">
     <div class="heading_cont">
-                <h4>Search Exam</h4>
-
+                <h4>Search Exam Category</h4>
                 <div class="open_close_filter closed" title="Open Filter" id="open_close_search">
                     <span class='switch_icon_keyboard_arrow_up'></span>
                 </div>
 
             </div>
     <div class="search_containers">
-        <br-form callback="radiology_search_exam_list">
+        <br-form callback="radiology_search_exam_category_list">
             <div class="medicine_content">
                 <br-input label="Test Name" name="query" type="text" value="${this.searchTerm == null ? '' : this.searchTerm}" placeholder="Enter category name" styles="
                             border-radius: var(--input_main_border_r);
@@ -293,10 +311,13 @@ export class RadiologyExamsCategoryListView {
     <div class="main_section medicine_table_out">
     
         <div class="in_table_top d_flex flex__u_s">
-            <h4>Radiology Exam List</h4>
+            <h4>Radiology Exam Category List</h4>
+            
+            ${ALLOW_TO_ADD_UPDATE_EXAM_CATEGORY.includes(this.role) ? `
             <div class="add_btn" title="Create New Exam" id="open_add_product_popup">
                 <span class="switch_icon_add"></span>
             </div>
+            ` : ''}
         </div>
         <div class="outpatient_table">
     

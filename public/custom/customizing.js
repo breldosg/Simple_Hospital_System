@@ -6,7 +6,7 @@ export const visit_add_card_btn = [
             {
                 component: 'visitsClinicalEvaluationPopUpView',
                 title: 'Clinical Evaluation',
-                active_if: [],
+                active_if: ['addVitalPopUpView'],
                 operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {

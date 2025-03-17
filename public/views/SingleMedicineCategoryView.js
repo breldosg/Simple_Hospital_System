@@ -1,3 +1,4 @@
+import { ALLOW_TO_ADD_UPDATE_PRODUCT } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
@@ -23,6 +24,8 @@ export class SingleMedicineCategoryView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        // get role from global state
+        this.role = globalStates.getState('user_data').role;
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('', 'active');
@@ -79,7 +82,7 @@ export class SingleMedicineCategoryView {
                     <p class="remain">0</p>
                     <p class="status">${data.status}</p>
                     <div class="action d_flex flex__c_c">
-                        <button type="button" class="main_btn">Edit</button>
+                        <button type="button" class="main_btn ${ALLOW_TO_ADD_UPDATE_PRODUCT.includes(this.role) ? '' : 'disabled'}">Edit</button>
                     </div>
                 </div>
             `;

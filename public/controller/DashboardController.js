@@ -85,6 +85,9 @@ import { AddPatientViewPopup } from "../popups/AddPatientViewPopup.js";
 import { DashboardView } from "../views/DashboardView.js";
 import { AddUserViewPopup } from "../popups/AddUserViewPopup.js";
 import { CreateRadiologyCategoryPopUp } from "../popups/CreateRadiologyCategoryPopUp.js";
+import { LaboratoryTestCategoryListView } from "../views/LaboratoryTestCategoryListView.js";
+import { CreateLaboratoryCategoryPopUp } from "../popups/CreateLaboratoryCategoryPopUp.js";
+import { CreateLaboratoryTestPopUp } from "../popups/CreateLaboratoryTestPopUp.js";
 class DashboardController {
 
     // Dashboard View   
@@ -204,8 +207,9 @@ class DashboardController {
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();
     singleVisitLaboratoryView = new SingleVisitLaboratoryView();
     laboratoryTestListView = new LaboratoryTestListView();
-
-
+    laboratoryTestCategoryListView = new LaboratoryTestCategoryListView();
+    createLaboratoryCategoryPopUp = new CreateLaboratoryCategoryPopUp();
+    createLaboratoryTestPopUp = new CreateLaboratoryTestPopUp();
 }
 
 export const dashboardController = new DashboardController();

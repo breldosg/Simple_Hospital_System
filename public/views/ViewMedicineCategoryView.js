@@ -1,3 +1,4 @@
+import { ALLOW_TO_ADD_UPDATE_CATEGORY } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
@@ -21,6 +22,9 @@ export class ViewMedicineCategoryView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+
+        // get role from global state
+        this.role = globalStates.getState('user_data').role;
 
 
         const cont = document.querySelector('.update_cont');
@@ -58,8 +62,6 @@ export class ViewMedicineCategoryView {
         if (add_btn) {
             add_btn.addEventListener('click', () => {
                 dashboardController.createRadiologyCategoryPopUp.PreRender();
-                console.log('add btn clicked');
-
             })
         }
 
@@ -96,6 +98,10 @@ export class ViewMedicineCategoryView {
         const Delete_btn = document.querySelectorAll('#Delete_btn');
         Delete_btn.forEach(btn => {
             btn.addEventListener('click', async (event) => {
+                if (!ALLOW_TO_ADD_UPDATE_CATEGORY.includes(this.role)) {
+                    notify('top_left', 'You are not authorized to delete this category.', 'warning');
+                    return;
+                }
                 // disable propagation
                 event.stopPropagation();
 
@@ -181,7 +187,7 @@ export class ViewMedicineCategoryView {
                     <p class="name">${medicineCategory.created_by}</p>
                     <p class="date">${this.date_formatter(medicineCategory.created_at)}</p>
                     <div class="action d_flex flex__c_c">
-                        <button type="button" id="Delete_btn" class="main_btn ${medicineCategory.medicine > 0 ? 'delete_inactive' : 'delete_active'}">Delete</button>
+                        <button type="button" id="Delete_btn" class="main_btn ${medicineCategory.medicine > 0 ? 'delete_inactive' : 'delete_active'} ${ALLOW_TO_ADD_UPDATE_CATEGORY.includes(this.role) ? '' : 'disabled'}">Delete</button>
                     </div>
                 </div>
             `;
@@ -309,7 +315,9 @@ export class ViewMedicineCategoryView {
                     <br-button loader_width="23" class="btn_search" type="submit">
                             <span class="switch_icon_magnifying_glass"></span>
                     </br-button>
+                    ${ALLOW_TO_ADD_UPDATE_CATEGORY.includes(this.role) ? `
                     <div class="add_btn" title="Create Category" id="open_add_category_popup"> <span class="switch_icon_add"></span></div>
+                    ` : ''}
                 </div>
             </div>
             <div class="outpatient_table">

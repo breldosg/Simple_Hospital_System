@@ -1,3 +1,4 @@
+import { ALLOW_TO_ADD_UPDATE_TEST } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { currency_formatter, notify } from "../script/index.js";
@@ -22,6 +23,9 @@ export class LaboratoryTestListView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+
+        // get role from global state
+        this.role = globalStates.getState('user_data').role;
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
@@ -57,6 +61,14 @@ export class LaboratoryTestListView {
             }
 
         });
+
+        // Create Laboratory Test Button
+        var create_laboratory_test = this.main_component.querySelector('#open_add_product_popup');
+        if (create_laboratory_test) {
+            create_laboratory_test.addEventListener('click', () => {
+                dashboardController.createLaboratoryTestPopUp.PreRender();
+            });
+        }
 
         // Pagination buttons
         this.main_component.querySelector('.main_btn.next').addEventListener('click', async () => {
@@ -155,14 +167,18 @@ export class LaboratoryTestListView {
                     <p class="remain">${currency_formatter(test.price)}</p>
                     <p class="status">${test.status}</p>
                     <div class="action d_flex flex__c_c">
-                        <button class="main_btn edit_price_btn">Edit Price</button>
+                        <button class="main_btn edit_price_btn ${ALLOW_TO_ADD_UPDATE_TEST.includes(this.role) ? '' : 'disabled'}">Edit Price</button>
                     </div>
             `;
 
             // add event listener to the edit price btn
             row.querySelector('.edit_price_btn').addEventListener('click', () => {
-                dashboardController.updateLaboratoryTestPricePopUpView.PreRender(test);
-                console.log('edit price btn clicked', test);
+                if (ALLOW_TO_ADD_UPDATE_TEST.includes(this.role)) {
+                    dashboardController.updateLaboratoryTestPricePopUpView.PreRender(test);
+                    console.log('edit price btn clicked', test);
+                } else {
+                    notify('top_left', 'You are not authorized to edit this test.', 'warning');
+                }
             });
 
             tableBody.appendChild(row);
@@ -383,9 +399,12 @@ export class LaboratoryTestListView {
     
         <div class="in_table_top d_flex flex__u_s">
             <h4>Laboratory Test List</h4>
+            
+            ${ALLOW_TO_ADD_UPDATE_TEST.includes(this.role) ? `
             <div class="add_btn" title="Create New Test" id="open_add_product_popup">
                 <span class="switch_icon_add"></span>
             </div>
+            ` : ''}
         </div>
         <div class="outpatient_table">
     

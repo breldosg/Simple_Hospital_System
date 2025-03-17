@@ -1,3 +1,4 @@
+import { ALLOW_TO_ADD_UPDATE_PRODUCT } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { notify } from "../script/index.js";
@@ -22,6 +23,9 @@ export class ViewMedicineView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+
+        // get role from global state
+        this.role = globalStates.getState('user_data').role;
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
@@ -58,9 +62,12 @@ export class ViewMedicineView {
 
 
         // add btn
-        document.querySelector('.add_btn').addEventListener('click', () => {
-            dashboardController.createProductPopUpView.PreRender();
-        });
+        const add_btn = document.querySelector('.add_btn');
+        if (add_btn) {
+            add_btn.addEventListener('click', () => {
+                dashboardController.createProductPopUpView.PreRender();
+            });
+        }
 
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
@@ -148,6 +155,8 @@ export class ViewMedicineView {
         current_page.innerText = medicineData.batch;
         this.total_page_num = medicineData.pages;
 
+        var activate_btn_class = ALLOW_TO_ADD_UPDATE_PRODUCT.includes(this.role) ? '' : 'disabled';
+        var deactivate_btn_class = ALLOW_TO_ADD_UPDATE_PRODUCT.includes(this.role) ? '' : 'disabled';
 
         medicineData.medicineList.forEach((medicine, index) => {
             var remains = this.side_fetched == 'pharmacy' ? medicine.pharmacy_quantity : medicine.store_quantity;
@@ -160,7 +169,7 @@ export class ViewMedicineView {
                     <p class="remain">${remains}</p>
                     <p class="status">${medicine.status}</p>
                     <div class="action d_flex flex__c_c">
-                        ${medicine.status === 'active' ? '<button id="deactivate_btn" class="main_btn error">Deactivate</button>' : '<button id="activate_btn" class="main_btn">Activate</button>'}
+                        ${medicine.status === 'active' ? `<button id="deactivate_btn" class="main_btn error ${deactivate_btn_class}">Deactivate</button>` : `<button id="activate_btn" class="main_btn ${activate_btn_class}">Activate</button>`}
                     </div>
                 </div>
             `;
@@ -208,6 +217,10 @@ export class ViewMedicineView {
 
         row_btn.forEach(btn => {
             btn.addEventListener('click', async (event) => {
+                if (!ALLOW_TO_ADD_UPDATE_PRODUCT.includes(this.role)) {
+                    notify('top_left', 'You are not authorized to edit this product.', 'warning');
+                    return;
+                }
                 // disable propagation
                 event.stopPropagation();
                 // Get the btn closest with class tr
@@ -487,9 +500,11 @@ export class ViewMedicineView {
         <div class="in_table_top d_flex flex__u_s">
             <h4>Product List</h4>
 
+            ${ALLOW_TO_ADD_UPDATE_PRODUCT.includes(this.role) ? `
             <div class="add_btn" title="Create Product" id="open_add_product_popup">
                 <span class="switch_icon_add"></span>
             </div>
+            ` : ''}
         </div>
         <div class="outpatient_table">
     

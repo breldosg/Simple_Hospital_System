@@ -20,7 +20,10 @@ const ROUTE_CONFIG = {
     get_laboratory_test_order_list: 910,
     update_laboratory_test_price: 990,
     get_category: 970,
-
+    search_laboratory_category: 1190,
+    create_laboratory_category: 1200,
+    update_laboratory_category: 1210,
+    delete_laboratory_category: 1220,
 };
 
 

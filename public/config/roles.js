@@ -5,6 +5,7 @@ export const ROLES = {
         name: 'Doctor',
         navItems: [
             { label: 'Patients', link: '/patient' },
+            { label: 'Store&Pharmacy', link: '/store' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -13,6 +14,43 @@ export const ROLES = {
                 choices: [
                     { label: 'View All Patient', href: '/patient/viewpatient' },
                     { label: 'Active Visits', href: '/patient/activevisit' }
+                ]
+            },
+            {
+                type: '/store',
+                choices: [
+                    { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                ]
+            },
+            {
+                type: '/notice',
+                choices: [
+                    { label: 'View All notice', href: '/notice/viewnotice' }
+                ]
+            }
+        ]
+    },
+
+    // Specialist Doctor role
+    SDCT: {
+        name: 'Specialist Doctor',
+        navItems: [
+            { label: 'Patients', link: '/patient' },
+            { label: 'Store & Pharmacy', link: '/store' },
+            { label: 'Notice', link: '/notice' }
+        ],
+        navigationSections: [
+            {
+                type: '/patient',
+                choices: [
+                    { label: 'View All Patient', href: '/patient/viewpatient' },
+                    { label: 'Active Visits', href: '/patient/activevisit' }
+                ]
+            },
+            {
+                type: '/store',
+                choices: [
+                    { label: 'View All Products', href: '/store/viewpharmacyproducts' },
                 ]
             },
             {
@@ -29,6 +67,7 @@ export const ROLES = {
         name: 'Receptionist',
         navItems: [
             { label: 'Patients', link: '/patient' },
+            { label: 'Billing', link: '/billing' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -40,6 +79,12 @@ export const ROLES = {
                 ]
             },
             {
+                type: '/billing',
+                choices: [
+                    { label: 'View Active Bills', href: '/billing/activebills' },
+                ]
+            },
+            {
                 type: '/notice',
                 choices: [
                     { label: 'View All notice', href: '/notice/viewnotice' }
@@ -47,6 +92,7 @@ export const ROLES = {
             }
         ]
     },
+
     // Nurse role
     NRS: {
         name: 'Nurse',
@@ -121,6 +167,7 @@ export const ROLES = {
                 choices: [
                     { label: 'Active Visits', href: '/laboratory/activevisits' },
                     { label: 'Test List', href: '/laboratory/testlist' },
+                    { label: 'Test Category List', href: '/laboratory/testcategorylist' }
                 ]
             },
             {
@@ -149,12 +196,11 @@ export const ROLES = {
         ]
     },
 
-    // Pharmacist role
-    RMS: {
-        name: 'Pharmacist',
+    // Head Pharmacist role
+    HPMS: {
+        name: 'Head Pharmacist',
         navItems: [
             { label: 'Pharmacy', link: '/pharmacy' },
-            { label: 'Store', link: '/store' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -167,10 +213,28 @@ export const ROLES = {
                 ]
             },
             {
-                type: '/store',
+                type: '/notice',
                 choices: [
-                    { label: 'View All Products', href: '/store/viewpharmacyproducts' },
-                    { label: 'View All batch', href: '/store/viewinatakebatch' }
+                    { label: 'View All notice', href: '/notice/viewnotice' }
+                ]
+            }
+        ]
+    },
+    
+    // Pharmacist role
+    PMS: {
+        name: 'Pharmacist',
+        navItems: [
+            { label: 'Pharmacy', link: '/pharmacy' },
+            { label: 'Notice', link: '/notice' }
+        ],
+        navigationSections: [
+            {
+                type: '/pharmacy',
+                choices: [
+                    { label: 'View All Products', href: '/pharmacy/viewpharmacyproducts' },
+                    { label: 'View All category', href: '/pharmacy/viewcategory' },
+                    { label: 'Active Visits', href: '/pharmacy/activevisits' }
                 ]
             },
             {
@@ -182,9 +246,35 @@ export const ROLES = {
         ]
     },
 
-    // Lab technician role
-    LBT: {
-        name: 'Lab Technician',
+    // Store Manager role
+    STR: {
+        name: 'Store Manager',
+        navItems: [
+            { label: 'Store', link: '/store' },
+            { label: 'Notice', link: '/notice' }
+        ],
+        navigationSections: [
+            {
+                type: '/store',
+                choices: [
+                    { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                    { label: 'View All category', href: '/store/viewcategory' },
+                    { label: 'View All batch', href: '/store/viewinatakebatch' },
+                    { label: 'Pharmacy Orders', href: '/store/orderlist' }
+                ]
+            },
+            {
+                type: '/notice',
+                choices: [
+                    { label: 'View All notice', href: '/notice/viewnotice' }
+                ]
+            }
+        ]
+    },
+
+    // Laboratory Technician role
+    LAB: {
+        name: 'Laboratory Technician',
         navItems: [
             { label: 'Laboratory', link: '/laboratory' },
             { label: 'Notice', link: '/notice' }
@@ -195,6 +285,7 @@ export const ROLES = {
                 choices: [
                     { label: 'Active Visits', href: '/laboratory/activevisits' },
                     { label: 'Test List', href: '/laboratory/testlist' },
+                    { label: 'Test Category List', href: '/laboratory/testcategorylist' }
                 ]
             },
             {
@@ -207,7 +298,7 @@ export const ROLES = {
     },
 
     // Radiologist role
-    RDT: {
+    RDL: {
         name: 'Radiologist',
         navItems: [
             { label: 'Radiology', link: '/radiology' },
@@ -232,7 +323,7 @@ export const ROLES = {
     },
 
     // Billing role
-    BIL: {
+    ACT: {
         name: 'Billing',
         navItems: [
             { label: 'Billing', link: '/billing' },
@@ -254,11 +345,17 @@ export const ROLES = {
             }
         ]
     }
-};
+}
+
+
 
 // Role definitions for ViewPatientView btns and actions
 export const VIEW_PATIENT_BTNS = {
     DCT: {
+        btn_role: ['view_visit', 'view_patient'],
+        btn_action: ['view_visit', 'view_patient']
+    },
+    SDCT: {
         btn_role: ['view_visit', 'view_patient'],
         btn_action: ['view_visit', 'view_patient']
     },
@@ -279,4 +376,30 @@ export const VIEW_PATIENT_BTNS = {
 export const ALLOW_TO_ADD_PATIENT = ['ICT', 'RPT'];
 export const ALLOW_TO_ADD_VISIT = ['ICT', 'RPT'];
 export const ALLOW_TO_CHECKOUT = ['ICT', 'RPT'];
+
+
+
+// lab section
+export const ALLOW_TO_OPEN_LABORATORY_TEST = ['ICT', 'HLAB', 'LAB'];
+export const ALLOW_TO_OPEN_LABORATORY_TEST_CATEGORY = ['ICT', 'HLAB', 'LAB'];
+
+export const ALLOW_TO_ADD_UPDATE_TEST = ['ICT', 'HLAB'];
+export const ALLOW_TO_ADD_UPDATE_TEST_CATEGORY = ['ICT', 'HLAB'];
+
+// radiology section
+export const ALLOW_TO_OPEN_RADIOLOGY_EXAM = ['ICT', 'HRDL', 'RDL'];
+export const ALLOW_TO_OPEN_RADIOLOGY_EXAM_CATEGORY = ['ICT', 'HRDL', 'RDL'];
+
+export const ALLOW_TO_ADD_UPDATE_EXAM = ['ICT', 'HRDL'];
+export const ALLOW_TO_ADD_UPDATE_EXAM_CATEGORY = ['ICT', 'HRDL'];
+
+
+// store section
+export const ALLOW_TO_ADD_UPDATE_PRODUCT = ['ICT', 'STR', 'HPMS'];
+export const ALLOW_TO_ADD_UPDATE_BATCH = ['ICT', 'STR'];
+export const ALLOW_TO_ADD_UPDATE_CATEGORY = ['ICT', 'STR'];
+
+
+
+
 

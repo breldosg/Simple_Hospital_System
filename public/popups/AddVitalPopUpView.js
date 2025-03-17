@@ -18,8 +18,6 @@ export class AddVitalPopUpView {
         this.params = params_json;
         this.vitalData = params_json.vital_data ? params_json.vital_data : [];
 
- 
-
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -39,18 +37,7 @@ export class AddVitalPopUpView {
 
             <div class="input_group">
 
-                <br-input required name="temperature" label="Temperature (deg C)" value="${this.vitalData.temperature ? this.vitalData.temperature : '0'}" type="number" styles="
-                                        border-radius: var(--input_main_border_r);
-                                        width: 300px;
-                                        padding: 10px;
-                                        height: 41px;
-                                        background-color: transparent;
-                                        border: 2px solid var(--input_border);
-                                        " labelStyles="font-size: 12px;"></br-input>
-
-                                        
-
-                <br-input required name="pulse" label="Pulse (bpm)" value="${this.vitalData.pulse ? this.vitalData.pulse : '0'}" type="number" styles="
+                <br-input required name="temperature" label="Temperature (deg C)" value="${this.vitalData.temperature ? this.vitalData.temperature : ''}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -60,8 +47,7 @@ export class AddVitalPopUpView {
                                         " labelStyles="font-size: 12px;"></br-input>
 
 
-
-                <br-input required name="weight" label="Weight (Kg)" value="${this.vitalData.weight ? this.vitalData.weight : '0'}" type="number" styles="
+                <br-input required name="pulse" label="Pulse (bpm)" value="${this.vitalData.pulse ? this.vitalData.pulse : ''}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -71,8 +57,7 @@ export class AddVitalPopUpView {
                                         " labelStyles="font-size: 12px;"></br-input>
 
 
-
-                <br-input required name="o2_saturation" label="O2 Saturation (%)" value="${this.vitalData.o2_saturation ? this.vitalData.o2_saturation : '0'}" type="number" styles="
+                <br-input required name="o2_saturation" label="O2 Saturation (%)" value="${this.vitalData.o2_saturation ? this.vitalData.o2_saturation : ''}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -83,7 +68,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="blood_pressure" label="Blood Pressure (mmHg)" value="${this.vitalData.blood_pressure ? this.vitalData.blood_pressure : '0'}" type="text" styles="
+                <br-input required name="blood_pressure" label="Blood Pressure (mmHg)" value="${this.vitalData.blood_pressure ? this.vitalData.blood_pressure : ''}" type="text" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -94,7 +79,7 @@ export class AddVitalPopUpView {
 
 
 
-                <br-input required name="respiration" label="Respiration (RR)" value="${this.vitalData.respiration ? this.vitalData.respiration : '0'}" type="number" styles="
+                <br-input required name="respiration" label="Respiration (RR)" value="${this.vitalData.respiration ? this.vitalData.respiration : ''}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;
@@ -104,8 +89,17 @@ export class AddVitalPopUpView {
                                         " labelStyles="font-size: 12px;"></br-input>
 
 
+                <br-input name="weight" label="Weight (Kg)" value="${this.vitalData.weight ? this.vitalData.weight : ''}" type="number" styles="
+                                        border-radius: var(--input_main_border_r);
+                                        width: 300px;
+                                        padding: 10px;
+                                        height: 41px;
+                                        background-color: transparent;
+                                        border: 2px solid var(--input_border);
+                                        " labelStyles="font-size: 12px;"></br-input>
 
-                <br-input required name="height" label="Height (cm)" value="${this.vitalData.height ? this.vitalData.height : '0'}" type="number" styles="
+
+                <br-input name="height" label="Height (cm)" value="${this.vitalData.height ? this.vitalData.height : ''}" type="number" styles="
                                         border-radius: var(--input_main_border_r);
                                         width: 300px;
                                         padding: 10px;

@@ -32,12 +32,18 @@ export class VisitVitalCardView {
         cont.classList.add('active');
         cont.prepend(this.ViewReturn());
 
+
+
         this.updateVitalView();
     }
 
     updateVitalView() {
 
         const container = document.querySelector('.vital_card_cont .vital_card')
+
+        if (this.data.id) {
+            dashboardController.singleVisitView.add_to_rendered_card_array('addVitalPopUpView')
+        }
 
         container.innerHTML = `
                 <div class="value_cont">
@@ -125,7 +131,6 @@ export class VisitVitalCardView {
             visit_id: this.visit_id
         }
 
-
         try {
             const response = await fetch('/api/patient/save_vital', {
                 method: 'POST',
@@ -159,6 +164,7 @@ export class VisitVitalCardView {
                 // After successful creation, clear the popup and close it
                 dashboardController.addVitalPopUpView.close();
                 this.data = data_old;
+
                 this.updateVitalView();
 
             } else {
