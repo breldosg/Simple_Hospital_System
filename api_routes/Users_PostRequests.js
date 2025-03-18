@@ -6,6 +6,7 @@ const { createRouteHandler } = require('../utility/serverFunctions');
 const ROUTE_CONFIG = {
     // Staff Management
     register_staff: 100,
+    update_staff_profile: 1230,
     search_staff: 140,
 
     // Role Management

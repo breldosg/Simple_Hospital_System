@@ -6,15 +6,22 @@ import { frontRouter } from "../script/route.js";
 export class AddUserViewPopup {
     constructor() {
         window.registerUser = this.registerUser.bind(this);
+        this.is_update = false;
+        this.data = null;
     }
 
-    async PreRender() {
+    async PreRender(params) {
         // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+        console.log(params);
 
+        if (params) {
+            this.is_update = params.is_update ?? false;
+            this.data = params.data ?? null;
+        }
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
         cont.innerHTML = this.ViewReturn('', 'active');
@@ -42,7 +49,9 @@ export class AddUserViewPopup {
             };
 
             const role_selector = this.main_container.querySelector('#role_selector');
-            role_selector.innerHTML = options(roles_raw.roles);
+            if (role_selector) {
+                role_selector.innerHTML = options(roles_raw.roles);
+            }
 
             const department_selector = this.main_container.querySelector('#department_selector');
             department_selector.innerHTML = options(roles_raw.departments);
@@ -66,48 +75,51 @@ export class AddUserViewPopup {
                 <div class="slide">
                     <p class="heading">Staff information</p>
                     <div class="input_group">
-                        <br-input label="Full name" name="name" type="text" styles="
+                        <br-input label="Full name" name="name" type="text" value="${this.is_update ? this.data.name == null ? '' : this.data.name : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
 
-                        <br-input label="Email" name="email" type="email" styles="
+                        <br-input label="Email" name="email" type="email" value="${this.is_update ? this.data.email == null ? '' : this.data.email : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required ></br-input>
 
-                        <br-input label="Username" name="user_name" type="text" styles="
+                        <br-input label="Username" name="user_name" type="text" value="${this.is_update ? this.data.user_name == null ? '' : this.data.user_name : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required ></br-input>
 
-                        <br-select required fontSize="13px" label="Gender" name="gender" placeholder="Select Gender" styles="
+                        <br-select required fontSize="13px" label="Gender" name="gender" placeholder="Select Gender" value="${this.is_update ? this.data.gender == null ? '' : this.data.gender : ''}"  styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;">
                             <br-option value="Male">Male</br-option>
                             <br-option value="Female">Female</br-option>
                         </br-select>
 
-                        <br-select required fontSize="13px" id="role_selector" label="Role" name="role" placeholder="Select Role" styles="
-                            ${this.input_styles()}
-                        " labelStyles="font-size: 12px;">
-                            
+                        ${this.is_update ? '' : `
+                                <br-select required fontSize="13px" id="role_selector" search=true label="Role" name="role" placeholder="Select Role" styles="
+                                    ${this.input_styles()}
+                                " labelStyles="font-size: 12px;">
+                                </br-select>
+                            `
+            }
                         </br-select>
-                        <br-select required fontSize="13px" id="department_selector" label="Department" name="department" placeholder="Select Department" styles="
+                        <br-select required fontSize="13px" id="department_selector" search=true label="Department" name="department" placeholder="Select Department" value="${this.is_update ? this.data.department_id == null ? '' : this.data.department_id : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;">
                             
                         </br-select>
 
-                        <br-input label="Specialist" type="text" name="specialist" styles="
+                        <br-input label="Specialist" type="text" name="specialist" value="${this.is_update ? this.data.specialist == null ? '' : this.data.specialist : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;"></br-input>
 
-                        <br-input label="Phone number" type="tel" name="phone" styles="
+                        <br-input label="Phone number" type="tel" name="phone" value="${this.is_update ? this.data.phone == null ? '' : this.data.phone : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>
 
 
                         <div class="btn_cont">
                             <br-button loader_width="23" class="btn_next cancel_btn" type="close" >Cancel</br-button>
-                            <br-button loader_width="23" class="btn_next" type="submit" >Submit</br-button>
+                            <br-button loader_width="23" class="btn_next" type="submit" >${this.is_update ? 'Update' : 'Submit'}</br-button>
                         </div>
                     </div>
                 </div>
@@ -130,8 +142,13 @@ export class AddUserViewPopup {
         const btn_submit = document.querySelector('br-button[type="submit"]');
         btn_submit.setAttribute('loading', true);
 
+        var link = '/api/users/register_staff';
+        if (this.is_update) {
+            link = '/api/users/update_staff_profile';
+        }
+
         try {
-            const response = await fetch('/api/users/register_staff', {
+            const response = await fetch(link, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -161,7 +178,11 @@ export class AddUserViewPopup {
             if (result.success) {
                 notify('top_left', result.message, 'success');
                 this.close_popup();
-                dashboardController.staffListView.fetchAndRenderData();
+                if (this.is_update) {
+                    dashboardController.userProfileView.PreRender();
+                } else {
+                    dashboardController.staffListView.fetchAndRenderData();
+                }
             } else {
                 notify('top_left', result.message, 'warning');
             }
@@ -178,7 +199,6 @@ export class AddUserViewPopup {
         popup_cont.innerHTML = '';
         popup_cont.classList.remove('active');
     }
-
 
     async fetchData() {
         try {
@@ -223,12 +243,11 @@ export class AddUserViewPopup {
     input_styles() {
         return `
         border-radius: var(--input_main_border_r);
-                            width: 300px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);`;
+        width: 300px;
+        padding: 10px;
+        height: 41px;
+        background-color: transparent;
+        border: 2px solid var(--input_border);`;
     }
-
 }
 

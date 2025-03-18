@@ -27,7 +27,7 @@ export class RadiologyExamsListView {
         // get role from global state
         this.role = globalStates.getState('user_data').role;
 
-        if(!ALLOW_TO_OPEN_RADIOLOGY_EXAM.includes(this.role)){
+        if (!ALLOW_TO_OPEN_RADIOLOGY_EXAM.includes(this.role)) {
             notify('top_left', 'You are not authorized to access this page.', 'warning');
             frontRouter.navigate('/dashboard');
             return;

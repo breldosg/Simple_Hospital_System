@@ -1,7 +1,7 @@
 import { ALLOW_TO_ADD_UPDATE_PRODUCT } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class SingleMedicineCategoryView {
@@ -17,6 +17,7 @@ export class SingleMedicineCategoryView {
         this.table_actions = false;
 
     }
+
     async PreRender(params) {
         // Render the initial structure with the loader
         const check_dashboard = document.querySelector('.update_cont');
@@ -89,7 +90,6 @@ export class SingleMedicineCategoryView {
             tableBody.insertAdjacentHTML('beforeend', row);
         });
 
-        // this.row_listener();
     }
 
 
@@ -124,7 +124,7 @@ export class SingleMedicineCategoryView {
             </p>
             <p>
                 <span class="title">Created at</span>
-                <span class="content">${data.created_at ? this.date_formatter(data.created_at) : ''}</span>
+                <span class="content">${data.created_at ? date_formatter(data.created_at) : ''}</span>
             </p>
         </div>
 
@@ -187,7 +187,6 @@ export class SingleMedicineCategoryView {
             <div class="loader_cont active"><div class="loader"></div></div>
         `;
     }
-
 
     attach_listeners() {
 
@@ -270,13 +269,4 @@ export class SingleMedicineCategoryView {
             return null;
         }
     }
-
-    date_formatter(ymd) {
-        console.log('date', ymd);
-
-        const dateee = new Date(ymd);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(dateee);
-    }
-
 }

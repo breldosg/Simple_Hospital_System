@@ -1,3 +1,4 @@
+import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify, timeStamp_formatter } from "../script/index.js";
 
@@ -35,7 +36,7 @@ export class UserProfileView {
     }
 
     setupEventListeners() {
-        const tabs = document.querySelectorAll('.profile-tab');
+        const tabs = this.main_container.querySelectorAll('.profile-tab');
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 this.activeTab = tab.textContent.trim();
@@ -45,15 +46,25 @@ export class UserProfileView {
         });
 
         // Add event listener for password visibility toggles
-        document.querySelectorAll('.password-toggle').forEach(toggle => {
+        this.main_container.querySelectorAll('.password-toggle').forEach(toggle => {
             toggle.addEventListener('click', (e) => {
                 const input = e.target.closest('.password-field').querySelector('input');
                 input.type = input.type === 'password' ? 'text' : 'password';
             });
         });
 
+        var edit_profile_btn = this.main_container.querySelector('.edit_profile_btn');
+        edit_profile_btn.addEventListener('click', () => {
+            dashboardController.addUserViewPopup.PreRender({
+                is_update: true,
+                data: this.profileData
+            });
+            console.log(this.profileData);
+
+        });
+
         // Add event listener for password update form
-        const passwordForm = document.querySelector('.password-form');
+        const passwordForm = this.main_container.querySelector('.password-form');
         if (passwordForm) {
             passwordForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -110,35 +121,39 @@ export class UserProfileView {
                 <div class="details-grid">
                     <div class="detail-row">
                         <p class="detail-label">Name</p>
-                        <p class="detail-value">${this.profileData.name}</p>
+                        <p class="detail-value">${this.profileData.name == null ? 'N/A' : this.profileData.name}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Email</p>
-                        <p class="detail-value">${this.profileData.email || ''}</p>
+                        <p class="detail-value">${this.profileData.email == null ? 'N/A' : this.profileData.email}</p>
+                    </div>
+                    <div class="detail-row">
+                        <p class="detail-label">Gender</p>
+                        <p class="detail-value">${this.profileData.gender == null ? 'N/A' : this.profileData.gender}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Position</p>
-                        <p class="detail-value">${this.profileData.position}</p>
+                        <p class="detail-value">${this.profileData.position == null ? 'N/A' : this.profileData.position}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Department</p>
-                        <p class="detail-value">Information Technology</p>
+                        <p class="detail-value">${this.profileData.department == null ? 'N/A' : this.profileData.department}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Specialization</p>
-                        <p class="detail-value">Developer</p>
+                        <p class="detail-value">${this.profileData.specialist == null ? 'N/A' : this.profileData.specialist}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Phone</p>
-                        <p class="detail-value">${this.profileData.phone}</p>
+                        <p class="detail-value">${this.profileData.phone == null ? 'N/A' : this.profileData.phone}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Account Status</p>
-                        <p class="detail-value">${this.profileData.verified ? 'Verified' : 'Unverified'}</p>
+                        <p class="detail-value">${this.profileData.verified == null ? 'N/A' : this.profileData.verified ? 'Verified' : 'Unverified'}</p>
                     </div>
                     <div class="detail-row">
                         <p class="detail-label">Joined</p>
-                        <p class="detail-value">${date_formatter(this.profileData.joined_date)}</p>
+                        <p class="detail-value">${this.profileData.joined_date == null ? 'N/A' : date_formatter(this.profileData.joined_date)}</p>
                     </div>
                 </div>
             </div>
