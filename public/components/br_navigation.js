@@ -166,6 +166,7 @@ export class BrCustomNavigation extends HTMLElement {
             height: 100%;
             gap: 10px;
             position: relative;
+            cursor: pointer;
 
             * {
                 color: var(--white);
@@ -220,7 +221,11 @@ export class BrCustomNavigation extends HTMLElement {
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
 
-            
+            .profile-dropdown.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
 
             .email-section {
                 padding: 12px;
@@ -262,13 +267,6 @@ export class BrCustomNavigation extends HTMLElement {
                 font-size: 14px;
             }
         }
-            .staff_cont:hover .profile-dropdown,
-            .staff_cont:focus-within .profile-dropdown {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
     }
 
     .choice_collection {
@@ -391,6 +389,27 @@ export class BrCustomNavigation extends HTMLElement {
         // document.body.classList.add(savedTheme);
         // const initialIcon = savedTheme === 'dark_mode' ? 'switch_icon_moon' : 'switch_icon_wb_sunny';
         // appearance.querySelector('span').classList.add(initialIcon);
+
+        // Add profile dropdown toggle functionality
+        const userProfile = this.shadowRoot.querySelector('#user_profile');
+        const profileDropdown = this.shadowRoot.querySelector('.profile-dropdown');
+        
+        userProfile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            if (profileDropdown.classList.contains('active')) {
+                profileDropdown.classList.remove('active');
+            }
+        });
+        
+        // Prevent dropdown from closing when clicking inside it
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     }
 
     setup() {

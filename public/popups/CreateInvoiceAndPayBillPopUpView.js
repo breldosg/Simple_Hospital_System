@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { currency_formatter, date_formatter, getCurrentDate, notify } from "../script/index.js";
+import { currency_formatter, date_formatter, getCurrentDate, notify, print_div } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class CreateInvoiceAndPayBillPopUpView {
@@ -113,7 +113,7 @@ export class CreateInvoiceAndPayBillPopUpView {
         const print_invoice_btn = this.main_container.querySelector('.print_invoice_btn');
         if (print_invoice_btn) {
             print_invoice_btn.addEventListener('click', async () => {
-                this.print_receipt(this.main_container);
+                print_div(this.main_container, this.receipt_style());
             });
         }
     }
@@ -346,34 +346,5 @@ export class CreateInvoiceAndPayBillPopUpView {
     `;
     }
 
-    print_receipt(div) {
-
-        // Create iframe  
-        var iframe = document.createElement('iframe');
-        iframe.style.position = 'absolute';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
-        iframe.style.border = 'none';
-        document.body.appendChild(iframe);
-
-        var doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(`  
-            <html>  
-                <head>  
-                    <title>Print</title>  
-                    <style>  
-                        ${this.receipt_style()}
-                    </style>  
-                </head>  
-                <body>${div.outerHTML}</body>  
-            </html>  
-        `);
-        doc.close();
-
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-        document.body.removeChild(iframe);
-    }
 
 }

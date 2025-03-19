@@ -299,6 +299,36 @@ export const currency_formatter = (amount, with_symbol = true) => {
     }
 }
 
+export function print_div(div, style) {
+    // Create iframe  
+    var iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
 
+    var doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`  
+        <html>  
+            <head>  
+                <link rel="stylesheet" href="/public/icons/style.css">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/breldosg/Xt-style-pack@main/icons/style.css">
+                <link rel="stylesheet" href="/public/styles/styles.css">
+                <title>Print</title>  
+                <style>  
+                    ${style}
+                </style>  
+            </head>  
+            <body>${div.outerHTML}</body>  
+        </html>  
+    `);
+    doc.close();
+
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+    document.body.removeChild(iframe);
+}
 
 

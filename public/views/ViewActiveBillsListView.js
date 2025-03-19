@@ -24,6 +24,8 @@ export class ViewActiveBillsListView {
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
+        
+        this.main_container = document.querySelector('.active_radiology_list');
 
         // Fetch the initial batch of Patient data
         await this.fetchAndRenderData();
@@ -32,7 +34,7 @@ export class ViewActiveBillsListView {
 
     attachEventListeners() {
         // Search input event listener
-        const searchInput = document.querySelector('.search_cont input');
+        const searchInput = this.main_container.querySelector('.search_cont input');
         searchInput.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter') {
                 this.searchTerm = searchInput.value;
@@ -41,8 +43,17 @@ export class ViewActiveBillsListView {
             }
         });
 
+        
+        var btn_search = this.main_container.querySelector('.btn_search');
+        btn_search.addEventListener('click', async () => {
+            this.searchTerm = searchInput.value;
+            this.batchNumber = 1; // Reset to batch 1 when searching
+            await this.fetchAndRenderData();
+        });
+
+
         // Pagination buttons
-        document.querySelector('.main_btn.next').addEventListener('click', async () => {
+        this.main_container.querySelector('.main_btn.next').addEventListener('click', async () => {
             if (this.batchNumber < this.total_page_num) {
                 this.batchNumber += 1;
                 await this.fetchAndRenderData();
@@ -51,7 +62,7 @@ export class ViewActiveBillsListView {
             // await this.fetchAndRenderData();
         });
 
-        document.querySelector('.main_btn.prev').addEventListener('click', async () => {
+        this.main_container.querySelector('.main_btn.prev').addEventListener('click', async () => {
             if (this.batchNumber > 1) {
                 this.batchNumber -= 1;
                 await this.fetchAndRenderData();
@@ -59,10 +70,8 @@ export class ViewActiveBillsListView {
         });
     }
 
-
     async fetchAndRenderData() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn(); // Show loader
+        this.loadingContent();
         const PatientData = await this.fetchData(); // Fetch data with search term and batch number
 
         this.PatientData = PatientData || [];
@@ -71,33 +80,44 @@ export class ViewActiveBillsListView {
     }
 
     render() {
-        const cont = document.querySelector('.update_cont');
-        cont.innerHTML = this.ViewReturn();
 
         if (this.PatientData.VisitList && this.PatientData.VisitList.length > 0) {
             this.populateTable(this.PatientData);
         } else {
-            const show_count = document.querySelector('.show_count');
-            const total_data = document.querySelector('.total_data');
-            const total_page = document.querySelector('.total_page');
+            const show_count = this.main_container.querySelector('.show_count');
+            const total_data = this.main_container.querySelector('.total_data');
+            const total_page = this.main_container.querySelector('.total_page');
             show_count.innerText = 0;
             total_data.innerText = 0;
             total_page.innerText = 1;
             this.total_page_num = 1;
             this.show_count_num = 0;
             this.total_data_num = 0;
-            document.querySelector('.start_page').style.display = 'flex'; // No data message
+            this.main_container.querySelector('.start_page').style.display = 'flex'; // No data message
         }
-        document.querySelector('.loader_cont').classList.remove('active');
+        // this.main_container.querySelector('.loader_cont').classList.remove('active');
+    }
+
+    
+    loadingContent() {
+        const tableBody = this.main_container.querySelector('.table_body');
+        tableBody.innerHTML = `
+            <div class="start_page deactivate">
+                <p>There Is No Any Active Visit</p>
+            </div>
+            <div class="loader_cont active">
+                <div class="loader"></div>
+            </div>
+    `;
     }
 
     populateTable(PatientData) {
-        const tableBody = document.querySelector('.table_body');
+        const tableBody = this.main_container.querySelector('.table_body');
         tableBody.innerHTML = ''; // Clear table before populating
 
-        const show_count = document.querySelector('.show_count');
-        const total_data = document.querySelector('.total_data');
-        const total_page = document.querySelector('.total_page');
+        const show_count = this.main_container.querySelector('.show_count');
+        const total_data = this.main_container.querySelector('.total_data');
+        const total_page = this.main_container.querySelector('.total_page');
 
 
         show_count.innerText = PatientData.showData;
@@ -186,6 +206,10 @@ export class ViewActiveBillsListView {
                 <h4>Active Visit List With Bill</h4>
                 <div class="search_cont">
                     <input type="text" placeholder="Search by name or id" value="${this.searchTerm}">
+
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                            <span class="switch_icon_magnifying_glass"></span>
+                    </br-button>
                 </div>
             </div>
             <div class="outpatient_table">

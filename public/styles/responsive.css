@@ -1,0 +1,60 @@
+/* -------------- Tablet -------------- */
+@media (max-width: 768px) {
+    .patient_info_cont {
+        flex-direction: column;
+        align-items: center;
+
+        .patient_detail {
+            align-items: center;
+            .name_card {
+                justify-content: center !important;
+                gap: 5px;
+            }
+
+            .card {
+                justify-content: center !important;
+
+                .vital_card {
+                    border-width: 1px !important;
+                    padding: 5px !important;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                }
+            }
+
+            .vital {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr);
+                width: fit-content !important;
+            }
+        }
+    }
+
+    .single_visit_history_cont{
+        .clinic_plan_cont{
+            grid-template-columns: 1fr !important;
+        }
+        .pre_final_diagnosis{
+            grid-template-columns: 1fr !important;
+
+        }
+    }
+}
+
+
+
+/* -------------- Mobile -------------- */
+@media (max-width: 480px) {
+    .update_cont {
+        height: 100vh;
+    }
+}
+
+/* -------------- Print -------------- */
+@media print {
+    .patient_info_cont {
+        display: none;
+    }
+}

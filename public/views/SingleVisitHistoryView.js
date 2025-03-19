@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { date_formatter, notify, print_div } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class SingleVisitHistoryView {
@@ -19,6 +19,7 @@ export class SingleVisitHistoryView {
 
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn('', 'active');
+        this.main_container = document.querySelector('.single_visit_history_cont');
 
         this.patient_id = params.id;
         // Now call render which will fetch data and populate it
@@ -30,8 +31,8 @@ export class SingleVisitHistoryView {
         const patient_data = await this.fetchData(id); // Wait for fetchData to complete
 
         console.log(patient_data);
-        
-        
+
+
         if (patient_data) {
             this.patient_name = patient_data.name;
             cont.innerHTML = this.ViewReturn(patient_data);
@@ -44,10 +45,10 @@ export class SingleVisitHistoryView {
 
     ViewReturn(data, loader = '') {
         // Check if vital signs data is available and not empty
-        const vitalSigns = data && data.vital_signs && 
-                          typeof data.vital_signs === 'object' && 
-                          Object.keys(data.vital_signs).length > 0 ? 
-                          data.vital_signs : null;
+        const vitalSigns = data && data.vital_signs &&
+            typeof data.vital_signs === 'object' &&
+            Object.keys(data.vital_signs).length > 0 ?
+            data.vital_signs : null;
 
         // Calculate BMI
         let bmi = 0;
@@ -55,7 +56,7 @@ export class SingleVisitHistoryView {
         if (vitalSigns && vitalSigns.height && vitalSigns.weight) {
             const height_m = vitalSigns.height / 100;
             bmi = (vitalSigns.weight / (height_m * height_m)).toFixed(1);
-            
+
             if (bmi < 18.5) bmiStatus = 'low';
             else if (bmi >= 18.5 && bmi < 25) bmiStatus = 'normal';
             else bmiStatus = 'high';
@@ -66,10 +67,10 @@ export class SingleVisitHistoryView {
             if (!bp) return { status: 'normal', systolic: 0, diastolic: 0 };
             const [systolic, diastolic] = bp.split('/').map(Number);
             let status = 'normal';
-            
+
             if (systolic < 90 || diastolic < 60) status = 'low';
             else if (systolic >= 140 || diastolic >= 90) status = 'high';
-            
+
             return { status, systolic, diastolic };
         };
 
@@ -77,9 +78,9 @@ export class SingleVisitHistoryView {
 
         // Helper function to get arrow icon and status text
         const getStatusInfo = (status) => {
-            switch(status) {
+            switch (status) {
                 case 'high':
-                    return { 
+                    return {
                         icon: '<span class="switch_icon_arrow_drop_up"></span>',
                         text: 'High'
                     };
@@ -135,7 +136,11 @@ export class SingleVisitHistoryView {
 
         return `
 <div class="single_visit_history_cont">
-    <div class="top_card">
+        <div class="print_btn">
+            <button type="button" class="print_btn_btn">Print Report</button>
+        </div>
+
+    <div class="top_card patient_info_cont">
         <div class="Patient_imag">
             <img src="${data == '' ? '' : data.Patient_img}" alt="">
         </div>
@@ -241,25 +246,454 @@ export class SingleVisitHistoryView {
             <div class="loader"></div>
         </div>
     </div>
+
+    <div class="section_cont clinic_plan_cont">
+        <div class="clinical_evaluation_cont">
+            <h3>Clinical Evaluation</h3>
+            <div class="card">
+            <div class="top_eval_card">
+                <p class="date">Mar 18, 2025</p>
+                <p class="doctor">Kelvin Godliver</p>
+            </div>
+            <div class="group">
+                <p class="head">Chief Complaint</p>
+                <p class="value">Lorem ipsum dolor sit,
+                    amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+            </div>
+            <div class="group">
+                <p class="head">History of Present Illness</p>
+                <p class="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+            </div>
+            <div class="group">
+                <p class="head">Review of Systems</p>
+                <p class="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+            </div>
+            <div class="group">
+                <p class="head">General Examination</p>
+                <p class="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+            </div>
+            <div class="group">
+                <p class="head">Systemic Examination</p>
+                <p class="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+            </div>
+            
+        </div>
+        
+        </div>
+
+        <div class="plan_for_next_visit_cont">
+            <h3>Plan for Next Visit</h3>
+            <div class="card">
+                <div class="top_plan_card">
+                    <p class="date">Mar 18, 2025</p>
+                    <p class="doctor">Kelvin Godliver</p>
+                </div>
+                <div class="group">
+                    <p class="head">Purpose of Visit</p>
+                    <p class="value">Lorem Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus quae a consequatur nihil nemo facere neque, incidunt nisi velit repellat.ipsum dolor sit, amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Instructions</p>
+                    <p class="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore at a facere ab ducimus aut quo excepturi distinctio sunt minus nobis voluptate neque voluptatum asperiores architecto quam, voluptas iusto.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pre_final_diagnosis">
+        <div class="diagnosis_cont">
+            <h3>Preliminary Diagnosis</h3>
+            <div class="card_cont">
+                <div class="card">
+                    <div class="icon_card">
+                        <span class="switch_icon_accessibility"></span>
+                    </div>
+                    <p class="name">Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div class="card">
+                    <div class="icon_card">
+                        <span class="switch_icon_accessibility"></span>
+                    </div>
+                    <p class="name">Lorem ipsum dolor sit.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="icon_card">
+                        <span class="switch_icon_accessibility"></span>
+                    </div>
+                    <p class="name">Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="diagnosis_cont">
+            <h3>Final Diagnosis</h3>
+            <div class="card_cont">
+                <div class="card">
+                    <div class="icon_card">
+                        <span class="switch_icon_accessibility"></span>
+                    </div>
+                    <p class="name">Lorem ipsum dolor sit amet.</p>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="lab_report_cont">
+        <h3>Laboratory Report</h3>
+        <div class="card">
+            <div class="lab_card_top">
+                <p class="name">Blood Test</p>
+                <p class="date">Mar 18, 2025</p>
+            </div>
+            <div class="lab_card_bottom">
+                <div class="t_head tr">
+                    <p class="column">Test</p>
+                    <p class="column">Result</p>
+                    <p class="column">Normal Range</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="lab_card_top">
+                <p class="name">Urine Test</p>
+                <p class="date">Mar 18, 2025</p>
+            </div>
+            <div class="lab_card_bottom">
+                <div class="t_head tr">
+                    <p class="column">Test</p>
+                    <p class="column">Result</p>
+                    <p class="column">Normal Range</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+                <div class="t_body tr">
+                    <p class="column">WBC</p>
+                    <p class="column">10.0 mmol/L</p>
+                    <p class="column">4.5-11.0</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="radiology_report_cont">
+        <h3>Radiology Report</h3>
+        <div class="card">
+            <div class="rad_card_top">
+                <p class="name">X-Ray</p>
+                <p class="date">Mar 18, 2025</p>
+            </div>
+            <div class="rad_card_bottom">
+                <div class="group">
+                    <p class="head">Comparison</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Findings</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Impression</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Recommendation</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="rad_card_top">
+                <p class="name">X-Ray</p>
+                <p class="date">Mar 18, 2025</p>
+            </div>
+            <div class="rad_card_bottom">
+                <div class="group">
+                    <p class="head">Comparison</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Findings</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Impression</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Recommendation</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="rad_card_top">
+                <p class="name">X-Ray</p>
+                <p class="date">Mar 18, 2025</p>
+            </div>
+            <div class="rad_card_bottom">
+                <div class="group">
+                    <p class="head">Comparison</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Findings</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Impression</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+                <div class="group">
+                    <p class="head">Recommendation</p>
+                    <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="prescription_cont">
+        <h3>Prescription</h3>
+        <div class="card_cont">
+
+            <div class="card">
+                <div class="medication_card_top">
+                    <p class="name">Acetylsalicylic Acid Solid oral dosage form: 75mg</p>
+                    <p class="date">Mar 18, 2025</p>
+                </div>
+                <div class="card_bottom">
+                    <div class="group">
+                        <p class="head">Quantity:</p>
+                        <p class="value">100 pills</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Duration:</p>    
+                        <p class="value">20 days</p>
+                    </div>
+                    <div class="group instruction_group">
+                        <p class="head">Instruction:</p>    
+                        <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="medication_card_top">
+                    <p class="name">Acetylsalicylic Acid Solid oral dosage form: 75mg</p>
+                    <p class="date">Mar 18, 2025</p>
+                </div>
+                <div class="card_bottom">
+                    <div class="group">
+                        <p class="head">Quantity:</p>
+                        <p class="value">100 pills</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Duration:</p>    
+                        <p class="value">20 days</p>
+                    </div>
+                    <div class="group instruction_group">
+                        <p class="head">Instruction:</p>    
+                        <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <div class="medication_card_top">
+                    <p class="name">Acetylsalicylic Acid Solid oral dosage form: 75mg</p>
+                    <p class="date">Mar 18, 2025</p>
+                </div>
+                <div class="card_bottom">
+                    <div class="group">
+                        <p class="head">Quantity:</p>
+                        <p class="value">100 pills</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Duration:</p>    
+                        <p class="value">20 days</p>
+                    </div>
+                    <div class="group instruction_group">
+                        <p class="head">Instruction:</p>    
+                        <p class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="procedures_cont">
+        <h3>Procedures</h3>
+        <div class="card_cont">
+
+            <div class="card">
+                <div class="medication_card_top">
+                    <p class="name">Acetylsalicylic Acid Solid oral dosage form: 75mg</p>
+                    <p class="date">Mar 18, 2025</p>
+                </div>
+                <div class="card_bottom">
+                    <div class="group">
+                        <p class="head">Leading Surgeon:</p>
+                        <p class="value">Dr. John Doe</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Anesthesiologist Name:</p>    
+                        <p class="value">Dr. Jane Smith</p>
+                    </div>
+                    <div class="group assistant_group">
+                        <p class="head">Assistant</p>
+                        <div class="pill_cont">
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                        </div>    
+                    </div>
+                    
+                </div>
+            </div>
+            
+
+            <div class="card">
+                <div class="medication_card_top">
+                    <p class="name">Acetylsalicylic Acid Solid oral dosage form: 75mg</p>
+                    <p class="date">Mar 18, 2025</p>
+                </div>
+                <div class="card_bottom">
+                    <div class="group">
+                        <p class="head">Leading Surgeon:</p>
+                        <p class="value">Dr. John Doe</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Anesthesiologist Name:</p>    
+                        <p class="value">Dr. Jane Smith</p>
+                    </div>
+                    <div class="group assistant_group">
+                        <p class="head">Assistant</p>
+                        <div class="pill_cont">
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                        </div>    
+                    </div>
+                    
+                </div>
+            </div>
+            
+
+            <div class="card">
+                <div class="medication_card_top">
+                    <p class="name">Acetylsalicylic Acid Solid oral dosage form: 75mg</p>
+                    <p class="date">Mar 18, 2025</p>
+                </div>
+                <div class="card_bottom">
+                    <div class="group">
+                        <p class="head">Leading Surgeon:</p>
+                        <p class="value">Dr. John Doe</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Anesthesiologist Name:</p>    
+                        <p class="value">Dr. Jane Smith</p>
+                    </div>
+                    <div class="group assistant_group">
+                        <p class="head">Assistant</p>
+                        <div class="pill_cont">
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                            <p class="pill">Dr. Jane Smith</p>
+                        </div>    
+                    </div>
+                    
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+
 </div>
 `;
     }
 
     attach_listeners() {
 
-        // const add_visit_btn = document.querySelector('.create_visit_btn');
-        // if (add_visit_btn) {
-        //     add_visit_btn.addEventListener('click', async () => {
+        const print_btn = document.querySelector('.print_btn_btn');
+        if (print_btn) {
+            print_btn.addEventListener('click', async () => {
+                // update some page styles before printing
+                var style = document.createElement('style');
+                style.id = 'print_style';
+                style.innerHTML = this.report_style();
+                document.head.appendChild(style);
 
-        //         // CreateVisitPopUpView().PreRender(this.patient_id);
-        //         dashboardController.createVisitPopUpView.PreRender(
-        //             {
-        //                 id: this.patient_id,
-        //                 p_name: this.patient_name
-        //             });
-
-        //     })
-        // }
+                // get body class list
+                var body_class = document.body.classList.value;
+                // clean body class list
+                document.body.classList.value = '';
+                // add print class to body
+                document.body.classList.add('light_mode');
+                
+                // print the page
+                window.print();
+                document.head.removeChild(style);
+                // restore body class list
+                document.body.classList.value = body_class;
+            })
+        }
 
     }
 
@@ -304,6 +738,26 @@ export class SingleVisitHistoryView {
             notify('top_left', error.message, 'error');
             return null;
         }
+    }
+
+    report_style(){
+        return `
+        br-navigation{
+            display: none;
+        }
+        .update_cont{
+            height: fit-content !important;
+            background: #f4f7f6 !important;
+        }
+        .single_visit_history_cont{
+            overflow: unset !important;
+         
+            .print_btn{
+                display: none !important;
+            }
+        }
+        `;
+
     }
 
 
