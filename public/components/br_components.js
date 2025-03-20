@@ -3,6 +3,7 @@ import { BrCustomButton } from "./br_button.js";
 import { BrCustomDateRangePicker } from "./br_date_range_picker.js";
 import { BrCustomForm } from "./br_form.js";
 import { BrCustomInput } from "./br_input.js";
+import { BrCustomLineGraph } from "./br_line_graph.js";
 import { BrCustomMultipleSelect } from "./br_multiple_select.js";
 import { BrCustomNavigation } from "./br_navigation.js";
 import { BrCustomOption } from "./br_option.js";
@@ -18,4 +19,5 @@ customElements.define('br-navigation', BrCustomNavigation);
 customElements.define('br-alert', BrCustomAlert);
 customElements.define('br-button', BrCustomButton);
 customElements.define('br-date-range-picker', BrCustomDateRangePicker);
+customElements.define('br-line-graph', BrCustomLineGraph);
 

@@ -9,3 +9,27 @@ screen then the bar chart i already have u ll put asit is on the right
 then on the bottom left just put the empty grid container i ll know what 
 to put inside later but with the border then on the right put also empty c
 ontainer i ll know what to put later
+
+
+
+
+create the most beautyfull hospital system dashboard for doctor 
+
+things i need not to be reamin out
+1- doctor appointment like in images
+2- show  today date in big show
+3- in small card on top be
+       - new today patient
+       - total patient
+       - active visit
+4- in the middle of the page show the active visit list
+5- create shadow compnent of line graph show visit statistic
+6- dont foget big and styled good morning like in the image 
+7- show also last 3 Login Sessions
+
+dont forget
+- use vanilla js
+- use css
+- use html
+- create example json that its data will be used to demo the view
+

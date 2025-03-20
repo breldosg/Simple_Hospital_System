@@ -26,6 +26,9 @@ const ROUTE_CONFIG = {
 
     // User Management
     search_attendance: 1150,
+
+    // Dashboard
+    get_dashboard_data: 1240,
 };
 
 
