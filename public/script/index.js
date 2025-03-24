@@ -1,7 +1,7 @@
 // import { frontRouter } from "/public/script/route.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { dashboardController } from "../controller/DashboardController.js";
-import { fileCategories } from "../custom/customizing.js";
+import { fileCategories, visit_priority, visit_type } from "../custom/customizing.js";
 import { frontRouter } from "./route.js";
 
 
@@ -331,4 +331,13 @@ export function print_div(div, style) {
     document.body.removeChild(iframe);
 }
 
+export function getVisitType(visit_type_word) {
+    var type = visit_type.find(type => type.value === visit_type_word).label || visit_type;
+    return type;
+}
+
+export function getVisitPriority(visit_priority_word) {
+    var priority = visit_priority.find(priority => priority.value === visit_priority_word).label || visit_priority;
+    return priority;
+}
 

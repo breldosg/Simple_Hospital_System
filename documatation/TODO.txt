@@ -1,23 +1,29 @@
 ===== Store Batch
-1- single Batch view functionality not complete 
-2- add product in batch popup not start with pre fetch data and search btn  
-3- Batch view table the closed status styles are not complete  
+1- single Batch view functionality not complete ✔️
+2- add product in batch popup no search btn ✔️
+3- Batch view table the closed status styles are not complete ✔️ 
+4- add cancel order btn to action on list table ✔️
 
 ====== Pharmacy
 1- add product order popup not start with pre fetch data ✔️
-2- order list view table the action status styles are not complete  
-3- add create category btn move to list table
-3- add cancel order btn to action on list table
+2- order list view table the action status styles are not complete ✔️
+3- add create category btn move to list table ✔️
 
 ===== Laboratory 
 1- list of active visit not styled well ✔️
-2- report normal range hint pop not styled well
+2- report normal range tooltip not styled well
 
 
 ====== Visit View
 1- add check history btn
 
+======== Patient
+1- Complete History 70%
 
+
+======= Staff
+1- Complete Dashboard 40%
+2- Tengeneza page kwaajili ya defaults updates kama vile pre/final Diagnosis na vingine
 
 
 

@@ -1,7 +1,7 @@
 import { VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { getVisitPriority, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class ViewOnProgressView {
@@ -66,8 +66,6 @@ export class ViewOnProgressView {
         });
     }
 
-
-
     async fetchAndRenderData() {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn(); // Show loader
@@ -115,10 +113,6 @@ export class ViewOnProgressView {
         this.show_count_num = PatientData.showData;
         this.total_data_num = PatientData.total;
 
-        // var checkout_btn = '<button type="button" id="checkOut_btn" class="main_btn error">CheckOut</button>';
-        // var view_visit_btn = '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>';
-        // var create_visit_btn = '<button type="button" id="createVisit_btn" class="main_btn">Create Visit</button>';
-
         var buttons = {
             checkout: '<button type="button" id="checkOut_btn" class="main_btn co_visit error">CheckOut</button>',
             view_visit: '<button type="button" id="viewVisit_btn" class="main_btn">View Visit</button>',
@@ -132,7 +126,7 @@ export class ViewOnProgressView {
         const allowed_btns = VIEW_PATIENT_BTNS[user_data.role].btn_role;
         const allowed_actions = VIEW_PATIENT_BTNS[user_data.role].btn_action;
 
-
+        console.log(PatientData);
 
         PatientData.VisitList.forEach((patient, index) => {
             const rowDiv = document.createElement('div');
@@ -144,9 +138,9 @@ export class ViewOnProgressView {
             rowDiv.innerHTML = `
                 <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                 <p class="name">${patient.patient_name}</p>
-                <p class="gender">${patient.stage}</p>
+                <p class="gender">${getVisitPriority(patient.visit_priority)}</p>
                 <p class="name">${patient.doctor_name}</p>
-                <p class="phone">${patient.created_by}</p>
+                <p class="phone">${patient.waiting_time}</p>
                 <p class="date">${patient.department_name}</p>
                 <div class="action d_flex flex__c_c">
                     ${patient.visit_status === 'active' ? allowed_btns.includes('checkout') ? buttons.checkout : '' : ''}
@@ -242,7 +236,6 @@ export class ViewOnProgressView {
         }
     }
 
-
     async checkout_request(id) {
         try {
             const response = await fetch('/api/patient/check_out_patient', {
@@ -282,7 +275,6 @@ export class ViewOnProgressView {
         }
     }
 
-
     ViewReturn() {
         return `
         <div class="main_section outpatient_table_out">
@@ -299,9 +291,9 @@ export class ViewOnProgressView {
                 <div class="table_head tr d_flex flex__c_a">
                     <p class="id">SN</p>
                     <p class="name">Patient Name</p>
-                    <p class="gender">Stage</p>
+                    <p class="gender">Priority</p>
                     <p class="name">Doctor Name</p>
-                    <p class="phone">Created By</p>
+                    <p class="phone">Waiting Time</p>
                     <p class="date">Department</p>
                     <div class="action"></div>
                 </div>

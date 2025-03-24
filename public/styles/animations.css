@@ -256,3 +256,14 @@
         opacity: 1;
     }
 }
+
+
+@keyframes l1 {
+    100% {
+        box-shadow: 0 0 0 15px var(--pri_op2)
+    }
+}
+
+@keyframes skeleton_loader {
+    0% {background-position: right}
+}

@@ -1,7 +1,8 @@
 import { ALLOW_TO_ADD_PATIENT, VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
+import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, decodeHTML, notify, timeStamp_formatter } from "../script/index.js";
+import { date_formatter, decodeHTML, getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class DashboardView {
@@ -15,36 +16,23 @@ export class DashboardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        // Add Font Awesome if it's not already in the document
-        this._loadFontAwesome();
-
         // get user role in global state
         this.user_data = globalStates.getState('user_data');
 
         // Fetch data and wait for result
         const response = await this.fetchData();
-        
+        console.log(response);
+
+
         const cont = document.querySelector('.update_cont');
         // Use await here to ensure ViewReturn completes
         cont.innerHTML = await this.ViewReturn(response);
         this.applyStyle();
 
-        this.renderChart();
+        this.renderChart(response.visit_statistics);
         this.initEventListeners();
     }
 
-    _loadFontAwesome() {
-        // Check if Font Awesome is already loaded
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-            const fontAwesome = document.createElement('link');
-            fontAwesome.rel = 'stylesheet';
-            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
-            fontAwesome.integrity = 'sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==';
-            fontAwesome.crossOrigin = 'anonymous';
-            fontAwesome.referrerPolicy = 'no-referrer';
-            document.head.appendChild(fontAwesome);
-        }
-    }
 
     async fetchData() {
         try {
@@ -185,43 +173,133 @@ export class DashboardView {
         return "Good Evening";
     }
 
-    renderChart() {
+    renderChart(visit_statistics) {
         // Get the chart container element
         const chartContainer = document.querySelector('.chart-container');
         if (!chartContainer) return;
 
         // Clear existing canvas if present
-        const existingCanvas = chartContainer.querySelector('#visitsChart');
+        const existingCanvas = chartContainer.querySelector('br-line-graph');
         if (existingCanvas) {
             existingCanvas.remove();
         }
 
-        // Sample monthly data for the line graph
-        const monthlyData = [
-            { "value": 28735, "date": "Jan GMT + 8" },
-            { "value": 45735, "date": "Feb GMT + 8" },
-            { "value": 25735, "date": "Mar GMT + 8" },
-            { "value": 52735, "date": "Apr GMT + 8" },
-            { "value": 38735, "date": "May GMT + 8" },
-            { "value": 56735, "date": "Jun GMT + 8" },
-            { "value": 74735, "date": "Jul GMT + 8" },
-            { "value": 65735, "date": "Aug GMT + 8" },
-            { "value": 45735, "date": "Sep GMT + 8" },
-            { "value": 75735, "date": "Oct GMT + 8" },
-            { "value": 58735, "date": "Nov GMT + 8" },
-            { "value": 85735, "date": "Dec GMT + 8" }
-        ];
+        // Format the data for the chart
+        let data;
+
+        if (visit_statistics && Array.isArray(visit_statistics) && visit_statistics.length > 0) {
+            console.log("Original visit statistics:", visit_statistics);
+
+            // Sort the data by date to ensure chronological order
+            data = visit_statistics.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateA - dateB;
+            }).map(item => {
+                // Format the date for display
+                const date = new Date(item.date);
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+
+                let formattedDate;
+                if (date.toDateString() === today.toDateString()) {
+                    formattedDate = 'Today';
+                } else if (date.toDateString() === yesterday.toDateString()) {
+                    formattedDate = 'Yesterday';
+                } else {
+                    formattedDate = date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+
+                // Convert value to number to ensure proper graph scaling
+                const numericValue = parseFloat(item.total_visit) || 0;
+
+                return {
+                    value: numericValue,
+                    date: formattedDate
+                };
+            });
+
+            console.log("Processed graph data:", data);
+        } else {
+            // Fallback to sample data if no valid data is provided
+            console.log("Using fallback data for chart");
+            data = [
+                { value: 0, date: "Mar 6" },
+                { value: 0, date: "Mar 7" },
+                { value: 0, date: "Mar 8" },
+                { value: 0, date: "Mar 9" },
+                { value: 0, date: "Mar 10" },
+                { value: 1, date: "Mar 11" },
+                { value: 7, date: "Mar 12" },
+                { value: 1, date: "Mar 13" },
+                { value: 0, date: "Mar 14" },
+                { value: 3, date: "Mar 15" },
+                { value: 0, date: "Mar 17" },
+                { value: 0, date: "Mar 21" }
+            ];
+        }
+
+        // Ensure we have at least 2 data points
+        if (data.length === 0) {
+            data = [
+                { value: 0, date: "Today" },
+                { value: 0, date: "Tomorrow" }
+            ];
+        } else if (data.length === 1) {
+            data.push({ ...data[0], date: "Next" });
+        }
 
         // Create the line graph component
         const lineGraph = document.createElement('br-line-graph');
         lineGraph.setAttribute('title', 'Visit Statistics');
-        lineGraph.setAttribute('currency', '$');
-        lineGraph.setAttribute('comparison-value', '15,686.65');
-        lineGraph.setAttribute('highlight-point', '11'); // Highlight July
-        lineGraph.setAttribute('data', JSON.stringify(monthlyData));
+        lineGraph.setAttribute('currency', '');
+        lineGraph.setAttribute('chart-type', 'normal'); // Default to normal chart
+
+        // Safe highlight point calculation
+        let highlightPoint = data.length - 1; // Default to last point
+        try {
+            const lastNonZeroIndex = [...data].reverse().findIndex(item => item.value > 0);
+            if (lastNonZeroIndex >= 0) {
+                highlightPoint = data.length - 1 - lastNonZeroIndex;
+            }
+        } catch (e) {
+            console.error("Error calculating highlight point:", e);
+        }
+
+        lineGraph.setAttribute('highlight-point', highlightPoint.toString());
+
+        // Set the data
+        lineGraph.setAttribute('data', JSON.stringify(data));
 
         // Add the component to the chart container
         chartContainer.appendChild(lineGraph);
+
+        // Update chart header to include chart type selector
+        const chartHeader = document.querySelector('.stats-chart .card-header');
+        const chartTypeSelector = document.createElement('div');
+        chartTypeSelector.className = 'chart-type-selector';
+        chartTypeSelector.innerHTML = `
+            <button class="chart-type-btn active" data-type="normal">Normal</button>
+            <button class="chart-type-btn" data-type="cumulative">Cumulative</button>
+        `;
+
+        chartHeader.appendChild(chartTypeSelector);
+
+        // Set up chart type button event listeners
+        const chartTypeBtns = document.querySelectorAll('.chart-type-btn');
+        chartTypeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                chartTypeBtns.forEach(b => b.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+
+                const chartType = e.currentTarget.getAttribute('data-type');
+                lineGraph.setAttribute('chart-type', chartType);
+            });
+        });
 
         // Set up period button event listeners
         const periodBtns = document.querySelectorAll('.period-btn');
@@ -230,14 +308,22 @@ export class DashboardView {
                 periodBtns.forEach(b => b.classList.remove('active'));
                 e.currentTarget.classList.add('active');
 
-                // You could update the graph data based on the selected period
-                // For demonstration purposes, we'll just change the highlight point
-                if (e.currentTarget.textContent === 'Week') {
-                    lineGraph.setAttribute('highlight-point', '3');
-                } else if (e.currentTarget.textContent === 'Month') {
-                    lineGraph.setAttribute('highlight-point', '6');
-                } else if (e.currentTarget.textContent === 'Year') {
-                    lineGraph.setAttribute('highlight-point', '11');
+                try {
+                    // You could update the graph data based on the selected period
+                    if (e.currentTarget.textContent === 'Week') {
+                        const weekData = data.length > 7 ? data.slice(-7) : data; // Last 7 days or all if less
+                        lineGraph.setAttribute('data', JSON.stringify(weekData));
+                        lineGraph.setAttribute('highlight-point', (weekData.length - 1).toString());
+                    } else if (e.currentTarget.textContent === 'Month') {
+                        lineGraph.setAttribute('data', JSON.stringify(data));
+                        lineGraph.setAttribute('highlight-point', highlightPoint.toString());
+                    } else if (e.currentTarget.textContent === 'Year') {
+                        // For year view, we might want to aggregate by month in a real implementation
+                        lineGraph.setAttribute('data', JSON.stringify(data));
+                        lineGraph.setAttribute('highlight-point', highlightPoint.toString());
+                    }
+                } catch (err) {
+                    console.error("Error updating chart period:", err);
                 }
             });
         });
@@ -251,6 +337,20 @@ export class DashboardView {
                 datePills.forEach(p => p.classList.remove('active'));
                 e.currentTarget.classList.add('active');
             });
+        });
+
+        const activeVisitRows = document.querySelectorAll('.active_visit_row');
+        activeVisitRows.forEach(row => {
+            row.addEventListener('click', (e) => {
+                e.stopPropagation();
+                frontRouter.navigate('/patient/activevisit/' + row.getAttribute('data_src'));
+            });
+        });
+
+        const viewAllActiveVisitsBtn = document.querySelector('.view_all_active_visits');
+        viewAllActiveVisitsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            frontRouter.navigate('/patient/activevisit');
         });
     }
 
@@ -324,7 +424,7 @@ export class DashboardView {
                     <div class="active-visits-section dashboard-card">
                         <div class="card-header">
                             <h2>Active Visits</h2>
-                            <button class="view-all-btn">View All</button>
+                            <button class="view-all-btn view_all_active_visits">View All</button>
                         </div>
                         <div class="visits-table">
                             <table>
@@ -332,21 +432,21 @@ export class DashboardView {
                                     <tr>
                                         <th>Patient Name</th>
                                         <th>Age</th>
-                                        <th>Reason</th>
-                                        <th>Wait Time</th>
-                                        <th>Status</th>
+                                        <th>Visit Priority</th>
+                                        <th>Waiting Time</th>
+                                        <th>Visit Type</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     ${activeVisits.map(visit => `
-                                        <tr>
+                                        <tr class="active_visit_row" data_src="${visit.id}">
                                             <td>${visit.patientName}</td>
                                             <td>${visit.age}</td>
-                                            <td>${visit.visit_priority}</td>
+                                            <td>${getVisitPriority(visit.visit_priority)}</td>
                                             <td>${visit.waiting_time}</td>
-                                            <td><span class="status-badge ${visit.status.toLowerCase().replace(' ', '-')}">${visit.status}</span></td>
-                                            <td><button class="view-btn">View</button></td>
+                                            <td>${getVisitType(visit.visit_type)}</td>
+                                            <td><button class="view-btn">Open</button></td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -357,11 +457,6 @@ export class DashboardView {
                     <div class="stats-chart dashboard-card">
                         <div class="card-header">
                             <h2>Visit Statistics</h2>
-                            <div class="chart-period">
-                                <button class="period-btn">Week</button>
-                                <button class="period-btn active">Month</button>
-                                <button class="period-btn">Year</button>
-                            </div>
                         </div>
                         <div class="chart-container">
                             <!-- The br-line-graph component will be inserted here by renderChart() -->
@@ -412,6 +507,7 @@ export class DashboardView {
         `;
     }
 
+
     applyStyle() {
         const styleElement = document.createElement('style');
         styleElement.textContent = this.style();
@@ -422,9 +518,9 @@ export class DashboardView {
         return `
 
         .main_dashboard {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
+           width: 100%;
+           height: 100%;
+           overflow-y: auto;
             background: var(--pure_white_background);
             padding: 20px;
             border-radius: var(--main_border_r);
@@ -452,7 +548,7 @@ export class DashboardView {
         
         .stats-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -551,8 +647,7 @@ export class DashboardView {
             text-align: left;
             padding: 12px 15px;
             border-bottom: 1px solid var(--input_border);
-            color: var(--gray_text);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         th:first-child {
@@ -566,7 +661,7 @@ export class DashboardView {
         td {
             padding: 15px;
             border-bottom: 1px solid var(--input_border);
-            color: var(--gray_text);
+            cursor: pointer;
         }
         
         tbody tr:hover {
@@ -677,7 +772,7 @@ export class DashboardView {
         
         .chart-container {
             width: 100%;
-            height: 350px;
+            height: 336px;
             margin-top: 20px;
             position: relative;
         }
@@ -724,9 +819,9 @@ export class DashboardView {
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            }
-            
-            .session-icon.current {
+        }
+        
+        .session-icon.current {
                 background-color: var(--pri_color);
                 color: var(--light_pri_color);
                 span{
@@ -771,10 +866,33 @@ export class DashboardView {
                 font-size: 1.8rem;
             }
         }
+        
+        /* Chart type selector styles */
+        .chart-type-selector {
+            display: flex;
+            margin-left: 15px;
+        }
+        
+        .chart-type-btn {
+            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid var(--input_border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--gray_text);
+            margin-left: 5px;
+            transition: all 0.2s ease;
+        }
+        
+        .chart-type-btn.active {
+            color: var(--light_pri_color);
+            background: var(--pri_op3);
+            font-weight: 500;
+            border-color: var(--pri_color);
+        }
         `;
     }
-
-
 }
 
 

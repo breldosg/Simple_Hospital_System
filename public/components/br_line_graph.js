@@ -5,17 +5,27 @@ export class BrCustomLineGraph extends HTMLElement {
         this.data = [];
         this.maxValue = 0;
         this.highlightedPoint = null;
+        this.chartType = 'normal'; // Default to normal chart type
         this._init();
     }
 
     static get observedAttributes() {
-        return ['data', 'title', 'currency', 'highlight-point', 'comparison-value'];
+        return ['data', 'title', 'currency', 'highlight-point', 'comparison-value', 'chart-type'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'data' && newValue) {
             try {
                 this.data = JSON.parse(newValue);
+
+                // Find the maximum value point by default
+                if (this.data && this.data.length > 0) {
+                    const maxValueIndex = this.findMaxValueIndex(this.data);
+                    if (maxValueIndex !== -1 && this.highlightedPoint === null) {
+                        this.highlightedPoint = maxValueIndex;
+                    }
+                }
+
                 setTimeout(() => this._updateGraph(), 10);
             } catch (e) {
                 console.error('Invalid data format for line graph', e);
@@ -29,6 +39,13 @@ export class BrCustomLineGraph extends HTMLElement {
 
         if (name === 'comparison-value' && newValue) {
             this.comparisonValue = parseFloat(newValue.replace(/,/g, ''));
+        }
+
+        if (name === 'chart-type' && newValue) {
+            this.chartType = newValue;
+            if (this.data && this.data.length > 0) {
+                setTimeout(() => this._updateGraph(), 10);
+            }
         }
     }
 
@@ -117,7 +134,7 @@ export class BrCustomLineGraph extends HTMLElement {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        padding: 15px 10px 10px 10px;
+        padding: 15px 0px 10px 0px;
         color: var(--gray_text);
         font-size: 12px;
         box-sizing: border-box;
@@ -165,7 +182,7 @@ export class BrCustomLineGraph extends HTMLElement {
     `;
 
         const template = document.createElement('div');
-        template.className='template';
+        template.className = 'template';
         template.innerHTML = `
       <div class="graph-container">
         <div class="graph-inner">
@@ -278,8 +295,35 @@ export class BrCustomLineGraph extends HTMLElement {
         highlightContainer.innerHTML = '';
         gridLines.innerHTML = '';
 
-        // Find max value for scaling
-        this.maxValue = Math.max(...this.data.map(item => item.value)) * 1.2;
+        // Ensure all values are numbers and find max value for scaling
+        this.data.forEach(item => {
+            if (typeof item.value !== 'number') {
+                item.value = Number(item.value) || 0; // Convert to number or default to 0
+            }
+        });
+
+        // Process data based on chart type
+        let processedData = [...this.data];
+        if (this.chartType === 'cumulative') {
+            let runningTotal = 0;
+            processedData = this.data.map(item => {
+                runningTotal += item.value;
+                return {
+                    ...item,
+                    value: runningTotal,
+                    originalValue: item.value // Store original value for tooltip
+                };
+            });
+        }
+
+        // Find max value for scaling with a minimum value to avoid division by zero
+        const maxDataValue = Math.max(...processedData.map(item => item.value));
+        this.maxValue = Math.max(maxDataValue * 1.2, 1); // Ensure non-zero max
+
+        // If no highlight point was explicitly set, use the max value point
+        if (this.highlightedPoint === null) {
+            this.highlightedPoint = this.findMaxValueIndex(processedData);
+        }
 
         // Create path for line
         const linePath = this.shadowRoot.querySelector('.graph-line');
@@ -294,7 +338,7 @@ export class BrCustomLineGraph extends HTMLElement {
         const usableWidth = width;
         const usableHeight = height - paddingY;
 
-        // Create horizontal grid lines (now 5 lines including top and bottom borders)
+        // Create horizontal grid lines
         // Add top border
         const topLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         topLine.setAttribute('x1', paddingX);
@@ -328,14 +372,34 @@ export class BrCustomLineGraph extends HTMLElement {
         // Store point coordinates for later use
         this.pointCoordinates = [];
 
+        // Ensure we have at least 2 data points for a valid line
+        if (processedData.length < 2) {
+            // Add a duplicate point if we only have one
+            processedData.push({ ...processedData[0] });
+        }
+
         // Create the line and points
-        this.data.forEach((point, index) => {
-            const x = paddingX + ((usableWidth / (this.data.length - 1)) * index);
+        processedData.forEach((point, index) => {
+            const x = paddingX + ((usableWidth / (processedData.length - 1)) * index);
             const rawY = (point.value / this.maxValue) * usableHeight;
             const y = paddingY + (usableHeight - rawY);
 
-            // Store coordinates
-            this.pointCoordinates.push({ x, y, value: point.value, date: point.date });
+            // Verify we have valid coordinates
+            if (isNaN(x) || isNaN(y)) {
+                console.error('Invalid coordinates:', { point, index, rawY, maxValue: this.maxValue });
+                return; // Skip this point
+            }
+
+            // Store coordinates with original data reference
+            const originalData = this.data[index];
+            this.pointCoordinates.push({
+                x,
+                y,
+                value: point.value,
+                originalValue: point.originalValue || point.value, // Use original value if available
+                date: point.date,
+                cumulative: this.chartType === 'cumulative'
+            });
 
             // Add to path
             if (index === 0) {
@@ -363,17 +427,20 @@ export class BrCustomLineGraph extends HTMLElement {
             highlightContainer.appendChild(highlight);
         });
 
-        // Close the area path
-        areaPathD += ` L ${width},${height} L ${paddingX},${height} Z`;
+        // Only set path attributes if we have valid path data
+        if (linePathD && areaPathD) {
+            // Close the area path
+            areaPathD += ` L ${width},${height} L ${paddingX},${height} Z`;
 
-        // Update the SVG paths
-        linePath.setAttribute('d', linePathD);
-        areaPath.setAttribute('d', areaPathD);
+            // Update the SVG paths
+            linePath.setAttribute('d', linePathD);
+            areaPath.setAttribute('d', areaPathD);
+        }
 
         // Update x-axis labels based on actual data
         this._updateAxisLabels();
 
-        // Set highlight if needed
+        // Set highlight if needed (always highlight the max value by default)
         if (this.highlightedPoint !== null) {
             setTimeout(() => this._updateHighlight(), 100);
         }
@@ -382,34 +449,34 @@ export class BrCustomLineGraph extends HTMLElement {
     _updateAxisLabels() {
         const labelsContainer = this.shadowRoot.querySelector('.x-axis-labels');
         if (!labelsContainer || !this.data || this.data.length === 0) return;
-        
+
         // Clear existing labels
         labelsContainer.innerHTML = '';
-        
+
         // Determine how many labels to show
         const maxLabels = Math.min(12, this.data.length);
         const labelStep = Math.ceil(this.data.length / maxLabels);
-        
+
         // Create new labels based on data
         for (let i = 0; i < this.data.length; i += labelStep) {
             const labelData = this.data[i];
             const label = document.createElement('span');
-            
+
             // Extract label text from date field in the data
             // This assumes the date field contains something like "Jan GMT + 8"
             // We'll extract just the first part before any space
-            const labelText = labelData.date.split(' ')[0];
+            const labelText = labelData.date;
             label.textContent = labelText;
-            
+
             labelsContainer.appendChild(label);
         }
-        
+
         // Add the last label if it's not already included
         const lastIndex = this.data.length - 1;
         if (lastIndex % labelStep !== 0) {
             const labelData = this.data[lastIndex];
             const label = document.createElement('span');
-            label.textContent = labelData.date.split(' ')[0];
+            label.textContent = labelData.date;
             labelsContainer.appendChild(label);
         }
     }
@@ -422,8 +489,27 @@ export class BrCustomLineGraph extends HTMLElement {
         const container = this.shadowRoot.querySelector('.graph-container');
 
         // Update tooltip content
-        tooltip.querySelector('.tooltip-value').textContent =
-            `$${parseFloat(point.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        // Check if currency is empty and format accordingly
+        const currency = this.getAttribute('currency') || '';
+        let tooltipContent;
+
+        if (point.cumulative) {
+            // For cumulative charts, show both the individual value and the cumulative total
+            tooltipContent = `
+                ${currency}${parseFloat(point.value).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                <div style="font-size: 10px; opacity: 0.7; margin-top: 3px;">
+                    Day: ${parseFloat(point.originalValue).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                </div>
+            `;
+            tooltip.querySelector('.tooltip-value').innerHTML = tooltipContent;
+        } else {
+            // For normal charts, show just the value
+            tooltipContent = currency ?
+                `${currency}${parseFloat(point.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` :
+                `${parseFloat(point.value).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+            tooltip.querySelector('.tooltip-value').textContent = tooltipContent;
+        }
+
         tooltip.querySelector('.tooltip-date').textContent = point.date;
 
         // Make tooltip visible but off-screen to measure its size
@@ -504,6 +590,11 @@ export class BrCustomLineGraph extends HTMLElement {
     }
 
     connectedCallback() {
+        // When component is connected, find max value point
+        if (this.data && this.data.length > 0 && this.highlightedPoint === null) {
+            this.highlightedPoint = this.findMaxValueIndex(this.data);
+        }
+
         // Use a sequence of delayed updates to ensure the graph renders properly
         [50, 150, 300, 500, 1000].forEach(delay => {
             setTimeout(() => {
@@ -532,5 +623,35 @@ export class BrCustomLineGraph extends HTMLElement {
     setData(data) {
         this.data = data;
         this._updateGraph();
+    }
+
+    // Method to set chart type programmatically
+    setChartType(type) {
+        if (type !== 'normal' && type !== 'cumulative') {
+            console.error('Invalid chart type. Must be "normal" or "cumulative".');
+            return;
+        }
+
+        this.chartType = type;
+        this.setAttribute('chart-type', type);
+        this._updateGraph();
+    }
+
+    // Helper method to find the index of the maximum value in the data
+    findMaxValueIndex(data) {
+        if (!data || data.length === 0) return -1;
+
+        let maxIndex = 0;
+        let maxValue = Number(data[0].value) || 0;
+
+        for (let i = 1; i < data.length; i++) {
+            const value = Number(data[i].value) || 0;
+            if (value > maxValue) {
+                maxValue = value;
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
     }
 } 

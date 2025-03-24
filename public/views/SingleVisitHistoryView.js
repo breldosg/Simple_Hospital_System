@@ -686,7 +686,7 @@ export class SingleVisitHistoryView {
                 document.body.classList.value = '';
                 // add print class to body
                 document.body.classList.add('light_mode');
-                
+
                 // print the page
                 window.print();
                 document.head.removeChild(style);
@@ -740,7 +740,7 @@ export class SingleVisitHistoryView {
         }
     }
 
-    report_style(){
+    report_style() {
         return `
         br-navigation{
             display: none;

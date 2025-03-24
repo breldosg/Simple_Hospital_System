@@ -48,14 +48,19 @@ export class ReceiveIntakeBatchPopUpView {
                     <div class="search_cont">
                         <br-input label="Product Name" name="query" type="text" styles="
                     border-radius: var(--input_main_border_r);
-                    width: 400px;
+                    width: 350px;
                     padding: 10px;
                     height: 41px;
                     background-color: transparent;
                     border: 2px solid var(--input_border);
                     " labelStyles="font-size: 12px;"></br-input>
 
+                    <br-button loader_width="23" class="btn_search" type="submit">
+                            <span class="switch_icon_magnifying_glass"></span>
+                    </br-button>
                     </div>
+
+
                 </br-form>
 
 

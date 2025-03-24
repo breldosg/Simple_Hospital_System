@@ -333,7 +333,7 @@ export class ViewPatientView {
                     <p class="gender">Gender</p>
                     <p class="phone">Phone Number</p>
                     <p class="name">Created By</p>
-                    <p class="date">Created Date</p>
+                    <p class="date">Join Date</p>
                     <div class="action"></div>
                 </div>
                 <div class="table_body d_flex flex__co">

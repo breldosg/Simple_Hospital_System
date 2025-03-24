@@ -127,9 +127,9 @@ export class ViewIntakeBatchView {
             <p class="name">${batch.provider}</p>
             <p class="number">${batch.products}</p>
             <p class="name">${batch.created_by}</p>
-            <p class="status">${batch.status}</p>
+            <p class="status ${batch.status}">${batch.status}</p>
             <div class="action d_flex flex__c_c">
-                ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : 'Closed'}
+                ${batch.status === 'open' ? '<button id="deactivate_btn" class="main_btn error">Close</button>' : '<button id="deactivate_btn" class="main_btn disabled error">Closed</button>'}
             </div>
             `;
 

@@ -161,9 +161,10 @@ input {
     --light_pri_color: #2ebfc6;
 
     --pri_op: #6af8ff34;
-    --pri_op1: #a5eef665;
-    --pri_op2: #a5eef647;
+    --pri_op1: #4e787d65;
+    --pri_op2: #48696c47;
     --pri_op3: #a5eef623;
+    --pri_op_skeleton: #00e5ff1e;
 
     --pri_back_op: #53b8c40d;
 
@@ -12270,6 +12271,15 @@ body {
                         padding-inline: 10px;
                         width: 90px;
                     }
+
+                    .status {
+                        color: var(--light_pri_color);
+                        font-weight: 700;
+                    }
+
+                    .status.closed {
+                        color: var(--error_color);
+                    }
                 }
 
                 .tr:hover {
@@ -12583,6 +12593,15 @@ body {
                         text-overflow: ellipsis;
                         overflow: hidden;
                         display: inline-block;
+                    }
+
+                    .status {
+                        font-weight: 700;
+                        color: var(--light_pri_color);
+                    }
+
+                    .status.error {
+                        color: var(--error_color);
                     }
 
                     .main_btn {
@@ -14852,8 +14871,6 @@ body {
                 flex-direction: column;
                 gap: 10px;
 
-
-
                 .result_cont {
                     display: flex;
                     gap: 5px;
@@ -14863,10 +14880,6 @@ body {
                     overflow-y: scroll;
                     border-top: 2px solid var(--input_border);
                     padding-top: 10px;
-
-
-
-
 
                     .start_view {
                         display: flex;
@@ -14953,7 +14966,23 @@ body {
                     display: flex;
                     gap: 10px;
                     width: 100%;
-                    flex-direction: column;
+                    align-items: flex-end;
+
+                    .btn_search {
+                        border: none;
+                        background-color: var(--pri_color);
+                        width: 50px;
+                        height: 40px;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
 
                     .btn {
                         padding-top: 10px;
@@ -20070,12 +20099,6 @@ body {
     box-shadow: 0 0 0 0 var(--pri_color);
     animation: l1 1s infinite;
 
-}
-
-@keyframes l1 {
-    100% {
-        box-shadow: 0 0 0 15px var(--pri_op2)
-    }
 }
 
 /* <div class="loader_cont active"><div class="loader"></div></div> */

@@ -13,6 +13,7 @@ export class SingleIntakeBatchView {
         this.total_data_num = 0;
         this.show_count_num = 0;
         this.isLoading = false;
+        this.batch_status = 'closed';
 
         // define function to global
         window.remove_product_on_batch = this.remove_product_on_batch.bind(this);
@@ -38,9 +39,11 @@ export class SingleIntakeBatchView {
     async render() {
         const top_cont = document.querySelector('.single_batch_cont .top_card');
         const batch_data = await this.fetchData(); // Wait for fetchData to complete
-        await this.fetch_table_data();
+        this.batch_status = batch_data.batch_data.status ?? 'closed';
 
         top_cont.innerHTML = this.top_card_view(batch_data.batch_data);
+        await this.fetch_table_data();
+
 
         // const open_add_product_btn=document.querySelector('#open_add_product_popup').remove();
 
@@ -77,6 +80,9 @@ export class SingleIntakeBatchView {
         document.querySelector('.current_page').innerText = productData.batch;
         this.total_page_num = productData.pages;
 
+        console.log(this.batch_status);
+
+
         productData.productList.forEach((product, index) => {
             try {
                 var expireDate = date_formatter(product.expire_date)
@@ -99,7 +105,7 @@ export class SingleIntakeBatchView {
                     <p class="name">${product.created_by}</p>
                     <p class="date">${expireDate}</p>
                     <div class="action d_flex flex__c_c">
-                        <button id="remove_btn" class="main_btn error">Remove</button>
+                        <button id="remove_btn" class="main_btn ${this.batch_status == 'closed' ? 'disabled' : ''} error">Remove</button>
                     </div>
             `;
 
@@ -217,9 +223,6 @@ export class SingleIntakeBatchView {
 
     top_card_view(data) {
         this.top_card_data = data;
-
-        console.log(data.status);
-
         if (data.status == 'open') {
             const open_add_product_popup = document.querySelector('#open_add_product_popup');
             if (!open_add_product_popup) {
@@ -244,7 +247,6 @@ export class SingleIntakeBatchView {
         }
         else {
             const close_add_product_popup = document.querySelector('#open_add_product_popup');
-            console.log(close_add_product_popup);
 
             if (close_add_product_popup) {
                 close_add_product_popup.remove();
@@ -529,8 +531,10 @@ export class SingleIntakeBatchView {
             if (result.success) {
                 if (data.where == 'single_batch_view') {
                     this.top_card_data.status = 'close'
+                    this.batch_status = 'closed';
                     const top_cont = document.querySelector('.single_batch_cont .top_card');
                     top_cont.innerHTML = this.top_card_view(this.top_card_data);
+                    this.fetch_table_data();
                 }
                 else if (data.where == 'view_all_batch') {
                     dashboardController.viewIntakeBatchView.after_success_close_batch_action();

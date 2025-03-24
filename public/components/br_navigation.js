@@ -293,11 +293,13 @@ export class BrCustomNavigation extends HTMLElement {
             background-color: var(--pure_white_background);
             z-index: 0;
             opacity: 0;
+            pointer-events: none;
         }
 
         .nav_collection.active {
             z-index: 1;
             opacity: 1;
+            pointer-events: auto;
         }
 
         .choice_item {

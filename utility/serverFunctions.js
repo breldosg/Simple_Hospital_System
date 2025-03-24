@@ -70,12 +70,38 @@ const parseUserAgent = (userAgent) => {
         'Mac OS X': 'MacOS',
         'Linux': 'Linux',
         'Android': 'Android',
-        'like Mac OS X': 'iOS'
+        'like Mac OS X': 'iOS',
+        'Macintosh': 'MacOS',
+        'Mac': 'MacOS',
+        'Linux': 'Linux',
+        'Windows': 'Windows',
+        'Ubuntu': 'Linux',
+        'Debian': 'Linux',
+        'Fedora': 'Linux',
+        'Chrome OS': 'Chrome OS'
     };
 
     const deviceMap = {
         'Mobi': 'Mobile',
-        'Tablet': 'Tablet'
+        'Tablet': 'Tablet',
+        'Desktop': 'Desktop',
+        'Macintosh': 'Desktop',
+        'Mac': 'Desktop',
+        'Linux': 'Desktop',
+        'Windows': 'Desktop',
+        'Ubuntu': 'Desktop',
+        'Debian': 'Desktop',
+        'Fedora': 'Desktop',
+        'Chrome OS': 'Chrome OS',
+        'like Mac OS X': 'iOS',
+        'Android': 'Android',
+        'BlackBerry': 'BlackBerry',
+        'PalmOS': 'PalmOS',
+        'SymbianOS': 'SymbianOS',
+        'Windows Phone': 'Windows Phone',
+        'Windows Mobile': 'Windows Mobile',
+        'Windows CE': 'Windows CE',
+        'Windows Mobile': 'Windows Mobile',
     };
 
     const browserMap = {

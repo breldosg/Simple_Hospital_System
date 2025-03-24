@@ -43,9 +43,13 @@ export class ViewOrderListView {
     attachEventListeners() {
 
         // add btn
-        document.querySelector('#open_add_order_popup').addEventListener('click', () => {
-            dashboardController.placeOrderPopUpView.PreRender();
-        });
+        var open_add_order_popup = document.querySelector('#open_add_order_popup')
+
+        if (open_add_order_popup) {
+            open_add_order_popup.addEventListener('click', () => {
+                dashboardController.placeOrderPopUpView.PreRender();
+            });
+        }
 
 
         // Open Close Filter Section buttons
@@ -64,7 +68,7 @@ export class ViewOrderListView {
             }
 
         });
-
+        
         // Pagination buttons
         document.querySelector('.main_btn.next').addEventListener('click', async () => {
 
@@ -131,13 +135,13 @@ export class ViewOrderListView {
             row.setAttribute('title', rowRequest.name);
 
             // pharmacy btn
-            var removeBtn = '<button id="remove_order_btn" class="main_btn error">Remove</button>';
-            var receiveBtn = '<button id="receive_order_btn" class="main_btn">Receive</button>';
+            var ph_removeBtn = '<button id="remove_order_btn" class="main_btn full_btn error">Remove</button>';
+            var ph_receiveBtn = '<button id="receive_order_btn" class="main_btn full_btn">Receive</button>';
 
 
             // store btn
             var approveBtn = '<button id="approve_order_btn" class="main_btn ">Approve</button>';
-            var updateBtn = '<button id="update_order_btn" class="main_btn full_btn">Update</button>';
+            var updateBtn = '<button id="update_order_btn" class="main_btn">Update</button>';
             var denyBtn = '<button id="deny_order_btn" class="main_btn error" >Deny</button>';
             var deniedBtn = '<button id="denied_order_btn" class="main_btn denied full_btn no_click" >Denied</button>';
             var approvedBtn = `<button id="approved_order_btn" class="main_btn received full_btn no_click">${rowRequest.status}</button>`;
@@ -146,8 +150,18 @@ export class ViewOrderListView {
             var validQuantity = '';
 
             if (this.side_fetched == 'pharmacy') {
-                action_btn = rowRequest.status === 'pending' ? removeBtn : (rowRequest.status === 'approved' ? receiveBtn : rowRequest.status);
+                // action_btn = rowRequest.status === 'pending' ? ph_removeBtn : (rowRequest.status === 'approved' ? ph_receiveBtn : rowRequest.status);
+                if (rowRequest.status === 'pending') {
+                    action_btn = ph_removeBtn;
+                }
+                else if (rowRequest.status === 'approved') {
+                    action_btn = ph_receiveBtn
+                }
+                else {
+                    action_btn = rowRequest.status === 'denied' ? deniedBtn : approvedBtn;
+                }
                 validQuantity = rowRequest.pharmacy_total_quantity;
+                var status_action = rowRequest.status === 'pending' || rowRequest.status === 'denied' ? 'error' : '';
             }
             else if (this.side_fetched == 'store') {
                 validQuantity = rowRequest.store_total_quantity;
@@ -156,15 +170,13 @@ export class ViewOrderListView {
                     action_btn = approveBtn + denyBtn;
                 }
                 else if (rowRequest.status === 'approved') {
-                    action_btn = updateBtn;
+                    action_btn = updateBtn + denyBtn;
                 }
                 else {
                     action_btn = rowRequest.status === 'denied' ? deniedBtn : approvedBtn;
                 }
 
-
-
-
+                var status_action = rowRequest.status === 'pending' || rowRequest.status == 'denied' ? 'error' : '';
             }
 
 
@@ -176,7 +188,7 @@ export class ViewOrderListView {
                         <p class="number">${validQuantity}</p>
                         <p class="name">${rowRequest.staff_name}</p>
                         <p class="date">${date}</p>
-                        <p class="status">${rowRequest.status}</p>
+                        <p class="status  ${status_action}">${rowRequest.status}</p>
                         <div class="action ${this.side_fetched} d_flex flex__c_c">
                             ${action_btn}
                         </div>
@@ -568,9 +580,10 @@ export class ViewOrderListView {
             <div class="in_table_top d_flex flex__u_s">
                 <h4>Order List</h4>
 
-                <div class="add_btn" title="Create Orders" id="open_add_order_popup">
-                    <span class="switch_icon_add"></span>
-                </div>
+                ${this.side_fetched == 'pharmacy' ?
+                `<div class="add_btn" title="Create Orders" id="open_add_order_popup">
+                            <span class="switch_icon_add"></span>
+                        </div>`: ''}
             </div>
             <div class="outpatient_table">
 
@@ -578,9 +591,9 @@ export class ViewOrderListView {
                     <p class="id">SN</p>
                     <p class="name">Name</p>
                     <p class="number">Quantity</p>
-                    <p class="number">${this.side_fetched} Quantity</p>
-                    <p class="name">Create By</p>
-                    <p class="date">Created Date</p>
+                    <p class="number">${this.side_fetched}</br>Quantity</p>
+                    <p class="name">Ordered By</p>
+                    <p class="date">Order Date</p>
                     <p class="status">Status</p>
                     <div class="action"></div>
                 </div>

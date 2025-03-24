@@ -3,24 +3,33 @@ import { frontRouter } from "../script/route.js";
 
 
 export class PatientDetailComponent {
+    constructor() {
+        this.vitalSigns_data = false;
+        this.applyStyle();
+    }
 
     async PreRender(params) {
+        // set default value
+        this.vitalSigns_data = false;
 
         // receive parameters
         this.rendered_card = [];
         this.visit_id = params.visit_id ?? null;
         this.patient_id = params.patient_id ?? null;
+        this.btn_group_type = params.btn_group_type ?? 'patient_history';
         this.container = params.container ?? null;
-
         if (this.container == null) {
             // throw new Error
             throw new Error('container is required');
         }
 
-        // Render initial structure
-        // this.container.prepend(this.ViewReturn());
-        this.container.insertAdjacentHTML('afterbegin', this.ViewReturn());
+        // get role from global state
+        this.role = globalStates.getState('user_data').role;
 
+        // Render initial structure
+        this.container.insertAdjacentHTML('afterbegin', this.ViewReturn(''));
+
+        this.main_container = document.querySelector('.top_card_patient_info_cont');
 
         this.render();
     }
@@ -29,31 +38,34 @@ export class PatientDetailComponent {
         const patient_data = await this.fetchData();
 
 
-        if (!patient_data) return;
+        if (!patient_data) {
+            var loader = this.main_container.querySelector('.loader_cont');
+            loader.classList.remove('active');
+            return;
+        }
+        await this.vitalSigns_processing(patient_data);
 
         // Render top patient card
         this.top_card_view(patient_data);
 
     }
 
-    ViewReturn() {
+    ViewReturn(data) {
         return `
-    <div class="top_card">
+    <div class="top_card_patient_info_cont">
         <div class="Patient_imag">
-            <img src="" alt="">
+            <img src="${data == '' ? '' : data.Patient_img}" alt="">
         </div>
+
         <div class="patient_detail">
             <div class="card name_card">
-                <div class="dit_group">
-                    <p class="name"></p>
-                    <p class="description"> Patient id: <span></span></p>
+                <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
+                <div class="more_btn"><span
+                        class='switch_icon_more_vert'></span>
                 </div>
-                <button type="button" data_src="" class="edit_btn">
-                    <span class='switch_icon_edit'></span>
-                </button>
             </div>
             <div class="card">
-                ${['user', 'calendar_check', 'location_dot', 'phone', 'briefcase']
+            ${['user', 'calendar_check', 'location_dot', 'phone', 'briefcase']
                 .map(icon => `
                 <div class="icon_card">
                     <span class='switch_icon_${icon}'></span>
@@ -61,33 +73,35 @@ export class PatientDetailComponent {
                 </div>
                 `).join('')}
             </div>
+
+            <div class="card vital">
+                ${this.no_vital_sign_data_view()}
+            </div>
         </div>
+
         <div class="loader_cont active">
-            <div class="loader"></div>
+            <div class="skeleton_loader"></div>
         </div>
     </div>
         `;
     }
 
     top_card_view(data) {
-        const body = this.container.querySelector('.top_card');
-        body.innerHTML = `
+        console.log(this.vitalSigns_data);
+
+        this.main_container.innerHTML = `
     <div class="Patient_imag">
-        <img src="${data ? data.Patient_img : ''}" alt="">
-    </div>
-    
-    <div class="patient_detail">
-        <div class="card name_card">
-            <div class="dit_group">
-                <p class="name">${data ? data.name : ''}</p>
-                <p class="description"> Patient id: <span>${data ? data.id : ''}</span></p>
-            </div>
-            <button type="button" data_src="${data ? data.id : ''}" class="edit_btn">
-                <span class='switch_icon_edit'></span>
-            </button>
+            <img src="${data == '' ? '' : data.Patient_img}" alt="">
         </div>
-    
-        <div class="card">
+
+        <div class="patient_detail">
+            <div class="card name_card">
+                <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
+                <div class="more_btn"><span
+                        class='switch_icon_more_vert'></span>
+                </div>
+            </div>
+            <div class="card">
             ${[
                 { icon: 'user', value: data ? data.gender : '' },
                 {
@@ -109,24 +123,45 @@ export class PatientDetailComponent {
                 <p>${item.value}</p>
             </div>
             `).join('')}
+            </div>
+
+            <div class="card vital">
+                ${this.vitalSigns_data ? this.vitalSigns_data.map(item => `
+                <div class="vital_card">
+                    <p class="main_ms ${item.status}">${item.value} <span>${item.unit}</span></p>
+                    <div class="dist">
+                        <p>${item.name}</p>
+                        <div class="range ${item.status}">
+                            ${item.icon}
+                        </div>
+                    </div>
+                </div>
+                `).join('') : this.no_vital_sign_data_view()}
+
+            </div>
         </div>
-    </div>
+
+        <div class="loader_cont active">
+            <div class="skeleton_loader"></div>
+        </div>
     `;
     }
 
     async fetchData() {
         try {
 
-            const response = await fetch('/api/patient/single_visit_detail_by_patient_id_or_visit_id', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    visit_id: this.visit_id,
-                    patient_id: this.patient_id,
-                })
-            });
+            // const response = await fetch('/api/patient/single_visit_detail_by_patient_id_or_visit_id',
+            const response = await fetch('/api/patient/single_patient',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        visit_id: this.visit_id,
+                        patient_id: this.patient_id,
+                    })
+                });
 
             if (!response.ok) {
                 throw new Error('Server Error');
@@ -159,5 +194,318 @@ export class PatientDetailComponent {
         }
     }
 
+    no_vital_sign_data_view() {
+        return `
+        <div class="no_vital_sign_data_view">
+            <p>No vital sign data</p>
+        </div>
+        `;
+    }
+
+    async vitalSigns_processing(data) {
+        try {
+            const vitalSigns = data?.vital_signs && typeof data.vital_signs === 'object' && Object.keys(data.vital_signs).length
+                ? data.vital_signs
+                : null;
+
+            if (!vitalSigns) {
+                this.vitalSigns_data = false;
+                return;
+            }
+
+            const getStatusInfo = (status) => ({
+                high: { icon: '<span class="switch_icon_arrow_drop_up"></span>', text: 'High' },
+                low: { icon: '<span class="switch_icon_arrow_drop_down"></span>', text: 'Low' },
+                normal: { icon: '<span class="switch_icon_minus"></span>', text: 'Normal' }
+            }[status] || { icon: '<span class="switch_icon_minus"></span>', text: 'Normal' });
+
+            // **BMI Calculation**
+            let bmi = 0, bmiStatus = 'normal';
+            if (vitalSigns.height >= 50 && vitalSigns.weight) { // Height should be at least 50cm to be reasonable
+                const height_m = vitalSigns.height / 100;
+                bmi = (vitalSigns.weight / (height_m * height_m)).toFixed(1);
+                bmiStatus = bmi < 18.5 ? 'low' : bmi >= 25 ? 'high' : 'normal';
+            }
+
+            // **Blood Pressure Analysis**
+            const analyzeBP = (bp) => {
+                if (!bp) return { status: 'normal', systolic: 0, diastolic: 0 };
+                const bpValues = bp.match(/\d+/g); // Extract numeric values
+
+                if (bpValues.length === 1) { // If only one value is given
+                    return {
+                        status: bpValues[0] < 90 ? 'low' : bpValues[0] > 140 ? 'high' : 'normal',
+                        systolic: bpValues[0],
+                        diastolic: '-'
+                    };
+                }
+
+                const [systolic, diastolic] = bpValues.map(Number);
+                return {
+                    status: systolic < 90 || diastolic < 60 ? 'low' :
+                        systolic >= 140 || diastolic >= 90 ? 'high' : 'normal',
+                    systolic, diastolic
+                };
+            };
+
+            const bp = analyzeBP(vitalSigns.blood_pressure);
+
+            // **Generic function to analyze vital ranges**
+            const analyzeVital = (value, low, high) => ({
+                status: !value ? 'normal' : value < low ? 'low' : value > high ? 'high' : 'normal',
+                text: !value ? 'Normal' : value < low ? 'Low' : value > high ? 'High' : 'Normal'
+            });
+
+            const tempInfo = analyzeVital(vitalSigns.temperature, 36.0, 37.5);
+            const pulseInfo = analyzeVital(vitalSigns.pulse, 60, 100);
+            const o2Info = analyzeVital(vitalSigns.o2_saturation, 95, 100);
+            const respInfo = analyzeVital(vitalSigns.respiration, 12, 20);
+
+            this.vitalSigns_data = [
+                { name: 'BMI', status: bmiStatus, value: bmi || '-', icon: getStatusInfo(bmiStatus).icon, unit: '' },
+                { name: 'Temperature', status: tempInfo.status, value: vitalSigns.temperature || '-', icon: getStatusInfo(tempInfo.status).icon, unit: '°C' },
+                { name: 'Pulse', status: pulseInfo.status, value: vitalSigns.pulse || '-', icon: getStatusInfo(pulseInfo.status).icon, unit: '/min' },
+                { name: 'Blood Pressure', status: bp.status, value: `${bp.systolic}/${bp.diastolic}`, icon: getStatusInfo(bp.status).icon, unit: '' },
+                { name: 'O₂ Saturation', status: o2Info.status, value: vitalSigns.o2_saturation || '-', icon: getStatusInfo(o2Info.status).icon, unit: '%' },
+                { name: 'Respiration Rate', status: respInfo.status, value: vitalSigns.respiration || '-', icon: getStatusInfo(respInfo.status).icon, unit: '/min' }
+            ];
+        } catch (error) {
+            notify('top_left', 'Failed to process vital signs data.', 'error');
+            this.vitalSigns_data = false;
+        }
+    }
+
+    applyStyle() {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = this.style();
+        styleElement.id = 'patient_detail_component_style';
+        document.head.appendChild(styleElement);
+    }
+
+    style() {
+        return `
+            .top_card_patient_info_cont {
+                width: 100%;
+                background-color: var(--pure_white_background);
+                /* height: 100px; */
+                border-radius: 10px;
+                padding: 20px;
+                display: flex;
+                gap: 40px;
+                position: relative;
+                overflow: hidden;
+
+                .Patient_imag {
+                    width: 170px;
+                    height: 170px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    background-color: var(--image_background);
+                    flex: none;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .patient_detail {
+                    width: 100%;
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: column;
+
+                    .card {
+                        width: 100%;
+                        display: flex;
+                        align-items: flex-end;
+                        gap: 10px 40px;
+                        flex-wrap: wrap;
+
+                        .name {
+                            font-size: 30px;
+                            font-weight: 900;
+                        }
+
+                        .more_btn {
+                            width: 45px;
+                            height: 45px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 5px;
+                            flex: none;
+                            cursor: pointer;
+                        }
+
+                        .more_btn:hover {
+                            background-color: var(--pri_op);
+                            cursor: pointer;
+                            span{
+                                color: var(--light_pri_color);
+                            }
+                        }
+
+
+                        .icon_card {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+
+                            p {
+                                font-weight: 500;
+                                color: var(--gray_text);
+
+                                span {
+                                    color: var(--gray_text);
+                                    font-weight: 700;
+                                }
+                            }
+                        }
+                    }
+
+                    .name_card {
+                        justify-content: space-between;
+                    }
+
+                    .vital {
+                        gap: 10px 20px;
+                        margin-top: 20px;
+
+                        .no_vital_sign_data_view{
+                            border: dashed 2px var(--input_border);
+                            width: 100%;
+                            height: 70px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 10px;
+                            
+                            p{
+                                font-size: 20px;
+                                font-weight: 500;
+                                color: var(--gray_text);
+                            }
+                        }
+
+                        .vital_card {
+                            padding: 5px 15px;
+                            border: dashed 2px var(--input_border);
+                            border-radius: 10px;
+
+                            .main_ms {
+                                font-size: 30px;
+                                font-weight: 900;
+                            }
+
+                            .dist {
+                                display: flex;
+                                gap: 5px;
+
+                                p {
+                                    color: var(--gray_text);
+                                    font-weight: 500;
+                                }
+
+                                .range {
+                                    display: flex;
+                                    gap: 5px;
+                                }
+
+                                .up {
+
+                                    p,
+                                    span {
+                                        color: var(--success_color);
+                                    }
+                                }
+
+                                .down {
+
+                                    p,
+                                    span {
+                                        color: var(--error_color);
+                                    }
+                                }
+                            }
+                        }
+
+                        .create_visit_btn {
+                            margin-left: auto;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            color: var(--white);
+                            font-weight: bold;
+                            width: auto;
+                        }
+                    }
+
+                    .vital_card {
+                        .main_ms {
+                            &.high {
+                                color: var(--error_color);
+                            }
+
+                            &.low {
+                                color: var(--warning_color);
+                            }
+
+                            &.normal {
+                                color: var(--success_color);
+                            }
+
+                            span {
+                                font-size: 25px;
+                            }
+                        }
+
+                        .range {
+                            display: flex;
+                            align-items: center;
+                            gap: 4px;
+                            padding: 2px 8px;
+                            border-radius: 12px;
+                            font-size: 12px;
+
+                            &.high span {
+                                /* background-color: rgba(255, 68, 68, 0.1); */
+                                color: var(--error_color);
+                            }
+
+                            &.low span {
+                                /* background-color: rgba(255, 160, 0, 0.1); */
+                                color: var(--warning_color);
+                            }
+
+                            &.normal span {
+                                /* background-color: rgba(0, 200, 83, 0.1); */
+                                color: var(--success_color);
+                            }
+
+                            
+                        }
+                    }
+                }
+
+                .loader_cont {
+                    padding: 0;
+                }
+            .skeleton_loader {
+                width: 100%;
+                height: 100%;
+                background: 
+                linear-gradient(97deg, var(--pure_white_background) 1%, var(--pri_op_skeleton) 20%, var(--pure_white_background) 80%) var(--pure_white_background);
+                background-size: 900% 100%;
+                animation: skeleton_loader 1.5s infinite cubic-bezier(0.445, 0.570, 0.760, 0.380);
+                pointer-events: none;
+            }
+            
+            
+
+            }
+        `;
+    }
 }
 
