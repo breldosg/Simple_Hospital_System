@@ -12,10 +12,11 @@
 ===== Laboratory 
 1- list of active visit not styled well ✔️
 2- report normal range tooltip not styled well
+3- create the update lab tests component
 
 
 ====== Visit View
-1- add check history btn
+1- add check history btn ✔️
 
 ======== Patient
 1- Complete History 70%

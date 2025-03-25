@@ -36,6 +36,7 @@ export class SingleVisitView {
         dashboardController.patientDetailComponent.PreRender({
             container: this.main_container,
             visit_id: this.visit_id,
+            location: 'visit_view',
         })
 
 

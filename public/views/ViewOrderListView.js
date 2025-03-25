@@ -150,7 +150,6 @@ export class ViewOrderListView {
             var validQuantity = '';
 
             if (this.side_fetched == 'pharmacy') {
-                // action_btn = rowRequest.status === 'pending' ? ph_removeBtn : (rowRequest.status === 'approved' ? ph_receiveBtn : rowRequest.status);
                 if (rowRequest.status === 'pending') {
                     action_btn = ph_removeBtn;
                 }

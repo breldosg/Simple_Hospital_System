@@ -1,4 +1,3 @@
-import { dashboardController } from "../controller/DashboardController.js";
 import { date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
@@ -6,20 +5,18 @@ import { frontRouter } from "../script/route.js";
 export class PatientDetailComponent {
     constructor() {
         this.vitalSigns_data = false;
-        this.vitalSignsRaw_data = [];
         this.applyStyle();
     }
 
     async PreRender(params) {
         // set default value
         this.vitalSigns_data = false;
-        this.vitalSignsRaw_data = [];
 
         // receive parameters
         this.rendered_card = [];
         this.visit_id = params.visit_id ?? null;
         this.patient_id = params.patient_id ?? null;
-        this.location = params.location ?? 'patient_history';
+        this.btn_group_type = params.btn_group_type ?? 'patient_history';
         this.container = params.container ?? null;
         if (this.container == null) {
             // throw new Error
@@ -47,13 +44,10 @@ export class PatientDetailComponent {
             return;
         }
         await this.vitalSigns_processing(patient_data);
-        this.vitalSignsRaw_data = patient_data.vital_signs;
-        this.patient_id = patient_data.id;
-        console.log(patient_data);
-        
+
         // Render top patient card
         this.top_card_view(patient_data);
-
+        
         // Setup popup menu after rendering
         this.setupPopupMenu();
     }
@@ -126,7 +120,28 @@ export class PatientDetailComponent {
                 <div class="more_btn"><span
                         class='switch_icon_more_vert'></span>
                     <div class="option_menu_popup">
-                        ${this.getMenuOptions()}
+                        <div class="option_item" data-action="edit_patient">
+                            <span class="switch_icon_edit"></span>
+                            <p>Edit Patient</p>
+                        </div>
+                        <div class="option_item" data-action="edit_visit">
+                            <span class="switch_icon_edit"></span>
+                            <p>Edit Visit</p>
+                        </div>
+                        <div class="option_item" data-action="add_vital_signs">
+                            <span class="switch_icon_add"></span>
+                            <p>Add Vital Signs</p>
+                        </div>
+                        <div class="option_item" data-action="view_history">
+                            <span class="switch_icon_history"></span>
+                            <p>View History</p>
+                        </div>
+                        
+                        <div class="option_item" data-action="print_file">
+                            <span class="switch_icon_print"></span>
+                            <p>Print File</p>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -176,60 +191,6 @@ export class PatientDetailComponent {
     `;
     }
 
-    getMenuOptions() {
-        // Define options based on role
-        const allOptions = [
-            {
-                id: 'edit_patient',
-                icon: 'edit',
-                text: 'Edit Patient',
-                location: ['patient_history'],
-                roles: ['ICT', 'RPT'] // roles that can see this option
-            },
-            {
-                id: 'edit_visit',
-                icon: 'edit',
-                text: 'Edit Visit',
-                location: ['patient_history','visit_view'],
-                roles: ['ICT', 'RPT']
-            },
-            {
-                id: 'add_vital_signs',
-                icon: 'add',
-                text: 'Add Vital Signs',
-                location: ['visit_view'],
-                roles: ['ICT','DCT','SDCT','NRS']
-            },
-            {
-                id: 'view_history',
-                icon: 'history',
-                text: 'View History',
-                location: ['visit_view','other_pages'],
-                roles: ['ICT', 'RPT','DCT','SDCT','NRS','HPMS','PMS','LAB','RDL']
-            },
-            {
-                id: 'print_file',
-                icon: 'print',
-                text: 'Print File',
-                location: ['other_pages','visit_view'],
-                roles: ['ICT', 'RPT','DCT','SDCT','NRS','HPMS','PMS','LAB','RDL']
-            }
-        ];
-
-        // Filter options based on user role
-        const filteredOptions = allOptions.filter(option =>
-            option.roles.includes(this.role) && option.location.includes(this.location)
-        );
-
-        // Generate HTML for the options
-        return filteredOptions.map(option => `
-            <div class="option_item" data-action="${option.id}">
-                <span class="switch_icon_${option.icon}"></span>
-                <p>${option.text}</p>
-            </div>
-        `).join('');
-    }
-
     setupPopupMenu() {
         const moreBtn = this.main_container.querySelector('.more_btn');
         const optionMenu = this.main_container.querySelector('.option_menu_popup');
@@ -262,25 +223,16 @@ export class PatientDetailComponent {
     handleMenuAction(action) {
         switch (action) {
             case 'edit_patient':
-                // Navigate to patient edit page or open modal
                 notify('top_left', 'Editing patient...', 'info');
                 // Add functionality for editing patient
                 break;
-            case 'edit_visit':
-                notify('top_left', 'Editing visit...', 'info');
-                // Add functionality for editing visit
-                break;
-            case 'add_vital_signs':
-                dashboardController.addVitalPopUpView.PreRender({
-                    visit_id: this.visit_id,
-                    vital_data: this.vitalSignsRaw_data
-                })
+            case 'print_details':
+                notify('top_left', 'Printing patient details...', 'info');
+                // Add functionality for printing patient details
                 break;
             case 'view_history':
-                frontRouter.navigate(`/patient/viewpatient/${this.patient_id}`);
-                break;
-            case 'print_file':
-                frontRouter.navigate('/patient/visithistory/' + this.visit_id);
+                notify('top_left', 'Viewing patient history...', 'info');
+                // Add functionality for viewing patient history
                 break;
             default:
                 break;

@@ -6,6 +6,7 @@ import { frontRouter } from "../script/route.js";
 
 export class CreateLaboratoryTestPopUp {
     constructor() {
+        this.applyStyle();
         window.CreateLaboratoryTestPopUp = this.CreateLaboratoryTest.bind(this);
         this.patient_id = null;
         this.isUpdate = false;
@@ -264,6 +265,13 @@ export class CreateLaboratoryTestPopUp {
         popup_cont.classList.remove('active');
     }
 
+    applyStyle() {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = this.style();
+        styleElement.id = 'create_radiology_popup';
+        document.head.appendChild(styleElement);
+    }
+
 
     input_styles() {
         return `
@@ -273,6 +281,132 @@ export class CreateLaboratoryTestPopUp {
             height: 41px;
             background-color: transparent;
             border: 2px solid var(--input_border);
+        `;
+    }
+
+    style() {
+        return `
+    .create_radiology_popup {
+        padding: 30px;
+        border-radius: var(--main_border_r);
+        background-color: var(--pure_white_background);
+        position: relative;
+        min-width: 500px;
+        min-height: 200px;
+
+        .loader_cont {
+            border-radius: var(--main_border_r);
+            position: absolute;
+        }
+
+        .slides.anima {
+            animation: text-focus-in 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        }
+
+        .slides {
+            display: flex;
+            width: 440px;
+
+            .slide {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                /* margin-top: 20px; */
+                padding: 10px;
+                width: 440px;
+                flex: none;
+
+                .heading {
+                    font-size: 25px;
+                    font-weight: bold;
+                }
+
+                .input_group {
+                    display: flex;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                    width: 100%;
+
+                    .inp_cont {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+
+                        label {
+                            font-size: 13px;
+                            /* font-weight: bold; */
+                        }
+
+                        input,
+                        select {
+                            border-radius: var(--input_main_border_r);
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: 2px solid var(--input_border);
+                        }
+
+                        .password-container {
+                            border-radius: var(--input_main_border_r);
+                            background-color: var(--input_background);
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 300px;
+                            padding: 10px;
+                            height: 41px;
+                            overflow: hidden;
+                            border: 2px solid var(--input_border);
+
+                            .password-input {
+                                width: calc(100% - 40px);
+                                padding: 0px;
+                                height: 100%;
+                                border: none;
+                                background: transparent;
+                                border-radius: 0;
+                            }
+
+                            .toggle-password {
+                                cursor: pointer;
+                                font-size: 18px;
+                                width: 30px;
+                                height: 41px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                /* background-color: rebeccapurple; */
+                            }
+                        }
+                    }
+                }
+
+                .btn_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: end;
+                    padding-top: 20px;
+                    gap: 20px;
+
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 35px;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+
+                    .cancel {
+                        background-color: var(--error_color);
+                    }
+                }
+            }
+        }
+    }
         `;
     }
 }

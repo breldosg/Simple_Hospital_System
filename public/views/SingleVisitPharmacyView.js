@@ -38,6 +38,7 @@ export class SingleVisitPharmacyView {
         dashboardController.patientDetailComponent.PreRender({
             container: this.main_container,
             visit_id: this.visit_id,
+            location: 'other_pages',
         })
 
         await this.render(this.visit_id);

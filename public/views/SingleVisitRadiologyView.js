@@ -44,6 +44,7 @@ export class SingleVisitRadiologyView {
         dashboardController.patientDetailComponent.PreRender({
             container: this.main_container,
             visit_id: this.visit_id,
+            location: 'other_pages',
         })
 
         this.render(this.visit_id);
