@@ -88,10 +88,18 @@ import { CreateRadiologyCategoryPopUp } from "../popups/CreateRadiologyCategoryP
 import { LaboratoryTestCategoryListView } from "../views/LaboratoryTestCategoryListView.js";
 import { CreateLaboratoryCategoryPopUp } from "../popups/CreateLaboratoryCategoryPopUp.js";
 import { CreateLaboratoryTestPopUp } from "../popups/CreateLaboratoryTestPopUp.js";
+import { SettingsView } from "../views/SettingsView.js";
+import { ViewAllProcedureView } from "../views/ViewAllProcedureView.js";
+import { ViewBillingProcedureView } from "../views/ViewBillingProcedureView.js";
+
+
 class DashboardController {
 
     // Dashboard View   
     dashboardView = new DashboardView();
+
+    // Settings View
+    settingsView = new SettingsView();
 
     // Loader View
     loaderView = new LoaderView();
@@ -112,6 +120,10 @@ class DashboardController {
     viewOnProgressView = new ViewOnProgressView();
     patientDetailComponent = new PatientDetailComponent();
     addPatientViewPopup = new AddPatientViewPopup();
+
+
+    // Procedure Views
+    viewAllProcedureView = new ViewAllProcedureView();
 
     //Patient Visit
     singleVisitView = new SingleVisitView();
@@ -190,6 +202,7 @@ class DashboardController {
     viewBillingMedicineView = new ViewBillingMedicineView();
     viewBillingRadiologyView = new ViewBillingRadiologyView();
     viewBillingLaboratoryView = new ViewBillingLaboratoryView();
+    viewBillingProcedureView = new ViewBillingProcedureView();
     viewBillingConsultationView = new ViewBillingConsultationView();
     viewBillingDefaultPriceView = new ViewBillingDefaultPriceView();
 

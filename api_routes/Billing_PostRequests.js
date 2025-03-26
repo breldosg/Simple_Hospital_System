@@ -15,6 +15,7 @@ const ROUTE_CONFIG = {
     search_radiology_test_on_billing: 940,
     search_laboratory_test_on_billing: 980,
     search_consultation_for_billing: 1000,
+    search_procedure_for_billing: 1260,
     create_visit_price: 1010,
     update_consultation_price: 1020,
     delete_consultation_price: 1030,

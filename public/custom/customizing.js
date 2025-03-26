@@ -14546,6 +14546,11 @@ export const view_price_cards = [
         title: 'Laboratory',
     },
     {
+        link: 'procedure',
+        icon: 'switch_icon_scissors',
+        title: 'Procedure',
+    },
+    {
         link: 'default',
         icon: 'switch_icon_settings_applications',
         title: 'Default Prices',

@@ -6,7 +6,8 @@ export const ROLES = {
         navItems: [
             { label: 'Patients', link: '/patient' },
             { label: 'Store&Pharmacy', link: '/store' },
-            { label: 'Notice', link: '/notice' }
+            { label: 'Procedure', link: '/procedure' },
+            { label: 'Notice', link: '/notice' },
         ],
         navigationSections: [
             {
@@ -20,6 +21,12 @@ export const ROLES = {
                 type: '/store',
                 choices: [
                     { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                ]
+            },
+            {
+                type: '/procedure',
+                choices: [
+                    { label: 'View All Procedure', href: '/procedure/viewprocedure' },
                 ]
             },
             {
@@ -37,6 +44,7 @@ export const ROLES = {
         navItems: [
             { label: 'Patients', link: '/patient' },
             { label: 'Store & Pharmacy', link: '/store' },
+            { label: 'Procedure', link: '/procedure' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -51,6 +59,12 @@ export const ROLES = {
                 type: '/store',
                 choices: [
                     { label: 'View All Products', href: '/store/viewpharmacyproducts' },
+                ]
+            },
+            {
+                type: '/procedure',
+                choices: [
+                    { label: 'View All Procedure', href: '/procedure/viewprocedure' },
                 ]
             },
             {
@@ -126,6 +140,7 @@ export const ROLES = {
             { label: 'Pharmacy', link: '/pharmacy' },
             { label: 'Radiology', link: '/radiology' },
             { label: 'Laboratory', link: '/laboratory' },
+            { label: 'Procedure', link: '/procedure' },
             { label: 'Store', link: '/store' },
             { label: 'Billing', link: '/billing' },
             { label: 'Notice', link: '/notice' }
@@ -171,6 +186,14 @@ export const ROLES = {
                 ]
             },
             {
+                type: '/procedure',
+                choices: [
+                    { label: 'View All Procedure', href: '/procedure/viewprocedure' },
+                    { label: 'Add Procedure', href: '/procedure/addprocedure' },
+                    { label: 'Add Procedure Category', href: '/procedure/addprocedurecategory' }
+                ]
+            },
+            {
                 type: '/store',
                 choices: [
                     { label: 'View All Products', href: '/store/viewpharmacyproducts' },
@@ -192,7 +215,8 @@ export const ROLES = {
                     { label: 'View All notice', href: '/notice/viewnotice' },
                     { label: 'Add notice', href: '/notice/addnotice' }
                 ]
-            }
+            },
+
         ]
     },
 
@@ -220,7 +244,7 @@ export const ROLES = {
             }
         ]
     },
-    
+
     // Pharmacist role
     PMS: {
         name: 'Pharmacist',

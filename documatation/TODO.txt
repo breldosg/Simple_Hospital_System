@@ -18,6 +18,10 @@
 ====== Visit View
 1- add check history btn ✔️
 
+======= Procedure 
+1- tengeneza section ya kutengeneza na update procedure na category
+
+
 ======== Patient
 1- Complete History 70%
 

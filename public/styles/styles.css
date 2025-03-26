@@ -161,7 +161,8 @@ input {
     --light_pri_color: #2ebfc6;
 
     --pri_op: #6af8ff34;
-    --pri_op1: #4e787d65;
+    /* --pri_op1: #4e787d65; */
+    --pri_op1: #1b3c3f3b;
     --pri_op2: #48696c47;
     --pri_op3: #a5eef623;
     --pri_op_skeleton: #00e5ff1e;
@@ -7854,7 +7855,7 @@ body {
 
                                 .procedure_card:hover {
                                     /* box-shadow: 0 0 5px 0 #0000003e; */
-                                    background: var(--pri_op2);
+                                    background: var(--pri_op1);
                                 }
                             }
                         }
@@ -8269,7 +8270,7 @@ body {
 
                                 .procedure_card:hover {
                                     /* box-shadow: 0 0 5px 0 #0000003e; */
-                                    background: var(--pri_op2);
+                                    background: var(--pri_op1);
                                 }
                             }
                         }

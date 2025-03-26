@@ -33,6 +33,7 @@ const routes = {
     '/': new HomeScreen(),
     '/login': screenCollection.loginScreen,
     '/dashboard': dashboardController.dashboardView,
+    '/settings': dashboardController.settingsView,
 
     '/users': dashboardController.staffListView,
     '/users/userlist': dashboardController.staffListView,
@@ -75,12 +76,16 @@ const routes = {
     '/laboratory/testlist': dashboardController.laboratoryTestListView,
     '/laboratory/testcategorylist': dashboardController.laboratoryTestCategoryListView,
 
+    '/procedure': dashboardController.viewAllProcedureView,
+    '/procedure/viewprocedure': dashboardController.viewAllProcedureView,
+
     '/billing': dashboardController.viewActiveBillsListView,
     '/billing/activebills': dashboardController.viewActiveBillsListView,
     '/billing/activebills/:id': dashboardController.singleVisitBillingView,
     '/billing/viewprices': dashboardController.singleViewPricesVisitView,
     '/billing/viewprices/consultation': dashboardController.viewBillingConsultationView,
     '/billing/viewprices/pharmacy': dashboardController.viewBillingMedicineView,
+    '/billing/viewprices/procedure': dashboardController.viewBillingProcedureView,
     '/billing/viewprices/radiology': dashboardController.viewBillingRadiologyView,
     '/billing/viewprices/laboratory': dashboardController.viewBillingLaboratoryView,
     '/billing/viewprices/default': dashboardController.viewBillingDefaultPriceView,
@@ -341,3 +346,16 @@ export function getVisitPriority(visit_priority_word) {
     return priority;
 }
 
+export function applyStyle(style, id) {
+    const styleElement = document.createElement('style');
+    styleElement.textContent = style;
+    styleElement.id = id;
+    document.head.appendChild(styleElement);
+}
+
+export function removeStyle(id) {
+    const styleElement = document.getElementById(id);
+    if (styleElement) {
+        document.head.removeChild(styleElement);
+    }
+}

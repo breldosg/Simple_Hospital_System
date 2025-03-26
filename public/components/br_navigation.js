@@ -51,6 +51,9 @@ export class BrCustomNavigation extends HTMLElement {
                             <a href="/users/account" class="menu-item" data-link>
                                 ACCOUNT SETTINGS
                             </a>
+                            <a href="/settings" class="menu-item" data-link>
+                                SYSTEM SETTINGS
+                            </a>
                             <div class="menu-item" id="appearance" data-link>
                                 <span>Appearance</span>
                                 <span class='switch_icon_wb_sunny'></span>
