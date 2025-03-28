@@ -50,7 +50,7 @@ export class PatientDetailComponent {
         this.vitalSignsRaw_data = patient_data.vital_signs;
         this.patient_id = patient_data.id;
         console.log(patient_data);
-        
+
         // Render top patient card
         this.top_card_view(patient_data);
 
@@ -190,7 +190,7 @@ export class PatientDetailComponent {
                 id: 'edit_visit',
                 icon: 'edit',
                 text: 'Edit Visit',
-                location: ['patient_history','visit_view'],
+                location: ['patient_history', 'visit_view'],
                 roles: ['ICT', 'RPT']
             },
             {
@@ -198,21 +198,21 @@ export class PatientDetailComponent {
                 icon: 'add',
                 text: 'Add Vital Signs',
                 location: ['visit_view'],
-                roles: ['ICT','DCT','SDCT','NRS']
+                roles: ['ICT', 'DCT', 'SDCT', 'NRS']
             },
             {
                 id: 'view_history',
                 icon: 'history',
                 text: 'View History',
-                location: ['visit_view','other_pages'],
-                roles: ['ICT', 'RPT','DCT','SDCT','NRS','HPMS','PMS','LAB','RDL']
+                location: ['visit_view', 'other_pages'],
+                roles: ['ICT', 'RPT', 'DCT', 'SDCT', 'NRS', 'HPMS', 'PMS', 'LAB', 'RDL']
             },
             {
                 id: 'print_file',
                 icon: 'print',
                 text: 'Print File',
-                location: ['other_pages','visit_view'],
-                roles: ['ICT', 'RPT','DCT','SDCT','NRS','HPMS','PMS','LAB','RDL']
+                location: ['other_pages', 'visit_view'],
+                roles: ['ICT', 'RPT', 'DCT', 'SDCT', 'NRS', 'HPMS', 'PMS', 'LAB', 'RDL']
             }
         ];
 

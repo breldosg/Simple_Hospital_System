@@ -23,6 +23,7 @@ const apiRouterUsers = require('./api_routes/Users_PostRequests.js');
 const apiRouterPatient = require('./api_routes/Patient_PostRequests.js');
 const apiRouterPharmacy = require('./api_routes/Pharmacy_PostRequests.js');
 const apiRouterRadiology = require('./api_routes/Radiology_PostRequests.js');
+const apiRouterProcedure = require('./api_routes/Procedure_PostRequests.js');
 const apiRouterLaboratory = require('./api_routes/Laboratory_PostRequests.js');
 const apiRouterBilling = require('./api_routes/Billing_PostRequests.js');
 
@@ -34,6 +35,7 @@ app.use('/api/pharmacy', apiRouterPharmacy);
 app.use('/api/radiology', apiRouterRadiology);
 app.use('/api/laboratory', apiRouterLaboratory);
 app.use('/api/billing', apiRouterBilling);
+app.use('/api/procedure', apiRouterProcedure);
 
 app.get(['/', '/login'], (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));

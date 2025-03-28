@@ -91,6 +91,7 @@ import { CreateLaboratoryTestPopUp } from "../popups/CreateLaboratoryTestPopUp.j
 import { SettingsView } from "../views/SettingsView.js";
 import { ViewAllProcedureView } from "../views/ViewAllProcedureView.js";
 import { ViewBillingProcedureView } from "../views/ViewBillingProcedureView.js";
+import { CreateUpdateProcedurePopUp } from "../popups/CreateUpdateProcedurePopUp.js";
 
 
 class DashboardController {
@@ -186,6 +187,8 @@ class DashboardController {
     singleVisitPharmacyView = new SingleVisitPharmacyView();
     addMedicineCategoryViewPopup = new AddMedicineCategoryViewPopup();
 
+    // Procedure Views
+    createUpdateProcedurePopUp = new CreateUpdateProcedurePopUp();
 
     // Radiology Section
     viewActiveRadiologyListView = new ViewActiveRadiologyListView();
