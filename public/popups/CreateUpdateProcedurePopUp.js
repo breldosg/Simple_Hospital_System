@@ -167,11 +167,12 @@ export class CreateUpdateProcedurePopUp {
 
     async CreateUpdateProcedure(data) {
         const btn_submit = this.main_container.querySelector('br-button[type="submit"]');
-        // btn_submit.setAttribute('loading', true);
-
-        const endpoint = this.isUpdate ? '/api/procedure/update_procedure' : '/api/procedure/create_procedure';
-
+        btn_submit.setAttribute('loading', true);
         
+        const endpoint = this.isUpdate ? '/api/procedure/update_procedure' : '/api/procedure/create_procedure';
+        
+        console.log(endpoint);
+        console.log(data);
         try {
             if (this.isUpdate) {
                 data['id'] = this.radiologyId;
@@ -268,7 +269,6 @@ export class CreateUpdateProcedurePopUp {
         styleElement.id = 'create_update_procedure_popup';
         document.head.appendChild(styleElement);
     }
-
 
     input_styles() {
         return `

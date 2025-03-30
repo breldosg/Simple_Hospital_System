@@ -1,8 +1,5 @@
-import { ALLOW_TO_ADD_PATIENT, VIEW_PATIENT_BTNS } from "../config/roles.js";
-import { dashboardController } from "../controller/DashboardController.js";
-import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, decodeHTML, getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
+import { getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class DashboardView {
@@ -159,11 +156,6 @@ export class DashboardView {
                 visitStats: [65, 80, 45, 90, 75, 85, 60]
             }
         };
-    }
-
-    formatDate(dateString) {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date().toLocaleDateString('en-US', options);
     }
 
     getGreeting() {
@@ -516,15 +508,14 @@ export class DashboardView {
 
     style() {
         return `
-
         .main_dashboard {
-           width: 100%;
-           height: 100%;
-           overflow-y: auto;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
             background: var(--pure_white_background);
             padding: 20px;
             border-radius: var(--main_border_r);
-        }
+        
         
         .dashboard-header {
             display: flex;
@@ -891,6 +882,7 @@ export class DashboardView {
             font-weight: 500;
             border-color: var(--pri_color);
         }
+    }
         `;
     }
 }

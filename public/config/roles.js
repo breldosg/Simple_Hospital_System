@@ -188,9 +188,8 @@ export const ROLES = {
             {
                 type: '/procedure',
                 choices: [
+                    { label: 'Active Visits', href: '/procedure/activevisits' },
                     { label: 'View All Procedure', href: '/procedure/viewprocedure' },
-                    { label: 'Add Procedure', href: '/procedure/addprocedure' },
-                    { label: 'Add Procedure Category', href: '/procedure/addprocedurecategory' }
                 ]
             },
             {

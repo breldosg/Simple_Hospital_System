@@ -78,6 +78,7 @@ const routes = {
 
     '/procedure': dashboardController.viewAllProcedureView,
     '/procedure/viewprocedure': dashboardController.viewAllProcedureView,
+    '/procedure/activevisits': dashboardController.viewActiveProcedureListView,
 
     '/billing': dashboardController.viewActiveBillsListView,
     '/billing/activebills': dashboardController.viewActiveBillsListView,

@@ -92,6 +92,7 @@ import { SettingsView } from "../views/SettingsView.js";
 import { ViewAllProcedureView } from "../views/ViewAllProcedureView.js";
 import { ViewBillingProcedureView } from "../views/ViewBillingProcedureView.js";
 import { CreateUpdateProcedurePopUp } from "../popups/CreateUpdateProcedurePopUp.js";
+import { ViewActiveProcedureListView } from "../views/ViewActiveProcedureListView.js";
 
 
 class DashboardController {
@@ -189,6 +190,7 @@ class DashboardController {
 
     // Procedure Views
     createUpdateProcedurePopUp = new CreateUpdateProcedurePopUp();
+    viewActiveProcedureListView = new ViewActiveProcedureListView();
 
     // Radiology Section
     viewActiveRadiologyListView = new ViewActiveRadiologyListView();

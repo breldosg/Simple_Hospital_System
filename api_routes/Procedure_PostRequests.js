@@ -13,9 +13,8 @@ const ROUTE_CONFIG = {
     get_category: 1270,
     create_procedure: 1280,
     update_procedure: 1290,
+    search_visit_with_procedure_order: 1300,
 };
-
-
 
 
 // Configure multer for file upload
@@ -32,8 +31,6 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
-
-
 
 const upload = multer({
     storage: storage,

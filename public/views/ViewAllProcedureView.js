@@ -136,19 +136,13 @@ export class ViewAllProcedureView {
                     <p class="name">${procedure.name}</p>
                     <p class="name">${procedure.category == null ? 'No Category' : procedure.category}</p>
                     <p class="remain">${currency_formatter(procedure.price)}</p>
-                    <p class="status">${procedure.status}</p>
+                    <p class="status ${procedure.status == 'inactive' ? 'inactive' : ''}">${procedure.status}</p>
                     <div class="action d_flex flex__c_c">
-                        <button class="main_btn edit_procedure_btn">Edit Procedure</button>
-                        <button class="main_btn edit_price_btn">Edit Price</button>
+                        <button class="main_btn edit_procedure_btn">Edit</button>
                     </div>
             `;
 
-            // add event listener to the edit price btn
-            row.querySelector('.edit_price_btn').addEventListener('click', () => {
-                dashboardController.updateProcedurePricePopUpView.PreRender(procedure);
-                console.log('edit price btn clicked', procedure);
-            });
-
+            // add event listener to the edit procedure btn
             row.querySelector('.edit_procedure_btn').addEventListener('click', () => {
                 var new_procedure = {
                     id: procedure.id,
@@ -592,6 +586,15 @@ export class ViewAllProcedureView {
                                 height: 30px;
                                 padding-inline: 10px;
                                 width: 90px;
+                            }
+
+                            .status {
+                                font-weight: 700;
+                                color: var(--light_pri_color);
+                            }
+                            
+                            .inactive {
+                                color: var(--error_color);
                             }
                         }
 

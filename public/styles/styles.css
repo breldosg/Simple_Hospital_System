@@ -13270,7 +13270,7 @@ body {
 
     /* ---------------------------------------------------------- */
 
- 
+
 
     /* ---------------------------------------------------------- */
 
@@ -17409,7 +17409,7 @@ body {
 
     /* ------------------------------------------------------- */
 
-    .add_preliminary_diagnosis_popUp {
+    /* .add_preliminary_diagnosis_popUp {
         width: 481px;
         height: fit-content;
         max-height: 650px;
@@ -17493,7 +17493,6 @@ body {
                 overflow-y: scroll;
                 display: flex;
                 flex-direction: column;
-                /* gap: 10px; */
                 padding-top: 20px;
                 width: 100%;
 
@@ -17510,7 +17509,6 @@ body {
                 .card_list {
                     margin-top: 10px;
                     padding-inline: var(--main_padding);
-                    /* padding: 5px; */
                     overflow-y: scroll;
                     display: flex;
                     flex-direction: column;
@@ -17525,9 +17523,6 @@ body {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        /* border-radius: var(--main_border_r); */
-                        /* border-bottom: 2px solid var(--pri_op); */
-                        /* box-shadow: 0 0 5px 0 #0000001d; */
                         cursor: pointer;
                         width: 100%;
                         padding: 10px 0px;
@@ -17592,7 +17587,7 @@ body {
 
         }
 
-    }
+    } */
 
     /* ------------------------------------------------------- */
 
