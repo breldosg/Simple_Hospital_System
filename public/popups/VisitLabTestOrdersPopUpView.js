@@ -176,6 +176,13 @@ export class VisitLabTestOrdersPopUpView {
             category_list.innerHTML = '';
 
             var category_list_data = lab_test_data.lab_test_category;
+            category_list_data =[
+                {
+                    id:0,
+                    name:"All"
+                },
+                ...category_list_data
+            ];
             var is_first_active = false;
             category_list_data.forEach((item) => {
 
@@ -217,7 +224,7 @@ export class VisitLabTestOrdersPopUpView {
                 if (this.searchQuery != '' && !item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
                     return;
                 }
-                if (item.category == this.selected_category) {
+                if (item.category == this.selected_category || this.selected_category == 0) {
                     var span_class = "switch_icon_check_box_outline_blank";
                     var lab_test_item = document.createElement('div');
                     lab_test_item.classList.add('lab_test_list_item');

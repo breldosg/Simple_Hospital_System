@@ -14,6 +14,7 @@ const ROUTE_CONFIG = {
     create_procedure: 1280,
     update_procedure: 1290,
     search_visit_with_procedure_order: 1300,
+    update_procedure_price: 1310,
 };
 
 

@@ -19,7 +19,8 @@
 1- add check history btn ✔️
 
 ======= Procedure 
-1- tengeneza section ya kutengeneza na update procedure na category
+1- tengeneza section ya kutengeneza na update procedure na category ✔️
+2- tendeza view yakujaza report za procedure
 
 
 ======== Patient
@@ -29,7 +30,21 @@
 ======= Staff
 1- Complete Dashboard 40%
 2- Tengeneza page kwaajili ya defaults updates kama vile pre/final Diagnosis na vingine
+3- ongeza practationaer number mda unamtengeza au update mgonjwa
 
+
+========= ADMIN
+1- Complete Setting
+
+--//////////// Settings ///////////////////////
+1- default abstract_updates
+    - pri/final diagnosis codes
+    - 
+2- Core System update
+    - System Name/Jina la taasis inayotumia hiyo System
+    - Logo Change 
+3- Interface
+4- About System
 
 
 ** Backend** 
@@ -39,6 +54,6 @@
 
 
 --///////////////// TO ADD //////////////////
-- add BMI body mass index calculation on vital sign
+- add BMI body mass index calculation on vital sign ✔️
 
 

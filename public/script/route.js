@@ -20,7 +20,10 @@ class FrontRouter {
         // Find a matching route or return 404
         const matchingRoute = this.matchRoute(path);
         if (matchingRoute) {
-            matchingRoute.route.PreRender(matchingRoute.params);
+            // update the title of the page
+            document.title = matchingRoute.route.title;
+
+            matchingRoute.route.view.PreRender(matchingRoute.params);
         } else {
             console.warn('No matching route found');
             this.routes['404'].PreRender();

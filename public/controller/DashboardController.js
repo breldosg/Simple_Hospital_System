@@ -25,7 +25,6 @@ import { ApprovePharmacyOrderPopUpView } from "../popups/ApprovePharmacyOrderPop
 import { SingleVisitView } from "../views/SingleVisitView.js";
 import { VisitsClinicalEvaluationPopUpView } from "../popups/VisitsClinicalEvaluationPopUpView.js";
 import { AddVitalPopUpView } from "../popups/AddVitalPopUpView.js";
-import { VisitVitalCardView } from "../cards/VisitVitalCardView.js";
 import { VisitPatientNoteCardView } from "../cards/VisitPatientNoteCardView.js";
 import { AddPatientNotePopUpView } from "../popups/AddPatientNotePopUpView.js";
 import { VisitClinicalEvaluationCardView } from "../cards/VisitClinicalEvaluationCardView.js";
@@ -93,6 +92,8 @@ import { ViewAllProcedureView } from "../views/ViewAllProcedureView.js";
 import { ViewBillingProcedureView } from "../views/ViewBillingProcedureView.js";
 import { CreateUpdateProcedurePopUp } from "../popups/CreateUpdateProcedurePopUp.js";
 import { ViewActiveProcedureListView } from "../views/ViewActiveProcedureListView.js";
+import { VisitDetailCardView } from "../cards/VisitDetailCardView.js";
+import { UpdateProcedurePricePopUpView } from "../popups/UpdateProcedurePricePopUpView.js";
 
 
 class DashboardController {
@@ -148,7 +149,7 @@ class DashboardController {
 
 
     // Patient Visit View Cards
-    visitVitalCardView = new VisitVitalCardView();
+    visitDetailCardView = new VisitDetailCardView();
     visitPatientNoteCardView = new VisitPatientNoteCardView();
     visitClinicalEvaluationCardView = new VisitClinicalEvaluationCardView();
     visitAllergyCardView = new VisitAllergyCardView();
@@ -210,6 +211,7 @@ class DashboardController {
     viewBillingProcedureView = new ViewBillingProcedureView();
     viewBillingConsultationView = new ViewBillingConsultationView();
     viewBillingDefaultPriceView = new ViewBillingDefaultPriceView();
+    updateProcedurePricePopUpView = new UpdateProcedurePricePopUpView();
 
 
     // Billing PopUp

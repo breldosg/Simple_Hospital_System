@@ -105,6 +105,7 @@ export class ViewPatientView {
             this.show_count_num = 0;
             this.total_data_num = 0;
             this.main_container.querySelector('.start_page').style.display = 'flex'; // No data message
+            this.main_container.querySelector('.loader_cont').classList.remove('active'); // No data message
         }
         // this.main_container.querySelector('.loader_cont').classList.remove('active');
     }

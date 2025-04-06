@@ -5,6 +5,7 @@ import { notify } from "../script/index.js";
 export class AddVitalPopUpView {
     constructor() {
         this.visit_id = null;
+        window.AddVital = this.AddVital.bind(this);
     }
 
     async PreRender(params_json) {
@@ -127,6 +128,62 @@ export class AddVitalPopUpView {
         cancel_btn.addEventListener('click', () => {
             this.close();
         });
+    }
+
+    async AddVital(data_old) {
+        const btn_submit = document.querySelector('br-button[type="submit"]');
+        btn_submit.setAttribute('loading', true);
+
+
+        var formData = {
+            ...data_old,
+            visit_id: this.visit_id
+        }
+
+        try {
+            const response = await fetch('/api/patient/save_vital', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('failed To update vital. Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
+            if (result.success) {
+                notify('top_left', result.message, 'success');
+                dashboardController.patientDetailComponent.render();
+
+                // After successful creation, clear the popup and close it
+                dashboardController.addVitalPopUpView.close();
+
+            } else {
+                notify('top_left', result.message, 'warning');
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        }
+        finally {
+            btn_submit.setAttribute('loading', false);
+        }
     }
 
     close() {

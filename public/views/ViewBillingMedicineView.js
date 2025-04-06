@@ -146,7 +146,7 @@ export class ViewBillingMedicineView {
                     <p class="name">${medicine.category == null ? 'No Category' : medicine.category}</p>
                     <p class="type">${medicine.type}</p>
                     <p class="remain">${currency_formatter(medicine.price)}</p>
-                    <p class="status">${medicine.status}</p>
+                    <p class="status ${medicine.status ?? 'active'}">${medicine.status}</p>
                     <div class="action d_flex flex__c_c">
                         <button class="main_btn edit_price_btn">Edit Price</button>
                     </div>

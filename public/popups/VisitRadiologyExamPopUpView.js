@@ -73,10 +73,7 @@ export class VisitRadiologyExamPopUpView {
                 </div>
 
                 <div class="group_category_list">
-                    <div class="radiology_list_item selected" data_src="x_ray_1">
-                        <p>X-Ray 1</p>
-                        <span class='switch_icon_check_box'></span>
-                    </div>
+                    
 
                 </div>
 
@@ -176,6 +173,16 @@ export class VisitRadiologyExamPopUpView {
             category_list.innerHTML = '';
 
             var category_list_data = radiology_data.radiology_category;
+            console.log(category_list_data);
+
+            category_list_data =[
+                {
+                    id:0,
+                    name:"All"
+                },
+                ...category_list_data
+            ];
+            
             var is_first_active = false;
             category_list_data.forEach((item) => {
 
@@ -213,11 +220,13 @@ export class VisitRadiologyExamPopUpView {
             radiology_list.innerHTML = '';
 
             var radiology_list_data = radiology_data.radiology_tests;
+            console.log(radiology_list_data);
+            
             radiology_list_data.forEach((item) => {
                 if (this.searchQuery != '' && !item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
                     return;
                 }
-                if (item.category == this.selected_category) {
+                if (item.category == this.selected_category || this.selected_category == 0) {
                     var span_class = "switch_icon_check_box_outline_blank";
                     var radiology_item = document.createElement('div');
                     radiology_item.classList.add('radiology_list_item');

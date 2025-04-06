@@ -94,7 +94,7 @@ export class ViewActivePharmacyListView {
             this.total_data_num = 0;
             this.main_container.querySelector('.start_page').style.display = 'flex'; // No data message
         }
-        // this.main_container.querySelector('.loader_cont').classList.remove('active');
+        this.main_container.querySelector('.loader_cont').classList.remove('active');
     }
 
     loadingContent() {

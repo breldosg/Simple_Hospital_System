@@ -74,6 +74,33 @@ export class SettingsView {
         return `
         <div class="main_settings_container">
 
+            <div class="settings_top_cont">
+                <div class="logo_cont">
+                    <img src="public/assets/logo/Primary_logo.svg" alt="logo">
+                </div>
+                <div class="settings_top_cont_right">
+                    <p class="settings_top_cont_right_title">System Settings <span>Admin</span></p>
+                    <p class="settings_top_cont_right_description">Manage your system settings here</p>
+                </div>
+            </div>
+
+            <div class="settings_bottom_cont">
+                <div class="settings_bottom_cont_left">
+                    <h3>Settings</h3>
+                </div>
+                <div class="settings_bottom_cont_right">
+
+                    <div class="settings_bottom_cont_right_example_view">
+                        <div class="example_logo_cont">
+                            <img src="public/assets/logo/SubMark.png" alt="logo">
+                        </div>
+                        <h3>System Settings</h3>
+                        <p>Manage your system settings here</p>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
         `;
     }
@@ -88,14 +115,6 @@ export class SettingsView {
     style() {
         return `
 
-        .main_settings_container {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            background: var(--pure_white_background);
-            padding: 20px;
-            border-radius: var(--main_border_r);
-        }
         `;
     }
 }

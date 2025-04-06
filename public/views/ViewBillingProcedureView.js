@@ -145,7 +145,7 @@ export class ViewBillingProcedureView {
                     <p class="name">${procedure.name}</p>
                     <p class="name">${procedure.category == null ? 'No Category' : procedure.category}</p>
                     <p class="remain">${currency_formatter(procedure.price)}</p>
-                    <p class="status">${procedure.status}</p>
+                    <p class="status ${procedure.status ?? 'active'}">${procedure.status}</p>
                     <div class="action d_flex flex__c_c">
                         <button class="main_btn edit_price_btn">Edit Price</button>
                     </div>
@@ -640,6 +640,18 @@ export class ViewBillingProcedureView {
                                 height: 30px;
                                 padding-inline: 10px;
                                 width: 90px;
+                            }
+
+                            .status{
+                                font-weight: 600;
+                            }
+
+                            .active {
+                                color: var(--success_color);
+                            }
+
+                            .inactive {
+                                color: var(--error_color);
                             }
                         }
 

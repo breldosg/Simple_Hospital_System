@@ -55,15 +55,15 @@ export class SingleVisitView {
 
         this.visit_detail_data = visit_data.visit_detail.visit_data;
 
-
-
+        console.log(this.visit_detail_data);
+        
 
         // Render various card views
         const cardRenderConfig = [
             {
-                method: dashboardController.visitVitalCardView,
-                dataKey: 'vital_sign',
-                dataArray: 'vital_data',
+                method: dashboardController.visitDetailCardView,
+                dataKey: 'visit_detail',
+                dataArray: 'visit_data',
             },
             {
                 method: dashboardController.visitPatientNoteCardView,
@@ -183,7 +183,7 @@ export class SingleVisitView {
     
     <div class="more_visit_detail"></div>
     <div class="more_visit_cards">
-        ${['Clinical Notes', 'Diagnosis', 'Treatment Plan']
+        ${['Clinical Notes', 'Diagnosis & Investigation', 'Treatment Plan']
                 .map((title, index) => `
         <div class="card_group_cont_cont" id="${['clinical', 'diagnosis', 'treatment'][index]}_group">
             <h4>${title}</h4>
@@ -197,7 +197,7 @@ export class SingleVisitView {
 
     render_add_btn() {
 
-        //delete the existing add card btn
+        // delete the existing add card btn
         this.add_cards_container.forEach(container => {
             container.remove();
         });
@@ -367,6 +367,12 @@ export class SingleVisitView {
 
     add_to_rendered_card_array(value) {
         this.rendered_card.push(value);
+
+
+        // check if visit detail is fetched 
+        if (this.visit_detail_data == null) {
+            return;
+        }
 
         // Render add buttons
         if (whoToSeeAddBtn.includes(this.staff_role) && this.visit_detail_data.status == 'active') {

@@ -7,6 +7,7 @@ export class PatientDetailComponent {
     constructor() {
         this.vitalSigns_data = false;
         this.vitalSignsRaw_data = [];
+        this.has_vital_sign_data = false;
         this.applyStyle();
     }
 
@@ -14,7 +15,7 @@ export class PatientDetailComponent {
         // set default value
         this.vitalSigns_data = false;
         this.vitalSignsRaw_data = [];
-
+        this.has_vital_sign_data = false;
         // receive parameters
         this.rendered_card = [];
         this.visit_id = params.visit_id ?? null;
@@ -38,14 +39,23 @@ export class PatientDetailComponent {
     }
 
     async render() {
-        const patient_data = await this.fetchData();
+        var loading_cont = this.main_container.querySelector('.loader_cont');
+        loading_cont.classList.add('active');
 
+        const patient_data = await this.fetchData();
 
         if (!patient_data) {
             var loader = this.main_container.querySelector('.loader_cont');
             loader.classList.remove('active');
             return;
         }
+
+        var vital_card = Boolean(patient_data.vital_signs);
+        if (vital_card) {
+            dashboardController.singleVisitView.add_to_rendered_card_array('addVitalPopUpView')
+            this.has_vital_sign_data = true;
+        }
+
         await this.vitalSigns_processing(patient_data);
         this.vitalSignsRaw_data = patient_data.vital_signs;
         this.patient_id = patient_data.id;
@@ -113,7 +123,6 @@ export class PatientDetailComponent {
     }
 
     top_card_view(data) {
-        console.log(this.vitalSigns_data);
 
         this.main_container.innerHTML = `
     <div class="Patient_imag">

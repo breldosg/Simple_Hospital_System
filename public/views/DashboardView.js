@@ -512,9 +512,9 @@ export class DashboardView {
             width: 100%;
             height: 100%;
             overflow-y: auto;
-            background: var(--pure_white_background);
-            padding: 20px;
-            border-radius: var(--main_border_r);
+            /* background: var(--pure_white_background); */
+            /* padding: 20px; */
+            /* border-radius: var(--main_border_r); */
         
         
         .dashboard-header {

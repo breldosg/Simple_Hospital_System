@@ -80,7 +80,11 @@ p,
 li,
 td,
 th {
-    font-size: 12px;
+    font-size: var(--main_font_size);
+}
+
+p {
+    white-space: pre-line;
 }
 
 h4 {
@@ -166,6 +170,9 @@ input {
     --pri_op2: #48696c47;
     --pri_op3: #a5eef623;
     --pri_op_skeleton: #00e5ff1e;
+
+    --visit_card_text: #e1e1e1;
+    --pri_back: #254147;
 
     --pri_back_op: #53b8c40d;
 
@@ -253,6 +260,11 @@ input {
     --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
+:root {
+    --main_font_size: 12px;
+    --main_font_size_sm: 10px;
+}
+
 body {
     background-color: var(--main_background);
 }
@@ -268,7 +280,8 @@ body {
     --pri_op2: #a5eef647;
     --pri_op3: #a5eef623;
 
-
+    --visit_card_text: #e0f9fc;
+    --pri_back: #e0f9fc;
     --pri_back_op: #53b8c40d;
 
     --pri_border_color: #01b2c624;
@@ -640,6 +653,139 @@ body {
             overflow-y: scroll;
         }
 
+
+        .main_settings_container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: auto;
+
+            .settings_top_cont {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 20px;
+                background-color: var(--pure_white_background);
+                border-radius: var(--main_border_r);
+
+                .logo_cont {
+                    width: auto;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+                }
+
+                .settings_top_cont_right {
+                    .settings_top_cont_right_title {
+                        /* display: flex; */
+                        /* align-items: flex-start; */
+                        gap: 10px;
+                        /* color: var(--gray_text); */
+                        font-size: 25px;
+                        font-weight: 500;
+
+                        span {
+                            font-size: var(--main_font_size_sm);
+                            font-weight: 700;
+                            color: var(--light_pri_color);
+                            padding: 3px 10px;
+                            border-radius: 10px;
+                            background-color: var(--pri_op);
+                        }
+
+                    }
+
+                    .settings_top_cont_right_description {
+                        color: var(--gray_text);
+                    }
+
+
+                }
+
+
+
+
+            }
+
+            .settings_bottom_cont {
+                display: grid;
+                grid-template-columns: 1fr 2.5fr;
+                gap: 20px;
+                height: 100%;
+                flex: none;
+
+                .settings_bottom_cont_left {
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--pure_white_background);
+                    border-radius: var(--main_border_r);
+                    padding: var(--main_padding);
+                    overflow-y: scroll;
+                    flex: none;
+                }
+
+                .settings_bottom_cont_right {
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--pure_white_background);
+                    border-radius: var(--main_border_r);
+                    padding: var(--main_padding);
+
+                    /* ------------------------------------------- */
+                    .settings_bottom_cont_right_example_view {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        /* gap: 10px; */
+
+                        .example_logo_cont {
+                            width: 80px;
+                            height: 80px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                            margin-bottom: 10px;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: contain;
+                                filter: grayscale(100%);
+                                opacity: 0.7;
+                            }
+
+                        }
+
+                        h3 {
+                            font-size: 25px;
+                            font-weight: 700;
+                            color: var(--gray_text);
+                        }
+                        p{
+                            color: var(--gray_text);
+                            width: 300px;
+                            text-align: center;
+                        }
+                    }
+
+                    
+                }
+
+            }
+
+        }
 
         /* ------------------------------------------------------- */
 
@@ -3778,6 +3924,18 @@ body {
                                 display: inline-block;
                             }
 
+                            .status {
+                                font-weight: 600;
+                            }
+
+                            .active {
+                                color: var(--success_color);
+                            }
+
+                            .inactive {
+                                color: var(--error_color);
+                            }
+
                             .main_btn {
                                 height: 30px;
                                 padding-inline: 10px;
@@ -4809,6 +4967,7 @@ body {
                             p {
                                 font-weight: 500;
                                 color: var(--gray_text);
+                                white-space: nowrap;
 
                                 span {
                                     color: var(--gray_text);
@@ -6146,34 +6305,6 @@ body {
 
                 }
 
-                .vital_card_cont {
-                    /* height: 305px; */
-
-                    .vital_card {
-                        display: flex;
-                        flex-direction: column;
-                        /* justify-content: space-around; */
-                        height: calc(100% - 35px);
-                        gap: 0;
-
-                        .value_cont {
-                            width: 100%;
-                            height: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-
-                            .name {
-                                font-weight: 500;
-                            }
-
-                            .value {
-                                width: 30%;
-                                font-weight: 600;
-                            }
-                        }
-                    }
-                }
 
             }
 

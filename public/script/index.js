@@ -31,70 +31,206 @@ class NotFoundScreen {
 // Define routes
 const routes = {
     '/': new HomeScreen(),
-    '/login': screenCollection.loginScreen,
-    '/dashboard': dashboardController.dashboardView,
-    '/settings': dashboardController.settingsView,
+    '/login': {
+        view: screenCollection.loginScreen,
+        title: 'Login'
+    },
+    '/dashboard': {
+        view: dashboardController.dashboardView,
+        title: 'Dashboard'
+    },
+    '/settings': {
+        view: dashboardController.settingsView,
+        title: 'Settings'
+    },
 
-    '/users': dashboardController.staffListView,
-    '/users/userlist': dashboardController.staffListView,
-    '/users/attendance': dashboardController.attendanceView,
-    '/users/account': dashboardController.userProfileView,
+    '/users': {
+        view: dashboardController.staffListView,
+        title: 'All Staff'
+    },
+    '/users/userlist': {
+        view: dashboardController.staffListView,
+        title: 'All Staff'
+    },
+    '/users/attendance': {
+        view: dashboardController.attendanceView,
+        title: 'Attendance'
+    },
+    '/users/account': {
+        view: dashboardController.userProfileView,
+        title: 'User Profile'
+    },
 
-    '/patient': dashboardController.viewPatientView,
-    '/patient/viewpatient': dashboardController.viewPatientView,
-    '/patient/activevisit': dashboardController.viewOnProgressView,
-    '/patient/viewpatient/:id': dashboardController.singlePatientView,
-    '/patient/activevisit/:id': dashboardController.singleVisitView,
-    '/patient/visithistory/:id': dashboardController.singleVisitHistoryView,
+    '/patient': {
+        view: dashboardController.viewPatientView,
+        title: 'All Patients'
+    },
+    '/patient/viewpatient': {
+        view: dashboardController.viewPatientView,
+        title: 'All Patients'
+    },
+    '/patient/activevisit': {
+        view: dashboardController.viewOnProgressView,
+        title: 'Patient Active Visits'
+    },
+    '/patient/viewpatient/:id': {
+        view: dashboardController.singlePatientView,
+        title: 'All Patients'
+    },
+    '/patient/activevisit/:id': {
+        view: dashboardController.singleVisitView,
+        title: 'Patient Visit'
+    },
+    '/patient/visithistory/:id': {
+        view: dashboardController.singleVisitHistoryView,
+        title: 'Patient Visit History'
+    },
 
-    '/pharmacy': dashboardController.viewMedicineView,
-    '/pharmacy/viewpharmacyproducts': dashboardController.viewMedicineView,
-    '/pharmacy/viewcategory': dashboardController.viewMedicineCategoryView,
-    '/pharmacy/viewcategory/:id': dashboardController.singleMedicineCategoryView,
-    '/pharmacy/orderlist': dashboardController.viewOrderListView,
-    '/pharmacy/activevisits': dashboardController.viewActivePharmacyListView,
-    '/pharmacy/activevisits/:id': dashboardController.singleVisitPharmacyView,
+    '/pharmacy': {
+        view: dashboardController.viewMedicineView,
+        title: 'All Pharmacy Products'
+    },
+    '/pharmacy/viewpharmacyproducts': {
+        view: dashboardController.viewMedicineView,
+        title: 'All Pharmacy Products'
+    },
+    '/pharmacy/viewcategory': {
+        view: dashboardController.viewMedicineCategoryView,
+        title: 'All Pharmacy Categories'
+    },
+    '/pharmacy/viewcategory/:id': {
+        view: dashboardController.singleMedicineCategoryView,
+        title: 'Pharmacy Category'
+    },
+    '/pharmacy/orderlist': {
+        view: dashboardController.viewOrderListView,
+        title: 'All Pharmacy Orders'
+    },
+    '/pharmacy/activevisits': {
+        view: dashboardController.viewActivePharmacyListView,
+        title: 'Visits with Prescriptions'
+    },
+    '/pharmacy/activevisits/:id': {
+        view: dashboardController.singleVisitPharmacyView,
+        title: 'Visit with Prescriptions'
+    },
 
-    '/store': dashboardController.viewMedicineView,
-    '/store/viewpharmacyproducts': dashboardController.viewMedicineView,
-    '/store/viewcategory': dashboardController.viewMedicineCategoryView,
-    '/store/addcategory': dashboardController.addMedicineCategoryView,
-    '/store/viewcategory/:id': dashboardController.singleMedicineCategoryView,
-    '/store/viewinatakebatch': dashboardController.viewIntakeBatchView,
-    '/store/viewinatakebatch/:id': dashboardController.singleIntakeBatchView,
-    '/store/orderlist': dashboardController.viewOrderListView,
+    '/store': {
+        view: dashboardController.viewMedicineView,
+        title: 'All Pharmacy Products'
+    },
+    '/store/viewpharmacyproducts': {
+        view: dashboardController.viewMedicineView,
+        title: 'All Pharmacy Products'
+    },
+    '/store/viewcategory': {
+        view: dashboardController.viewMedicineCategoryView,
+        title: 'Medicine Categories'
+    },
+    // '/store/addcategory': {
+    //     view: dashboardController.addMedicineCategoryView,
+    //     title: 'Medicine Category'
+    // },
+    '/store/viewcategory/:id': {
+        view: dashboardController.singleMedicineCategoryView,
+        title: 'Medicine Category'
+    },
+    '/store/viewinatakebatch': {
+        view: dashboardController.viewIntakeBatchView,
+        title: 'All Store Intake Batches'
+    },
+    '/store/orderlist': {
+        view: dashboardController.viewOrderListView,
+        title: 'All Pharmacy Orders'
+    },
 
-    '/radiology': dashboardController.viewActiveRadiologyListView,
-    '/radiology/activevisits': dashboardController.viewActiveRadiologyListView,
-    '/radiology/activevisits/:id': dashboardController.singleVisitRadiologyView,
-    '/radiology/examslist': dashboardController.radiologyExamsListView,
-    '/radiology/examscategorylist': dashboardController.radiologyExamsCategoryListView,
+    '/radiology': {
+        view: dashboardController.viewActiveRadiologyListView,
+        title: 'All Radiology Exams'
+    },
+    '/radiology/activevisits': {
+        view: dashboardController.viewActiveRadiologyListView,
+        title: 'Visits with Radiology'
+    },
+    '/radiology/activevisits/:id': {
+        view: dashboardController.singleVisitRadiologyView,
+        title: 'Visit with Radiology'
+    },
+    '/radiology/examslist': {
+        view: dashboardController.radiologyExamsListView,
+        title: 'All Radiology Exams'
+    },
+    '/radiology/examscategorylist': {
+        view: dashboardController.radiologyExamsCategoryListView,
+        title: 'All Radiology Exams Category'
+    },
 
-    '/laboratory': dashboardController.viewActiveLaboratoryListView,
-    '/laboratory/activevisits': dashboardController.viewActiveLaboratoryListView,
-    '/laboratory/activevisits/:id': dashboardController.singleVisitLaboratoryView,
-    '/laboratory/testlist': dashboardController.laboratoryTestListView,
-    '/laboratory/testcategorylist': dashboardController.laboratoryTestCategoryListView,
+    '/laboratory': {
+        view: dashboardController.viewActiveLaboratoryListView,
+        title: 'All Laboratory Tests'
+    },
+    '/laboratory/activevisits': {
+        view: dashboardController.viewActiveLaboratoryListView,
+        title: 'Visits with Laboratory'
+    },
+    '/laboratory/activevisits/:id': {
+        view: dashboardController.singleVisitLaboratoryView,
+        title: 'Visit with Laboratory'
+    },
 
-    '/procedure': dashboardController.viewAllProcedureView,
-    '/procedure/viewprocedure': dashboardController.viewAllProcedureView,
-    '/procedure/activevisits': dashboardController.viewActiveProcedureListView,
+    '/procedure': {
+        view: dashboardController.viewAllProcedureView,
+        title: 'All Procedures'
+    },
+    '/procedure/viewprocedure': {
+        view: dashboardController.viewAllProcedureView,
+        title: 'All Procedures'
+    },
+    '/procedure/activevisits': {
+        view: dashboardController.viewActiveProcedureListView,
+        title: 'Visits with Procedures'
+    },
 
-    '/billing': dashboardController.viewActiveBillsListView,
-    '/billing/activebills': dashboardController.viewActiveBillsListView,
-    '/billing/activebills/:id': dashboardController.singleVisitBillingView,
-    '/billing/viewprices': dashboardController.singleViewPricesVisitView,
-    '/billing/viewprices/consultation': dashboardController.viewBillingConsultationView,
-    '/billing/viewprices/pharmacy': dashboardController.viewBillingMedicineView,
-    '/billing/viewprices/procedure': dashboardController.viewBillingProcedureView,
-    '/billing/viewprices/radiology': dashboardController.viewBillingRadiologyView,
-    '/billing/viewprices/laboratory': dashboardController.viewBillingLaboratoryView,
-    '/billing/viewprices/default': dashboardController.viewBillingDefaultPriceView,
-
-    '/notice': screenCollection.dashboardScreen,
-    '/notice/viewnotice': screenCollection.dashboardScreen,
-    '/notice/addnotice': screenCollection.dashboardScreen,
-
+    '/billing': {
+        view: dashboardController.viewActiveBillsListView,
+        title: "Visits with Bills"
+    },
+    '/billing/activebills': {
+        view: dashboardController.viewActiveBillsListView,
+        title: "Visits with Bills"
+    },
+    '/billing/viewprices/pharmacy': {
+        view: dashboardController.viewBillingMedicineView,
+        title: 'Pharmacy Billing Price'
+    },
+    '/billing/viewprices/procedure': {
+        view: dashboardController.viewBillingProcedureView,
+        title: 'Procedure Billing Price'
+    },
+    '/billing/viewprices/radiology': {
+        view: dashboardController.viewBillingRadiologyView,
+        title: 'Radiology Billing Price'
+    },
+    '/billing/viewprices/laboratory': {
+        view: dashboardController.viewBillingLaboratoryView,
+        title: 'Laboratory Billing Price'
+    },
+    '/billing/viewprices/default': {
+        view: dashboardController.viewBillingDefaultPriceView,
+        title: 'Default Billing Price'
+    },
+    '/notice': {
+        view: screenCollection.dashboardScreen,
+        title: 'Notice'
+    },
+    '/notice/viewnotice': {
+        view: screenCollection.dashboardScreen,
+        title: 'View Notice'
+    },
+    '/notice/addnotice': {
+        view: screenCollection.dashboardScreen,
+        title: 'Add Notice'
+    },
     '404': new NotFoundScreen()
 };
 
