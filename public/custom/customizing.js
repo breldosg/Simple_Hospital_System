@@ -16,12 +16,6 @@ export const visit_add_card_btn = [
                 operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {
-                component: 'visitAllergyPopUpView',
-                title: 'Allergy',
-                active_if: [],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
-            },
-            {
                 component: 'visitPlanForNextVisitPopUpView',
                 title: 'Plan for Next Visit',
                 active_if: [],
@@ -71,12 +65,6 @@ export const visit_add_card_btn = [
                 component: 'visitsProcedurePopUpView',
                 title: 'Procedures',
                 active_if: ['visitFinalDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
-            },
-            {
-                component: 'visitsVaccinePopUpView',
-                title: 'Vaccine',
-                active_if: [],
                 operator_roles: ['ICT', 'DCT', 'SDCT']
             },
             {

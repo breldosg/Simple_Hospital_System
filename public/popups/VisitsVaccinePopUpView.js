@@ -18,6 +18,9 @@ export class VisitsVaccinePopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        console.log(params);
+
+
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : 'creation';
         this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
@@ -207,9 +210,6 @@ export class VisitsVaccinePopUpView {
             visit_id: this.visit_id
         };
 
-        console.log(formData);
-        // return;
-
         try {
             const response = await fetch('/api/patient/save_vaccine_order', {
                 method: 'POST',
@@ -236,15 +236,16 @@ export class VisitsVaccinePopUpView {
 
 
             if (result.success) {
-                dashboardController.visitVaccineCardView.PreRender({
-                    visit_id: this.visit_id,
-                    data: result.data,
-                    state: this.state,
-                    visit_status: this.visit_status
-                });
+                // dashboardController.visitVaccineCardView.PreRender({
+                //     visit_id: this.visit_id,
+                //     data: result.data,
+                //     state: this.state,
+                //     visit_status: this.visit_status
+                // });
 
                 notify('top_left', result.message, 'success');
                 this.close();
+                dashboardController.visitPatientNoteCardView.RefetchData();
             } else {
                 notify('top_left', result.message, 'warning');
             }

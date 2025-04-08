@@ -61,7 +61,7 @@ import { SingleVisitPharmacyView } from "../views/SingleVisitPharmacyView.js";
 import { ViewActiveBillsListView } from "../views/ViewActiveBillsListView.js";
 import { SingleVisitBillingView } from "../views/SingleVisitBillingView.js";
 import { VisitsLaboratoryResultPopUpView } from "../popups/VisitsLaboratoryResultPopUpView.js";
-import { SingleViewPricesVisitView } from "../views/SingleViewPricesVisitView.js";
+import { SingleViewPricesView } from "../views/SingleViewPricesView.js";
 import { ViewBillingMedicineView } from "../views/ViewBillingMedicineView.js";
 import { UpdatePharmacyProductPricePopUpView } from "../popups/UpdatePharmacyProductPricePopUpView.js";
 import { ViewBillingRadiologyView } from "../views/ViewBillingRadiologyView.js";
@@ -152,14 +152,12 @@ class DashboardController {
     visitDetailCardView = new VisitDetailCardView();
     visitPatientNoteCardView = new VisitPatientNoteCardView();
     visitClinicalEvaluationCardView = new VisitClinicalEvaluationCardView();
-    visitAllergyCardView = new VisitAllergyCardView();
     visitFinalDiagnosisCardView = new VisitFinalDiagnosisCardView();
     visitPlanForNextVisitCardView = new VisitPlanForNextVisitCardView();
     visitRadiologyExamCardView = new VisitRadiologyExamCardView();
     visitLabExamCardView = new VisitLabExamCardView();
     visitPrescriptionsCardView = new VisitPrescriptionsCardView();
     visitProceduresCardView = new VisitProceduresCardView();
-    visitVaccineCardView = new VisitVaccineCardView();
     visitImplantableDevicesCardView = new VisitImplantableDevicesCardView();
     visitPreDiagnosisCardView = new VisitPreDiagnosisCardView();
     visitAttachmentsCardView = new VisitAttachmentsCardView();
@@ -204,7 +202,7 @@ class DashboardController {
     // Billing Section
     viewActiveBillsListView = new ViewActiveBillsListView();
     singleVisitBillingView = new SingleVisitBillingView();
-    singleViewPricesVisitView = new SingleViewPricesVisitView();
+    singleViewPricesView = new SingleViewPricesView();
     viewBillingMedicineView = new ViewBillingMedicineView();
     viewBillingRadiologyView = new ViewBillingRadiologyView();
     viewBillingLaboratoryView = new ViewBillingLaboratoryView();

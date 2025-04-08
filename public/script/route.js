@@ -1,3 +1,5 @@
+import { INSTITUTION_NAME } from "../config/config.js";
+
 class FrontRouter {
 
     constructor() {
@@ -21,8 +23,7 @@ class FrontRouter {
         const matchingRoute = this.matchRoute(path);
         if (matchingRoute) {
             // update the title of the page
-            document.title = matchingRoute.route.title;
-
+            document.title = `${INSTITUTION_NAME} - ${matchingRoute.route.title}`;
             matchingRoute.route.view.PreRender(matchingRoute.params);
         } else {
             console.warn('No matching route found');

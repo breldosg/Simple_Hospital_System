@@ -30,7 +30,10 @@ class NotFoundScreen {
 
 // Define routes
 const routes = {
-    '/': new HomeScreen(),
+    '/': {
+        view: new HomeScreen(),
+        title: 'Home'
+    },
     '/login': {
         view: screenCollection.loginScreen,
         title: 'Login'
@@ -198,6 +201,18 @@ const routes = {
     '/billing/activebills': {
         view: dashboardController.viewActiveBillsListView,
         title: "Visits with Bills"
+    },
+    '/billing/viewprices': {
+        view: dashboardController.singleViewPricesView,
+        title: 'Prices Category'
+    },
+    '/billing/activebills/:id': {
+        view: dashboardController.singleVisitBillingView,
+        title: 'Visit Bills'
+    },
+    '/billing/viewprices/consultation': {
+        view: dashboardController.viewBillingConsultationView,
+        title: 'Consultation Billing Price'
     },
     '/billing/viewprices/pharmacy': {
         view: dashboardController.viewBillingMedicineView,

@@ -15,6 +15,7 @@ const ROUTE_CONFIG = {
     single_patient: 190,
     single_visit_detail_by_patient_id_or_visit_id: 191,
     search_list_of_patient_visit: 1090,
+    get_patient_notes: 1320,
 
     // Visit Management
     get_create_visit_open_data: 200,

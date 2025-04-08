@@ -19,6 +19,9 @@ export class VisitAllergyPopUpView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        console.log(params);
+
+
         this.visit_id = params.visit_id ? params.visit_id : '';
         this.state = params.state ? params.state : "creation";
         this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
@@ -202,12 +205,7 @@ export class VisitAllergyPopUpView {
             if (result.success) {
                 notify('top_left', result.message, 'success');
                 this.close();
-                dashboardController.visitAllergyCardView.PreRender({
-                    visit_id: this.visit_id,
-                    state: this.state,
-                    data: result.data,
-                    visit_status: this.visit_status
-                });
+                dashboardController.visitPatientNoteCardView.RefetchData();
                 // dashboardController.visitAllergyPopUpView.close();
                 // this.datas = result.data;
                 // console.log('after save:', this.datas);
@@ -218,6 +216,8 @@ export class VisitAllergyPopUpView {
             }
         } catch (error) {
             notify('top_left', error.message, 'error');
+        } finally {
+            btn_submit.setAttribute('loading', false);
         }
     }
 }

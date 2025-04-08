@@ -4,7 +4,7 @@ import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, notify, timeStamp_formatter, uploadWithProgress } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class SingleViewPricesVisitView {
+export class SingleViewPricesView {
     constructor() {
         this.visit_id = null;
     }

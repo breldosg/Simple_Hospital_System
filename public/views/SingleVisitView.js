@@ -67,7 +67,7 @@ export class SingleVisitView {
             },
             {
                 method: dashboardController.visitPatientNoteCardView,
-                dataKey: 'patient_note',
+                dataKey: 'patient_note_data',
                 dataArray: 'note_data',
             },
             {
@@ -83,13 +83,6 @@ export class SingleVisitView {
                 dataArray: 'diagnosis_data',
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
-            },
-            {
-                method: dashboardController.visitAllergyCardView,
-                dataKey: 'allergy_data',
-                dataArray: 'allergy_data',
-                condition: (data) => data.success,
-                // afterRender: () => this.rendered_card.push('visitAllergyCardView')
             },
             {
                 method: dashboardController.visitPlanForNextVisitCardView,
@@ -123,13 +116,6 @@ export class SingleVisitView {
                 method: dashboardController.visitImplantableDevicesCardView,
                 dataKey: 'implantable_device_data',
                 dataArray: 'devices_data',
-                condition: (data) => data.success,
-                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
-            },
-            {
-                method: dashboardController.visitVaccineCardView,
-                dataKey: 'vaccine_data',
-                dataArray: 'vaccine_data',
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },

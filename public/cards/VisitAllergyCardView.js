@@ -13,6 +13,7 @@ export class VisitAllergyCardView {
         this.visit_status = null;
         this.edit_mode = false;
         window.remove_allergy_request = this.remove_allergy_request.bind(this);
+        this.applyStyle();
     }
 
     async PreRender(params = []) {
@@ -232,5 +233,139 @@ export class VisitAllergyCardView {
         } finally {
             dashboardController.loaderView.remove();
         }
+    }
+
+    applyStyle() {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = this.style();
+        document.head.appendChild(styleElement);
+    }
+
+    style() {
+        return `
+                    /* ----------------------------------------------------------- */
+
+                        .allergy_card_cont_cont {
+                            padding: 10px;
+
+                            .head_part {
+                                padding: 19px;
+                                padding-top: 10px;
+                                padding-bottom: 0px;
+                            }
+
+                            .allergy_card_cont {
+                                display: flex;
+                                flex-direction: column;
+                                flex: none;
+                                gap: 20px;
+
+                                .allergy_card {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 10px;
+                                    width: 100%;
+                                    padding: 20px;
+                                    border-radius: var(--main_border_r);
+                                    border: solid 1px var(--pri_border_color);
+                                    cursor: pointer;
+
+                                    .top {
+                                        border: none;
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+
+                                        .left {
+                                            width: 70%;
+                                        }
+
+                                        .right {
+                                            display: flex;
+                                            gap: 10px;
+
+                                            .btn {
+                                                width: 35px;
+                                                height: 35px;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                border-radius: 5px;
+                                                flex: none;
+                                                cursor: pointer;
+
+                                                span {
+                                                    font-size: 16px;
+                                                }
+                                            }
+
+                                            .btn:hover {
+                                                background-color: var(--pri_op);
+
+                                                span {
+                                                    color: var(--pri_color);
+                                                }
+                                            }
+
+                                            .delete_btn:hover {
+                                                background-color: var(--white_error_color_op1);
+
+                                                span {
+                                                    color: var(--error_color);
+                                                }
+                                            }
+
+                                        }
+
+                                        .date {
+                                            font-size: 20px;
+                                            font-weight: 900;
+                                        }
+
+                                        .created_by {
+                                            font-size: 13px;
+                                        }
+                                    }
+
+                                    .data {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        /* min-height: 40px; */
+                                        padding-block: 5px;
+                                        border-bottom: 1px solid var(--input_border);
+
+                                        .head {
+                                            font-weight: 500;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+
+                                        .description {
+                                            width: 40%;
+                                            font-weight: 600;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                        }
+                                    }
+
+                                    .data:last-child {
+                                        border: none;
+                                    }
+
+                                }
+
+                                .allergy_card:hover {
+                                    background: var(--pri_op1);
+                                }
+                            }
+
+                        }
+
+        `;
     }
 }
