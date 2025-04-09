@@ -59,6 +59,7 @@ export class PatientDetailComponent {
         await this.vitalSigns_processing(patient_data);
         this.vitalSignsRaw_data = patient_data.vital_signs;
         this.patient_id = patient_data.id;
+        this.full_patient_data = patient_data;
         console.log(patient_data);
 
         // Render top patient card
@@ -276,8 +277,19 @@ export class PatientDetailComponent {
                 // Add functionality for editing patient
                 break;
             case 'edit_visit':
-                notify('top_left', 'Editing visit...', 'info');
-                // Add functionality for editing visit
+                dashboardController.createVisitPopUpView.PreRender({
+                    id: this.patient_id,
+                    p_name: this.full_patient_data.name,
+                    mode: 'update',
+                    visit_data: {
+                        id: this.full_patient_data.visit_detail.visit_id,
+                        type: this.full_patient_data.visit_detail.visit_type,
+                        priority: this.full_patient_data.visit_detail.visit_priority,
+                        department_id: this.full_patient_data.visit_detail.department_id,
+                        doctor_id: this.full_patient_data.visit_detail.doctor_id
+                    },
+                    render_component: ['visit_view']
+                });
                 break;
             case 'add_vital_signs':
                 dashboardController.addVitalPopUpView.PreRender({

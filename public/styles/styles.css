@@ -14995,6 +14995,7 @@ body {
 
                     .row {
                         display: flex;
+                        flex-direction: column;
                         justify-content: space-between;
                         gap: 5px;
                         width: 100%;
@@ -15003,14 +15004,25 @@ body {
                         cursor: pointer;
                         opacity: 1;
                         transform: translateY(0);
+                        border: solid 1px var(--pri_border_color);
+
+                        .info_top,.info_bottom {
+                            display: flex;
+                            justify-content: space-between;
+                            gap: 5px;
+                        }
+
+                        .stock{
+                            color: var(--gray_text);
+                        }
 
                         .name {
-                            font-weight: 700;
+                            font-size: 14px;
+                            font-weight: 600;
                         }
 
                         .type {
                             text-transform: capitalize;
-                            font-weight: 700;
                             color: var(--gray_text);
                         }
                     }

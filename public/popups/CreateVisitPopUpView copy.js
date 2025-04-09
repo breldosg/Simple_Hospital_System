@@ -1,3 +1,4 @@
+
 import { dashboardController } from "../controller/DashboardController.js";
 import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
@@ -8,8 +9,6 @@ export class CreateVisitPopUpView {
     constructor() {
         window.CreateVisit = this.CreateVisit.bind(this);
         this.patient_id = null;
-        this.mode = 'create'; // 'create' or 'update'
-        this.visit_data = null;
     }
 
     async PreRender(params) {
@@ -21,8 +20,6 @@ export class CreateVisitPopUpView {
 
         this.patient_id = params.id;
         this.patient_name = params.p_name;
-        this.mode = params.mode || 'create';
-        this.visit_data = params.visit_data;
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
@@ -52,28 +49,23 @@ export class CreateVisitPopUpView {
 
             // Replace loader and insert the content
             cont.querySelector('.create_visit_popup').innerHTML = this.update_view_after_loading(options_elements(departments_data), options_elements(doctors_data), '');
-            this.attachListeners();
-
-            // // If in update mode, pre-fill the form with existing data
-            // if (this.mode === 'update' && this.visit_data) {
-            //     this.prefillForm(this.visit_data);
-            // }
+            this.attachListeners()
         } else {
             // Handle case where no roles were returned, or an error occurred.
-            cont.innerHTML = '<h3>Error fetching roles data. Please try again.</h3>';
+            cont.innerHTML = '<3>Error fetching roles data. Please try again.</3>';
         }
     }
 
     ViewReturn(loader = '') {
-        const title = this.mode === 'create' ? 'Create Visit' : 'Update Visit';
         return `
         <div class="container create_visit_popup">
 
         <br-form class="slides" callback="CreateVisit">
         <div class="slide">
             <div>
-                <p class="heading">${title}</p>
+                <p class="heading">Create Visit</p>
                 <p class="subHead">${this.patient_name}</p>
+
             </div>
             <div class="input_group">
 
@@ -106,7 +98,7 @@ export class CreateVisitPopUpView {
 
                 <div class="btn_cont">
                 <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
-                <br-button loader_width="23" class="btn_next" type="submit">${this.mode === 'create' ? 'Submit' : 'Update'}</br-button>
+                <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
                 </div>
 
 
@@ -123,19 +115,19 @@ export class CreateVisitPopUpView {
     }
 
     update_view_after_loading(departments, doctors) {
-        const title = this.mode === 'create' ? 'Create Visit' : 'Update Visit';
+
         return `
         <br-form class="slides anima" callback="CreateVisit">
         <div class="slide">
             <div>
-                <p class="heading">${title}</p>
+                <p class="heading">Create Visit</p>
                 <p class="subHead">${this.patient_name}</p>
 
             </div>
             <div class="input_group">
 
 
-                <br-select ${this.mode === 'update' ? 'value="' + (this.visit_data.type??'') + '"' : ''} required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
+                <br-select required fontSize="13px" label="Visit Type" name="type" placeholder="Select Visit Type"
                     styles="
                     ${this.input_style()}
             " labelStyles="font-size: 12px;">
@@ -143,7 +135,7 @@ export class CreateVisitPopUpView {
                 </br-select>
                 
                 
-                <br-select ${this.mode === 'update' ? 'value="' + (this.visit_data.priority??'') + '"' : ''} required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Priority"
+                <br-select required fontSize="13px" label="Visit Priority" name="priority" placeholder="Select Visit Priority"
                     styles="
                     ${this.input_style()}
             " labelStyles="font-size: 12px;">
@@ -152,7 +144,7 @@ export class CreateVisitPopUpView {
 
 
 
-                <br-select ${this.mode === 'update' ? 'value="' + (this.visit_data.department_id??'') + '"' : ''} required fontSize="13px" search='true' label="Department" name="department" placeholder="Select Department"
+                <br-select required fontSize="13px" search='true' label="Department" name="department" placeholder="Select Department"
                     styles="
                     ${this.input_style()}
             " labelStyles="font-size: 12px;">
@@ -160,7 +152,7 @@ export class CreateVisitPopUpView {
                 </br-select>
 
 
-                <br-select ${this.mode === 'update' ? 'value="' + (this.visit_data.doctor_id??'') + '"' : ''} required fontSize="13px" search='true' label="Doctors" name="doctors" placeholder="Select Doctors" styles="
+                <br-select required fontSize="13px" search='true' label="Doctors" name="doctors" placeholder="Select Doctors" styles="
                 ${this.input_style()}
             " labelStyles="font-size: 12px;">
                     ${doctors ? doctors : ''}
@@ -169,30 +161,15 @@ export class CreateVisitPopUpView {
 
                 <div class="btn_cont">
                 <br-button loader_width="23" class="btn_next cancel" type="cancel">Cancel</br-button>
-                <br-button loader_width="23" class="btn_next" type="submit">${this.mode === 'create' ? 'Submit' : 'Update'}</br-button>
+                <br-button loader_width="23" class="btn_next" type="submit">Submit</br-button>
                 </div>
 
 
             </div>
         </div>
     </br-form>`;
+
     }
-
-    // prefillForm(visitData) {
-    //     // Helper function to set select value
-    //     const setSelectValue = (name, value) => {
-    //         const select = document.querySelector(`br-select[name="${name}"]`);
-    //         if (select) {
-    //             select.setAttribute('value', value);
-    //         }
-    //     };
-
-    //     // Pre-fill form fields with visit data
-    //     setSelectValue('type', visitData.type);
-    //     setSelectValue('priority', visitData.priority);
-    //     setSelectValue('department', visitData.department_id);
-    //     setSelectValue('doctors', visitData.doctor_id);
-    // }
 
     attachListeners() {
         const cancel_btn = document.querySelector('br-button[type="cancel"]');
@@ -201,6 +178,7 @@ export class CreateVisitPopUpView {
             const cont = document.querySelector('.popup');
             cont.classList.remove('active');
             cont.innerHTML = '';
+
         });
     }
 
@@ -213,13 +191,8 @@ export class CreateVisitPopUpView {
             patient_id: this.patient_id
         }
 
-        if (this.mode === 'update') {
-            data.visit_id = this.visit_data.id;
-        }
-
         try {
-            const endpoint = this.mode === 'create' ? '/api/patient/create_visit' : '/api/patient/update_visit';
-            const response = await fetch(endpoint, {
+            const response = await fetch('/api/patient/create_visit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -228,7 +201,7 @@ export class CreateVisitPopUpView {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to ${this.mode} visit. Server Error`);
+                throw new Error('failed To create visit. Server Error');
             }
 
             const result = await response.json();
@@ -244,19 +217,16 @@ export class CreateVisitPopUpView {
                 }, 500);
             }
 
+
+
             if (result.success) {
                 notify('top_left', result.message, 'success');
-                // After successful creation/update, clear the popup and close it
+                // After successful creation, clear the popup and close it
                 const popup_cont = document.querySelector('.popup');
                 popup_cont.innerHTML = ''; // Clear the popup and close it
                 popup_cont.classList.remove('active');
 
-                if (this.mode === 'create') {
-                    dashboardController.viewPatientView.PreRender();
-                } else {
-                    // Refresh the current visit view
-                    dashboardController.singleVisitView.PreRender({ id: this.visit_data.id });
-                }
+                dashboardController.viewPatientView.PreRender();
             } else {
                 notify('top_left', result.message, 'warning');
             }
@@ -293,6 +263,8 @@ export class CreateVisitPopUpView {
                     }, 500);
                 }, 500);
             }
+
+
 
             if (result.success) {
                 return result.data;

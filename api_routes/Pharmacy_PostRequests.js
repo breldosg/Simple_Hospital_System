@@ -11,6 +11,7 @@ const ROUTE_CONFIG = {
 
     // Product Management
     product_list: 250,
+    search_prescription: 251,
     create_product: 230,
     receive_product: 360,
 

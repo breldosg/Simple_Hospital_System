@@ -33,7 +33,7 @@ export class VisitPatientNoteCardView {
         window.save_patient_note = this.save_patient_note;
         window.delete_allergy_request = this.delete_allergy_request;
         window.delete_vaccine_request = this.delete_vaccine_request;
-
+        window.deletePatientNoteOnCard = this.deletePatientNoteOnCard;
         this.applyStyle();
 
         this.card_to_delete = null;
@@ -1203,6 +1203,9 @@ export class VisitPatientNoteCardView {
     }
 
     async deleteNote(noteId) {
+
+        console.log(noteId);
+        
         dashboardController.loaderView.render();
 
         try {

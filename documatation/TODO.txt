@@ -21,10 +21,12 @@
 ======= Procedure 
 1- tengeneza section ya kutengeneza na update procedure na category ✔️
 2- tendeza view yakujaza report za procedure
+3- kuna procedure haziitaji anestezia au asisstant
 
 
 ======== Patient
 1- Complete History 70%
+2- update Visit
 
 
 ======= Staff

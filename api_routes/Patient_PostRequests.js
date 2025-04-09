@@ -20,6 +20,7 @@ const ROUTE_CONFIG = {
     // Visit Management
     get_create_visit_open_data: 200,
     create_visit: 180,
+    update_visit: 181,
     check_out_patient: 210,
     onprogress_visits: 220,
     single_visit_detail: 460,

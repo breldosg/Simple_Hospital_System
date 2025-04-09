@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, getCurrentDate, decodeHTML, notify } from "../script/index.js";
+import { decodeHTML, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitsPrescriptionPopUpView {
@@ -245,11 +245,9 @@ export class VisitsPrescriptionPopUpView {
     }
 
     async fetch_data(searchTerm) {
-        // btn_search
-        // const 
 
         try {
-            const response = await fetch('/api/pharmacy/product_list', {
+            const response = await fetch('/api/pharmacy/search_prescription', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -318,8 +316,14 @@ export class VisitsPrescriptionPopUpView {
                 row.setAttribute('data_src', medicine.id);
                 row.setAttribute('title', decodeHTML(medicine.name));
                 row.innerHTML = `
-                    <p class="name">${medicine.name}</p>
-                    <p class="type">${medicine.type}</p>
+                    <div class="info_top">
+                        <p class="name">${medicine.name}</p>
+                        
+                    </div>
+                    <div class="info_bottom">
+                        <p class="stock">Pharmacy: ${medicine.pharmacy_quantity ?? 0} | Store: ${medicine.store_quantity ?? 0}</p>
+                        <p class="type">${medicine.type}</p>
+                    </div>
                 `;
                 row.addEventListener('click', () => {
                     this.open_fill_form(medicine.id, decodeHTML(medicine.name), medicine.type);
