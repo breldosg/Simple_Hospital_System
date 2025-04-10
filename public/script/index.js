@@ -142,6 +142,10 @@ const routes = {
         view: dashboardController.viewIntakeBatchView,
         title: 'All Store Intake Batches'
     },
+    '/store/viewinatakebatch/:id': {
+        view: dashboardController.singleIntakeBatchView,
+        title: 'Store Intake Batch'
+    },
     '/store/orderlist': {
         view: dashboardController.viewOrderListView,
         title: 'All Pharmacy Orders'
@@ -245,6 +249,106 @@ const routes = {
     '/notice/addnotice': {
         view: screenCollection.dashboardScreen,
         title: 'Add Notice'
+    },
+    '/reports': {
+        view: dashboardController.reportsView,
+        title: 'Reports Dashboard'
+    },
+    '/reports/viewreports': {
+        view: dashboardController.reportsView,
+        title: 'Reports Dashboard'
+    },
+    '/reports/patient/registration': {
+        view: dashboardController.reportsView,
+        title: 'Patient Registration Report'
+    },
+    '/reports/patient/visits': {
+        view: dashboardController.reportsView,
+        title: 'Patient Visits Report'
+    },
+    '/reports/billing/revenue': {
+        view: dashboardController.reportsView,
+        title: 'Revenue Report'
+    },
+    '/reports/billing/unpaid': {
+        view: dashboardController.reportsView,
+        title: 'Unpaid Bills Report'
+    },
+    '/reports/pharmacy/inventory': {
+        view: dashboardController.reportsView,
+        title: 'Pharmacy Inventory Report'
+    },
+    '/reports/pharmacy/prescriptions': {
+        view: dashboardController.reportsView,
+        title: 'Prescription Analytics Report'
+    },
+    '/reports/laboratory/stats': {
+        view: dashboardController.reportsView,
+        title: 'Laboratory Statistics Report'
+    },
+    '/reports/radiology/stats': {
+        view: dashboardController.reportsView,
+        title: 'Radiology Statistics Report'
+    },
+    '/reports/staff/attendance': {
+        view: dashboardController.reportsView,
+        title: 'Staff Attendance Report'
+    },
+    '/reports/staff/performance': {
+        view: dashboardController.reportsView,
+        title: 'Staff Performance Report'
+    },
+    '/reports/patient/demographics': {
+        view: dashboardController.reportsView,
+        title: 'Patient Demographics Report'
+    },
+    '/reports/billing/trends': {
+        view: dashboardController.reportsView,
+        title: 'Payment Trends Report'
+    },
+    '/reports/pharmacy/stock': {
+        view: dashboardController.reportsView,
+        title: 'Stock Movement Report'
+    },
+    '/reports/pharmacy/expiry': {
+        view: dashboardController.reportsView,
+        title: 'Expiry Tracking Report'
+    },
+    '/reports/laboratory/turnaround': {
+        view: dashboardController.reportsView,
+        title: 'Test Turnaround Time Report'
+    },
+    '/reports/laboratory/equipment': {
+        view: dashboardController.reportsView,
+        title: 'Laboratory Equipment Usage Report'
+    },
+    '/reports/radiology/equipment': {
+        view: dashboardController.reportsView,
+        title: 'Radiology Equipment Utilization Report'
+    },
+    '/reports/radiology/procedures': {
+        view: dashboardController.reportsView,
+        title: 'Radiology Procedure Times Report'
+    },
+    '/reports/staff/workload': {
+        view: dashboardController.reportsView,
+        title: 'Staff Workload Report'
+    },
+    '/reports/staff/scheduling': {
+        view: dashboardController.reportsView,
+        title: 'Staff Scheduling Report'
+    },
+    '/reports/system/audit': {
+        view: dashboardController.reportsView,
+        title: 'System Audit Logs'
+    },
+    '/reports/system/usage': {
+        view: dashboardController.reportsView,
+        title: 'System Usage Statistics'
+    },
+    '/reports/system/errors': {
+        view: dashboardController.reportsView,
+        title: 'System Error Logs'
     },
     '404': new NotFoundScreen()
 };

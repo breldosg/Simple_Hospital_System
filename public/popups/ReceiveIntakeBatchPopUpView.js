@@ -87,7 +87,7 @@ export class ReceiveIntakeBatchPopUpView {
             </div>
 
             <br-form id="more_detail_form" callback="add_to_receive_product_pending">
-                <div class="search_cont">
+                <div class="search_cont fill_form_cont">
                     <br-input name="product" label="Product Name" id="product_name_view" type="text" styles="
                     border-radius: var(--input_main_border_r);
                     width: 400px;

@@ -280,8 +280,13 @@ export class PlaceOrderPopUpView {
                 row.setAttribute('data_src', medicine.id);
                 row.setAttribute('title', decodeHTML(medicine.name));
                 row.innerHTML = `
-<p class="name">${medicine.name}</p>
-<p class="type">${medicine.type}</p>
+                    <div class="info_top">
+                        <p class="name">${medicine.name}</p>
+                    </div>
+                    <div class="info_bottom">
+                        <p class="stock">Pharmacy: ${medicine.pharmacy_quantity ?? 0} | Store: ${medicine.store_quantity ?? 0}</p>
+                        <p class="type">${medicine.type}</p>
+                    </div>
 `;
                 // Attach click event listener to the row
                 row.addEventListener('click', () => {

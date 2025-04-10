@@ -94,6 +94,7 @@ import { CreateUpdateProcedurePopUp } from "../popups/CreateUpdateProcedurePopUp
 import { ViewActiveProcedureListView } from "../views/ViewActiveProcedureListView.js";
 import { VisitDetailCardView } from "../cards/VisitDetailCardView.js";
 import { UpdateProcedurePricePopUpView } from "../popups/UpdateProcedurePricePopUpView.js";
+import { ReportsView } from "../views/ReportsView.js";
 
 
 class DashboardController {
@@ -228,6 +229,9 @@ class DashboardController {
     laboratoryTestCategoryListView = new LaboratoryTestCategoryListView();
     createLaboratoryCategoryPopUp = new CreateLaboratoryCategoryPopUp();
     createLaboratoryTestPopUp = new CreateLaboratoryTestPopUp();
+
+    // Reports View
+    reportsView = new ReportsView();
 }
 
 export const dashboardController = new DashboardController();

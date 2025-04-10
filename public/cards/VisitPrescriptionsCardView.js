@@ -53,13 +53,26 @@ export class VisitPrescriptionsCardView {
         if (this.datas.length > 0) {
             this.datas.forEach((data) => {
 
+                console.log(data);
+
+                // construct if status is base on is_paid and is_given
+                let status = '';
+                if (data.is_paid == "true" && data.is_given == "true") {
+                    status = 'completed';
+                } else if (data.is_paid == "true" && data.is_given == "false") {
+                    status = 'approved';
+                } else {
+                    status = 'pending';
+                }
 
                 const card = document.createElement('div');
                 card.classList.add('procedure_card');
                 card.innerHTML = `
             <div class="top">
                 <div class="card_left">
-                    <p class="date">${data.product_name}</p>
+                    <div class="info_top">
+                        <p class="date">${data.product_name} </p>
+                    </div>
                     <p class="created_by">${date_formatter(data.created_at)}</p>
                 </div>
                 <div class="card_right">
@@ -71,12 +84,17 @@ export class VisitPrescriptionsCardView {
 
             <div class="data">
                 <p class="head">Quantity:</p>
-                <p class="description">${data.amount}</p>
+                <p class="description">${data.amount} ${data.unit ?? ''}</p>
             </div>
 
             <div class="data">
                 <p class="head">Duration:</p>
                 <p class="description">${data.duration} days</p>
+            </div>
+
+            <div class="data">
+                <p class="head">Status:</p>
+                <p class="description ${status}">${status === 'completed' ? 'Paid and Given' : status === 'approved' ? 'Paid but Not Given' : 'Not Paid'}</p>
             </div>
 
                 
@@ -196,6 +214,180 @@ export class VisitPrescriptionsCardView {
         } finally {
             dashboardController.loaderView.remove();
         }
+    }
+
+
+    style() {
+        return `
+          /* -------------------------------------------------------- */
+
+        .prescription_order_card_cont_cont {
+            padding: 10px;
+
+            .head_part {
+                padding: 19px;
+                padding-top: 10px;
+                padding-bottom: 0px;
+            }
+
+            .prescription_card_cont {
+                display: flex;
+                flex-direction: column;
+                flex: none;
+                gap: 20px;
+
+                .procedure_card {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    padding: 20px;
+                    border-radius: var(--main_border_r);
+                    border: solid 1px var(--pri_border_color);
+                    width: 100%;
+
+                    .top {
+                        border: none;
+                        display: flex;
+                        justify-content: space-between;
+                        /* align-items: center; */
+
+                        .card_left {
+                            width: 70%;
+
+                            .info_top{
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+
+                                .status_dot{
+                                    padding: 2px 2px;
+                                    border-radius: 50%;
+                                    flex: none;
+
+                                    &.completed{
+                                        background-color: var(--success_color);
+                                    }
+
+                                    &.approved{
+                                        background-color: var(--warning_color);
+                                    }
+                                    &.pending{
+                                        background-color: var(--error_color);
+                                    }
+                                }
+                            }
+                        }
+
+                        .card_right {
+                            display: flex;
+                            gap: 10px;
+
+                            .btn {
+                                width: 35px;
+                                height: 35px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border-radius: 5px;
+                                flex: none;
+                                cursor: pointer;
+
+                                span {
+                                    font-size: 16px;
+                                }
+                            }
+
+                            .btn:hover {
+                                background-color: var(--pri_op);
+
+                                span {
+                                    color: var(--pri_color);
+                                }
+                            }
+
+                            .delete_btn:hover {
+                                background-color: var(--white_error_color_op1);
+
+                                span {
+                                    color: var(--error_color);
+                                }
+                            }
+                        }
+
+                        .date {
+                            font-size: 14px;
+                            font-weight: 900;
+                        }
+
+
+                    }
+
+                    .data {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding-block: 5px;
+                        border-bottom: 1px solid var(--input_border);
+
+                        .head {
+                            font-weight: 500;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                        }
+
+                        .description {
+                            width: 40%;
+                            font-weight: 600;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                        }
+                    }
+
+                    .note {
+                        flex-direction: column;
+                        gap: 10px;
+                        height: 100%;
+                        overflow: auto;
+
+                        .head {
+                            font-weight: 700;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                            width: 100%;
+                            flex: none;
+                        }
+
+                        .description {
+                            width: 100%;
+                            font-weight: 400;
+                            white-space: unset;
+                            text-overflow: unset;
+                            overflow: unset;
+                            display: unset;
+                            word-break: break-all;
+                            overflow-y: scroll;
+                            height: 100%;
+                        }
+                    }
+
+                    .data:last-child {
+                        border: none;
+                    }
+                }
+
+                .procedure_card:hover {
+                    /* box-shadow: 0 0 5px 0 #0000003e; */
+                    background: var(--pri_op1);
+                }
+            }
+        }
+        `
     }
 
 }
