@@ -1,4 +1,4 @@
-export class TwBaseReportComponent extends HTMLElement {
+export class BaseReportComponent extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -7,10 +7,10 @@ export class TwBaseReportComponent extends HTMLElement {
         this.loading = true;
         this.filterPanelOpen = false;
         this.selectedDate = new Date().toISOString().split('T')[0];
-        
+
         // Column configurations for the main table
         this.columnConfigs = {};
-        
+
         // Filter arrays
         this.filters = {};
     }
@@ -66,10 +66,7 @@ export class TwBaseReportComponent extends HTMLElement {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    key: this.requestKey,
-                    data: JSON.stringify(requestData)
-                })
+                body: JSON.stringify(requestData)
             });
 
             const result = await response.json();
@@ -127,7 +124,7 @@ export class TwBaseReportComponent extends HTMLElement {
         }
 
         const columnKeys = Object.keys(this.columnConfigs);
-        
+
         return `
             <div class="main-table">
                 <div class="table-header">
@@ -611,7 +608,7 @@ export class TwBaseReportComponent extends HTMLElement {
         if (!this.data || !this.data.length) return '';
 
         const columnKeys = Object.keys(this.columnConfigs);
-        
+
         return `
             <table>
                 <thead>

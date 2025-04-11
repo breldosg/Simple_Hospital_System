@@ -491,6 +491,13 @@ export const REPORTS_CONFIG = {
         title: "Billing Reports",
         icon: "switch_icon_money_bill_1_wave",
         reports: {
+            sales: {
+                name: "Sales Report",
+                icon: "switch_icon_money_bill_1_wave",
+                description: "Overall revenue and financial statistics",
+                roles: ["ICT", "ACT"],
+                endpoint: "/reports/sales"
+            },
             revenue: {
                 name: "Revenue Report",
                 icon: "switch_icon_money_bill_1_wave",

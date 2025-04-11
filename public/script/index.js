@@ -250,6 +250,8 @@ const routes = {
         view: screenCollection.dashboardScreen,
         title: 'Add Notice'
     },
+
+    // reports
     '/reports': {
         view: dashboardController.reportsView,
         title: 'Reports Dashboard'
@@ -257,6 +259,10 @@ const routes = {
     '/reports/viewreports': {
         view: dashboardController.reportsView,
         title: 'Reports Dashboard'
+    },
+    '/reports/sales': {
+        view: dashboardController.salesReportView,
+        title: 'Sales Report'
     },
     '/reports/patient/registration': {
         view: dashboardController.reportsView,

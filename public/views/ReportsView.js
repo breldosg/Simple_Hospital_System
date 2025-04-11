@@ -6,6 +6,8 @@ export class ReportsView {
     constructor() {
         this.user_role = '';
         this.styleId = 'reports-view-styles';
+        // Apply styles
+        applyStyle(this.style(), this.styleId);
     }
 
     async PreRender() {
@@ -17,19 +19,12 @@ export class ReportsView {
         // Get user role from localStorage
         this.user_role = globalStates.getState('user_data').role;
 
-        // Apply styles
-        applyStyle(this.style(), this.styleId);
-        
+
+
         const update_cont = document.querySelector('.update_cont');
         update_cont.innerHTML = '';
         update_cont.appendChild(this.ViewReturn());
 
-        // Add cleanup listener
-        window.addEventListener('popstate', () => this.cleanup());
-    }
-
-    cleanup() {
-        removeStyle(this.styleId);
     }
 
     ViewReturn() {
@@ -41,11 +36,11 @@ export class ReportsView {
         `;
 
         const reportsGrid = container.querySelector('.reports_grid');
-        
+
         // Iterate through report categories
         Object.entries(REPORTS_CONFIG).forEach(([categoryKey, category]) => {
             let hasAccessibleReports = false;
-            
+
             // Check if user has access to any reports in this category
             Object.values(category.reports).forEach(report => {
                 if (report.roles.includes(this.user_role)) {
@@ -57,7 +52,7 @@ export class ReportsView {
             if (hasAccessibleReports) {
                 const categorySection = document.createElement('div');
                 categorySection.className = 'report_category_section';
-                
+
                 categorySection.innerHTML = `
                     <div class="category_header">
                         <p class="category_title">${category.title}</p>
@@ -74,7 +69,7 @@ export class ReportsView {
                         reportCard.href = report.endpoint;
                         reportCard.setAttribute('data-link', '');
                         reportCard.className = 'report_card';
-                        
+
                         reportCard.innerHTML = `
                             <div class="card_content">
                                 <div class="card_icon">
@@ -84,6 +79,13 @@ export class ReportsView {
                                 <p class="card_description">${report.description}</p>
                             </div>
                         `;
+
+                        reportCard.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            console.log(report.endpoint);
+                        });
 
                         reportsContainer.appendChild(reportCard);
                     }

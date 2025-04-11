@@ -95,6 +95,7 @@ import { ViewActiveProcedureListView } from "../views/ViewActiveProcedureListVie
 import { VisitDetailCardView } from "../cards/VisitDetailCardView.js";
 import { UpdateProcedurePricePopUpView } from "../popups/UpdateProcedurePricePopUpView.js";
 import { ReportsView } from "../views/ReportsView.js";
+import { SalesReportView } from "../views/SalesReportView.js";
 
 
 class DashboardController {
@@ -232,6 +233,7 @@ class DashboardController {
 
     // Reports View
     reportsView = new ReportsView();
+    salesReportView = new SalesReportView();
 }
 
 export const dashboardController = new DashboardController();
