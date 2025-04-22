@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { notify } from "../script/index.js";
+import { applyStyle, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitDetailCardView {
@@ -8,7 +8,7 @@ export class VisitDetailCardView {
         this.visit_id = null;
         this.data = [];
         this.edit_mode = false;
-        this.applyStyle();
+        applyStyle(this.style(), "visit_detail_card_style");
     }
 
     async PreRender(params) {
@@ -96,17 +96,13 @@ export class VisitDetailCardView {
 
     }
 
-    applyStyle() {
-        const style = document.createElement('style');
-        style.textContent = this.style();
-        style.id = 'visit_detail_card_style';
-        document.head.appendChild(style);
-    }
-
     style() {
         return `
         .visit_detail_card_style {
+            scroll-snap-align: start;
             background-color: var(--pri_back) !important;
+            border-radius: var(--main_border_r);
+            padding: var(--main_padding);
 
             .add_btn{
                 visibility: hidden;
@@ -165,6 +161,13 @@ export class VisitDetailCardView {
 
                     }
                 }
+            }
+        }
+
+        @media screen and (max-width: 850px) {
+            .visit_detail_card_style {
+                width: 100%;
+                flex:none;
             }
         }
         `

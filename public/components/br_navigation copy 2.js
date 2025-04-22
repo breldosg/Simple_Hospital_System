@@ -45,8 +45,7 @@ export class BrCustomNavigation extends HTMLElement {
                     </div>
                     <div class="profile-dropdown">
                         <div class="email-section">
-                            <p class="email">${staffName}</p>
-                            <p class="description">${staffRole}</p>
+                            <p class="email">${staffName.toLowerCase()}@gmail.com</p>
                         </div>
                         <div class="menu-items">
                             <a href="/users/account" class="menu-item" data-link>
@@ -109,15 +108,6 @@ export class BrCustomNavigation extends HTMLElement {
     a {
         text-decoration: none;
     }
-    
-    ::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: transparent;
-    }
 
     :host {
         width: 100%;
@@ -143,7 +133,6 @@ export class BrCustomNavigation extends HTMLElement {
             display: flex;
             align-items: end;
             height: 100%;
-            overflow-x: scroll;
 
             .nav_item {
                 display: flex;
@@ -251,12 +240,6 @@ export class BrCustomNavigation extends HTMLElement {
                 font-size: 12px;
                 opacity: 0.8;
             }
-            
-            .description{
-                color: var(--gray_text);
-                font-size: 10px;
-                opacity: 0.8;
-            }
 
             .menu-items {
                 padding: 8px 0;
@@ -339,13 +322,6 @@ export class BrCustomNavigation extends HTMLElement {
         }
 
     }
-
-        @media screen and (max-width: 850px) {
-            .word_cont{
-                display: none;
-            }
-        }
-
         `;
     }
 

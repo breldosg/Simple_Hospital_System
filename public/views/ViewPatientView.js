@@ -1,7 +1,7 @@
 import { ALLOW_TO_ADD_PATIENT, VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, decodeHTML, notify } from "../script/index.js";
+import { applyStyle, date_formatter, decodeHTML, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class ViewPatientView {
@@ -13,6 +13,8 @@ export class ViewPatientView {
         this.show_count_num = 0; // Keep track of current batch
         this.searchTerm = '';  // Store the current search term
         window.checkout_request = this.checkout_request.bind(this);
+
+        applyStyle(this.style(), 'ViewPatientView')
 
     }
 
@@ -31,7 +33,7 @@ export class ViewPatientView {
         const cont = document.querySelector('.update_cont');
         cont.innerHTML = this.ViewReturn();
 
-        this.main_container = document.querySelector('.outpatient_table_out');
+        this.main_container = document.querySelector('.view_patient_table');
 
         // Fetch the initial batch of Patient data
         await this.fetchAndRenderData();
@@ -142,8 +144,6 @@ export class ViewPatientView {
         PatientData.PatientList.forEach((patient, index) => {
             const row = document.createElement('div');
             row.classList.add('tr');
-            row.classList.add('d_flex');
-            row.classList.add('flex__c_a');
 
             row.setAttribute('title', decodeHTML(patient.name));
 
@@ -159,8 +159,8 @@ export class ViewPatientView {
                     <p class="name">${patient.name}</p>
                     <p class="gender">${patient.gender}</p>
                     <p class="phone">${patient.phone}</p>
-                    <p class="name">${patient.created_by}</p>
-                    <p class="date">${date}</p>
+                    <p class="name created_by">${patient.created_by}</p>
+                    <p class="date join_date">${date}</p>
                     <div class="action d_flex flex__c_c">
                             ${patient.visit_status === 'active' ?
                     (allowed_btns.includes('view_visit') ? buttons.view_visit : '') +
@@ -312,7 +312,7 @@ export class ViewPatientView {
 
     ViewReturn() {
         return `
-        <div class="main_section outpatient_table_out">
+        <div class="main_section view_patient_table">
             <div class="in_table_top d_flex flex__u_b">
                 <h4>Patient List</h4>
                 <div class="search_cont">
@@ -328,16 +328,16 @@ export class ViewPatientView {
                 </div>
             </div>
             <div class="outpatient_table">
-                <div class="table_head tr d_flex flex__c_a">
+                <div class="table_head tr">
                     <p class="id">SN</p>
                     <p class="name">Name</p>
                     <p class="gender">Gender</p>
                     <p class="phone">Phone Number</p>
-                    <p class="name">Created By</p>
-                    <p class="date">Join Date</p>
+                    <p class="name created_by">Created By</p>
+                    <p class="date join_date">Join Date</p>
                     <div class="action"></div>
                 </div>
-                <div class="table_body d_flex flex__co">
+                <div class="table_body">
                     <div class="start_page deactivate">
                         <p>No Patient Found</p>
                     </div>
@@ -359,5 +359,249 @@ export class ViewPatientView {
         </div>
         `;
     }
+
+    style() {
+        return `
+        .view_patient_table {
+            .main_btn {
+                height: 35px;
+                width: 86px;
+            }
+
+            .main_btn:hover {
+                background-color: var(--btn_hover_color);
+            }
+
+
+
+            .in_table_top {
+                height: 50px;
+
+                .search_cont {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+
+
+                    input {
+                        border-radius: var(--input_main_border_r);
+                        width: 300px;
+                        padding: 10px;
+                        height: 41px;
+                        background-color: transparent;
+                        border: 2px solid var(--input_border);
+                    }
+
+                    .add_btn {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 5px;
+                        flex: none;
+                        cursor: pointer;
+                        margin-left: 20px;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+
+                    }
+
+                    .input_search {
+                        display: flex;
+                        gap: 5px;
+                        align-items: center;
+                        position: relative;
+                    }
+
+                    .add_btn:hover {
+                        background-color: var(--pri_op);
+                        cursor: pointer;
+                    }
+
+                    .input_search.close {
+                        width: 50px;
+                        overflow: hidden;
+                    }
+
+                    .btn_search {
+                        border: none;
+                        background-color: var(--pri_color);
+                        width: 40px;
+                        height: 40px;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
+
+                }
+            }
+
+            .outpatient_table {
+                height: calc(100% - 50px);
+
+                .table_head {
+                    background-color: var(--pri_color);
+                    height: 50px;
+                    border-radius: 5px 5px 0 0;
+
+                    p {
+                        font-weight: 600;
+                        color: var(--white);
+                        font-size: 13px;
+                        cursor: default;
+                    }
+                }
+
+                .tr {
+                    display:grid;
+                    grid-template-columns: 50px 2fr 1fr 1fr 1fr 1fr 15vw;
+                    gap: 2px;
+                    align-items: center;
+
+                    p {
+                        flex: none;
+                        text-align: center;
+                        width:100%;
+                    }
+
+                    .name {
+                        text-align: left;
+                    }
+
+                    
+
+                    .action {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 15px;
+
+                        .error {
+                            background-color: var(--error_color);
+                        }
+
+                        .co_visit,
+                        .v_visit,
+                        .c_visit,
+                        .v_patient,
+                        .v_patien {
+                            width: 100%;
+                            /* max-width: 187px; */
+                        }
+
+                        .v_patient {
+                            background-color: var(--gray_text);
+                        }
+                    }
+                }
+
+                .table_body {
+                    padding-block: 5px;
+                    gap: 5px;
+                    overflow-y: scroll;
+                    height: calc(100% - 130px);
+                    position: relative;
+
+                    .loader_cont {
+                        position: absolute;
+                    }
+
+                    .tr {
+                        flex: none;
+                        height: 40px;
+                        cursor: pointer;
+
+                        p {
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                        }
+
+                        .main_btn {
+                            height: 30px;
+                            padding-inline: 10px;
+                        }
+                    }
+
+                    .tr:hover {
+                        background-color: var(--hover_list_table);
+                    }
+
+                    .start_page {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        p {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
+                        }
+                    }
+
+                    .start_page.deactivate {
+                        display: none;
+                    }
+                }
+
+                .table_footer {
+                    height: 80px;
+
+                    p {
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+
+                    .pagenation {
+                        gap: 10px;
+                        align-self: flex-end;
+
+                        .page_no {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 5px;
+                            border: 1px solid var(--border_color);
+                        }
+
+                        .main_btn {
+                            height: 40px;
+                            width: 62px;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+        }
+
+@media screen and (max-width: 850px) {
+    .view_patient_table {
+        .tr {
+            grid-template-columns: 50px 2fr 1fr 1fr 2fr !important;
+
+            .created_by, .join_date {
+                display: none !important;
+            }
+        }
+    }
+}
+
+        `;
+    }
+
+
+
 }
 

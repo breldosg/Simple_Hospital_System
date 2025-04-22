@@ -1,7 +1,7 @@
 import { VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { getVisitPriority, notify } from "../script/index.js";
+import { applyStyle, getVisitPriority, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class ViewOnProgressView {
@@ -12,6 +12,8 @@ export class ViewOnProgressView {
         this.total_data_num = 0; // Keep track of current batch
         this.show_count_num = 0; // Keep track of current batch
         this.searchTerm = '';  // Store the current search term
+
+        applyStyle(this.style(), 'view_active_visit_table');
     }
 
     async PreRender() {
@@ -130,7 +132,7 @@ export class ViewOnProgressView {
 
         PatientData.VisitList.forEach((patient, index) => {
             const rowDiv = document.createElement('div');
-            rowDiv.className = "tr d_flex flex__c_a";
+            rowDiv.className = "tr";
             rowDiv.setAttribute('data_src', patient.patient_id);
             rowDiv.setAttribute('data_src_v', patient.id);
             rowDiv.setAttribute('title', patient.patient_name);
@@ -138,7 +140,7 @@ export class ViewOnProgressView {
             rowDiv.innerHTML = `
                 <p class="id">${(this.batchNumber - 1) * 15 + index + 1}</p>
                 <p class="name">${patient.patient_name}</p>
-                <p class="gender">${getVisitPriority(patient.visit_priority)}</p>
+                <p class="gender hide_on_tablet">${getVisitPriority(patient.visit_priority)}</p>
                 <p class="name">${patient.doctor_name}</p>
                 <p class="phone">${patient.waiting_time}</p>
                 <p class="date">${patient.department_name}</p>
@@ -277,7 +279,7 @@ export class ViewOnProgressView {
 
     ViewReturn() {
         return `
-        <div class="main_section outpatient_table_out">
+        <div class="main_section view_active_visit_table">
             <div class="in_table_top d_flex flex__u_b">
                 <h4>Active Visit List</h4>
                 <div class="search_cont">
@@ -288,16 +290,16 @@ export class ViewOnProgressView {
                 </div>
             </div>
             <div class="outpatient_table">
-                <div class="table_head tr d_flex flex__c_a">
+                <div class="table_head tr">
                     <p class="id">SN</p>
                     <p class="name">Patient Name</p>
-                    <p class="gender">Priority</p>
+                    <p class="gender hide_on_tablet">Priority</p>
                     <p class="name">Doctor Name</p>
                     <p class="phone">Waiting Time</p>
                     <p class="date">Department</p>
                     <div class="action"></div>
                 </div>
-                <div class="table_body d_flex flex__co">
+                <div class="table_body">
                     <div class="start_page deactivate">
                         <p>There Is No Any Active Visit</p>
                     </div>
@@ -315,5 +317,247 @@ export class ViewOnProgressView {
         </div>
         `;
     }
+
+    style() {
+        return `
+        .view_active_visit_table {
+            .main_btn {
+                height: 35px;
+                width: 86px;
+            }
+
+            .main_btn:hover {
+                background-color: var(--btn_hover_color);
+            }
+
+
+
+            .in_table_top {
+                height: 50px;
+
+                .search_cont {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+
+
+                    input {
+                        border-radius: var(--input_main_border_r);
+                        width: 300px;
+                        padding: 10px;
+                        height: 41px;
+                        background-color: transparent;
+                        border: 2px solid var(--input_border);
+                    }
+
+                    .add_btn {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 5px;
+                        flex: none;
+                        cursor: pointer;
+                        margin-left: 20px;
+
+                        span {
+                            font-size: 20px;
+                            /* color: var(--btn_hover_color); */
+                        }
+
+                    }
+
+                    .input_search {
+                        display: flex;
+                        gap: 5px;
+                        align-items: center;
+                        position: relative;
+                    }
+
+                    .add_btn:hover {
+                        background-color: var(--pri_op);
+                        cursor: pointer;
+                    }
+
+                    .input_search.close {
+                        width: 50px;
+                        overflow: hidden;
+                    }
+
+                    .btn_search {
+                        border: none;
+                        background-color: var(--pri_color);
+                        width: 40px;
+                        height: 40px;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
+
+                }
+            }
+
+            .outpatient_table {
+                height: calc(100% - 50px);
+
+                .table_head {
+                    background-color: var(--pri_color);
+                    height: 50px;
+                    border-radius: 5px 5px 0 0;
+
+                    p {
+                        font-weight: 600;
+                        color: var(--white);
+                        font-size: 13px;
+                        cursor: default;
+                    }
+                }
+
+                .tr {
+                    display:grid;
+                    grid-template-columns: 50px 2fr 1fr 1fr 1fr 1fr 15vw;
+                    gap: 2px;
+                    align-items: center;
+
+                    p {
+                        flex: none;
+                        text-align: center;
+                        width:100%;
+                    }
+
+                    .name {
+                        text-align: left;
+                    }
+
+                    
+
+                    .action {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 15px;
+
+                        .error {
+                            background-color: var(--error_color);
+                        }
+
+                        .co_visit,
+                        .v_visit,
+                        .c_visit,
+                        .v_patient,
+                        .v_patien {
+                            width: 100%;
+                            /* max-width: 187px; */
+                        }
+
+                        .v_patient {
+                            background-color: var(--gray_text);
+                        }
+                    }
+                }
+
+                .table_body {
+                    padding-block: 5px;
+                    gap: 5px;
+                    overflow-y: scroll;
+                    height: calc(100% - 130px);
+                    position: relative;
+
+                    .loader_cont {
+                        position: absolute;
+                    }
+
+                    .tr {
+                        flex: none;
+                        height: 40px;
+                        cursor: pointer;
+
+                        p {
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            display: inline-block;
+                        }
+
+                        .main_btn {
+                            height: 30px;
+                            padding-inline: 10px;
+                        }
+                    }
+
+                    .tr:hover {
+                        background-color: var(--hover_list_table);
+                    }
+
+                    .start_page {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        p {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
+                        }
+                    }
+
+                    .start_page.deactivate {
+                        display: none;
+                    }
+                }
+
+                .table_footer {
+                    height: 80px;
+
+                    p {
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+
+                    .pagenation {
+                        gap: 10px;
+                        align-self: flex-end;
+
+                        .page_no {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 5px;
+                            border: 1px solid var(--border_color);
+                        }
+
+                        .main_btn {
+                            height: 40px;
+                            width: 62px;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+        }
+
+@media screen and (max-width: 850px) {
+    .view_active_visit_table {
+        .tr {
+            grid-template-columns: 50px 2fr 1fr 1fr 1fr 2fr !important;
+
+            .hide_on_tablet {
+                display: none !important;
+            }
+        }
+    }
+}
+
+        `;
+    }
+
 }
 

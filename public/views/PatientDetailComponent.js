@@ -74,10 +74,34 @@ export class PatientDetailComponent {
     <div class="top_card_patient_info_cont">
         <div class="Patient_imag">
             <img src="${data == '' ? '' : data.Patient_img}" alt="">
+            <div class="card name_card show_on_tablet">
+                <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
+                <div class="more_btn"><span
+                        class='switch_icon_more_vert'></span>
+                    <div class="option_menu_popup">
+                        <div class="option_item" data-action="edit_patient">
+                            <span class="switch_icon_edit"></span>
+                            <p>Edit Patient</p>
+                        </div>
+                        <div class="option_item" data-action="edit_visit">
+                            <span class="switch_icon_edit"></span>
+                            <p>Edit Visit</p>
+                        </div>
+                        <div class="option_item" data-action="add_vital_signs">
+                            <span class="switch_icon_add"></span>
+                            <p>Add Vital Signs</p>
+                        </div>
+                        <div class="option_item" data-action="view_history">
+                            <span class="switch_icon_history"></span>
+                            <p>View History</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="patient_detail">
-            <div class="card name_card">
+            <div class="card name_card hide_on_tablet">
                 <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
                 <div class="more_btn"><span
                         class='switch_icon_more_vert'></span>
@@ -126,12 +150,22 @@ export class PatientDetailComponent {
     top_card_view(data) {
 
         this.main_container.innerHTML = `
-    <div class="Patient_imag">
-            <img src="${data == '' ? '' : data.Patient_img}" alt="">
+        <div class="Patient_imag_cont">
+            <div class="Patient_imag">
+                <img src="${data == '' ? '' : data.Patient_img}" alt="">
+            </div>
+            <div class="card name_card show_on_tablet">
+                <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
+                <div class="more_btn"><span
+                        class='switch_icon_more_vert'></span>
+                    <div class="option_menu_popup">
+                        ${this.getMenuOptions()}
+                    </div>
+                </div>
+            </div>
         </div>
-
         <div class="patient_detail">
-            <div class="card name_card">
+            <div class="card name_card hide_on_tablet">
                 <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
                 <div class="more_btn"><span
                         class='switch_icon_more_vert'></span>
@@ -471,20 +505,7 @@ export class PatientDetailComponent {
                     }
                 }
 
-                .patient_detail {
-                    width: 100%;
-                    display: flex;
-                    gap: 10px;
-                    flex-direction: column;
-
-                    .card {
-                        width: 100%;
-                        display: flex;
-                        align-items: flex-end;
-                        gap: 10px 40px;
-                        flex-wrap: wrap;
-
-                        .name {
+                .name {
                             font-size: 30px;
                             font-weight: 900;
                         }
@@ -562,6 +583,21 @@ export class PatientDetailComponent {
                                 }
                             }
                         }
+
+                .patient_detail {
+                    width: 100%;
+                    display: flex;
+                    gap: 10px;
+                    flex-direction: column;
+
+                    .card {
+                        width: 100%;
+                        display: flex;
+                        align-items: flex-end;
+                        gap: 10px 40px;
+                        flex-wrap: wrap;
+
+                        
 
 
                         .icon_card {
@@ -681,7 +717,7 @@ export class PatientDetailComponent {
                             display: flex;
                             align-items: center;
                             gap: 4px;
-                            padding: 2px 8px;
+                            padding: 0px 8px;
                             border-radius: 12px;
                             font-size: 12px;
 
@@ -718,8 +754,106 @@ export class PatientDetailComponent {
                 pointer-events: none;
             }
             
-            
 
+            .show_on_tablet {
+                display: none;
+            }
+
+            }
+
+            @media screen and (max-width: 850px) {
+                .top_card_patient_info_cont {
+                    gap: 10px;
+                    flex-direction: column;
+                    
+                    .Patient_imag_cont {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+
+                        .card {
+                            width: 100%;
+                            overflow: auto;
+                            display: flex;
+                            gap:20px;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            .name {
+                                font-size: var(--main_font_size_30);
+                                width: calc(100% - 70px);
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                            }
+                        }
+
+                        .Patient_imag {
+                            width: 70px;
+                            height: 70px;
+                        }
+
+                    
+                    
+                    }
+                    .patient_detail {
+                        .hide_on_tablet {
+                            display: none;
+                        }
+                        
+                        .card {
+                            gap: 10px 10px;
+                            
+                            .icon_card {
+                                span {
+                                    font-size: var(--main_font_size_sm);
+                                }
+                            }
+                        }
+                        .vital {
+                            margin-top: 5px;
+                            .no_vital_sign_data_view {
+                                height: 50px;
+                            }
+                            .vital_card {
+                                flex-grow: 1;
+                                padding: 5px 10px;
+                                .main_ms {
+                                    font-size: var(--main_font_size_20);
+                                    span {
+                                        font-size: var(--main_font_size_15);
+                                    }
+                                }
+                                .dist {
+                                    p {
+                                        font-size: var(--main_font_size_sm);
+                                    }
+                                    .range {
+                                        padding: 0px 5px;
+                                        span {
+                                            font-size:  var(--main_font_size_sm);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* -------------- Mobile -------------- */
+            @media (max-width: 500px) {
+                .top_card_patient_info_cont {
+                    .Patient_imag_cont {
+                        .card {
+                            .name {
+                                font-size: var(--main_font_size_15);
+                            }
+                        }
+                    }
+                    
+                }
             }
         `;
     }

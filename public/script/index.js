@@ -176,10 +176,20 @@ const routes = {
         view: dashboardController.viewActiveLaboratoryListView,
         title: 'All Laboratory Tests'
     },
+    '/laboratory/testlist': {
+        view: dashboardController.laboratoryTestListView,
+        title: 'All Laboratory Tests'
+    },
+    '/laboratory/testcategorylist': {
+        view: dashboardController.laboratoryTestCategoryListView,
+        title: 'All Laboratory Tests'
+    },
+
     '/laboratory/activevisits': {
         view: dashboardController.viewActiveLaboratoryListView,
         title: 'Visits with Laboratory'
     },
+
     '/laboratory/activevisits/:id': {
         view: dashboardController.singleVisitLaboratoryView,
         title: 'Visit with Laboratory'
@@ -608,7 +618,7 @@ export function getVisitPriority(visit_priority_word) {
     return priority;
 }
 
-export function applyStyle(style, id) {
+export function applyStyle(style, id = '') {
     const styleElement = document.createElement('style');
     styleElement.textContent = style;
     styleElement.id = id;
@@ -621,3 +631,24 @@ export function removeStyle(id) {
         document.head.removeChild(styleElement);
     }
 }
+
+export function scrollToItem(container, item, speed = 'normal') {
+    if (container && item) {
+        container.scrollTo({
+            left: item.offsetLeft,
+            behavior: speed == 'fast' ? 'auto' : 'smooth',
+        });
+    }
+}
+
+
+function listen_window_width() {
+    console.log(window.innerWidth);
+    globalStates.setState({ window_width: window.innerWidth });
+    window.addEventListener('resize', (e) => {
+        console.log(window.innerWidth);
+        globalStates.setState({ window_width: e.target.innerWidth });
+    })
+}
+
+listen_window_width()

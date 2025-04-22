@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { applyStyle, date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitPatientNoteCardView {
@@ -34,9 +34,9 @@ export class VisitPatientNoteCardView {
         window.delete_allergy_request = this.delete_allergy_request;
         window.delete_vaccine_request = this.delete_vaccine_request;
         window.deletePatientNoteOnCard = this.deletePatientNoteOnCard;
-        this.applyStyle();
 
         this.card_to_delete = null;
+        applyStyle(this.style(), 'patient_cards_cont');
     }
 
     updateState(newState) {
@@ -341,18 +341,583 @@ export class VisitPatientNoteCardView {
         return card;
     }
 
-    applyStyle() {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = this.style();
-        document.head.appendChild(styleElement);
+    renderAllCards() {
+        // Safe guard against rendering before mount
+        if (!this.state.mounted) return;
+
+        const container = document.querySelector('.patient_cards_cont .card_content_area');
+        if (!container) return;
+
+        // Clear existing cards
+        container.innerHTML = '';
+
+        // Combine all items into a single array with type information
+        const allItems = [
+            ...this.state.notes.map(note => ({ ...note, type: 'note' })),
+            ...this.state.allergies.map(allergy => ({ ...allergy, type: 'allergy' })),
+            ...this.state.vaccines.map(vaccine => ({ ...vaccine, type: 'vaccine' }))
+        ];
+
+        // Sort by creation date (newest first)
+        allItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        if (allItems.length < 1) {
+            container.innerHTML = `
+                <div class="start_cont">
+                    <p class="start_view_overlay">No Records Found</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render all items
+        allItems.forEach(item => {
+            let card;
+            switch (item.type) {
+                case 'note':
+                    card = this.createNoteCard(item);
+                    break;
+                case 'allergy':
+                    card = this.createAllergyCard(item);
+                    break;
+                case 'vaccine':
+                    card = this.createVaccineCard(item);
+                    break;
+            }
+            if (card) {
+                container.appendChild(card);
+            }
+        });
     }
+
+    createAllergyCard(data) {
+        const card = document.createElement('div');
+        card.className = 'allergy_card';
+
+        card.innerHTML = `
+            <div class="top">
+                <div class="left">
+                    <p class="date">${date_formatter(data.created_at)}</p>
+                    <p class="created_by">${data.created_by}</p>
+                </div>
+                <div class="right">
+                    <div class="delete_btn btn ${this.visit_status == "active" ? "" : "visibility_hidden"}" title="Delete this allergy." id="delete_patient_allergy">
+                        <span class='switch_icon_delete'></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data">
+                <p class="head">Allergen Type:</p>
+                <p class="description">${data.allergy_type}</p>
+            </div>
+            
+            <div class="data">
+                <p class="head">Reaction Type:</p>
+                <p class="description">${data.allergy_reaction}</p>
+            </div>
+            
+            <div class="data specific_allergy">
+                <p class="head">Specific Allergen:</p>
+                <p class="description">${data.allergy_specific}</p>
+            </div>
+            
+            <div class="data">
+                <p class="head">Allergy Severity:</p>
+                <p class="description">${data.allergy_severity}</p>
+            </div>
+            
+            <div class="data">
+                <p class="head">Allergy Condition:</p>
+                <p class="description">${data.allergy_condition}</p>
+            </div>
+        `;
+
+        const deleteBtn = card.querySelector('.delete_btn');
+        if (this.visit_status == "active") {
+            deleteBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                dashboardController.confirmPopUpView.PreRender({
+                    callback: 'delete_allergy_request',
+                    parameter: data.id,
+                    title: 'Delete Allergy',
+                    sub_heading: `Allergy: ${data.allergy_type}`,
+                    description: 'Are you sure you want to delete this allergy?',
+                    ok_btn: 'Delete',
+                    cancel_btn: 'Cancel'
+                });
+
+                this.singleAllergyToDelete = card;
+            });
+        }
+
+        return card;
+    }
+
+    createVaccineCard(data) {
+        const card = document.createElement('div');
+        card.className = 'vaccine_card';
+
+        card.innerHTML = `
+            <div class="top">
+                <div class="left">
+                    <p class="date">${date_formatter(data.created_at)}</p>
+                    <p class="created_by">${data.created_by}</p>
+                </div>
+                <div class="right">
+                    <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" id="delete_patient_vaccine">
+                        <span class='switch_icon_delete'></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data">
+                <p class="head">Vaccine Name:</p>
+                <p class="description">${data.vaccine_name}</p>
+            </div>
+            
+            <div class="data">
+                <p class="head">Given Date:</p>
+                <p class="description">${date_formatter(data.given_date)}</p>
+            </div>
+            
+            ${data.note ? `
+            <div class="data note">
+                <p class="head">Note</p>
+                <p class="description">${data.note}</p>
+            </div>
+            ` : ''}
+        `;
+
+        const deleteBtn = card.querySelector('.delete_btn');
+        if (this.edit_mode) {
+            deleteBtn.addEventListener('click', () => {
+                dashboardController.confirmPopUpView.PreRender({
+                    callback: 'delete_vaccine_request',
+                    parameter: data.id,
+                    title: 'Delete Vaccine Record',
+                    sub_heading: `Vaccine: ${data.vaccine_name}`,
+                    description: 'Are you sure you want to delete this vaccine record?',
+                    ok_btn: 'Delete',
+                    cancel_btn: 'Cancel'
+                });
+
+                this.singleVaccineToDelete = card;
+            });
+        }
+
+        return card;
+    }
+
+    renderAllergyCards() {
+        // Safe guard against rendering before mount
+        if (!this.state.mounted) return;
+
+        const container = document.querySelector('.patient_cards_cont .card_content_area');
+        if (!container) return;
+
+        // Clear existing cards
+        container.innerHTML = '';
+
+        if (this.state.allergies.length < 1) {
+            container.innerHTML = `
+                <div class="start_cont">
+                    <p class="start_view_overlay">No Allergies Found</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render allergies
+        this.state.allergies.forEach(data => {
+            const card = document.createElement('div');
+            card.className = 'allergy_card';
+
+            card.innerHTML = `
+                <div class="top">
+                    <div class="left">
+                        <p class="date">${date_formatter(data.created_at)}</p>
+                        <p class="created_by">${data.created_by}</p>
+                    </div>
+                    <div class="right">
+                        <div class="delete_btn btn ${this.visit_status == "active" ? "" : "visibility_hidden"}" title="Delete this allergy." id="delete_patient_allergy">
+                            <span class='switch_icon_delete'></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data">
+                    <p class="head">Allergen Type:</p>
+                    <p class="description">${data.allergy_type}</p>
+                </div>
+                
+                <div class="data">
+                    <p class="head">Reaction Type:</p>
+                    <p class="description">${data.allergy_reaction}</p>
+                </div>
+                
+                <div class="data specific_allergy">
+                    <p class="head">Specific Allergen:</p>
+                    <p class="description">${data.allergy_specific}</p>
+                </div>
+                
+                <div class="data">
+                    <p class="head">Allergy Severity:</p>
+                    <p class="description">${data.allergy_severity}</p>
+                </div>
+                
+                <div class="data">
+                    <p class="head">Allergy Condition:</p>
+                    <p class="description">${data.allergy_condition}</p>
+                </div>
+            `;
+
+            const deleteBtn = card.querySelector('.delete_btn');
+            if (this.visit_status == "active") {
+                deleteBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'delete_allergy_request',
+                        parameter: data.id,
+                        title: 'Delete Allergy',
+                        sub_heading: `Allergy: ${data.allergy_type}`,
+                        description: 'Are you sure you want to delete this allergy?',
+                        ok_btn: 'Delete',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.singleAllergyToDelete = card;
+                });
+            }
+
+            container.prepend(card);
+        });
+    }
+
+    renderVaccineCards() {
+        // Safe guard against rendering before mount
+        if (!this.state.mounted) return;
+
+        const container = document.querySelector('.patient_cards_cont .card_content_area');
+        if (!container) return;
+
+        // Clear existing cards
+        container.innerHTML = '';
+
+        if (this.state.vaccines.length < 1) {
+            container.innerHTML = `
+                <div class="start_cont">
+                    <p class="start_view_overlay">No Vaccines Found</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render vaccines
+        this.state.vaccines.forEach(data => {
+            const card = document.createElement('div');
+            card.className = 'vaccine_card';
+
+            card.innerHTML = `
+                <div class="top">
+                    <div class="left">
+                        <p class="date">${date_formatter(data.created_at)}</p>
+                        <p class="created_by">${data.created_by}</p>
+                    </div>
+                    <div class="right">
+                        <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" id="delete_patient_vaccine">
+                            <span class='switch_icon_delete'></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data">
+                    <p class="head">Vaccine Name:</p>
+                    <p class="description">${data.vaccine_name}</p>
+                </div>
+                
+                <div class="data">
+                    <p class="head">Given Date:</p>
+                    <p class="description">${date_formatter(data.given_date)}</p>
+                </div>
+                
+                ${data.note ? `
+                <div class="data note">
+                    <p class="head">Note</p>
+                    <p class="description">${data.note}</p>
+                </div>
+                ` : ''}
+            `;
+
+            const deleteBtn = card.querySelector('.delete_btn');
+            if (this.edit_mode) {
+                deleteBtn.addEventListener('click', () => {
+                    dashboardController.confirmPopUpView.PreRender({
+                        callback: 'delete_vaccine_request',
+                        parameter: data.id,
+                        title: 'Delete Vaccine Record',
+                        sub_heading: `Vaccine: ${data.vaccine_name}`,
+                        description: 'Are you sure you want to delete this vaccine record?',
+                        ok_btn: 'Delete',
+                        cancel_btn: 'Cancel'
+                    });
+
+                    this.singleVaccineToDelete = card;
+                });
+            }
+
+            container.prepend(card);
+        });
+    }
+
+    renderNoteCards() {
+        // Safe guard against rendering before mount
+        if (!this.state.mounted) return;
+
+        const container = document.querySelector('.patient_cards_cont .card_content_area');
+        if (!container) return;
+
+        // Clear existing cards
+        container.innerHTML = '';
+
+        if (this.state.notes.length < 1) {
+            container.innerHTML = `
+                <div class="start_cont">
+                    <p class="start_view_overlay">No Patient Notes Found</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render notes
+        this.state.notes.forEach(note => {
+            container.prepend(this.createNoteCard(note));
+        });
+    }
+
+    async deleteNote(noteId) {
+
+        console.log(noteId);
+
+        dashboardController.loaderView.render();
+
+        try {
+            const response = await fetch('/api/patient/save_update_delete_patient_note', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    note_id: noteId,
+                    action: 'delete'
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+
+            notify('top_left', 'Note deleted successfully', 'success');
+
+            // Update the state by filtering out the deleted note
+            this.updateState({
+                notes: this.state.notes.filter(note => note.id !== noteId)
+            });
+
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            dashboardController.loaderView.remove();
+        }
+    }
+
+    async delete_allergy_request(id) {
+        dashboardController.loaderView.render();
+
+        try {
+            const response = await fetch('/api/patient/delete_allergy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: this.state.visitId,
+                    allergy_id: id
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+
+            notify('top_left', result.message, 'success');
+
+
+            this.singleAllergyToDelete.remove();
+            this.singleAllergyToDelete = null;
+
+            // Also update the state by filtering out the deleted vaccine
+            this.updateState({
+                allergies: this.state.allergies.filter(allergy => allergy.id !== id)
+            });
+
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            dashboardController.loaderView.remove();
+        }
+    }
+
+    async delete_vaccine_request(ids) {
+        dashboardController.loaderView.render();
+
+        try {
+            const response = await fetch('/api/patient/delete_vaccine_order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visit_id: this.state.visitId,
+                    vaccine_ids: [ids],
+                    state: 'single',
+                })
+            });
+
+            if (!response.ok) throw new Error('Server Error');
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+
+            notify('top_left', result.message, 'success');
+
+            if (this.singleVaccineToDelete) {
+                this.singleVaccineToDelete.remove();
+                this.singleVaccineToDelete = null;
+
+                // Also update the state by filtering out the deleted vaccine
+                this.updateState({
+                    vaccines: this.state.vaccines.filter(vaccine => vaccine.id !== ids)
+                });
+            }
+
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+        } finally {
+            dashboardController.loaderView.remove();
+        }
+    }
+
+
+    async RefetchData() {
+        try {
+            const response = await fetch('/api/patient/get_patient_notes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.state.visitId,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
+            if (result.success) {
+                this.state.notes = result.data.note;
+                this.state.allergies = result.data.allergy;
+                this.state.vaccines = result.data.vaccine;
+                this.renderCurrentCardType();
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
 
     style() {
         return `
+            @media screen and (max-width: 850px) {
+                .patient_cards_cont {
+                    width: 100%;
+                    flex:none;
+                }
+            }
             .patient_cards_cont {
-                    grid-column-start: 2;
-                    grid-column-end: 4;
+                scroll-snap-align: start;
                     height: 323px;
+                    flex: none;
+                    background-color: var(--pure_white_background);
+                    border-radius: var(--main_border_r);
+                    padding: var(--main_padding);
 
                      * {
                             transition: all 0s;
@@ -841,568 +1406,10 @@ export class VisitPatientNoteCardView {
                     }
                 }
             }
+
+            
         `;
     }
 
-    renderAllCards() {
-        // Safe guard against rendering before mount
-        if (!this.state.mounted) return;
-
-        const container = document.querySelector('.patient_cards_cont .card_content_area');
-        if (!container) return;
-
-        // Clear existing cards
-        container.innerHTML = '';
-
-        // Combine all items into a single array with type information
-        const allItems = [
-            ...this.state.notes.map(note => ({ ...note, type: 'note' })),
-            ...this.state.allergies.map(allergy => ({ ...allergy, type: 'allergy' })),
-            ...this.state.vaccines.map(vaccine => ({ ...vaccine, type: 'vaccine' }))
-        ];
-
-        // Sort by creation date (newest first)
-        allItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-        if (allItems.length < 1) {
-            container.innerHTML = `
-                <div class="start_cont">
-                    <p class="start_view_overlay">No Records Found</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Render all items
-        allItems.forEach(item => {
-            let card;
-            switch (item.type) {
-                case 'note':
-                    card = this.createNoteCard(item);
-                    break;
-                case 'allergy':
-                    card = this.createAllergyCard(item);
-                    break;
-                case 'vaccine':
-                    card = this.createVaccineCard(item);
-                    break;
-            }
-            if (card) {
-                container.appendChild(card);
-            }
-        });
-    }
-
-    createAllergyCard(data) {
-        const card = document.createElement('div');
-        card.className = 'allergy_card';
-
-        card.innerHTML = `
-            <div class="top">
-                <div class="left">
-                    <p class="date">${date_formatter(data.created_at)}</p>
-                    <p class="created_by">${data.created_by}</p>
-                </div>
-                <div class="right">
-                    <div class="delete_btn btn ${this.visit_status == "active" ? "" : "visibility_hidden"}" title="Delete this allergy." id="delete_patient_allergy">
-                        <span class='switch_icon_delete'></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="data">
-                <p class="head">Allergen Type:</p>
-                <p class="description">${data.allergy_type}</p>
-            </div>
-            
-            <div class="data">
-                <p class="head">Reaction Type:</p>
-                <p class="description">${data.allergy_reaction}</p>
-            </div>
-            
-            <div class="data specific_allergy">
-                <p class="head">Specific Allergen:</p>
-                <p class="description">${data.allergy_specific}</p>
-            </div>
-            
-            <div class="data">
-                <p class="head">Allergy Severity:</p>
-                <p class="description">${data.allergy_severity}</p>
-            </div>
-            
-            <div class="data">
-                <p class="head">Allergy Condition:</p>
-                <p class="description">${data.allergy_condition}</p>
-            </div>
-        `;
-
-        const deleteBtn = card.querySelector('.delete_btn');
-        if (this.visit_status == "active") {
-            deleteBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                dashboardController.confirmPopUpView.PreRender({
-                    callback: 'delete_allergy_request',
-                    parameter: data.id,
-                    title: 'Delete Allergy',
-                    sub_heading: `Allergy: ${data.allergy_type}`,
-                    description: 'Are you sure you want to delete this allergy?',
-                    ok_btn: 'Delete',
-                    cancel_btn: 'Cancel'
-                });
-
-                this.singleAllergyToDelete = card;
-            });
-        }
-
-        return card;
-    }
-
-    createVaccineCard(data) {
-        const card = document.createElement('div');
-        card.className = 'vaccine_card';
-
-        card.innerHTML = `
-            <div class="top">
-                <div class="left">
-                    <p class="date">${date_formatter(data.created_at)}</p>
-                    <p class="created_by">${data.created_by}</p>
-                </div>
-                <div class="right">
-                    <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" id="delete_patient_vaccine">
-                        <span class='switch_icon_delete'></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="data">
-                <p class="head">Vaccine Name:</p>
-                <p class="description">${data.vaccine_name}</p>
-            </div>
-            
-            <div class="data">
-                <p class="head">Given Date:</p>
-                <p class="description">${date_formatter(data.given_date)}</p>
-            </div>
-            
-            ${data.note ? `
-            <div class="data note">
-                <p class="head">Note</p>
-                <p class="description">${data.note}</p>
-            </div>
-            ` : ''}
-        `;
-
-        const deleteBtn = card.querySelector('.delete_btn');
-        if (this.edit_mode) {
-            deleteBtn.addEventListener('click', () => {
-                dashboardController.confirmPopUpView.PreRender({
-                    callback: 'delete_vaccine_request',
-                    parameter: data.id,
-                    title: 'Delete Vaccine Record',
-                    sub_heading: `Vaccine: ${data.vaccine_name}`,
-                    description: 'Are you sure you want to delete this vaccine record?',
-                    ok_btn: 'Delete',
-                    cancel_btn: 'Cancel'
-                });
-
-                this.singleVaccineToDelete = card;
-            });
-        }
-
-        return card;
-    }
-
-    renderAllergyCards() {
-        // Safe guard against rendering before mount
-        if (!this.state.mounted) return;
-
-        const container = document.querySelector('.patient_cards_cont .card_content_area');
-        if (!container) return;
-
-        // Clear existing cards
-        container.innerHTML = '';
-
-        if (this.state.allergies.length < 1) {
-            container.innerHTML = `
-                <div class="start_cont">
-                    <p class="start_view_overlay">No Allergies Found</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Render allergies
-        this.state.allergies.forEach(data => {
-            const card = document.createElement('div');
-            card.className = 'allergy_card';
-
-            card.innerHTML = `
-                <div class="top">
-                    <div class="left">
-                        <p class="date">${date_formatter(data.created_at)}</p>
-                        <p class="created_by">${data.created_by}</p>
-                    </div>
-                    <div class="right">
-                        <div class="delete_btn btn ${this.visit_status == "active" ? "" : "visibility_hidden"}" title="Delete this allergy." id="delete_patient_allergy">
-                            <span class='switch_icon_delete'></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="data">
-                    <p class="head">Allergen Type:</p>
-                    <p class="description">${data.allergy_type}</p>
-                </div>
-                
-                <div class="data">
-                    <p class="head">Reaction Type:</p>
-                    <p class="description">${data.allergy_reaction}</p>
-                </div>
-                
-                <div class="data specific_allergy">
-                    <p class="head">Specific Allergen:</p>
-                    <p class="description">${data.allergy_specific}</p>
-                </div>
-                
-                <div class="data">
-                    <p class="head">Allergy Severity:</p>
-                    <p class="description">${data.allergy_severity}</p>
-                </div>
-                
-                <div class="data">
-                    <p class="head">Allergy Condition:</p>
-                    <p class="description">${data.allergy_condition}</p>
-                </div>
-            `;
-
-            const deleteBtn = card.querySelector('.delete_btn');
-            if (this.visit_status == "active") {
-                deleteBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    dashboardController.confirmPopUpView.PreRender({
-                        callback: 'delete_allergy_request',
-                        parameter: data.id,
-                        title: 'Delete Allergy',
-                        sub_heading: `Allergy: ${data.allergy_type}`,
-                        description: 'Are you sure you want to delete this allergy?',
-                        ok_btn: 'Delete',
-                        cancel_btn: 'Cancel'
-                    });
-
-                    this.singleAllergyToDelete = card;
-                });
-            }
-
-            container.prepend(card);
-        });
-    }
-
-    renderVaccineCards() {
-        // Safe guard against rendering before mount
-        if (!this.state.mounted) return;
-
-        const container = document.querySelector('.patient_cards_cont .card_content_area');
-        if (!container) return;
-
-        // Clear existing cards
-        container.innerHTML = '';
-
-        if (this.state.vaccines.length < 1) {
-            container.innerHTML = `
-                <div class="start_cont">
-                    <p class="start_view_overlay">No Vaccines Found</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Render vaccines
-        this.state.vaccines.forEach(data => {
-            const card = document.createElement('div');
-            card.className = 'vaccine_card';
-
-            card.innerHTML = `
-                <div class="top">
-                    <div class="left">
-                        <p class="date">${date_formatter(data.created_at)}</p>
-                        <p class="created_by">${data.created_by}</p>
-                    </div>
-                    <div class="right">
-                        <div class="delete_btn btn ${this.edit_mode ? "" : "visibility_hidden"}" id="delete_patient_vaccine">
-                            <span class='switch_icon_delete'></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="data">
-                    <p class="head">Vaccine Name:</p>
-                    <p class="description">${data.vaccine_name}</p>
-                </div>
-                
-                <div class="data">
-                    <p class="head">Given Date:</p>
-                    <p class="description">${date_formatter(data.given_date)}</p>
-                </div>
-                
-                ${data.note ? `
-                <div class="data note">
-                    <p class="head">Note</p>
-                    <p class="description">${data.note}</p>
-                </div>
-                ` : ''}
-            `;
-
-            const deleteBtn = card.querySelector('.delete_btn');
-            if (this.edit_mode) {
-                deleteBtn.addEventListener('click', () => {
-                    dashboardController.confirmPopUpView.PreRender({
-                        callback: 'delete_vaccine_request',
-                        parameter: data.id,
-                        title: 'Delete Vaccine Record',
-                        sub_heading: `Vaccine: ${data.vaccine_name}`,
-                        description: 'Are you sure you want to delete this vaccine record?',
-                        ok_btn: 'Delete',
-                        cancel_btn: 'Cancel'
-                    });
-
-                    this.singleVaccineToDelete = card;
-                });
-            }
-
-            container.prepend(card);
-        });
-    }
-
-    renderNoteCards() {
-        // Safe guard against rendering before mount
-        if (!this.state.mounted) return;
-
-        const container = document.querySelector('.patient_cards_cont .card_content_area');
-        if (!container) return;
-
-        // Clear existing cards
-        container.innerHTML = '';
-
-        if (this.state.notes.length < 1) {
-            container.innerHTML = `
-                <div class="start_cont">
-                    <p class="start_view_overlay">No Patient Notes Found</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Render notes
-        this.state.notes.forEach(note => {
-            container.prepend(this.createNoteCard(note));
-        });
-    }
-
-    async deleteNote(noteId) {
-
-        console.log(noteId);
-        
-        dashboardController.loaderView.render();
-
-        try {
-            const response = await fetch('/api/patient/save_update_delete_patient_note', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    note_id: noteId,
-                    action: 'delete'
-                })
-            });
-
-            if (!response.ok) throw new Error('Server Error');
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-            if (!result.success) {
-                notify('top_left', result.message, 'warning');
-                return;
-            }
-
-            notify('top_left', 'Note deleted successfully', 'success');
-
-            // Update the state by filtering out the deleted note
-            this.updateState({
-                notes: this.state.notes.filter(note => note.id !== noteId)
-            });
-
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-        } finally {
-            dashboardController.loaderView.remove();
-        }
-    }
-
-    async delete_allergy_request(id) {
-        dashboardController.loaderView.render();
-
-        try {
-            const response = await fetch('/api/patient/delete_allergy', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    visit_id: this.state.visitId,
-                    allergy_id: id
-                })
-            });
-
-            if (!response.ok) throw new Error('Server Error');
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-            if (!result.success) {
-                notify('top_left', result.message, 'warning');
-                return;
-            }
-
-            notify('top_left', result.message, 'success');
-
-
-            this.singleAllergyToDelete.remove();
-            this.singleAllergyToDelete = null;
-
-            // Also update the state by filtering out the deleted vaccine
-            this.updateState({
-                allergies: this.state.allergies.filter(allergy => allergy.id !== id)
-            });
-
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-        } finally {
-            dashboardController.loaderView.remove();
-        }
-    }
-
-    async delete_vaccine_request(ids) {
-        dashboardController.loaderView.render();
-
-        try {
-            const response = await fetch('/api/patient/delete_vaccine_order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    visit_id: this.state.visitId,
-                    vaccine_ids: [ids],
-                    state: 'single',
-                })
-            });
-
-            if (!response.ok) throw new Error('Server Error');
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-            if (!result.success) {
-                notify('top_left', result.message, 'warning');
-                return;
-            }
-
-            notify('top_left', result.message, 'success');
-
-            if (this.singleVaccineToDelete) {
-                this.singleVaccineToDelete.remove();
-                this.singleVaccineToDelete = null;
-
-                // Also update the state by filtering out the deleted vaccine
-                this.updateState({
-                    vaccines: this.state.vaccines.filter(vaccine => vaccine.id !== ids)
-                });
-            }
-
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-        } finally {
-            dashboardController.loaderView.remove();
-        }
-    }
-
-
-    async RefetchData() {
-        try {
-            const response = await fetch('/api/patient/get_patient_notes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    visit_id: this.state.visitId,
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-
-
-            if (result.success) {
-                this.state.notes = result.data.note;
-                this.state.allergies = result.data.allergy;
-                this.state.vaccines = result.data.vaccine;
-                this.renderCurrentCardType();
-            } else {
-                notify('top_left', result.message, 'warning');
-                return null;
-            }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
-            return null;
-        }
-    }
 
 }

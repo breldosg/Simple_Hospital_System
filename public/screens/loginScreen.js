@@ -1,4 +1,4 @@
-import { notify } from "../script/index.js";
+import { applyStyle, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class loginScreen {
@@ -7,6 +7,7 @@ export class loginScreen {
         // globalize the LoginUser function
         window.LoginUser = this.LoginUser.bind(this);
         this.is_sent = false;
+        applyStyle(this.style(),'login_screen_style')
     }
 
     PreRender() {
@@ -115,6 +116,132 @@ export class loginScreen {
             //remove loader ver on wrapper
             btn_submit.setAttribute('loading', false);
         }
+    }
+
+    style() {
+        return `
+        .login_cont {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: var(--white_background);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            .loginForm {
+                /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                z-index: 2;
+
+                .img_cont {
+                    width: 75px;
+                    height: 75px;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        object-fit: contain;
+                        object-position: center;
+                    }
+                }
+
+                .head_text {
+                    font-size: 30px;
+                    font-weight: 700;
+                }
+
+                input {
+                    border-radius: var(--input_border_r);
+                    width: 300px;
+                    padding: 15px;
+                    background-color: var(--input_background);
+                    border: none;
+                    font-weight: 600;
+                    height: 47px;
+                }
+
+                .password-container {
+                    border-radius: var(--input_border_r);
+                    background-color: var(--input_background);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 300px;
+                    padding: 15px;
+                    height: 47px;
+                    overflow: hidden;
+
+                    .password-input {
+                        width: calc(100% - 40px);
+                        padding: 0px;
+                        height: 100%;
+                        border: none;
+                        background: transparent;
+                        font-weight: 600;
+                        border-radius: 0;
+                    }
+
+                    .toggle-password {
+                        cursor: pointer;
+                        font-size: 18px;
+                        width: 30px;
+                        height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        /* background-color: rebeccapurple; */
+                    }
+                }
+            }
+
+            .error_login {
+                width: 100%;
+                padding: 20px;
+                background-color: var(--error_background_color);
+                border: 1.5px var(--error_color) solid;
+                border-radius: 30px;
+                opacity: 0;
+
+                p {
+                    text-align: center;
+                    font-weight: 500;
+                    color: var(--white);
+                }
+            }
+
+            .error_login.active {
+                opacity: 1;
+            }
+        }
+
+        .login_cont:before {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* background-image: url(../files/background.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center; */
+            background-color: #797c85;
+            opacity: 0.5;
+            background-image: repeating-radial-gradient(circle at 0 0,
+                    transparent 0,
+                    #797c85 7px),
+                repeating-linear-gradient(#bec6a055, #bec6a0);
+            opacity: 0.2;
+        }
+        `
     }
 
 

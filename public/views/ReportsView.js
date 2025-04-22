@@ -1,6 +1,7 @@
 import { REPORTS_CONFIG } from "../config/roles.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { applyStyle, removeStyle } from "../script/index.js";
+import { frontRouter } from "../script/route.js";
 
 export class ReportsView {
     constructor() {
@@ -85,6 +86,7 @@ export class ReportsView {
                             e.stopPropagation();
                             e.stopImmediatePropagation();
                             console.log(report.endpoint);
+                            frontRouter.navigate(report.endpoint);
                         });
 
                         reportsContainer.appendChild(reportCard);

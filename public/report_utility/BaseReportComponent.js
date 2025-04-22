@@ -36,6 +36,10 @@ export class BaseReportComponent extends HTMLElement {
         if (this.data) this.render();
     }
 
+    setDate(date) {
+        this.selectedDate = date;
+    }
+
     loader() {
         this.shadowRoot.innerHTML = `
             ${this.styleSheet()}
@@ -139,9 +143,9 @@ export class BaseReportComponent extends HTMLElement {
                         <div class="table-row">
                             ${columnKeys.map(key => `
                                 <div class="td" style="width: ${this.columnConfigs[key].width}">
-                                    <div class="cell-content" style="text-align: ${this.columnConfigs[key].align || 'left'}">
+                                    <p class="cell-content" style="text-align: ${this.columnConfigs[key].align || 'left'}">
                                         ${this.renderCell(key, item[key], item)}
-                                    </div>
+                                    </p>
                                 </div>
                             `).join('')}
                         </div>
@@ -235,20 +239,6 @@ export class BaseReportComponent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             ${this.styleSheet()}
             <div class="report-container">
-                <div class="report-header">
-                    <div class="title">${this.reportTitle || 'Report'}</div>
-                    <div class="actions">
-                        <button class="print-button">
-                            <span class="switch_icon_print"></span>
-                            Print
-                        </button>
-                        <div class="date-filter">
-                            <input type="date" class="date-input" value="${this.selectedDate}">
-                            <button class="submit-date">Apply</button>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="report-grid">
                     <div class="summary-section">
                         ${this.renderSummaryTable()}
@@ -259,25 +249,25 @@ export class BaseReportComponent extends HTMLElement {
                 </div>
             </div>
         `;
-
-        // Add event listeners
-        const printButton = this.shadowRoot.querySelector('.print-button');
-        printButton.addEventListener('click', () => this.printReport());
-
-        const submitButton = this.shadowRoot.querySelector('.submit-date');
-        submitButton.addEventListener('click', async () => {
-            const dateInput = this.shadowRoot.querySelector('.date-input');
-            this.selectedDate = dateInput.value;
-            this.loading = true;
-            this.controlRender();
-            await this.fetchData();
-        });
     }
 
     styleSheet() {
         return `
             <style>
-                @import url('/assets/icons/style.css');
+                @import url('/public/icons/style.css');
+
+                *{
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+
+                p,
+                li,
+                td,
+                th {
+                    font-size: var(--main_font_size);
+                }
 
                 :host {
                     display: block;
@@ -287,85 +277,11 @@ export class BaseReportComponent extends HTMLElement {
 
                 .report-container {
                     display: grid;
-                    grid-template-rows: auto 1fr;
+                    grid-template-rows: 1fr;
                     height: 100%;
                     gap: 20px;
-                    padding: 20px;
-                }
-
-                .report-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding-bottom: 10px;
-                    border-bottom: 1px solid var(--border_color);
-                }
-
-                .title {
-                    font-size: 1.2rem;
-                    font-weight: 600;
-                    color: var(--main_text);
-                }
-
-                .actions {
-                    display: flex;
-                    gap: 15px;
-                }
-
-                .print-button {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    height: 42px;
-                    padding: 0 15px;
-                    background-color: var(--main_color);
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                }
-
-                .print-button:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 8px rgba(var(--main_color_rgb), 0.2);
-                }
-
-                .date-filter {
-                    display: flex;
-                    gap: 10px;
-                }
-
-                .date-input {
-                    height: 42px;
-                    border-radius: 8px;
-                    border: 1px solid var(--border_color);
-                    padding: 0 15px;
-                    font-size: 14px;
-                    transition: border-color 0.2s ease;
-                }
-
-                .date-input:focus {
-                    outline: none;
-                    border-color: var(--main_color);
-                }
-
-                .submit-date {
-                    height: 42px;
-                    min-width: 120px;
-                    border-radius: 8px;
-                    background-color: var(--main_color);
-                    color: white;
-                    border: none;
-                    font-size: 14px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                }
-
-                .submit-date:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 8px rgba(var(--main_color_rgb), 0.2);
+                    width: 100%;
+                    overflow: hidden;
                 }
 
                 .report-grid {
@@ -374,6 +290,7 @@ export class BaseReportComponent extends HTMLElement {
                     gap: 20px;
                     height: 100%;
                     overflow: hidden;
+                    width: 100%;
                 }
 
                 .summary-section {
@@ -381,22 +298,33 @@ export class BaseReportComponent extends HTMLElement {
                     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                     gap: 20px;
                     padding: 20px;
-                    background: white;
+                    background: var(--pure_white_background);
                     border-radius: 10px;
                     border: 1px solid var(--border_color);
+                    width: 100%;
                 }
 
                 .summary-table {
-                    display: contents;
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
                 }
 
                 .summary-content {
-                    display: contents;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 10px;
+                    width: 100%;
                 }
 
                 .summary-item {
                     background: var(--white_background);
-                    padding: 20px;
+                    padding: 10px;
+                    width: fit-content;
+                    flex-grow: 1;
+                    min-width: 200px;
+                    /* max-width: 400px; */
                     border-radius: 8px;
                     display: flex;
                     flex-direction: column;
@@ -416,30 +344,35 @@ export class BaseReportComponent extends HTMLElement {
                 .summary-value {
                     font-size: 1.4rem;
                     font-weight: 600;
-                    color: var(--main_color);
+                    color: var(--light_pri_color);
                 }
 
                 .table-section {
                     display: grid;
                     grid-template-rows: auto 1fr;
-                    background: white;
+                    background: var(--pure_white_background);
                     border-radius: 10px;
                     border: 1px solid var(--border_color);
                     overflow: hidden;
+                    width: 100%;
+                    min-height: 100%;
                 }
 
                 .main-table {
                     display: grid;
                     grid-template-rows: auto 1fr;
                     overflow: hidden;
+                    width: 100%;
+                    height: 100%;
                 }
 
                 .table-header {
                     display: grid;
                     grid-template-columns: ${this.getGridTemplateColumns()};
-                    background-color: var(--main_color);
+                    background-color: var(--pri_color);
                     padding: 15px;
                     gap: 10px;
+                    width: 100%;
                 }
 
                 .th {
@@ -451,6 +384,8 @@ export class BaseReportComponent extends HTMLElement {
 
                 .table-body {
                     overflow-y: auto;
+                    width: 100%;
+                    min-height: 100%;
                 }
 
                 .table-row {
@@ -460,10 +395,11 @@ export class BaseReportComponent extends HTMLElement {
                     gap: 10px;
                     border-bottom: 1px solid var(--border_color);
                     transition: background-color 0.2s ease;
+                    width: 100%;
                 }
 
                 .table-row:hover {
-                    background-color: rgba(var(--main_color_rgb), 0.05);
+                    background-color: var(--pri_color-op2);
                 }
 
                 .td {
@@ -477,7 +413,9 @@ export class BaseReportComponent extends HTMLElement {
                     align-items: center;
                     justify-content: center;
                     height: 100%;
+                    width: 100%;
                     gap: 10px;
+                    min-height: 300px;
                 }
 
                 .empty-state span {
@@ -499,7 +437,8 @@ export class BaseReportComponent extends HTMLElement {
 
                 /* Scrollbar Styling */
                 .table-body::-webkit-scrollbar {
-                    width: 6px;
+                    width: 5px;
+                    height: 5px;
                 }
 
                 .table-body::-webkit-scrollbar-track {
@@ -507,12 +446,12 @@ export class BaseReportComponent extends HTMLElement {
                 }
 
                 .table-body::-webkit-scrollbar-thumb {
-                    background: var(--main_color-op2);
+                    background: var(--pri_color-op2);
                     border-radius: 10px;
                 }
 
                 .table-body::-webkit-scrollbar-thumb:hover {
-                    background: var(--main_color);
+                    background: var(--pri_color);
                 }
             </style>
         `;

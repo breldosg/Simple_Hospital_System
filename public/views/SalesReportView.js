@@ -111,24 +111,90 @@ export class SalesReportView {
         const container = document.createElement('div');
         container.className = 'sales_report_view_container';
 
+        // Create the report header with controls
+        const reportHeader = document.createElement('div');
+        reportHeader.className = 'report-header';
+
+        // Title
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'title';
+        titleDiv.textContent = this.reportTitle;
+        reportHeader.appendChild(titleDiv);
+
+        // Actions container
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'actions';
+
+        // Print button
+        const printButton = document.createElement('button');
+        printButton.className = 'print-button';
+        printButton.innerHTML = '<span class="switch_icon_print"></span> Print';
+        actionsDiv.appendChild(printButton);
+
+        // Date filter
+        const dateFilter = document.createElement('div');
+        dateFilter.className = 'date-filter';
+
+        const today = new Date().toISOString().split('T')[0];
+
+        // Date input
+        const dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.className = 'date-input';
+        dateInput.value = today;
+        dateFilter.appendChild(dateInput);
+
+        // Apply button
+        const applyButton = document.createElement('button');
+        applyButton.className = 'submit-date';
+        applyButton.textContent = 'Apply';
+        dateFilter.appendChild(applyButton);
+
+        actionsDiv.appendChild(dateFilter);
+        reportHeader.appendChild(actionsDiv);
+
+        container.appendChild(reportHeader);
+
         // Create the base report component
         const reportComponent = document.createElement('base-report');
 
         // Set initial properties
         reportComponent.setColumnConfigs(this.getColumnConfigs());
         reportComponent.reportTitle = this.reportTitle;
+        reportComponent.endpoint = this.endpoint;
+        reportComponent.setDate(today);
 
         // Setup data fetching
-        const today = new Date().toISOString().split('T')[0];
         this.fetchData(today)
             .then(result => {
                 if (result.success && result.data) {
-                    reportComponent.setData(result.data, result.summary);
+                    reportComponent.setData(result.data.data, result.data.summary);
                 }
             })
             .catch(error => {
                 console.error('Failed to fetch initial data:', error);
             });
+
+        // Add event listeners
+        printButton.addEventListener('click', () => {
+            reportComponent.printReport();
+        });
+
+        applyButton.addEventListener('click', async () => {
+            const date = dateInput.value;
+            reportComponent.setDate(date);
+            reportComponent.loading = true;
+            reportComponent.controlRender();
+
+            try {
+                const result = await this.fetchData(date);
+                if (result.success && result.data) {
+                    reportComponent.setData(result.data.data, result.data.summary);
+                }
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            }
+        });
 
         container.appendChild(reportComponent);
         update_cont.appendChild(container);
@@ -138,19 +204,90 @@ export class SalesReportView {
         return `
             .sales_report_view_container {
                 display: grid;
-                grid-template-rows: 1fr;
+                grid-template-rows: auto 1fr;
                 width: 100%;
                 height: 100%;
-                background-color: var(--background);
                 border-radius: 10px;
                 overflow: hidden;
                 padding: 0;
-                gap: 0;
+                gap: 20px;
             }
 
             .sales_report_view_container > * {
                 min-width: 0;
                 min-height: 0;
+            }
+
+            .report-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 10px;
+                width: 100%;
+            }
+
+            .title {
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: var(--main_text);
+            }
+
+            .actions {
+                display: flex;
+                gap: 15px;
+            }
+
+            .print-button {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                height: 42px;
+                padding: 0 15px;
+                background-color: var(--pri_color);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .print-button:hover {
+                transform: translateY(-2px);
+            }
+
+            .date-filter {
+                display: flex;
+                gap: 10px;
+            }
+
+            .date-input {
+                height: 42px;
+                border-radius: 8px;
+                border: 1px solid var(--border_color);
+                padding: 0 15px;
+                font-size: 14px;
+                transition: border-color 0.2s ease;
+            }
+
+            .date-input:focus {
+                outline: none;
+            }
+
+            .submit-date {
+                height: 42px;
+                min-width: 120px;
+                border-radius: 8px;
+                background-color: var(--pri_color);
+                color: white;
+                border: none;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .submit-date:hover {
+                transform: translateY(-2px);
             }
 
             .status-badge {
@@ -176,6 +313,25 @@ export class SalesReportView {
             @media screen and (max-width: 768px) {
                 .sales_report_view_container {
                     padding: 10px;
+                }
+                
+                .actions {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .report-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 15px;
+                }
+                
+                .date-filter {
+                    width: 100%;
+                }
+                
+                .date-input {
+                    flex: 1;
                 }
             }
         `;
