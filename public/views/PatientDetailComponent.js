@@ -1,5 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { date_formatter, notify } from "../script/index.js";
+import { applyStyle, date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 
@@ -8,7 +8,7 @@ export class PatientDetailComponent {
         this.vitalSigns_data = false;
         this.vitalSignsRaw_data = [];
         this.has_vital_sign_data = false;
-        this.applyStyle();
+        applyStyle(this.style());
     }
 
     async PreRender(params) {
@@ -26,6 +26,9 @@ export class PatientDetailComponent {
             // throw new Error
             throw new Error('container is required');
         }
+
+        console.log(this.container);
+        
 
         // get role from global state
         this.role = globalStates.getState('user_data').role;
@@ -83,18 +86,6 @@ export class PatientDetailComponent {
                             <span class="switch_icon_edit"></span>
                             <p>Edit Patient</p>
                         </div>
-                        <div class="option_item" data-action="edit_visit">
-                            <span class="switch_icon_edit"></span>
-                            <p>Edit Visit</p>
-                        </div>
-                        <div class="option_item" data-action="add_vital_signs">
-                            <span class="switch_icon_add"></span>
-                            <p>Add Vital Signs</p>
-                        </div>
-                        <div class="option_item" data-action="view_history">
-                            <span class="switch_icon_history"></span>
-                            <p>View History</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -109,18 +100,6 @@ export class PatientDetailComponent {
                         <div class="option_item" data-action="edit_patient">
                             <span class="switch_icon_edit"></span>
                             <p>Edit Patient</p>
-                        </div>
-                        <div class="option_item" data-action="edit_visit">
-                            <span class="switch_icon_edit"></span>
-                            <p>Edit Visit</p>
-                        </div>
-                        <div class="option_item" data-action="add_vital_signs">
-                            <span class="switch_icon_add"></span>
-                            <p>Add Vital Signs</p>
-                        </div>
-                        <div class="option_item" data-action="view_history">
-                            <span class="switch_icon_history"></span>
-                            <p>View History</p>
                         </div>
                     </div>
                 </div>
@@ -156,9 +135,9 @@ export class PatientDetailComponent {
             </div>
             <div class="card name_card show_on_tablet">
                 <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
-                <div class="more_btn"><span
-                        class='switch_icon_more_vert'></span>
-                    <div class="option_menu_popup">
+                <div class="more_btn mobile_more_menu">
+                    <span class='switch_icon_more_vert'></span>
+                    <div class="option_menu_popup ">
                         ${this.getMenuOptions()}
                     </div>
                 </div>
@@ -167,9 +146,9 @@ export class PatientDetailComponent {
         <div class="patient_detail">
             <div class="card name_card hide_on_tablet">
                 <p class="name">${data == '' ? '' : data.name} #<span>${data == '' ? '' : data.id}</span></p>
-                <div class="more_btn"><span
-                        class='switch_icon_more_vert'></span>
-                    <div class="option_menu_popup">
+                <div class="more_btn desktop_more_menu">
+                    <span class='switch_icon_more_vert'></span>
+                    <div class="option_menu_popup ">
                         ${this.getMenuOptions()}
                     </div>
                 </div>
@@ -275,30 +254,54 @@ export class PatientDetailComponent {
     }
 
     setupPopupMenu() {
-        const moreBtn = this.main_container.querySelector('.more_btn');
-        const optionMenu = this.main_container.querySelector('.option_menu_popup');
-        const optionItems = this.main_container.querySelectorAll('.option_item');
+        const desktop_more_btn = this.main_container.querySelector('.desktop_more_menu');
+        const mobile_more_btn = this.main_container.querySelector('.mobile_more_menu');
 
-        // Toggle menu on more button click
-        moreBtn.addEventListener('click', (e) => {
+        const desktop_more_menu = this.main_container.querySelector('.desktop_more_menu .option_menu_popup');
+        const mobile_more_menu = this.main_container.querySelector('.mobile_more_menu .option_menu_popup');
+
+        const desktop_more_option_items = this.main_container.querySelectorAll('.desktop_more_menu .option_item');
+        const mobile_more_option_items = this.main_container.querySelectorAll('.mobile_more_menu .option_item');
+
+        // Toggle menu on more button click for big screen
+        desktop_more_btn.addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent click from propagating to document
-            optionMenu.classList.toggle('active');
+            desktop_more_menu.classList.toggle('active');
         });
 
-        // Handle option items click
-        optionItems.forEach(item => {
+        // Toggle menu on more button click for small screen
+        mobile_more_btn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from propagating to document
+            mobile_more_menu.classList.toggle('active');
+        });
+
+        // Handle option items click big screen
+        desktop_more_option_items.forEach(item => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation(); // Prevent click from propagating to document
                 const action = item.getAttribute('data-action');
                 this.handleMenuAction(action);
-                optionMenu.classList.remove('active');
+                desktop_more_menu.classList.remove('active');
+            });
+        });
+
+        // Handle option items click small screen
+        mobile_more_option_items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent click from propagating to document
+                const action = item.getAttribute('data-action');
+                this.handleMenuAction(action);
+                mobile_more_menu.classList.remove('active');
             });
         });
 
         // Close menu when clicking outside
         document.addEventListener('click', () => {
-            if (optionMenu.classList.contains('active')) {
-                optionMenu.classList.remove('active');
+            if (desktop_more_menu.classList.contains('active')) {
+                desktop_more_menu.classList.remove('active');
+            }
+            if (mobile_more_menu.classList.contains('active')) {
+                mobile_more_menu.classList.remove('active');
             }
         });
     }
@@ -470,12 +473,6 @@ export class PatientDetailComponent {
         }
     }
 
-    applyStyle() {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = this.style();
-        styleElement.id = 'patient_detail_component_style';
-        document.head.appendChild(styleElement);
-    }
 
     style() {
         return `
@@ -773,7 +770,7 @@ export class PatientDetailComponent {
 
                         .card {
                             width: 100%;
-                            overflow: auto;
+                            /* overflow: auto; */
                             display: flex;
                             gap:20px;
                             justify-content: space-between;

@@ -14394,6 +14394,8 @@ export const visitsProcedurePopUpViewStageDatas = {
         search_data_name: 'procedure',
         selected_data: 'selected_procedure',
         max_data: 1,
+        is_required: true
+
     },
     surgeon: {
         heading: 'Select Leading Surgeon',
@@ -14404,6 +14406,8 @@ export const visitsProcedurePopUpViewStageDatas = {
         search_data_name: 'staff',
         selected_data: 'selected_leading_surgeon',
         max_data: 1,
+        is_required: true
+
     },
     anesthesiologist: {
         heading: 'Select Anesthesiologist',
@@ -14414,6 +14418,7 @@ export const visitsProcedurePopUpViewStageDatas = {
         search_data_name: 'staff',
         selected_data: 'selected_anesthesiologist',
         max_data: 1,
+        is_required: false
     },
     assistants: {
         heading: 'Select Surgeons/Assistants',
@@ -14424,6 +14429,7 @@ export const visitsProcedurePopUpViewStageDatas = {
         search_data_name: 'staff',
         selected_data: 'selected_assistants',
         max_data: 10,
+        is_required: false
     },
     other: {
         heading: 'Other Information',
@@ -14434,6 +14440,8 @@ export const visitsProcedurePopUpViewStageDatas = {
         search_data_name: 'other',
         selected_data: 'other',
         selected_data_array: ['other_note', 'other_date'],
+        is_required: true
+
     },
 
 };

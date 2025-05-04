@@ -93,6 +93,7 @@ export class BrCustomInput extends HTMLElement {
         const additionalStyles = this.getAttribute('styles') || '';
         const labelStyles = this.getAttribute('labelStyles') || '';
         const labelstyles = this.getAttribute('labelstyles') || '';
+        const host_style = this.getAttribute('host_style') || '';
         const dropDownStyles = this.getAttribute('dropDownStyles') || '';
         const dropDownBorder_radius = this.getAttribute('dropDownBorder_radius') || '0';
 
@@ -120,12 +121,7 @@ export class BrCustomInput extends HTMLElement {
             :host {
                 display: block;
                 width: fit-content;
-                box-sizing: border-box;
-                font-size: 16px;
-                color: currentColor;
-                font-family: inherit;
-                padding: 0;
-                margin: 0;
+                ${host_style}
             }
             label{
                 ${labelStyles}
@@ -135,12 +131,11 @@ export class BrCustomInput extends HTMLElement {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                width: 100px;
+                width:100%;
                 border: 1px solid #ccc;
                 <!-- overflow: hidden; -->
                 field-sizing: content;
                 position: relative;
-
                 ${additionalStyles}
             }
 

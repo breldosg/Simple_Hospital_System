@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, notify, searchInArray } from "../script/index.js";
+import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitsPreliminaryDiagnosisPopUpView {
@@ -10,7 +10,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
         this.data = null;
         this.added_diagnosis = new Set();
         this.visit_id = '';
-        this.applyStyle();
+        applyStyle(this.style());
         // window.save_clinical_note = this.save_clinical_note.bind(this);
     }
 
@@ -294,12 +294,7 @@ export class VisitsPreliminaryDiagnosisPopUpView {
         `
     }
 
-    applyStyle() {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = this.style();
-        styleElement.id = 'add_preliminary_diagnosis_popUp';
-        document.head.appendChild(styleElement);
-    }
+
 
     style() {
         return `

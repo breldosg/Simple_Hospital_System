@@ -295,7 +295,6 @@ export class BrCustomNavigation extends HTMLElement {
         display: flex;
         flex-direction: row;
         align-items: center;
-        padding: 0 50px;
         position: relative;
 
 
@@ -341,9 +340,24 @@ export class BrCustomNavigation extends HTMLElement {
     }
 
         @media screen and (max-width: 850px) {
+            :host {
+                align-items: start;
+            }
+
+            .top {
+                padding:0 10px;
+            }
+            .choice_collection{
+                .nav_collection{
+                    padding:0 10px;
+                }
+            }
+
             .word_cont{
                 display: none;
             }
+            
+
         }
 
         `;

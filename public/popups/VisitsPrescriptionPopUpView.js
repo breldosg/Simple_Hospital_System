@@ -465,7 +465,7 @@ export class VisitsPrescriptionPopUpView {
         cont.classList.remove('active');
         cont.innerHTML = '';
     }
-
+    
 }
 
 

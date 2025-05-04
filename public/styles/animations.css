@@ -265,5 +265,7 @@
 }
 
 @keyframes skeleton_loader {
-    0% {background-position: right}
+    0% {
+        background-position: right
+    }
 }

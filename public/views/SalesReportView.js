@@ -227,7 +227,7 @@ export class SalesReportView {
             }
 
             .title {
-                font-size: 1.2rem;
+                font-size: var(--main_font_size);
                 font-weight: 600;
                 color: var(--main_text);
             }

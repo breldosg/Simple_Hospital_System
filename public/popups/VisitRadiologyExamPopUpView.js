@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, notify, searchInArray } from "../script/index.js";
+import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitRadiologyExamPopUpView {
@@ -14,6 +14,8 @@ export class VisitRadiologyExamPopUpView {
         this.selected_radiology_test = [];
         this.searchQuery = '';
         this.state = "creation";
+
+        applyStyle(this.style())
     }
 
     async PreRender(params = '') {
@@ -175,14 +177,14 @@ export class VisitRadiologyExamPopUpView {
             var category_list_data = radiology_data.radiology_category;
             console.log(category_list_data);
 
-            category_list_data =[
+            category_list_data = [
                 {
-                    id:0,
-                    name:"All"
+                    id: 0,
+                    name: "All"
                 },
                 ...category_list_data
             ];
-            
+
             var is_first_active = false;
             category_list_data.forEach((item) => {
 
@@ -221,7 +223,7 @@ export class VisitRadiologyExamPopUpView {
 
             var radiology_list_data = radiology_data.radiology_tests;
             console.log(radiology_list_data);
-            
+
             radiology_list_data.forEach((item) => {
                 if (this.searchQuery != '' && !item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
                     return;
@@ -298,7 +300,6 @@ export class VisitRadiologyExamPopUpView {
         });
     }
 
-
     close() {
         const cont = document.querySelector('.popup');
         cont.classList.remove('active');
@@ -356,5 +357,384 @@ export class VisitRadiologyExamPopUpView {
         } catch (error) {
             notify('top_left', error.message, 'error');
         }
+    }
+
+    style(){
+        return`
+    .radiology_popUp {
+        width: 1200px;
+        max-width: 80%;
+        height: 650px;
+        max-height: 88%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        /* padding: 50px; */
+        position: relative;
+        z-index: 1;
+
+        .cont_heading {
+            background: var(--pure_white_background);
+            border-radius: var(--main_border_r);
+            box-shadow: 0 0 5px 0 #0000001d;
+            padding: 10px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .heading {
+                font-size: 17px;
+                font-weight: bold;
+            }
+
+            .close_btn {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 5px;
+                flex: none;
+                cursor: pointer;
+            }
+
+            .close_btn:hover {
+                box-shadow: 0 0 5px 0 #00000019;
+            }
+
+        }
+
+        .radiology_pop_cont {
+            /* padding: 20px; */
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
+            overflow: scroll;
+
+            .radiology_pop_loader_cont {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background-color: var(--pure_white_background);
+                display: none;
+                justify-content: center;
+                align-items: center;
+
+            }
+
+            .radiology_pop_loader_cont.active {
+                display: flex;
+            }
+
+            .left {
+                padding-block: 20px;
+                width: 70%;
+                background: var(--pure_white_background);
+                border-radius: var(--main_border_r);
+                box-shadow: 0 0 5px 0 #0000001d;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                overflow: hidden;
+
+                .top_head {
+                    padding-inline: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    /* border-bottom: 1px solid var(--input_border); */
+
+                    .heading {
+                        font-size: 15px;
+                        font-weight: 700;
+                    }
+
+                    .search_cont {
+                        display: flex;
+                        align-items: center;
+                        /* border: 2px solid var(--black-op3); */
+                        box-shadow: 0 0 5px 0 #23989e38;
+                        border-radius: var(--main_border_r);
+                        overflow: hidden;
+
+                        .radiology_popup_search {
+                            width: 250px;
+                            padding: 10px;
+                            height: 41px;
+                            background-color: transparent;
+                            border: none;
+
+                        }
+
+                        .btn_search {
+                            border: none;
+                            /* background-color: var(--pri_color); */
+                            width: 50px;
+                            height: 40px;
+                            cursor: pointer;
+                            /* border-radius: var(--input_main_border_r); */
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+
+                }
+
+                .left_body_cont {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    height: calc(100% - 60px);
+                    position: relative;
+                    /* overflow-y: scroll; */
+
+                    .group_category_cont_cont {
+                        width: 100%;
+                        padding-inline: 20px;
+
+                        .group_category_cont {
+                            display: flex;
+                            gap: 10px;
+                            overflow-x: scroll;
+                            padding-bottom: 10px;
+
+                            .group_category {
+                                flex: none;
+                                padding: 10px 20px;
+                                /* box-shadow: 0 0 5px 0 #0000000b; */
+                                border-radius: var(--main_border_r);
+                                cursor: pointer;
+                                border: 1px solid #00000007;
+
+
+                                p {
+                                    font-weight: 800;
+                                }
+                            }
+
+                            .group_category:hover {
+                                border: 1px solid var(--light_pri_color);
+                                box-shadow: 0 0 5px 0 #0000000b;
+
+                            }
+
+                            .group_category.active {
+                                border: 1px solid var(--light_pri_color);
+                                background-color: var(--pri_op);
+
+                                p {
+                                    color: var(--light_pri_color);
+                                }
+                            }
+                        }
+                    }
+
+                    .group_category_list {
+                        padding-inline: 20px;
+                        padding-bottom: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 10px;
+                        width: 100%;
+                        overflow-y: scroll;
+                        height: 100%;
+
+                        .radiology_list_item {
+                            padding: 15px 20px;
+                            width: 100%;
+                            border-radius: var(--main_border_r);
+                            cursor: pointer;
+                            border: 1px solid #00000007;
+                            display: flex;
+                            justify-content: space-between;
+
+                            span {
+                                font-size: 12px;
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+
+                        .radiology_list_item.selected {
+                            border: 1px solid var(--light_pri_color);
+
+                            span {
+                                color: var(--light_pri_color);
+                            }
+                        }
+
+                        .radiology_list_item.selected:hover {
+                            border: 1px solid var(--light_pri_color);
+                            box-shadow: 0 0 5px 0 #0000000b;
+
+                            span {
+                                color: var(--light_pri_color);
+                            }
+                        }
+
+
+
+                        .radiology_list_item:hover {
+                            border: 1px solid var(--light_pri_color);
+                            box-shadow: 0 0 5px 0 #0000000b;
+
+                            span {
+                                color: var(--light_pri_color);
+                            }
+                        }
+
+                    }
+                }
+
+                .loader_cont {
+                    position: absolute;
+                }
+
+            }
+
+            .right {
+                padding-block: 20px;
+                background: var(--pure_white_background);
+                border-radius: var(--main_border_r);
+                box-shadow: 0 0 5px 0 #0000001d;
+                width: 30%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                justify-content: space-between;
+
+                .top_head {
+                    padding: 10px 20px;
+                    /* border-bottom: 1px solid var(--input_border); */
+
+                    .heading {
+                        font-size: 15px;
+                        font-weight: 700;
+                    }
+                }
+
+                .right_body_cont {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    height: 100%;
+                    overflow-y: scroll;
+                    padding-inline: 20px;
+                    padding-bottom: 20px;
+                    position: relative;
+
+                    .radiology_list_item {
+                        padding: 15px 20px;
+                        width: 100%;
+                        box-shadow: 0 0 5px 0 #0000000b;
+                        border-radius: var(--main_border_r);
+                        cursor: pointer;
+                        display: flex;
+                        justify-content: space-between;
+                        border: 1px solid var(--light_pri_color);
+
+                        span {
+                            color: var(--light_pri_color);
+                            font-size: 12px;
+                            display: flex;
+                            align-items: center;
+
+                        }
+                    }
+
+                    .radiology_list_item:hover {
+                        box-shadow: 0 0 5px 0 #0000000b;
+                    }
+                }
+
+
+            }
+
+
+        }
+
+
+        .btn_cont {
+            padding-inline: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 10px;
+            padding-top: 0;
+            /* margin-top: 30px; */
+
+            br-button {
+                border: none;
+                background-color: var(--pri_color);
+                padding: 10px 35px;
+                font-weight: bold;
+                font-size: 12px;
+                color: var(--white);
+                cursor: pointer;
+                border-radius: var(--input_main_border_r);
+            }
+
+            .secondary {
+                background-color: var(--gray_text);
+                color: var(--white);
+            }
+
+        }
+
+    }
+
+    @media screen and (max-width: 850px) {
+        .radiology_popUp {
+            gap:0;
+            width:100%;
+            max-width:95%;
+            height:88%;
+            background:var(--pure_white_background);
+            border-radius: var(--main_border_r);
+
+
+            .radiology_pop_cont {
+                flex-direction:column;
+                gap:0;
+
+                .left{
+                    width:100%;
+                    height:100%;
+                    .top_head{
+                        .heading{
+                            display:none;
+                        }
+
+                        .search_cont{
+                            width:100%;
+                            .radiology_popup_search{
+                                width:100%;
+                            }
+                        }
+                    }
+                }
+
+                .right {
+                    box-shadow:none;
+                    width:100%;
+                    .top_head,.right_body_cont {
+                        display:none;
+                    }
+                }   
+            } 
+        }
+    }
+
+
+        `
     }
 }

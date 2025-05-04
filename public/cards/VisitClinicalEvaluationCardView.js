@@ -51,10 +51,6 @@ export class VisitClinicalEvaluationCardView {
 
         if (this.data == "") return;
 
-
-
-
-
         const container = document.querySelector('.clinical_note_cont_cont .body_part');
 
         container.innerHTML = `

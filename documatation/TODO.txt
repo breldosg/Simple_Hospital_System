@@ -17,6 +17,7 @@
 
 ====== Visit View
 1- add check history btn ✔️
+2- kwenye view ya daktar lab na radiology card listener zake hazijakaa vzr after internal reloding ✔️
 
 ======= Procedure 
 1- tengeneza section ya kutengeneza na update procedure na category ✔️
@@ -25,14 +26,14 @@
 
 
 ======== Patient
-1- Complete History 70%
+1- Complete History 95%
 2- update Visit
 
 
 ======= Staff
 1- Complete Dashboard 40%
 2- Tengeneza page kwaajili ya defaults updates kama vile pre/final Diagnosis na vingine
-3- ongeza practationaer number mda unamtengeza au update mgonjwa
+3- ongeza practationaer number mda unamtengeza au update staff
 
 
 ========= ADMIN
@@ -51,7 +52,7 @@
 
 ** Backend** 
 1- The active visit on radiology, laboratory and pharmacy list pagination shows incorrect count (e.g. "showing 1 data of 7" when actual count differs) - Need to fix pagination count calculation in backend to match actual number of records
-
+2- angalia page ya all product load speed >>>>>> /pharmacy/viewpharmacyproducts
 
 
 

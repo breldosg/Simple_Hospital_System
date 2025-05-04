@@ -485,6 +485,8 @@ export class VisitLabExamCardView {
                     visit_id: this.visit_id,
                     state: 'modify',
                     data: result.data,
+                    visit_status: this.visit_status
+
                 });
 
                 // Exit selection mode

@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { currency_formatter, notify } from "../script/index.js";
+import { applyStyle, currency_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class ViewAllProcedureView {
@@ -15,7 +15,7 @@ export class ViewAllProcedureView {
         this.isLoading = false;  // Prevent multiple fetch calls at the same time
         this.page_shift = false;  // Prevent multiple fetch calls at the same time
 
-        this.applyStyle();
+        applyStyle(this.style());
     }
 
     async PreRender() {
@@ -344,12 +344,7 @@ export class ViewAllProcedureView {
         `;
     }
 
-    applyStyle() {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = this.style();
-        styleElement.id = 'procedure_all_view_cont';
-        document.head.appendChild(styleElement);
-    }
+
 
     style() {
         return `

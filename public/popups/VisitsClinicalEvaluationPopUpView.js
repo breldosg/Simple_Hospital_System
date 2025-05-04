@@ -1,7 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { diagnosisArray, duration_unit } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, notify, searchInArray } from "../script/index.js";
+import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitsClinicalEvaluationPopUpView {
@@ -9,6 +9,7 @@ export class VisitsClinicalEvaluationPopUpView {
         this.callback = null;
         this.data = null;
         window.save_clinical_note = this.save_clinical_note.bind(this);
+        applyStyle(this.style(), 'VisitsClinicalEvaluationPopUpView');
     }
 
     async PreRender(params = '') {
@@ -31,6 +32,22 @@ export class VisitsClinicalEvaluationPopUpView {
         this.attachListeners()
     }
 
+    input_styles() {
+        return `
+        border-radius: var(--input_main_border_r);
+        padding: 10px;
+        height: 60px;
+        background-color: transparent;
+        border: 2px solid var(--input_border);
+        `;
+    }
+    
+    input_host_styles() {
+        return `
+        width:100%;
+        `;
+    }
+
     ViewReturn() {
         return `
 <div class="container clinical_note_add_popUp">
@@ -50,18 +67,8 @@ export class VisitsClinicalEvaluationPopUpView {
 
                     <br-input placeholder="Briefly describe the main issue" name="cc_description"
                     value="${this.evaluation_data.chief_complaints ? this.evaluation_data.chief_complaints : ''}"
-                        label="Complaint Description" required type="textarea" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 60px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 12px;"></br-input>
-
+                        label="Complaint Description" required type="textarea" host_style="${this.input_host_styles()}" styles="${this.input_styles()}" labelStyles="font-size: 12px;"></br-input>
                 </div>
-
-
             </div>
 
 
@@ -70,20 +77,9 @@ export class VisitsClinicalEvaluationPopUpView {
 
                 <div class="input_groups">
 
-
-
                     <br-input placeholder="Briefly describe the illness" name="hpi_description"
                     value="${this.evaluation_data.history_of_present_illness ? this.evaluation_data.history_of_present_illness : ''}"
-                        label="Illness Description" required type="textarea" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 60px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 12px;"></br-input>
-
-
+                        label="Illness Description" required type="textarea" host_style="${this.input_host_styles()}" styles="${this.input_styles()}" labelStyles="font-size: 12px;"></br-input>
                 </div>
 
 
@@ -96,19 +92,8 @@ export class VisitsClinicalEvaluationPopUpView {
 
                     <br-input placeholder="Explain related symptoms" name="ros_symptoms" label="Related Symptoms"
                     value="${this.evaluation_data.review_of_systems ? this.evaluation_data.review_of_systems : ''}"
-                        type="textarea" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 60px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 12px;"></br-input>
-
-
+                        type="textarea" host_style="${this.input_host_styles()}" styles="${this.input_styles()}" labelStyles="font-size: 12px;"></br-input>
                 </div>
-
-
             </div>
 
 
@@ -119,16 +104,7 @@ export class VisitsClinicalEvaluationPopUpView {
 
                     <br-input placeholder="Any visible or notable physical findings" name="ge_observation"
                     value="${this.evaluation_data.general_exam ? this.evaluation_data.general_exam : ''}"
-                        label="Physical Observations" type="textarea" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 60px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 12px;"></br-input>
-
-
+                        label="Physical Observations" type="textarea" host_style="${this.input_host_styles()}" styles="${this.input_styles()}" labelStyles="font-size: 12px;"></br-input>
                 </div>
 
 
@@ -142,24 +118,11 @@ export class VisitsClinicalEvaluationPopUpView {
 
                     <br-input placeholder="Key findings in specific systems..." name="se_findings"
                     value="${this.evaluation_data.systemic_exam ? this.evaluation_data.systemic_exam : ''}"
-                        label="Focused Findings" require type="textarea" styles="
-                            border-radius: var(--input_main_border_r);
-                            width: 350px;
-                            padding: 10px;
-                            height: 60px;
-                            background-color: transparent;
-                            border: 2px solid var(--input_border);
-                            " labelStyles="font-size: 12px;"></br-input>
-
-
+                        label="Focused Findings" require type="textarea" host_style="${this.input_host_styles()}" styles="${this.input_styles()}" labelStyles="font-size: 12px;"></br-input>
                 </div>
 
 
             </div>
-
-
-
-
 
 
 
@@ -253,5 +216,105 @@ export class VisitsClinicalEvaluationPopUpView {
             notify('top_left', error.message, 'error');
         }
 
+    }
+
+    style() {
+        return `
+          /* ------------------------------------------------------- */
+
+        .clinical_note_add_popUp {
+            width: 80%;
+            max-width: 830px;
+            height: fit-content;
+            max-height: 650px;
+            background: var(--pure_white_background);
+            border-radius: var(--main_border_r);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 50px;
+            position: relative;
+            z-index: 1;
+
+            .cont_heading {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .heading {
+                    font-size: 17px;
+                    font-weight: bold;
+                }
+            }
+
+            .cont_form {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 30px;
+                height: 100%;
+                /* row-gap: 50px; */
+
+                .section_group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    width:45%;
+
+                    h4 {
+                        color: var(--light_pri_color);
+                        padding-bottom: 10px;
+                        border-bottom: 1px var(--active_color) solid;
+                    }
+
+                    .input_groups {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+
+                        .input_group_group {
+                            display: flex;
+                            align-items: center;
+                            /* justify-content: space-between; */
+                            gap: 20px;
+                        }
+                    }
+                }
+
+            }
+
+            .btn_wrapper {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: end;
+                gap: 10px;
+                margin-top: 30px;
+
+                .card-button {
+                    border: none;
+                    background-color: var(--pri_color);
+                    padding: 10px 35px;
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: var(--white);
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+                }
+
+                .secondary {
+                    background-color: var(--gray_text);
+                    color: var(--white);
+                }
+
+            }
+
+        }
+
+        `;
     }
 }

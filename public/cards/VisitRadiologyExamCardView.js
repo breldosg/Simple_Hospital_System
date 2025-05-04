@@ -28,6 +28,9 @@ export class VisitRadiologyExamCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        console.log("radiology", params);
+
+
         this.resetState(data, visit_id, state, visit_status);
 
         // First render the main card structure
@@ -85,8 +88,6 @@ export class VisitRadiologyExamCardView {
                 <div class="loader_cont active">
                     <div class="dot_loader"></div>
                 </div>
-
-
             </div>
         `;
 
@@ -118,6 +119,7 @@ export class VisitRadiologyExamCardView {
                     visit_id: this.visit_id,
                     state: 'modify',
                     data: pendingIds,
+                    visit_status: this.visit_status,
                 });
             });
         }
@@ -380,7 +382,7 @@ export class VisitRadiologyExamCardView {
             sub_heading: `You have selected ${selectedIds.length} Radiology orders.`,
             description: 'Are you sure you want to remove these selected Radiology orders?',
             ok_btn: 'Remove',
-            cancel_btn: 'Cancel'
+            cancel_btn: 'Cancel',
         });
     }
 
@@ -461,6 +463,8 @@ export class VisitRadiologyExamCardView {
                     visit_id: this.visit_id,
                     state: 'modify',
                     data: result.data,
+                    visit_status: this.visit_status
+
                 });
 
                 // Exit selection mode

@@ -702,11 +702,14 @@ export class SingleVisitView {
                     flex:none;
                     scroll-snap-type: x mandatory;
                     scroll-behavior: smooth;
+                    height:calc(100% - 78px);
                     
                     .card_group_cont_cont {
                         scroll-snap-align: start;
                         width: 100%;
                         flex:none;
+                        height:100%;
+                        overflow-y:scroll;
                     }
                 }
 

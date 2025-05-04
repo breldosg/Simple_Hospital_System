@@ -103,13 +103,13 @@ export class VisitsProcedurePopUpView {
 
         const save_btn = document.createElement('button');
         save_btn.className = 'card-button';
+
         // add id
-        save_btn.id = 'confirm_save';
+        save_btn.id = 'save_btn';
         save_btn.setAttribute('type', 'submit');
         if (this.selected_data_list.size <= 0) {
             save_btn.classList.add('disabled');
         }
-        save_btn.id = 'save_btn';
         save_btn.innerHTML = `Save`;
         save_btn.addEventListener('click', () => {
             this.save_procedure_note();
@@ -184,13 +184,13 @@ export class VisitsProcedurePopUpView {
 
                 <div class="data">
                     <p class="head">Anesthesiologist Name:</p>
-                    <p class="description">${await fetch_toJson_data('staff', data, 'anesthesiologist')}</p>
+                    <p class="description">${data.anesthesiologist && data.anesthesiologist.length > 0 ? await fetch_toJson_data('staff', data, 'anesthesiologist') : ""}</p>
                 </div>
 
                 <div class="data pills">
                     <p class="head">Assistants</p>
                     <div class="pills_cont">
-                        ${await renderAssistants(data.assistants)}
+                        ${data.assistants && data.assistants.length > 0 ? await renderAssistants(data.assistants) : ""}
                     </div>
                 </div>
 
@@ -320,6 +320,8 @@ export class VisitsProcedurePopUpView {
         this.main_container.querySelectorAll('.stage').forEach((stage) => {
             stage.classList.remove('error');
         });
+        console.log("stages= ", visitsProcedurePopUpViewStages);
+        console.log("datas= ", visitsProcedurePopUpViewStageDatas);
 
         visitsProcedurePopUpViewStages.forEach((stage, index) => {
             if (stage == 'other') {
@@ -336,7 +338,8 @@ export class VisitsProcedurePopUpView {
                 }
 
             } else {
-                var data_store = visitsProcedurePopUpViewStageDatas[stage].selected_data;
+                var procedure_data_config = visitsProcedurePopUpViewStageDatas[stage];
+                var data_store = procedure_data_config.selected_data;
 
                 if (this[data_store] && this[data_store].size > 0) {
                     // console.log(this[data_store]);Array.from(this.added_diagnosis)
@@ -346,12 +349,16 @@ export class VisitsProcedurePopUpView {
                     }
                 }
                 else {
-                    fail = true;
-                    this.main_container.querySelector(`.stage.index_${index}`).classList.add('error');
+                    if (procedure_data_config['is_required']) {
+                        fail = true;
+                        this.main_container.querySelector(`.stage.index_${index}`).classList.add('error');
+                    }
                 }
 
             }
         })
+
+
         if (!fail) {
             this.selected_data_list.add(array);
             this.render_selected_list_view();

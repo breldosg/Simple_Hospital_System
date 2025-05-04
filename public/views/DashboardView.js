@@ -1,10 +1,11 @@
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
+import { applyStyle, getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class DashboardView {
     constructor() {
         this.demoData = this.getDemoData();
+        applyStyle(this.style())
     }
 
     async PreRender() {
@@ -24,7 +25,6 @@ export class DashboardView {
         const cont = document.querySelector('.update_cont');
         // Use await here to ensure ViewReturn completes
         cont.innerHTML = await this.ViewReturn(response);
-        this.applyStyle();
 
         this.renderChart(response.visit_statistics);
         this.initEventListeners();
@@ -482,7 +482,7 @@ export class DashboardView {
                             ${loginSessions.map((session, index) => `
                                 <div class="session-item">
                                     <div class="session-icon ${session.status == 1 ? 'current' : ''}">
-                                        <span class='${session.device == 'Desktop' ? 'switch_icon_desktop_windows' : (session.device == 'Android' ? 'switch_icon_mobile_screen_button' : 'switch_icon_laptop_mac')}'></span>
+                                        <span class='${session.device == 'Desktop' ? 'switch_icon_desktop_windows' : (session.device == 'Mobile' ? 'switch_icon_mobile_screen_button' : 'switch_icon_laptop_mac')}'></span>
                                     </div>
                                     <div class="session-details">
                                         <h4>${timeStamp_formatter(session.created_at)}</h4>
@@ -499,12 +499,6 @@ export class DashboardView {
         `;
     }
 
-
-    applyStyle() {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = this.style();
-        document.head.appendChild(styleElement);
-    }
 
     style() {
         return `

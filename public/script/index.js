@@ -618,12 +618,20 @@ export function getVisitPriority(visit_priority_word) {
     return priority;
 }
 
-export function applyStyle(style, id = '') {
-    const styleElement = document.createElement('style');
-    styleElement.textContent = style;
-    styleElement.id = id;
-    document.head.appendChild(styleElement);
+// export function applyStyle(style, id = '') {
+//     const styleElement = document.createElement('style');
+//     styleElement.textContent = style;
+//     styleElement.id = id;
+//     document.head.appendChild(styleElement);
+// }
+
+// styleManager.js
+export function applyStyle(cssString) {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(cssString);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
 }
+
 
 export function removeStyle(id) {
     const styleElement = document.getElementById(id);
