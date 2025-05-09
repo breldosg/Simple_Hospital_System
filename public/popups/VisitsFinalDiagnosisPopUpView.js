@@ -1,5 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { diagnosisArray, duration_unit } from "../custom/customizing.js";
+import { duration_unit } from "../custom/customizing.js";
+import { diagnosisArray } from "../custom/Pre_final_disgnosis.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -144,7 +145,7 @@ export class VisitFinalDiagnosisPopUpView {
                 this.added_diagnosis.delete(data);
                 card.remove();
 
- 
+
 
                 if (this.added_diagnosis.size <= 0) {
                     this.handleNoDataAdded()
@@ -177,7 +178,7 @@ export class VisitFinalDiagnosisPopUpView {
 
             // Call your search function here
             const found_options = searchInArray(diagnosisArray, value, null, 100);
- 
+
 
             if (found_options.length >= 1) {
                 final_diagnosis_input.updateOption(found_options);
@@ -270,7 +271,7 @@ export class VisitFinalDiagnosisPopUpView {
                 });
 
                 notify('top_left', result.message, 'success');
- 
+
 
                 this.close();
             } else {

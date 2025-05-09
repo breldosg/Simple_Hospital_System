@@ -96,6 +96,11 @@ import { VisitDetailCardView } from "../cards/VisitDetailCardView.js";
 import { UpdateProcedurePricePopUpView } from "../popups/UpdateProcedurePricePopUpView.js";
 import { ReportsView } from "../views/ReportsView.js";
 import { SalesReportView } from "../views/SalesReportView.js";
+import { AboutSystemView } from "../views/SettingViews/AboutSystemView.js";
+import { AppearanceSystemView } from "../views/SettingViews/AppearanceSystemView.js";
+import { PreFinalDiagnosisCodesSystemView } from "../views/SettingViews/PreFinalDiagnosisCodesSystemView.js";
+import { CompanyInformationView } from "../views/SettingViews/CompanyInformationView.js";
+
 
 
 class DashboardController {
@@ -105,6 +110,10 @@ class DashboardController {
 
     // Settings View
     settingsView = new SettingsView();
+    aboutSystemView = new AboutSystemView();
+    appearanceSystemView = new AppearanceSystemView();
+    preFinalDiagnosisCodesSystemView = new PreFinalDiagnosisCodesSystemView();
+    companyInformationView = new CompanyInformationView();
 
     // Loader View
     loaderView = new LoaderView();
@@ -234,6 +243,7 @@ class DashboardController {
     // Reports View
     reportsView = new ReportsView();
     salesReportView = new SalesReportView();
+
 }
 
 export const dashboardController = new DashboardController();

@@ -1,5 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { diagnosisArray, duration_unit } from "../custom/customizing.js";
+import { duration_unit } from "../custom/customizing.js";
+import { diagnosisArray } from "../custom/Pre_final_disgnosis.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";

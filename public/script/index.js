@@ -42,9 +42,31 @@ const routes = {
         view: dashboardController.dashboardView,
         title: 'Dashboard'
     },
+
+    // settings
     '/settings': {
         view: dashboardController.settingsView,
         title: 'Settings'
+    },
+    '/settings/about_system': {
+        view: dashboardController.aboutSystemView,
+        title: 'About System'
+    },
+    '/settings/appearance': {
+        view: dashboardController.appearanceSystemView,
+        title: 'Appearance'
+    },
+    '/settings/pre_final_diagnosis_codes': {
+        view: dashboardController.preFinalDiagnosisCodesSystemView,
+        title: 'Pre-Final Diagnosis Codes'
+    },
+    '/settings/pharmacy_units': {
+        view: dashboardController.pharmacyUnitsSystemView,
+        title: 'Pharmacy Units'
+    },
+    '/settings/company_information': {
+        view: dashboardController.companyInformationView,
+        title: 'Company Information'
     },
 
     '/users': {

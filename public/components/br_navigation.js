@@ -85,8 +85,8 @@ export class BrCustomNavigation extends HTMLElement {
                 ${role.navigationSections.map(section => `
                     <div class="nav_collection ${section.type === '/users' ? 'active' : ''}" type="${section.type}">
                         ${section.choices.map(choice =>
-                            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
-                        ).join('')}
+            `<a href="${choice.href}" data-link class="choice_item">${choice.label}</a>`
+        ).join('')}
                     </div>
                 `).join('')}
             </div>
@@ -370,7 +370,7 @@ export class BrCustomNavigation extends HTMLElement {
 
             link.addEventListener('click', (e) => {
                 console.log(link);
-                
+
                 if (link.hasAttribute('data-link')) {
                     e.preventDefault();
                     links.forEach(rLink => {
@@ -436,19 +436,19 @@ export class BrCustomNavigation extends HTMLElement {
         // Add profile dropdown toggle functionality
         const userProfile = this.shadowRoot.querySelector('#user_profile');
         const profileDropdown = this.shadowRoot.querySelector('.profile-dropdown');
-        
+
         userProfile.addEventListener('click', (e) => {
             e.stopPropagation();
             profileDropdown.classList.toggle('active');
         });
-        
+
         // Close dropdown when clicking outside
         document.addEventListener('click', () => {
             if (profileDropdown.classList.contains('active')) {
                 profileDropdown.classList.remove('active');
             }
         });
-        
+
         // Prevent dropdown from closing when clicking inside it
         profileDropdown.addEventListener('click', (e) => {
             e.stopPropagation();

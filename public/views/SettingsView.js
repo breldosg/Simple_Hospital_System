@@ -2,12 +2,56 @@ import { ALLOW_TO_ADD_PATIENT, VIEW_PATIENT_BTNS } from "../config/roles.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, decodeHTML, getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
+import { applyStyle, date_formatter, decodeHTML, getVisitPriority, getVisitType, notify, timeStamp_formatter } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class SettingsView {
     constructor() {
-        this.applyStyle();
+        applyStyle(this.style());
+
+        this.settingMenu = [
+            {
+                type: 'title',
+                title: 'System Settings',
+            },
+            {
+                type: 'link',
+                title: 'About System',
+                path: '/settings/about_system',
+                component: 'aboutSystemView',
+                start_active: true
+            },
+            {
+                type: 'link',
+                title: 'Company Information',
+                path: '/settings/company_information',
+                component: 'companyInformationView',
+                start_active: false
+            },
+            {
+                type: 'link',
+                title: 'Appearance',
+                path: '/settings/appearance',
+                start_active: false
+            },
+            {
+                type: 'title',
+                title: 'Default Attribute Settings',
+            },
+            {
+                type: 'link',
+                title: 'Pre-Final Diagnosis Codes',
+                path: '/settings/pre_final_diagnosis_codes',
+                start_active: false
+            },
+            // {
+            //     type: 'link',
+            //     title: 'Pharmacy Units',
+            //     path: '/settings/pharmacy_units',
+            //     start_active: false
+            // },
+
+        ]
     }
 
     async PreRender() {
@@ -19,17 +63,12 @@ export class SettingsView {
         // get user role in global state
         this.user_data = globalStates.getState('user_data');
 
-        // Fetch data and wait for result
-        // const response = await this.fetchData();
-        // console.log(response);
-
-
         const cont = document.querySelector('.update_cont');
         // Use await here to ensure ViewReturn completes
         cont.innerHTML = this.ViewReturn();
-
         this.main_container = document.querySelector('.main_settings_container');
-
+        this.renderSettingMenu();
+        this.render_example_view();
     }
 
 
@@ -76,7 +115,7 @@ export class SettingsView {
 
             <div class="settings_top_cont">
                 <div class="logo_cont">
-                    <img src="public/assets/logo/Primary_logo.svg" alt="logo">
+                    <img src="/public/assets/logo/Primary_logo.svg" alt="logo">
                 </div>
                 <div class="settings_top_cont_right">
                     <p class="settings_top_cont_right_title">System Settings <span>Admin</span></p>
@@ -86,17 +125,10 @@ export class SettingsView {
 
             <div class="settings_bottom_cont">
                 <div class="settings_bottom_cont_left">
-                    <h3>Settings</h3>
+                    
                 </div>
                 <div class="settings_bottom_cont_right">
 
-                    <div class="settings_bottom_cont_right_example_view">
-                        <div class="example_logo_cont">
-                            <img src="public/assets/logo/SubMark.png" alt="logo">
-                        </div>
-                        <h3>System Settings</h3>
-                        <p>Manage your system settings here</p>
-                    </div>
 
                 </div>
             </div>
@@ -105,11 +137,54 @@ export class SettingsView {
         `;
     }
 
+    render_example_view() {
+        const cont = document.querySelector('.settings_bottom_cont_right');
+        cont.innerHTML = `
+        <div class="settings_bottom_cont_right_example_view">
+            <div class="example_logo_cont">
+                <img src="/public/assets/logo/SubMark.png" alt="logo">
+            </div>
+            <h3>System Settings</h3>
+            <p>Manage your system settings here</p>
+        </div>
+        `;
+    }
 
-    applyStyle() {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = this.style();
-        document.head.appendChild(styleElement);
+    renderSettingMenu() {
+        const settingMenu = this.main_container.querySelector('.settings_bottom_cont_left');
+        this.settingMenu.forEach(item => {
+            if (item.type === 'title') {
+                var component = document.createElement('p');
+                component.className = 'settings_bottom_cont_left_title';
+                component.innerHTML = item.title;
+            } else {
+                var component = document.createElement('a');
+                component.href = item.path;
+                component.className = 'choice_item';
+                component.innerHTML = item.title;
+                component.setAttribute('setting_link', item.path);
+                if (item.start_active) {
+                    component.classList.add('active');
+                }
+
+                component.addEventListener('click', (e) => {
+                    if (component.hasAttribute('setting_link')) {
+                        e.preventDefault();
+
+                        // remove active class from all components
+                        settingMenu.querySelectorAll('a.active').forEach(component => {
+                            component.classList.remove('active');
+                        });
+                        component.classList.add('active');
+
+                        // pre render the component
+                        // dashboardController[item.component].PreRender();
+                        frontRouter.navigate(item.path);
+                    }
+                });
+            }
+            settingMenu.appendChild(component);
+        });
     }
 
     style() {

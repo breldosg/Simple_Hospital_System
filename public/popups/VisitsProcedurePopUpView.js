@@ -1,5 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { diagnosisArray, duration_unit, visitsProcedurePopUpViewStageDatas, side_slide_selector_data_role_icon_name, visitsProcedurePopUpViewStages } from
+import { duration_unit, visitsProcedurePopUpViewStageDatas, side_slide_selector_data_role_icon_name, visitsProcedurePopUpViewStages } from
     "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { date_formatter, debounce, getCurrentDate, notify, searchInArray } from "../script/index.js";

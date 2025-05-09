@@ -22,12 +22,12 @@
 ======= Procedure 
 1- tengeneza section ya kutengeneza na update procedure na category ✔️
 2- tendeza view yakujaza report za procedure
-3- kuna procedure haziitaji anestezia au asisstant
+3- kuna procedure haziitaji anestezia au asisstant ✔️
 
 
 ======== Patient
 1- Complete History 95%
-2- update Visit
+2- update Visit ✔️
 
 
 ======= Staff
@@ -36,15 +36,23 @@
 3- ongeza practationaer number mda unamtengeza au update staff
 
 
+========= Global
+1- Login page theme mode  
+2- kwenye hospital system muda unacreate mgonjwa hmn haja ya gardian wala payment detail gardian na payment detail anatakiwa mda unacreate visit 
+
 ========= ADMIN
 1- Complete Setting
 
 --//////////// Settings ///////////////////////
 1- default abstract_updates
     - pri/final diagnosis codes
-    - 
+    - medicine units
+    -
 2- Core System update
     - System Name/Jina la taasis inayotumia hiyo System
+            -- Update Jina La taasis
+            -- Update logo za taasis
+            -- Update taarifa za mawasiliano
     - Logo Change 
 3- Interface
 4- About System
