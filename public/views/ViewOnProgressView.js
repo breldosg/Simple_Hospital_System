@@ -432,7 +432,8 @@ export class ViewOnProgressView {
                         width:100%;
                     }
 
-                    .name {
+                    .name,
+                    .date {
                         text-align: left;
                     }
 

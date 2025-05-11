@@ -100,6 +100,7 @@ import { AboutSystemView } from "../views/SettingViews/AboutSystemView.js";
 import { AppearanceSystemView } from "../views/SettingViews/AppearanceSystemView.js";
 import { PreFinalDiagnosisCodesSystemView } from "../views/SettingViews/PreFinalDiagnosisCodesSystemView.js";
 import { CompanyInformationView } from "../views/SettingViews/CompanyInformationView.js";
+import { VisitsOtherServicePopUpView } from "../popups/VisitsOtherServicePopUpView.js";
 
 
 
@@ -146,7 +147,7 @@ class DashboardController {
     visitFinalDiagnosisPopUpView = new VisitFinalDiagnosisPopUpView();
     visitPlanForNextVisitPopUpView = new VisitPlanForNextVisitPopUpView();
     visitRadiologyExamPopUpView = new VisitRadiologyExamPopUpView();
-
+    visitsOtherServicePopUpView = new VisitsOtherServicePopUpView();
     visitLabTestOrdersPopUpView = new VisitLabTestOrdersPopUpView();
     visitsPreliminaryDiagnosisPopUpView = new VisitsPreliminaryDiagnosisPopUpView();
     visitsProcedurePopUpView = new VisitsProcedurePopUpView();

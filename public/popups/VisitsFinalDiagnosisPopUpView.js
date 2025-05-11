@@ -1,8 +1,7 @@
 import { dashboardController } from "../controller/DashboardController.js";
-import { duration_unit } from "../custom/customizing.js";
 import { diagnosisArray } from "../custom/Pre_final_disgnosis.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { debounce, notify, searchInArray } from "../script/index.js";
+import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitFinalDiagnosisPopUpView {
@@ -11,6 +10,7 @@ export class VisitFinalDiagnosisPopUpView {
         this.data = null;
         this.added_diagnosis = new Set();
         this.visit_id = '';
+        applyStyle(this.style());
     }
 
     async PreRender(params = '') {
@@ -47,14 +47,7 @@ export class VisitFinalDiagnosisPopUpView {
     <div class="body">
         <div class="top">
             <br-input placeholder="Enter diagnosis" option="true" label="Enter Diagnosis"
-                type="text" styles="
-        border-radius: var(--input_main_border_r);
-        width: 440px;
-        padding: 10px;
-        height: 41px;
-        background-color: transparent;
-        border: 2px solid var(--input_border);
-        " dropDownStyles="border: 2px solid var(--input_border);" dropDownBorder_radius="var(--input_main_border_r)"
+                type="text" styles="${this.input_styles()}" dropDownStyles="border: 2px solid var(--input_border);" dropDownBorder_radius="var(--input_main_border_r)"
                 labelStyles="font-size: 12px;" id="final_diagnosis_input"></br-input>
 
             <br-button class="card-button" id="add_to_added_list_btn" type="add">Add</br-button>
@@ -169,6 +162,16 @@ export class VisitFinalDiagnosisPopUpView {
 
         const final_diagnosis_input = document.querySelector('.final_diagnosis_popUp #final_diagnosis_input');
 
+        if (final_diagnosis_input) {
+            // set initial options
+            final_diagnosis_input.updateOption(searchInArray(diagnosisArray, '', null, 100));
+            
+            // add event listener
+            final_diagnosis_input.addEventListener('input', () => {
+                debouncedFunction();
+            });
+        }
+
         const debouncedFunction = debounce(() => {
             let value = final_diagnosis_input.getValue();
 
@@ -185,12 +188,6 @@ export class VisitFinalDiagnosisPopUpView {
             }
 
         }, 800);
-
-        final_diagnosis_input.addEventListener('input', () => {
-
-            debouncedFunction();
-
-        });
 
         const add_to_added_list_btn = document.querySelector('.final_diagnosis_popUp #add_to_added_list_btn');
 
@@ -215,6 +212,17 @@ export class VisitFinalDiagnosisPopUpView {
         const cont = document.querySelector('.popup');
         cont.classList.remove('active');
         cont.innerHTML = '';
+    }
+
+    input_styles() {
+        return `
+        border-radius: var(--input_main_border_r);
+        width: 440px;
+        padding: 10px;
+        height: 41px;
+        background-color: transparent;
+        border: 2px solid var(--input_border);
+        `
     }
 
     async save_final_diagnosis_note() {
@@ -284,5 +292,199 @@ export class VisitFinalDiagnosisPopUpView {
             btn_submit.removeAttribute('loading');
         }
 
+    }
+
+    style() {
+        return `
+            .final_diagnosis_popUp {
+                width: 481px;
+                height: fit-content;
+                max-height: 650px;
+                background: var(--pure_white_background);
+                border-radius: var(--main_border_r);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                position: relative;
+                z-index: 1;
+
+                .cont_heading {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: var(--main_padding);
+                    padding-bottom: 0;
+
+                    .heading {
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+
+                    .close_btn {
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 5px;
+                        flex: none;
+                        cursor: pointer;
+                    }
+
+                    .close_btn:hover {
+                        box-shadow: 0 0 5px 0 #00000019;
+                    }
+                }
+
+                .body {
+                    padding-bottom: var(--main_padding);
+                    overflow-y: scroll;
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+
+
+
+                    .card-button {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 35px;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 12px;
+                        color: var(--white);
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                        flex: none;
+
+                    }
+
+                    .top {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                        padding-bottom: 20px;
+                        border-bottom: 2px solid var(--border_color_op1);
+                        padding-inline: var(--main_padding);
+
+                        #preliminary_diagnosis_input {
+                            position: relative;
+                            z-index: 2;
+                        }
+                    }
+
+                    .down {
+                        overflow-y: scroll;
+                        display: flex;
+                        flex-direction: column;
+                        /* gap: 10px; */
+                        padding-top: 20px;
+                        width: 100%;
+
+
+                        .heading_cont {
+                            padding-inline: var(--main_padding);
+
+                            .heading {
+                                font-size: 14px;
+                                font-weight: bold;
+                            }
+                        }
+
+                        .card_list {
+                            margin-top: 10px;
+                            padding-inline: var(--main_padding);
+                            /* padding: 5px; */
+                            overflow-y: scroll;
+                            display: flex;
+                            flex-direction: column;
+                            min-height: 200px;
+                            gap: 10px;
+                            width: 100%;
+                            border-bottom: 2px solid var(--border_color_op1);
+                            padding-bottom: 20px;
+
+
+
+                            .card {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                /* border-radius: var(--main_border_r); */
+                                border-bottom: 2px solid var(--pri_op);
+                                /* box-shadow: 0 0 5px 0 #0000001d; */
+                                cursor: pointer;
+                                width: 100%;
+                                padding: 10px 5px;
+
+                                .word {
+                                    width: 85%;
+                                    font-size: 14px;
+                                    font-weight: 500;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    display: inline-block;
+                                }
+
+                                .remove_btn {
+                                    width: 35px;
+                                    height: 35px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border-radius: 5px;
+                                    flex: none;
+                                    cursor: pointer;
+                                    background-color: var(--white_error_color_op1);
+
+                                    span {
+                                        color: var(--white_error_color);
+                                        font-size: 18px;
+                                    }
+                                }
+
+                                .remove_btn:hover {
+                                    span {
+                                        color: var(--error_color);
+                                    }
+                                }
+                            }
+
+                            .card:hover{
+                                background-color: var(--pri_op1);
+                            }
+
+                            .example {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                height: 100%;
+
+                                p {
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                    color: var(--black-op2);
+                                }
+                            }
+
+                        }
+
+                        .heading_btn {
+                            padding-inline: var(--main_padding);
+                            padding-top: 20px;
+
+
+
+                        }
+                    }
+
+                }
+
+            }
+        `;
     }
 }

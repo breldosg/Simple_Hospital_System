@@ -540,13 +540,13 @@ body {
             width: 70%;
             min-width: 300px;
 
-            .card_title{
+            .card_title {
                 font-size: 14px;
                 font-weight: 500;
                 margin-bottom: 2px;
             }
 
-            .card_description{
+            .card_description {
                 color: var(--gray_text);
             }
 
@@ -569,7 +569,7 @@ body {
                 gap: 10px;
                 margin-top: 10px;
 
-                .card_logo{
+                .card_logo {
                     width: 300px;
                     height: 160px;
                     display: flex;
@@ -580,22 +580,23 @@ body {
                     border: 1px solid var(--border_color);
                     flex: none;
 
-                    img{
+                    img {
                         width: 80%;
                         height: 80%;
                         object-fit: contain;
                     }
                 }
-                .card_logo_upload{
+
+                .card_logo_upload {
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
 
-                    .card_logo_upload_button_cont{
+                    .card_logo_upload_button_cont {
                         display: flex;
                         gap: 10px;
 
-                        .card_logo_upload_button_button{
+                        .card_logo_upload_button_button {
                             all: unset;
                             padding: 10px 30px;
                             border-radius: var(--input_main_border_r);
@@ -604,7 +605,7 @@ body {
                             font-weight: 700;
                             cursor: pointer;
 
-                            &:hover{
+                            &:hover {
                                 background-color: var(--pri_color);
                             }
                         }
@@ -613,18 +614,18 @@ body {
             }
         }
 
-        .submit_btn_cont{
+        .submit_btn_cont {
             display: flex;
             flex-direction: column;
             gap: 10px;
             padding-block: 20px;
-            border-top:2px solid var(--border_color);
+            border-top: 2px solid var(--border_color);
 
-            .submit_btn_text{
+            .submit_btn_text {
                 color: var(--gray_text);
             }
 
-            .submit_btn{
+            .submit_btn {
                 all: unset;
                 padding: 10px 30px;
                 border-radius: var(--input_main_border_r);
@@ -634,7 +635,7 @@ body {
                 cursor: pointer;
                 width: fit-content;
 
-                &:hover{
+                &:hover {
                     background-color: var(--pri_color);
                 }
             }
@@ -13459,7 +13460,7 @@ body {
 
     }
 
-    .final_diagnosis_popUp {
+    .final_diagnosis_popUpddd {
         width: 481px;
         height: fit-content;
         max-height: 650px;

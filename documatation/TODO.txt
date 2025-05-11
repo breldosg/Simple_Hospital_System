@@ -47,7 +47,7 @@
 1- default abstract_updates
     - pri/final diagnosis codes
     - medicine units
-    -
+    - other service
 2- Core System update
     - System Name/Jina la taasis inayotumia hiyo System
             -- Update Jina La taasis

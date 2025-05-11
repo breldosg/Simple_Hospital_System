@@ -19,7 +19,7 @@ export class SettingsView {
                 title: 'About System',
                 path: '/settings/about_system',
                 component: 'aboutSystemView',
-                start_active: true
+                start_active: false
             },
             {
                 type: 'link',
@@ -40,8 +40,14 @@ export class SettingsView {
             },
             {
                 type: 'link',
-                title: 'Pre-Final Diagnosis Codes',
+                title: 'Pre-Final Diagnosis Customization',
                 path: '/settings/pre_final_diagnosis_codes',
+                start_active: false
+            },
+            {
+                type: 'link',
+                title: 'Other Service Customization',
+                path: '/settings/other_service_customization',
                 start_active: false
             },
             // {

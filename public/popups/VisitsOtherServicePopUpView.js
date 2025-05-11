@@ -1,10 +1,9 @@
 import { dashboardController } from "../controller/DashboardController.js";
- 
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
-export class VisitLabTestOrdersPopUpView {
+export class VisitsOtherServicePopUpView {
     constructor() {
         this.callback = null;
         this.data = null;
@@ -35,6 +34,7 @@ export class VisitLabTestOrdersPopUpView {
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
         cont.innerHTML = this.ViewReturn();
+        this.main_container = document.querySelector('.other_service_popup');
 
 
         this.attachListeners();
@@ -43,10 +43,10 @@ export class VisitLabTestOrdersPopUpView {
 
     ViewReturn() {
         return `
-<div class="container lab_order_popup">
+<div class="container other_service_popup">
 
     <div class="cont_heading">
-        <p class="heading">Add Laboratory Test Order</p>
+        <p class="heading">Add Other Service</p>
         <div class="close_btn">
             <span class='switch_icon_close'>
             </span>
@@ -56,7 +56,7 @@ export class VisitLabTestOrdersPopUpView {
 
         <div class="left">
             <div class="top_head">
-                <p class="heading">Select Laboratory Test</p>
+                <p class="heading">Select Other Service</p>
 
                 <div class="search_cont">
                     <input type="text" placeholder="Search" class="lab_order_popup_search">
@@ -121,7 +121,7 @@ export class VisitLabTestOrdersPopUpView {
 
     render_lab_test_data() {
         if (globalStates.getState('lab_test_data_exists')) {
-            document.querySelector('.lab_order_popup .left_body_cont .lab_order_pop_loader_cont').classList.remove('active');
+            this.main_container.querySelector('.left_body_cont .lab_order_pop_loader_cont').classList.remove('active');
             this.loadLabTestCategoryList();
             this.loadLabTestList();
             this.render_selected_lab_test();
@@ -132,7 +132,7 @@ export class VisitLabTestOrdersPopUpView {
     }
 
     render_selected_lab_test() {
-        const selected_radiology_list = document.querySelector('.lab_order_popup .right_body_cont');
+        const selected_radiology_list = this.main_container.querySelector('.right_body_cont');
         selected_radiology_list.innerHTML = '';
         // the item is the id of radiology test so take name from the radiology_data.radiology_tests
         const lab_test_data = globalStates.getState('lab_test_data');
@@ -172,7 +172,7 @@ export class VisitLabTestOrdersPopUpView {
     loadLabTestCategoryList() {
         if (globalStates.getState('lab_test_data_exists')) {
             const lab_test_data = globalStates.getState('lab_test_data');
-            const category_list = document.querySelector('.lab_order_popup .group_category_cont');
+            const category_list = this.main_container.querySelector('.group_category_cont');
 
             category_list.innerHTML = '';
 
@@ -217,7 +217,7 @@ export class VisitLabTestOrdersPopUpView {
     loadLabTestList() {
         if (globalStates.getState('lab_test_data_exists')) {
             const lab_test_data = globalStates.getState('lab_test_data');
-            const lab_test_list = document.querySelector('.lab_order_popup .group_category_list');
+            const lab_test_list = this.main_container.querySelector('.group_category_list');
             lab_test_list.innerHTML = '';
 
             var lab_test_list_data = lab_test_data.lab_test_tests;
@@ -266,7 +266,7 @@ export class VisitLabTestOrdersPopUpView {
     }
 
     attachListeners() {
-        const cancel_btns = document.querySelectorAll('.lab_order_popup #confirm_cancel, .lab_order_popup .close_btn');
+        const cancel_btns = this.main_container.querySelectorAll('#confirm_cancel, .close_btn');
 
         cancel_btns.forEach((btn) => {
             btn.addEventListener('click', () => {
@@ -274,20 +274,20 @@ export class VisitLabTestOrdersPopUpView {
             });
         });
 
-        const search_input = document.querySelector('.lab_order_popup .lab_order_popup_search');
+        const search_input = this.main_container.querySelector('.lab_order_popup_search');
         search_input.addEventListener('input', debounce((e) => {
             this.searchQuery = e.target.value;
 
             this.loadLabTestList();
         }, 500));
 
-        const search_btn = document.querySelector('.lab_order_popup .btn_search');
+        const search_btn = this.main_container.querySelector('.btn_search');
         search_btn.addEventListener('click', () => {
             this.searchQuery = search_input.value;
             this.loadLabTestList();
         });
 
-        const submit_btn = document.querySelector('.lab_order_popup br-button[type="btn"]');
+        const submit_btn = this.main_container.querySelector('br-button[type="btn"]');
         submit_btn.addEventListener('click', () => {
             if (this.selected_lab_test.length == 0) {
                 notify('top_left', 'Please select at least one radiology test', 'warning');
@@ -685,7 +685,7 @@ export class VisitLabTestOrdersPopUpView {
     }
 
     @media screen and (max-width: 850px) {
-        .lab_order_popup {
+        .other_service_popup {
             gap:0;
             width:100%;
             max-width:95%;

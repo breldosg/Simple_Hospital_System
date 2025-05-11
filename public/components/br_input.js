@@ -188,7 +188,7 @@ export class BrCustomInput extends HTMLElement {
                 transform: translateX(-50%);
                 position: absolute;
                 background-color: var(--pure_white_background);
-                z-index: 1;
+                z-index: 1000000000000000;
                 max-height: 150px;
                 overflow-y: auto;
                 width: 101%;

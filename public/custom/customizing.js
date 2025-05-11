@@ -73,6 +73,12 @@ export const visit_add_card_btn = [
                 active_if: ['visitFinalDiagnosisPopUpView'],
                 operator_roles: ['ICT', 'DCT', 'SDCT']
             },
+            {
+                component: 'visitsOtherServicePopUpView',
+                title: 'Other Services',
+                active_if: ['visitFinalDiagnosisPopUpView'],
+                operator_roles: ['ICT', 'DCT', 'SDCT']
+            },
         ],
     },
 ];
