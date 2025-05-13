@@ -598,16 +598,14 @@ body {
 
                         .card_logo_upload_button_button {
                             all: unset;
-                            padding: 10px 30px;
+                            padding: 10px 35px;
                             border-radius: var(--input_main_border_r);
-                            background-color: var(--pri_op);
-                            font-size: 14px;
+                            background-color: var(--pri_color);
+                            font-size: var(--main_font_size);
                             font-weight: 700;
                             cursor: pointer;
-
-                            &:hover {
-                                background-color: var(--pri_color);
-                            }
+                            width: fit-content;
+                            color: var(--white);
                         }
                     }
                 }
@@ -627,17 +625,15 @@ body {
 
             .submit_btn {
                 all: unset;
-                padding: 10px 30px;
+                padding: 10px 35px;
                 border-radius: var(--input_main_border_r);
-                background-color: var(--pri_op);
-                font-size: 14px;
+                background-color: var(--pri_color);
+                font-size: var(--main_font_size);
                 font-weight: 700;
                 cursor: pointer;
                 width: fit-content;
+                color: var(--white);
 
-                &:hover {
-                    background-color: var(--pri_color);
-                }
             }
         }
 
