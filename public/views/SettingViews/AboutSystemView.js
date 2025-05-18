@@ -1,3 +1,4 @@
+import { SYSTEM_MAIN_LOGO, SYSTEM_NAME } from "../../config/config.js";
 import { ALLOW_TO_ADD_PATIENT, VIEW_PATIENT_BTNS } from "../../config/roles.js";
 import { dashboardController } from "../../controller/DashboardController.js";
 import { visit_priority, visit_type } from "../../custom/customizing.js";
@@ -77,9 +78,9 @@ export class AboutSystemView {
             <div class="about_system_card">
                 <div class="system_header">
                     <div class="logo_container">
-                        <img src="/public/assets/logo/SubMark.png" alt="Hospital System Logo" class="system_logo">
+                        <img src="${SYSTEM_MAIN_LOGO}" alt="${SYSTEM_NAME} Logo" class="system_logo">
                     </div>
-                    <p class="system_title">Hospital Management System</p>
+                    <p class="system_title">${SYSTEM_NAME}</p>
                 </div>
 
                 <div class="action_links">
@@ -120,7 +121,94 @@ export class AboutSystemView {
 
     style() {
         return `
-    
+        .about_system_container_view {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .about_system_card {
+                padding: var(--main_padding);
+                border-radius: var(--main_border_r);
+                background-color: var(--pure_white_background);
+                width: 100%;
+
+
+                .system_header {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    padding-bottom: 10px;
+                    margin-bottom: 10px;
+                    border-bottom: 1px solid var(--border_color);
+
+                    .logo_container {
+                        width: auto;
+                        height: 40px;
+                        flex: none;
+
+                        img {
+                            width: auto;
+                            height: 100%;
+                            object-fit: contain;
+                            object-position: center;
+                        }
+                    }
+
+                    .system_title {
+                        font-size: 30px;
+                        font-weight: 900;
+                    }
+                }
+
+                .action_links {
+                    display: grid;
+                    gap: 5px;
+
+
+                    .action_link {
+                        display: flex;
+                        justify-content: space-between;
+                        text-decoration: none;
+                        padding: 10px;
+                        border-radius: var(--main_border_r);
+                        /* border-bottom: 1px solid var(--border_color); */
+
+                        &:hover {
+                            background-color: var(--pri_op2);
+                        }
+
+                        .action_text {
+                            font-size: 14px;
+                            font-weight: 500;
+                        }
+                    }
+
+
+                }
+            }
+
+            .system_footer {
+                padding: var(--main_padding);
+                border-radius: var(--main_border_r);
+                background-color: var(--pure_white_background);
+                margin-top: 5rem;
+                text-align: center;
+                padding-top: 2rem;
+
+
+                p {
+                    margin: 0.5rem 0;
+                    color: var(--text_secondary);
+                }
+
+                .footer_note {
+                    margin-top: 1rem;
+                    font-style: italic;
+                    color: var(--text_secondary);
+                }
+            }
+        }
         `;
     }
 }

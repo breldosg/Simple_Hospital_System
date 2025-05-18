@@ -56,9 +56,13 @@ const routes = {
         view: dashboardController.appearanceSystemView,
         title: 'Appearance'
     },
-    '/settings/pre_final_diagnosis_codes': {
-        view: dashboardController.preFinalDiagnosisCodesSystemView,
-        title: 'Pre-Final Diagnosis Codes'
+    '/settings/diagnosis_codes_management': {
+        view: dashboardController.diagnosisCodesManagementSettingView,
+        title: 'Diagnosis Codes Management'
+    },
+    '/settings/services_management': {
+        view: dashboardController.servicesManagementSettingView,
+        title: 'Services Management'
     },
     '/settings/pharmacy_units': {
         view: dashboardController.pharmacyUnitsSystemView,

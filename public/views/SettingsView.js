@@ -19,20 +19,17 @@ export class SettingsView {
                 title: 'About System',
                 path: '/settings/about_system',
                 component: 'aboutSystemView',
-                start_active: false
             },
             {
                 type: 'link',
                 title: 'Company Information',
                 path: '/settings/company_information',
                 component: 'companyInformationView',
-                start_active: false
             },
             {
                 type: 'link',
                 title: 'Appearance',
                 path: '/settings/appearance',
-                start_active: false
             },
             {
                 type: 'title',
@@ -40,21 +37,18 @@ export class SettingsView {
             },
             {
                 type: 'link',
-                title: 'Pre-Final Diagnosis Customization',
-                path: '/settings/pre_final_diagnosis_codes',
-                start_active: false
+                title: 'Diagnosis Codes Management',
+                path: '/settings/diagnosis_codes_management',
             },
             {
                 type: 'link',
-                title: 'Other Service Customization',
-                path: '/settings/other_service_customization',
-                start_active: false
+                title: 'Services Management',
+                path: '/settings/services_management'
             },
             // {
             //     type: 'link',
             //     title: 'Pharmacy Units',
-            //     path: '/settings/pharmacy_units',
-            //     start_active: false
+            //     path: '/settings/pharmacy_units'
             // },
 
         ]
@@ -65,6 +59,8 @@ export class SettingsView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
+        // Get the current path, default to '/users' if on '/dashboard'
+        this.rawPath = window.location.pathname.toLowerCase();
 
         // get user role in global state
         this.user_data = globalStates.getState('user_data');
@@ -75,43 +71,6 @@ export class SettingsView {
         this.main_container = document.querySelector('.main_settings_container');
         this.renderSettingMenu();
         this.render_example_view();
-    }
-
-
-    async fetchData() {
-        try {
-            const response = await fetch('/api/users/get_dashboard_data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.status == 401) {
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.5s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        frontRouter.navigate('/login');
-                        document.body.style.opacity = '1';
-                    }, 500);
-                }, 500);
-            }
-
-            return result.success ? result.data : null;
-        } catch (error) {
-            console.error('Error:', error);
-            notify('top_left', error.message, 'error');
-            return null;
-        }
     }
 
 
@@ -169,7 +128,7 @@ export class SettingsView {
                 component.className = 'choice_item';
                 component.innerHTML = item.title;
                 component.setAttribute('setting_link', item.path);
-                if (item.start_active) {
+                if (this.rawPath == item.path) {
                     component.classList.add('active');
                 }
 
@@ -195,6 +154,165 @@ export class SettingsView {
 
     style() {
         return `
+            
+        .main_settings_container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: auto;
+
+            .settings_top_cont {
+                display: none;
+                align-items: center;
+                gap: 10px;
+                padding: 20px;
+                background-color: var(--pure_white_background_op);
+                border-radius: var(--main_border_r);
+
+                .logo_cont {
+                    width: auto;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+                }
+
+                .settings_top_cont_right {
+                    .settings_top_cont_right_title {
+                        /* display: flex; */
+                        /* align-items: flex-start; */
+                        gap: 10px;
+                        /* color: var(--gray_text); */
+                        font-size: 25px;
+                        font-weight: 500;
+
+                        span {
+                            font-size: var(--main_font_size_sm);
+                            font-weight: 700;
+                            color: var(--light_pri_color);
+                            padding: 3px 10px;
+                            border-radius: 10px;
+                            background-color: var(--pri_op);
+                        }
+
+                    }
+
+                    .settings_top_cont_right_description {
+                        color: var(--gray_text);
+                    }
+
+
+                }
+
+
+
+
+            }
+
+            .settings_bottom_cont {
+                display: grid;
+                grid-template-columns: 300px 1fr;
+                gap: 20px;
+                height: 100%;
+                flex: none;
+
+                .settings_bottom_cont_left {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--pure_white_background_op);
+                    border-radius: var(--main_border_r);
+                    overflow-y: scroll;
+                    flex: none;
+
+                    .settings_bottom_cont_left_title {
+                        font-size: 16px;
+                        font-weight: 900;
+                        color: var(--gray_text);
+                        padding: var(--main_padding) 0 0 var(--main_padding);
+
+                    }
+
+                    .choice_item {
+                        font-size: 14px;
+                        padding-block: 10px;
+                        padding-inline: var(--main_padding);
+                        border-left: 2px solid transparent;
+                    }
+
+                    .choice_item.active {
+                        border-left-color: var(--light_pri_color);
+                        background-color: var(--pri_op2);
+                        color: var(--light_pri_color);
+
+                    }
+
+                }
+
+                .settings_bottom_cont_right {
+                    width: 100%;
+                    height: 100%;
+                    overflow-y: scroll;
+
+                    /* ------------------------------------------- */
+                    .settings_bottom_cont_right_example_view {
+                        border-radius: var(--main_border_r);
+                        background-color: var(--pure_white_background_op);
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        /* gap: 10px; */
+
+                        .example_logo_cont {
+                            width: 80px;
+                            height: 80px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                            margin-bottom: 10px;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: contain;
+                                filter: grayscale(100%);
+                                opacity: 0.7;
+                            }
+
+                        }
+
+                        h3 {
+                            font-size: 25px;
+                            font-weight: 700;
+                            color: var(--gray_text);
+                        }
+
+                        p {
+                            color: var(--gray_text);
+                            width: 300px;
+                            text-align: center;
+                        }
+                    }
+
+
+                }
+
+            }
+
+        }
 
         `;
     }

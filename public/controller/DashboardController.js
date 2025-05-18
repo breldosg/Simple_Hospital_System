@@ -98,9 +98,11 @@ import { ReportsView } from "../views/ReportsView.js";
 import { SalesReportView } from "../views/SalesReportView.js";
 import { AboutSystemView } from "../views/SettingViews/AboutSystemView.js";
 import { AppearanceSystemView } from "../views/SettingViews/AppearanceSystemView.js";
-import { PreFinalDiagnosisCodesSystemView } from "../views/SettingViews/PreFinalDiagnosisCodesSystemView.js";
+import { DiagnosisCodesManagementSettingView } from "../views/SettingViews/DiagnosisCodesManagementSettingView.js";
 import { CompanyInformationView } from "../views/SettingViews/CompanyInformationView.js";
 import { VisitsOtherServicePopUpView } from "../popups/VisitsOtherServicePopUpView.js";
+import { ServicesManagementSettingView } from "../views/SettingViews/ServicesManagementSettingView.js";
+import { CreateServicePopUp } from "../popups/SettingPopups/CreateServicePopUp.js";
 
 
 
@@ -113,8 +115,13 @@ class DashboardController {
     settingsView = new SettingsView();
     aboutSystemView = new AboutSystemView();
     appearanceSystemView = new AppearanceSystemView();
-    preFinalDiagnosisCodesSystemView = new PreFinalDiagnosisCodesSystemView();
+    diagnosisCodesManagementSettingView = new DiagnosisCodesManagementSettingView();
     companyInformationView = new CompanyInformationView();
+    servicesManagementSettingView = new ServicesManagementSettingView();
+    
+    // Setting Popup
+    createServicePopUp = new CreateServicePopUp();
+
 
     // Loader View
     loaderView = new LoaderView();
