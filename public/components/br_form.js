@@ -81,13 +81,26 @@ export class BrCustomForm extends HTMLElement {
     handleSubmit() {
         let data = {};
         let isValid = true;
-        const inputs = this.shadowRoot.host.querySelectorAll('br-input,br-select,br-multiple-select'); // Get elements assigned to the slot
+        const inputs = this.shadowRoot.host.querySelectorAll('br-input,br-select,br-multiple-select,input'); // Get elements assigned to the slot
 
 
         inputs.forEach(input => {
 
             if (input.tagName.toLowerCase() === 'br-input') {
                 const value = input.getValue();
+                const required = input.hasAttribute('required');
+
+                // Check if input is required and has no value
+                if (required && (value === null || value.trim() === '')) {
+                    input.setAttribute('error', 'true'); // Set error attribute if value is empty
+                    isValid = false;
+                } else {
+                    input.removeAttribute('error'); // Remove error attribute if value is valid
+                    data[input.getAttribute('name')] = value; // Add input value to data object for easy access
+                }
+            }
+            else if (input.tagName.toLowerCase() === 'input') {
+                const value = input.value;
                 const required = input.hasAttribute('required');
 
                 // Check if input is required and has no value

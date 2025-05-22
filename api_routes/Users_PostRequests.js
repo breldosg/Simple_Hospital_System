@@ -29,6 +29,10 @@ const ROUTE_CONFIG = {
 
     // Dashboard
     get_dashboard_data: 1240,
+
+
+    // Company 
+    update_company_info: 1380,
 };
 
 

@@ -1,4 +1,5 @@
 /* @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"); */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
 
 /* Regular */
 @font-face {
@@ -48,13 +49,24 @@
     font-style: italic;
 }
 
+/* .geist-main {
+    font-family: "Geist", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+} */
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "DM Sans";
+    /* font-family: "DM Sans"; */
+    /* font-family: "Geist", sans-serif; */
     color: var(--main_text);
     transition: all 0.3s ease-in;
+
+    font-family: "Geist", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 .example {
@@ -370,6 +382,7 @@ input {
     /* --main_font_size_sm: 1.2vw; */
     --main_font_size: 12px;
     --main_font_size_sm: 10px;
+    --main_font_size_title: 14px;
 
     --main_font_size_15: 15px;
     --main_font_size_20: 20px;
@@ -682,161 +695,6 @@ body {
         }
 
 
-        .pre_final_diagnosis_setting_container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background: var(--pure_white_background_op);
-            border-radius: var(--main_border_r);
-            padding: var(--main_padding);
-
-            .diagnosis_header {
-                margin-bottom: 24px;
-            }
-
-            .header_text h2 {
-                font-size: 24px;
-                font-weight: 600;
-                color: var(--text-primary);
-                margin-bottom: 8px;
-            }
-
-            .header_text p {
-                font-size: 14px;
-                color: var(--text-secondary);
-                margin-bottom: 24px;
-            }
-
-            .search_container {
-                display: flex;
-                gap: 10px;
-                align-items: center;
-
-                .search_input {
-                    flex: 1;
-                    width: 100%;
-                    background: var(--pure_white_background);
-                    outline: none;
-                    border-radius: var(--input_main_border_r);
-                    padding: 10px;
-                    height: 41px;
-                    background-color: transparent;
-                    border: 2px solid var(--input_border);
-                }
-
-                .search_btn {
-                    border: none;
-                    background-color: var(--pri_color);
-                    width: 41px;
-                    height: 41px;
-                    cursor: pointer;
-                    border-radius: var(--input_main_border_r);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    
-                    
-                    span{
-                        font-size: 16px;
-                    }
-                }
-
-
-                .add_diagnosis_btn {
-                    border: none;
-                    width: 41px;
-                    height: 41px;
-                    cursor: pointer;
-                    border-radius: var(--input_main_border_r);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background-color: transparent;
-
-                    margin-left: 10px;
-
-                    span{
-                        font-size: 16px;
-                    }
-                    
-                    &:hover{
-                        background-color: var(--pri_color);
-                    }
-                }
-            }
-
-
-
-            .diagnosis_content {
-                flex: 1;
-                overflow-y: auto;
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-                padding-right: 8px;
-
-
-                .diagnosis_card {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 16px;
-                    border: 1px solid var(--border_color);
-                    border-radius: 8px;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        background-color: var(--pri_op1);
-                    }
-                }
-
-                .diagnosis_info {
-                    display: flex;
-                    gap: 16px;
-                    align-items: center;
-
-                    .code {
-                        font-weight: 600;
-                        color: var(--primary-color);
-                        min-width: 80px;
-                    }
-
-                    .name {
-                        color: var(--text-primary);
-                    }
-                }
-            }
-
-            .diagnosis_actions {
-                display: flex;
-                gap: 8px;
-            }
-
-            .diagnosis_actions button {
-                padding: 8px;
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--text-secondary);
-                border-radius: 4px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-            }
-
-            .diagnosis_actions .edit_btn:hover {
-                color: var(--primary-color);
-                background: var(--primary-color-light);
-            }
-
-            .diagnosis_actions .delete_btn:hover {
-                color: var(--danger-color);
-                background: var(--danger-color-light);
-            }
-        }
-
 
         .services_setting_container {
             width: 100%;
@@ -848,26 +706,27 @@ body {
             padding: var(--main_padding);
 
             .diagnosis_header {
-                margin-bottom: 24px;
+                margin-bottom: 12px;
             }
 
-            .header_text h2 {
-                font-size: 24px;
-                font-weight: 600;
-                color: var(--text-primary);
-                margin-bottom: 8px;
-            }
-
-            .header_text p {
-                font-size: 14px;
-                color: var(--text-secondary);
+            .header_text {
                 margin-bottom: 24px;
+
+                h2 {
+                    font-size: var(--main_font_size_20);
+                    font-weight: 600;
+                }
+
+                p {
+                    color: var(--gray_text);
+                }
             }
 
             .search_container {
                 display: flex;
                 gap: 10px;
                 align-items: center;
+                padding-right: 16px;
 
                 .search_input {
                     flex: 1;
@@ -891,10 +750,11 @@ body {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    
-                    
-                    span{
-                        font-size: 16px;
+
+
+                    span {
+                        font-size: var(--main_font_size_15);
+                        color: var(--white);
                     }
                 }
 
@@ -912,12 +772,16 @@ body {
 
                     margin-left: 10px;
 
-                    span{
-                        font-size: 16px;
+                    span {
+                        font-size: var(--main_font_size_15);
                     }
-                    
-                    &:hover{
+
+                    &:hover {
                         background-color: var(--pri_color);
+
+                        span {
+                            color: var(--white);
+                        }
                     }
                 }
             }
@@ -949,17 +813,29 @@ body {
 
                 .diagnosis_info {
                     display: flex;
-                    gap: 16px;
-                    align-items: center;
+                    flex-direction: column;
+                    gap: 5px;
 
-                    .code {
-                        font-weight: 600;
-                        color: var(--primary-color);
-                        min-width: 80px;
-                    }
 
                     .name {
-                        color: var(--text-primary);
+                        font-size: var(--main_font_size_title);
+                        font-weight: 700;
+                    }
+
+                    .infos_cont {
+
+                        /* display: flex; */
+                        .status {
+                            font-weight: 700;
+                        }
+
+                        .status.active {
+                            color: var(--light_pri_color)
+                        }
+
+                        .status.inactive {
+                            color: var(--error_color)
+                        }
                     }
                 }
             }
@@ -967,29 +843,225 @@ body {
             .diagnosis_actions {
                 display: flex;
                 gap: 8px;
+
+                button {
+                    width: 41px;
+                    height: 41px;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: var(--text-secondary);
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+
+                    span {
+                        font-size: var(--main_font_size_15);
+                    }
+
+                }
+
+                .edit_btn:hover {
+                    background: var(--pri_color);
+
+                    span {
+                        color: var(--white);
+                    }
+                }
+
+                .delete_btn:hover {
+                    background: var(--error_color);
+
+                    span {
+                        color: var(--white);
+                    }
+                }
+            }
+        }
+        .pre_final_diagnosis_setting_container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: var(--pure_white_background_op);
+            border-radius: var(--main_border_r);
+            padding: var(--main_padding);
+
+            .diagnosis_header {
+                margin-bottom: 12px;
             }
 
-            .diagnosis_actions button {
-                padding: 8px;
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--text-secondary);
-                border-radius: 4px;
+            .header_text {
+                margin-bottom: 24px;
+
+                h2 {
+                    font-size: var(--main_font_size_20);
+                    font-weight: 600;
+                }
+
+                p {
+                    color: var(--gray_text);
+                }
+            }
+
+            .search_container {
                 display: flex;
+                gap: 10px;
                 align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
+                padding-right: 16px;
+
+                .search_input {
+                    flex: 1;
+                    width: 100%;
+                    background: var(--pure_white_background);
+                    outline: none;
+                    border-radius: var(--input_main_border_r);
+                    padding: 10px;
+                    height: 41px;
+                    background-color: transparent;
+                    border: 2px solid var(--input_border);
+                }
+
+                .search_btn {
+                    border: none;
+                    background-color: var(--pri_color);
+                    width: 41px;
+                    height: 41px;
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+
+                    span {
+                        font-size: var(--main_font_size_15);
+                        color: var(--white);
+                    }
+                }
+
+
+                .add_diagnosis_btn {
+                    border: none;
+                    width: 41px;
+                    height: 41px;
+                    cursor: pointer;
+                    border-radius: var(--input_main_border_r);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: transparent;
+
+                    margin-left: 10px;
+
+                    span {
+                        font-size: var(--main_font_size_15);
+                    }
+
+                    &:hover {
+                        background-color: var(--pri_color);
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
+                }
             }
 
-            .diagnosis_actions .edit_btn:hover {
-                color: var(--primary-color);
-                background: var(--primary-color-light);
+
+
+            .diagnosis_content {
+                flex: 1;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                padding-right: 8px;
+
+
+                .diagnosis_card {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 16px;
+                    border: 1px solid var(--border_color);
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background-color: var(--pri_op1);
+                    }
+                }
+
+                .diagnosis_info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+
+
+                    .name {
+                        font-size: var(--main_font_size_title);
+                        font-weight: 700;
+                    }
+
+                    .infos_cont {
+
+                        /* display: flex; */
+                        .status {
+                            font-weight: 700;
+                        }
+
+                        .status.active {
+                            color: var(--light_pri_color)
+                        }
+
+                        .status.inactive {
+                            color: var(--error_color)
+                        }
+                    }
+                }
             }
 
-            .diagnosis_actions .delete_btn:hover {
-                color: var(--danger-color);
-                background: var(--danger-color-light);
+            .diagnosis_actions {
+                display: flex;
+                gap: 8px;
+
+                button {
+                    width: 41px;
+                    height: 41px;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: var(--text-secondary);
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+
+                    span {
+                        font-size: var(--main_font_size_15);
+                    }
+
+                }
+
+                .edit_btn:hover {
+                    background: var(--pri_color);
+
+                    span {
+                        color: var(--white);
+                    }
+                }
+
+                .delete_btn:hover {
+                    background: var(--error_color);
+
+                    span {
+                        color: var(--white);
+                    }
+                }
             }
         }
 

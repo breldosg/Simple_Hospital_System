@@ -8,6 +8,8 @@ import { frontRouter } from "../../script/route.js";
 export class CompanyInformationView {
     constructor() {
         applyStyle(this.style());
+
+        window.UpdateCompanyInfo = this.UpdateCompanyInfo.bind(this);
     }
 
     async PreRender() {
@@ -30,18 +32,28 @@ export class CompanyInformationView {
 
         this.main_container = document.querySelector('.company_information_view');
 
-
+        this.addListener();
     }
 
+    addListener() {
+        const submit_btn = document.querySelector('.submit_btn');
+        submit_btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const form = document.querySelector('br-form');
+            form.handleSubmit();
+        });
+    }
 
-    async fetchData() {
+    async UpdateCompanyInfo(data) {
+
         try {
-            const response = await fetch('/api/users/get_dashboard_data', {
+            const response = await fetch('/api/users/update_company_info', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    ...data
                 })
             });
 
@@ -61,8 +73,10 @@ export class CompanyInformationView {
                     }, 500);
                 }, 500);
             }
-
-            return result.success ? result.data : null;
+            console.log(result);
+            
+            notify('top_left', result.message, 'success');
+            return result.success ? result.message : null;
         } catch (error) {
             console.error('Error:', error);
             notify('top_left', error.message, 'error');
@@ -77,72 +91,73 @@ export class CompanyInformationView {
         
             <p class="big_title">Customization Company Information</p>
 
-            <div class="company_information_content">
+            <br-form callback="UpdateCompanyInfo">
+                <div class="company_information_content">
 
-                <div class="company_information_card">
-                    <p class="card_title">Company Name</p>
-                    <p class="card_description">Choose a channel name that represents you and your content. Changes made to your name and picture are visible only on YouTube and not other Google services. You can change your name twice in 14 days</p>
-                    <input type="text" class="card_input" value="Mount Meru Hospital" placeholder="Enter Company Name">
-                </div>
+                    <div class="company_information_card">
+                        <p class="card_title">Company Name</p>
+                        <p class="card_description">Choose a channel name that represents you and your content. Changes made to your name and picture are visible only on YouTube and not other Google services. You can change your name twice in 14 days</p>
+                        <input type="text" class="card_input" name="name" value="Mount Meru Hospital" placeholder="Enter Company Name">
+                    </div>
 
-                <div class="company_information_card">
-                    <p class="card_title">Company Address</p>
-                    <input type="text" class="card_input" value="P.O. Box 1234, Dar es Salaam, Tanzania" placeholder="Enter Company Address">
-                </div>
+                    <div class="company_information_card">
+                        <p class="card_title">Company Address</p>
+                        <input type="text" class="card_input" name="address" value="P.O. Box 1234, Dar es Salaam, Tanzania" placeholder="Enter Company Address">
+                    </div>
 
-                <div class="company_information_card">
-                    <p class="card_title">Company Phone Number</p>
-                    <input type="text" class="card_input" value="+255 712 345 678" placeholder="Enter Company Phone Number">
-                </div>
+                    <div class="company_information_card">
+                        <p class="card_title">Company Phone Number</p>
+                        <input type="text" class="card_input" name="phone" value="+255 712 345 678" placeholder="Enter Company Phone Number">
+                    </div>
 
-                <div class="company_information_card">
-                    <p class="card_title">Company Email</p>
-                    <input type="email" class="card_input" value="info@mountmeru.com" placeholder="Enter Company Email">
-                </div>
+                    <div class="company_information_card">
+                        <p class="card_title">Company Email</p>
+                        <input type="email" class="card_input" name="email" value="info@mountmeru.com" placeholder="Enter Company Email">
+                    </div>
 
-                <div class="company_information_card logo">
-                    <p class="card_title">Main Logo</p>
-                    <p class="card_description">Upload a Main Logo for your company</p>
-                    <div class="card_logo_container">
-                        <div class="card_logo">
-                            <img src="/public/assets/logo/Primary_logo.svg" alt="Company Logo">
-                        </div>
-                        <div class="card_logo_upload">
-                            <p class="card_logo_upload_text">It’s recommended to use a picture that’s at least 98 x 98 pixels and 4MB or less. Use a PNG or GIF (no animations) file. Make sure your picture follows the YouTube Community Guidelines.
-                            </p>
-                            <div class="card_logo_upload_button_cont">
-                                <button class="card_logo_upload_button_button">Upload</button>
-                                <button class="card_logo_upload_button_button">Remove</button>
+                    <div class="company_information_card logo">
+                        <p class="card_title">Main Logo</p>
+                        <p class="card_description">Upload a Main Logo for your company</p>
+                        <div class="card_logo_container">
+                            <div class="card_logo">
+                                <img src="/public/assets/logo/Primary_logo.svg" alt="Company Logo">
+                            </div>
+                            <div class="card_logo_upload">
+                                <p class="card_logo_upload_text">It’s recommended to use a picture that’s at least 98 x 98 pixels and 4MB or less. Use a PNG or GIF (no animations) file. Make sure your picture follows the YouTube Community Guidelines.
+                                </p>
+                                <div class="card_logo_upload_button_cont">
+                                    <button class="card_logo_upload_button_button">Upload</button>
+                                    <button class="card_logo_upload_button_button">Remove</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="company_information_card logo">
-                    <p class="card_title">Secondary Logo</p>
-                    <p class="card_description">Upload a Secondary Logo for your company</p>
-                    <div class="card_logo_container">
-                        <div class="card_logo">
-                            <img src="/public/assets/logo/SubMark.png" alt="Company Logo">
-                        </div>
-                        <div class="card_logo_upload">
-                            <p class="card_logo_upload_text">It’s recommended to use a picture that’s at least 98 x 98 pixels and 4MB or less. Use a PNG or GIF (no animations) file. Make sure your picture follows the YouTube Community Guidelines.
-                            </p>
-                            <div class="card_logo_upload_button_cont">
-                                <button class="card_logo_upload_button_button">Upload</button>
-                                <button class="card_logo_upload_button_button">Remove</button>
+                    
+                    <div class="company_information_card logo">
+                        <p class="card_title">Secondary Logo</p>
+                        <p class="card_description">Upload a Secondary Logo for your company</p>
+                        <div class="card_logo_container">
+                            <div class="card_logo">
+                                <img src="/public/assets/logo/SubMark.png" alt="Company Logo">
+                            </div>
+                            <div class="card_logo_upload">
+                                <p class="card_logo_upload_text">It’s recommended to use a picture that’s at least 98 x 98 pixels and 4MB or less. Use a PNG or GIF (no animations) file. Make sure your picture follows the YouTube Community Guidelines.
+                                </p>
+                                <div class="card_logo_upload_button_cont">
+                                    <button class="card_logo_upload_button_button">Upload</button>
+                                    <button class="card_logo_upload_button_button">Remove</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
+                    
+                    <div class="submit_btn_cont">
+                        <p class="submit_btn_text">You can publish your company information by clicking the button below</p>
+                        <button type="submit" class="submit_btn">Publish</button>
+                    </div>
                 </div>
-                
-                
-                <div class="submit_btn_cont">
-                    <p class="submit_btn_text">You can publish your company information by clicking the button below</p>
-                    <button class="submit_btn">Publish</button>
-                </div>
-
-            </div>
+            </br-form>
 
         </div>
         `;

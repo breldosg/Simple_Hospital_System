@@ -47,8 +47,13 @@ const ROUTE_CONFIG = {
     get_radiology_test_order_list: 541,
     
     // Diagnosis Management
+    search_diagnosis_code: 1400,
+    delete_diagnosis_code: 1410,
+    create_diagnosis_code: 1420,
+    update_diagnosis_code: 1430,
     create_delete_pre_diagnosis: 590,
     create_delete_final_diagnosis: 600,
+
 
     // Procedures and Devices
     get_data_add_procedure_form: 610,

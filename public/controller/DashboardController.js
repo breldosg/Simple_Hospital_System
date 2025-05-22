@@ -103,6 +103,7 @@ import { CompanyInformationView } from "../views/SettingViews/CompanyInformation
 import { VisitsOtherServicePopUpView } from "../popups/VisitsOtherServicePopUpView.js";
 import { ServicesManagementSettingView } from "../views/SettingViews/ServicesManagementSettingView.js";
 import { CreateServicePopUp } from "../popups/SettingPopups/CreateServicePopUp.js";
+import { CreateDiagnosisCodePopUp } from "../popups/SettingPopups/CreateDiagnosisCodePopUp.js";
 
 
 
@@ -121,7 +122,7 @@ class DashboardController {
     
     // Setting Popup
     createServicePopUp = new CreateServicePopUp();
-
+    createDiagnosisCodePopUp = new CreateDiagnosisCodePopUp();
 
     // Loader View
     loaderView = new LoaderView();

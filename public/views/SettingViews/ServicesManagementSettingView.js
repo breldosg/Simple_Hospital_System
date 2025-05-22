@@ -99,12 +99,11 @@ export class ServicesManagementSettingView {
         <div class="services_setting_container">
             <div class="diagnosis_header">
                 <div class="header_text">
-                    <h2>Diagnosis Codes Management</h2>
-                    <p>Manage preliminary and final diagnosis codes for the hospital system</p>
+                    <h2>Services Management</h2>
+                    <p>Manage services here for the hospital system</p>
                 </div>
                 
                 <div class="search_container">
-                    
                         <input type="text" placeholder="Search diagnosis codes or names..." value="${this.searchTerm}" class="search_input">
                         <button class="search_btn">
                             <span class='switch_icon_magnifying_glass'></span>
@@ -157,10 +156,18 @@ export class ServicesManagementSettingView {
             const item = document.createElement('div');
             item.className = 'diagnosis_card';
 
+            var statusMap = {
+                active: "Active",
+                inactive: "Inactive",
+            }
+
             item.innerHTML = `
                 <div class="diagnosis_info">
-                    <div class="code">${data.id ?? 'N/A'}</div>
-                    <div class="name">${data.name ?? 'Unknown'}</div>
+                    <p class="name">${data.name ?? 'Unknown'}</p>
+                    <div class="infos_cont">
+                        <p class="price">Price: ${data.price ?? '0'}</p>
+                        <p class="status ${data.status}">${statusMap[data.status] ?? 'Inactive'}</p>
+                    </div>
                 </div>
                 <div class="diagnosis_actions">
                     <button class="edit_btn" title="Edit">
@@ -202,31 +209,6 @@ export class ServicesManagementSettingView {
             container.appendChild(item);
         })
 
-    }
-
-    getDemoDiagnosis() {
-        return [
-            { code: "A01.0", name: "Typhoid fever" },
-            { code: "B27.0", name: "Infectious mononucleosis" },
-            { code: "E11.9", name: "Type 2 diabetes mellitus" },
-            { code: "I10", name: "Essential hypertension" },
-            { code: "J18.9", name: "Pneumonia, unspecified" },
-            { code: "K29.7", name: "Gastritis, unspecified" },
-            { code: "M54.5", name: "Low back pain" },
-            { code: "N39.0", name: "Urinary tract infection" },
-            { code: "R51", name: "Headache" },
-            { code: "T14.90", name: "Injury, unspecified" },
-            { code: "G43.9", name: "Migraine, unspecified" },
-            { code: "F41.1", name: "Generalized anxiety disorder" },
-            { code: "L20.9", name: "Atopic dermatitis" },
-            { code: "H26.9", name: "Cataract, unspecified" },
-            { code: "D64.9", name: "Anemia, unspecified" },
-            { code: "C50.9", name: "Breast cancer" },
-            { code: "K21.9", name: "Gastro-esophageal reflux disease" },
-            { code: "M17.9", name: "Osteoarthritis of knee" },
-            { code: "J45.909", name: "Unspecified asthma" },
-            { code: "E78.5", name: "Dyslipidemia" }
-        ];
     }
 
     delete_item(data) {
