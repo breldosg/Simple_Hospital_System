@@ -1,0 +1,106 @@
+🛡️ Privacy Policy
+Effective Date: [Insert Date]
+Last Updated: [Insert Date]
+
+This Privacy Policy describes how [Your Company Name] ("we", "our", or "us") collects, uses, shares, and protects personal and medical data when hospitals use our Hospital Management System ("the System"). By registering for or using our System, the hospital agrees to this policy.
+
+1. 🔍 Information We Collect
+We collect the following data through the use of the System:
+
+a. Hospital and Staff Information
+Hospital name, registration info
+
+Staff names, emails, phone numbers, gender, and role types
+
+Login credentials (stored securely with hashing)
+
+b. Patient Information (entered by hospital)
+Full name, gender, date of birth
+
+Visit records, medical diagnoses
+
+Lab tests, radiology reports, prescriptions
+
+Clinical notes, vital signs, etc.
+
+c. System Usage Data
+IP address, device/browser info
+
+Login history
+
+System actions and logs
+
+2. 🛠️ How We Use the Information
+We use the collected data to:
+
+Provide and maintain the System functionality
+
+Allow hospitals to manage medical records
+
+Improve system performance and user experience
+
+Detect, prevent, and resolve security or technical issues
+
+Communicate with registered users (notifications, updates)
+
+3. 🔐 Data Ownership and Responsibility
+The hospital owns the patient and staff data entered into the System.
+
+We act as a data processor and will never use, sell, or share patient data for any other purpose unless legally required.
+
+It is the hospital’s responsibility to obtain consent from patients regarding data entry and processing.
+
+4. 📤 Data Sharing and Disclosure
+We do not share hospital or patient data with any third parties unless:
+
+Required by law or court order
+
+Hospital explicitly requests integration with an external service
+
+Necessary for system maintenance by authorized technical staff (who are under strict confidentiality agreements)
+
+5. ☁️ Data Storage and Security
+For cloud-hosted systems, all data is stored on secure servers with:
+
+Firewalls
+
+Data encryption (at rest and in transit)
+
+Daily backups
+
+Access control policies
+
+For local installations, the hospital is responsible for protecting the data stored on their servers.
+
+6. 📅 Data Retention
+We retain data only for as long as the hospital account is active.
+
+Upon termination of service:
+
+Cloud data will be deleted within 30 days unless otherwise requested.
+
+Hospitals may request a data export before deletion.
+
+7. 👁️ User Rights
+For cloud-hosted systems:
+
+Hospitals may request to access, update, or delete their data.
+
+Staff can request access or updates to their personal data through the hospital admin.
+
+Patients should contact their hospital for any data requests, as we do not manage patient accounts directly.
+
+8. 🧑‍💻 Cookies and Tracking (Web version)
+Our system may use minimal cookies for session management and login authentication. We do not use third-party trackers or advertising cookies.
+
+9. 🛠 Changes to this Policy
+We may update this Privacy Policy from time to time. Any major changes will be communicated to registered hospitals via email or platform notifications.
+
+10. 📞 Contact Us
+For questions, concerns, or data requests, contact:
+
+[Your Company Name]
+Email: [support@yourcompany.com]
+Phone: [+XXX XXX XXX XXX]
+Address: [Your Company Address]
+

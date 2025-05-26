@@ -1,0 +1,119 @@
+Maintenance & Upgrade Policy
+Version: 1.0
+Effective Date: [Insert Date]
+Applies To: All hospitals using [Hospital System Name]
+
+1. 🎯 Purpose
+This policy defines the scope, schedule, and conditions for maintenance and upgrades to ensure your hospital system runs efficiently, securely, and reliably at all times.
+
+2. 🛠️ Types of Maintenance
+| Type           | Description                                                  | Frequency            |
+| -------------- | ------------------------------------------------------------ | -------------------- |
+| **Preventive** | Regular checks, optimizations, and updates to prevent issues | Monthly or Quarterly |
+| **Corrective** | Fixing bugs, errors, or performance problems                 | As needed            |
+| **Adaptive**   | Adjustments due to regulatory or hospital-specific changes   | As needed            |
+| **Perfective** | Improvements to performance, UI/UX, or feature usability     | Ongoing              |
+
+
+3. 🔄 Upgrade Types
+| Upgrade              | Description                                               |
+| -------------------- | --------------------------------------------------------- |
+| **Minor Upgrade**    | Bug fixes, UI improvements, small feature enhancements    |
+| **Major Upgrade**    | New modules, major redesigns, structural database changes |
+| **Security Upgrade** | Patches for vulnerabilities or compliance updates         |
+
+
+🚨 Note: Major upgrades may require system downtime and client approval before deployment.
+
+4. 🔧 Maintenance Activities
+Performance tuning (speed, query optimization)
+
+Data cleanup or archiving (if agreed)
+
+Backup verification
+
+Error log analysis and resolution
+
+Module patching or dependency updates
+
+User access reviews
+
+5. 📅 Maintenance Schedule
+| Task                       | When                                      |
+| -------------------------- | ----------------------------------------- |
+| Regular Remote Maintenance | Monthly                                   |
+| System Health Check        | Quarterly                                 |
+| Emergency Maintenance      | As needed (with prior notice if possible) |
+| Major Upgrade Window       | Scheduled outside hospital peak hours     |
+
+
+⏳ Hospitals will be notified at least 48 hours before any scheduled maintenance that may impact operations.
+
+6. 💡 Client Responsibilities
+Provide timely access to servers for maintenance (physical or virtual)
+
+Notify us of any critical dates to avoid interference
+
+Avoid unauthorized system modifications
+
+Ensure backups are complete (for local installations)
+
+Use the latest recommended system version
+
+7. 📦 Delivery of Upgrades
+| Method                  | Requirement                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| **Cloud-based Users**   | Upgrades will be automatically deployed                      |
+| **Local Installations** | Upgrades require hospital approval and technician scheduling |
+
+
+8. 💰 Cost of Maintenance & Upgrades
+| Type                       | Free Period                         | After Free Period           |
+| -------------------------- | ----------------------------------- | --------------------------- |
+| Monthly Remote Maintenance | 1 month free                        | Based on support plan       |
+| Physical Maintenance Visit | 14 days free                        | Per-visit charge or package |
+| Minor Upgrades             | Free for all users                  |                             |
+| Major Upgrades             | Free for Premium users, else quoted |                             |
+| Custom Feature Requests    | Always quoted separately            |                             |
+
+9. 🧾 Maintenance Reporting
+After each maintenance session, hospitals will receive a short maintenance summary report, including:
+
+Tasks performed
+
+Any risks or errors found
+
+Recommendations
+
+Next scheduled check
+
+10. 🚨 Emergency Maintenance
+Emergency issues like:
+
+System crash
+
+Data corruption
+
+Critical security bugs
+
+Will be addressed immediately, regardless of the schedule. We will:
+
+Acknowledge within 1–4 hours
+
+Start diagnostics and resolution
+
+Send a full report after
+
+11. 🔐 Data & System Integrity
+We always:
+
+Take precautions to protect patient and hospital data
+
+Create backup points before upgrades
+
+Avoid downtime unless required
+
+Never access hospital data without written permission
+
+12. 📄 Policy Review
+This Maintenance & Upgrade Policy is subject to updates based on system changes, regulations, and feedback. Hospitals will always be informed of major changes.

@@ -7,15 +7,15 @@ The Simple Hospital System follows a modern client-server architecture with a RE
 ### High-Level Architecture
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   Client    │────▶│   Express    │────▶│  Database   │
-│  (Browser)  │◀────│   Server     │◀────│   Server    │
-└─────────────┘     └──────────────┘     └─────────────┘
-                          │
-                    ┌─────┴─────┐
-                    │  File     │
-                    │  Storage  │
-                    └───────────┘
+┌─────────────┐     ┌──────────────┐     ┌──────────────────┐
+│   Client    │────▶│   Express    │────▶│ PHP SQL Database│
+│  (Browser)  │◀────│   Server     │◀────│   Server        │
+└─────────────┘     └──────────────┘     └──────────────────┘
+                                                │
+                                          ┌─────┴─────┐
+                                          │  File     │
+                                          │  Storage  │
+                                          └───────────┘
 ```
 
 ## Technology Stack
@@ -23,7 +23,6 @@ The Simple Hospital System follows a modern client-server architecture with a RE
 ### Backend
 - **Runtime**: Node.js
 - **Framework**: Express.js
-- **Authentication**: JWT (JSON Web Tokens)
 - **File Handling**: Multer
 - **API Documentation**: OpenAPI/Swagger
 
@@ -67,10 +66,6 @@ The Simple Hospital System follows a modern client-server architecture with a RE
    - Stylesheets
    - Images
 
-5. **Upload Management** (`/uploads`)
-   - Patient documents
-   - Medical reports
-   - System files
 
 ## Security Architecture
 

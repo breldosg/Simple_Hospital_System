@@ -183,6 +183,13 @@ export class SingleVisitBillingView {
                 },
             });
         });
+
+        var joint_receipt = this.main_container.querySelector('.joint_receipt');
+        joint_receipt.addEventListener('click', () => {
+            console.log('clicked');
+            
+        });
+
     }
 
     ViewReturn() {
@@ -265,6 +272,7 @@ export class SingleVisitBillingView {
             </div>
             <div class="bottom">
                 <p class="total_paid"></p>
+                <button class="btn joint_receipt">Joint Receipt</button>
             </div>
 
         </div>

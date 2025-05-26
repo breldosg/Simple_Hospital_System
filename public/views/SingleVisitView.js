@@ -143,6 +143,13 @@ export class SingleVisitView {
                 condition: (data) => data.success,
                 // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
             },
+            {
+                method: dashboardController.visitOtherServicesCardView,
+                dataKey: 'services_order_data',
+                dataArray: 'services_order_data',
+                condition: (data) => data.success,
+                // afterRender: () => this.rendered_card.push('visitPlanForNextVisitCardView')
+            },
         ];
 
         cardRenderConfig.forEach(config => {

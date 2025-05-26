@@ -362,7 +362,7 @@ export class VisitLabTestOrdersPopUpView {
         return `
             /* ------------------------------------------------------- */
 
-    .other_service_popup {
+    .lab_order_popup {
         width: 1200px;
         max-width: 80%;
         height: 650px;

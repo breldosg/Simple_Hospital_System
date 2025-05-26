@@ -76,6 +76,10 @@ const ROUTE_CONFIG = {
     upload_attachments: 690,
     delete_attachment_order: 700,
 
+    // Services Management
+    search_all_services: 1440,
+    save_other_services: 1450,
+    delete_other_service: 1460,
 };
 
 

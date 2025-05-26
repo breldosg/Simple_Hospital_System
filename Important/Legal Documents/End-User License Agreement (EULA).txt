@@ -1,0 +1,94 @@
+End-User License Agreement (EULA)
+Effective Date: [Insert Date]
+This End-User License Agreement ("Agreement") is a legal agreement between you ("Hospital", "End User", or "You") and [Your Company Name] ("Licensor", "we", or "us") for the use of the Hospital Management System ("Software").
+
+By accessing, installing, or using the Software, you agree to be bound by the terms of this EULA.
+
+1. 🧾 Grant of License
+We grant the Hospital a non-exclusive, non-transferable, limited license to:
+
+Access and use the Software for internal hospital operations
+
+Install the software on hospital-owned systems (if on-premise)
+
+Use all core features (e.g., Patient Records, Lab Orders, Pharmacy, Billing, etc.)
+
+This license is not a sale of the Software.
+
+2. 🚫 Restrictions
+You agree NOT to:
+
+Reverse engineer, decompile, or disassemble the Software
+
+Share, sell, rent, lease, or sublicense the Software to third parties
+
+Use the Software for any illegal purpose
+
+Copy or duplicate the Software except for backup purposes
+
+Remove or alter any proprietary notices or logos
+
+3. 🏢 Ownership and Intellectual Property
+The Software and all related materials are the exclusive property of [Your Company Name].
+
+All source code, designs, trademarks, and content belong to us
+
+No ownership rights are transferred to the Hospital
+
+4. 🔐 Data and Privacy
+All patient and operational data entered into the Software remains the property of the Hospital
+
+We act only as a data processor, and will not access, use, or disclose data without your permission (except when legally required)
+
+For cloud-hosted systems, data is stored securely with encryption and regular backups
+
+See our Privacy Policy for full details.
+
+5. 🛠 Updates and Maintenance
+We may:
+
+Release updates, patches, and new features periodically
+
+Require downtime for maintenance (we'll notify you in advance when possible)
+
+Local installations may require manual update assistance or support packages.
+
+6. 💥 Termination
+This Agreement remains in effect until:
+
+Terminated by the Hospital or
+
+Violated due to breach of terms (e.g., unauthorized use)
+
+Upon termination:
+
+All Software usage must stop
+
+Cloud access will be disabled
+
+Local installations must be removed (or deactivated)
+
+7. ⚖️ Limitation of Liability
+We are not liable for:
+
+Loss of data due to hospital-side hardware or user error
+
+Damages from improper usage or unapproved system modifications
+
+Third-party service disruptions (e.g., internet providers)
+
+Total liability shall not exceed the last one month of fees paid by the Hospital.
+
+8. 📍 Governing Law
+This Agreement shall be governed by the laws of [Your Country or Jurisdiction].
+All disputes shall be resolved in the courts located in [Your City/Region].
+
+9. 📬 Contact Information
+[Your Company Name]
+Support Email: [support@yourcompany.com]
+Phone: [+XXX XXX XXX XXX]
+Website: [www.yourcompany.com]
+Address: [Company Address]
+
+10. ✅ Acceptance
+By using the Software, you agree to this EULA in full.

@@ -97,13 +97,16 @@ import { UpdateProcedurePricePopUpView } from "../popups/UpdateProcedurePricePop
 import { ReportsView } from "../views/ReportsView.js";
 import { SalesReportView } from "../views/SalesReportView.js";
 import { AboutSystemView } from "../views/SettingViews/AboutSystemView.js";
-import { AppearanceSystemView } from "../views/SettingViews/AppearanceSystemView.js";
 import { DiagnosisCodesManagementSettingView } from "../views/SettingViews/DiagnosisCodesManagementSettingView.js";
 import { CompanyInformationView } from "../views/SettingViews/CompanyInformationView.js";
 import { VisitsOtherServicePopUpView } from "../popups/VisitsOtherServicePopUpView.js";
 import { ServicesManagementSettingView } from "../views/SettingViews/ServicesManagementSettingView.js";
 import { CreateServicePopUp } from "../popups/SettingPopups/CreateServicePopUp.js";
 import { CreateDiagnosisCodePopUp } from "../popups/SettingPopups/CreateDiagnosisCodePopUp.js";
+import { VisitOtherServicesCardView } from "../cards/VisitOtherServicesCardView.js";
+import { ViewBillingOtherServiceView } from "../views/ViewBillingOtherServiceView.js";
+import { UpdateServicePricePopUpView } from "../popups/UpdateServicePricePopUpView.js";
+import { PrintJointReceiptPopUpView } from "../popups/PrintJointReceiptPopUpView.js";
 
 
 
@@ -115,7 +118,6 @@ class DashboardController {
     // Settings View
     settingsView = new SettingsView();
     aboutSystemView = new AboutSystemView();
-    appearanceSystemView = new AppearanceSystemView();
     diagnosisCodesManagementSettingView = new DiagnosisCodesManagementSettingView();
     companyInformationView = new CompanyInformationView();
     servicesManagementSettingView = new ServicesManagementSettingView();
@@ -181,7 +183,7 @@ class DashboardController {
     visitImplantableDevicesCardView = new VisitImplantableDevicesCardView();
     visitPreDiagnosisCardView = new VisitPreDiagnosisCardView();
     visitAttachmentsCardView = new VisitAttachmentsCardView();
-
+    visitOtherServicesCardView = new VisitOtherServicesCardView();
 
     // Patient PopUp
     addVitalPopUpView = new AddVitalPopUpView();
@@ -230,6 +232,7 @@ class DashboardController {
     viewBillingConsultationView = new ViewBillingConsultationView();
     viewBillingDefaultPriceView = new ViewBillingDefaultPriceView();
     updateProcedurePricePopUpView = new UpdateProcedurePricePopUpView();
+    viewBillingOtherServiceView = new ViewBillingOtherServiceView();
 
 
     // Billing PopUp
@@ -240,6 +243,8 @@ class DashboardController {
     updateConsultationPricePopUpView = new UpdateConsultationPricePopUpView();
     updateDefaultPricePopUpView = new UpdateDefaultPricePopUpView();
     createInvoiceAndPayBillPopUpView = new CreateInvoiceAndPayBillPopUpView();
+    updateServicePricePopUpView = new UpdateServicePricePopUpView();
+    printJointReceiptPopUpView = new PrintJointReceiptPopUpView();
 
     // Laboratory Section
     viewActiveLaboratoryListView = new ViewActiveLaboratoryListView();

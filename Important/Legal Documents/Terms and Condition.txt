@@ -1,0 +1,127 @@
+✅ Full and Final: Terms and Conditions for Hospital System Usage
+Effective Date: [Insert Date]
+
+1. Introduction
+Welcome to [Your Company Name] (“we”, “our”, or “us”). These Terms and Conditions (“Terms”) govern your hospital’s access to and use of our Hospital Management System (“System”), whether hosted online (cloud) or installed locally (on-premise).
+By registering, installing, or using the system, you agree to these Terms.
+
+2. Eligibility and Account Registration
+Only licensed hospitals, clinics, or authorized healthcare providers may use this system.
+
+Each hospital must register an official account with valid information (name, email, address, contact person).
+
+You are responsible for maintaining the confidentiality and security of your access credentials.
+
+3. System Usage and Access
+By using the system, you agree to:
+
+Use the system only for lawful hospital operations.
+
+Ensure your staff use the system properly and do not misuse features.
+
+Prevent unauthorized access by protecting user logins.
+
+Not reverse-engineer, copy, or resell the system.
+
+4. Data Ownership and Privacy
+Data entered into the system belongs to your hospital.
+
+We do not access or share your hospital data with third parties without permission unless required by law.
+
+In cloud setups, we ensure data encryption, secure backups, and storage according to [Your Country]’s health data laws.
+
+In local setups, your IT staff will be responsible for backups and server security.
+
+You must ensure your hospital has consent from patients for data collection as required by law.
+
+5. Services Offered
+The system includes (but is not limited to):
+
+Patient registration and record management
+
+Pharmacy, lab, radiology, and service modules
+
+Doctor/nurse documentation
+
+Billing and invoicing (if enabled)
+
+Staff and user access control
+
+Reporting, analytics, and backups
+
+Some features may vary depending on the package or plan selected.
+
+6. Pricing and Payment
+A one-time setup fee or license fee may apply for local/on-premise installations.
+
+Cloud-based services may include a monthly or annual subscription.
+
+Hospitals are responsible for timely payment. Non-payment may result in suspension or restriction of access.
+
+All payments are non-refundable unless stated otherwise.
+
+7. System Availability and Support
+For cloud-hosted clients, we provide:
+
+99% uptime guarantee
+
+Regular backups and updates
+
+Technical support via email/phone/remote session
+
+For on-premise clients:
+
+We provide support during agreed working hours
+
+Clients are responsible for local server maintenance
+
+Updates may be provided manually or through scheduled visits
+
+8. License and Restrictions
+You are granted a limited, non-transferable license to use the system for internal hospital operations only.
+
+You may not:
+
+Modify or reverse-engineer the software
+
+Sell or redistribute the system
+
+Use the system for any illegal or unauthorized activities
+
+9. Termination
+We may terminate access if:
+
+You violate these Terms
+
+You use the system maliciously or illegally
+
+You fail to pay as agreed
+
+You may also request to terminate your account by contacting our support.
+
+10. Limitation of Liability
+We are not liable for any damages resulting from:
+
+Misuse of the system
+
+Staff errors
+
+Data loss due to user-side negligence
+
+For cloud clients, we will restore data from the most recent backup if available.
+
+Use of the system is at your own risk.
+
+11. Changes to Terms
+We may revise these Terms occasionally. Continued use of the system means you accept the updated version.
+
+12. Governing Law
+These Terms shall be governed by the laws of [Your Country]. Any disputes shall be handled in [Local Court or Arbitration Panel].
+
+13. Contact Us
+For questions or support, contact:
+
+Company Name: [Your Company Name]
+Email: [support@yourcompany.com]
+Phone: [+254 xxx xxx xxx]
+Address: [Your Office Address]

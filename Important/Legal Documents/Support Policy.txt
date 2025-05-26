@@ -1,0 +1,111 @@
+Support Policy
+Version: 1.0
+Effective Date: [Insert Date]
+Applies To: All hospitals using [Hospital System Name], whether via local installation or cloud-based access.
+
+1. 🎯 Purpose
+This Support Policy outlines the terms, coverage, availability, and responsibilities for technical support services provided to hospitals using our system. It ensures smooth, reliable, and secure use of the platform across all departments (e.g., Pharmacy, Lab, Radiology, etc.).
+
+2. 🛠️ Support Channels
+You can access our support team via:
+
+| Method                             | Availability         | Notes                                  |
+| ---------------------------------- | -------------------- | -------------------------------------- |
+| Email                              | 24/7                 | support@\[yourdomain].com              |
+| WhatsApp/Phone                     | Mon–Fri, 9 AM – 5 PM | \[Support Number]                      |
+| Remote Access (TeamViewer/AnyDesk) | Scheduled            | As per maintenance plan                |
+| On-Site Visit                      | Scheduled            | Physical maintenance plan or emergency |
+
+
+3. 🔍 Scope of Support
+✅ Covered:
+System usage assistance (navigation, login, modules)
+
+Troubleshooting errors & bugs
+
+Software configuration help
+
+Remote database backup guidance
+
+User account management
+
+Help with reports & exports
+
+Training reminders and resources
+
+❌ Not Covered (Unless by Agreement):
+Hardware issues (printers, LAN switches, etc.)
+
+Internet problems at the hospital
+
+Data loss due to local negligence
+
+Unauthorized system changes or third-party integrations
+
+Custom feature development outside the current license
+
+4. ⏳ Response Times
+| Severity Level | Description                                    | Response Time   |
+| -------------- | ---------------------------------------------- | --------------- |
+| 🟥 Critical    | System down or unusable                        | Within 4 hours  |
+| 🟧 High        | Major module not working (e.g., Lab, Pharmacy) | Within 12 hours |
+| 🟨 Medium      | Errors not stopping operations                 | Within 24 hours |
+| 🟩 Low         | Cosmetic or UI issues                          | Within 72 hours |
+
+
+Premium Support Plans receive faster guaranteed response times.
+
+5. 📅 Support Availability
+| Support Type            | Days    | Hours                            |
+| ----------------------- | ------- | -------------------------------- |
+| Standard Support        | Mon–Fri | 9 AM – 5 PM                      |
+| Extended (Premium Plan) | Mon–Sun | 8 AM – 8 PM                      |
+| Emergency Hotline       | 24/7    | For system-down or urgent issues |
+
+
+6. 📜 Support Levels
+| Level       | Description                                               |
+| ----------- | --------------------------------------------------------- |
+| **Level 1** | Frontline help (login issues, usage help, password reset) |
+| **Level 2** | Technical troubleshooting (bugs, database errors)         |
+| **Level 3** | Advanced issues, module patching, development support     |
+
+
+7. 💰 Paid vs. Free Support
+| Service             | Free Period     | After Free Period                |
+| ------------------- | --------------- | -------------------------------- |
+| Virtual Maintenance | 1 month         | Based on support plan            |
+| On-Site Maintenance | 14 days         | Charged per visit or plan        |
+| System Updates      | Free (standard) | Advanced updates may be paid     |
+| Retraining          | 1-time free     | Charged per session or as agreed |
+
+
+8. 🧾 Support Requests Process
+Open a ticket via email or chat
+
+Include: issue summary, affected module, screenshots/logs if possible
+
+We will classify the issue and respond within the SLA time
+
+Resolution will be tracked and documented
+
+9. ⚠️ Client Responsibilities
+Maintain a stable environment (e.g., power, internet, hardware)
+
+Avoid unauthorized modifications
+
+Provide timely access for remote or on-site support
+
+Regularly back up local data (unless cloud-based)
+
+Inform staff on system usage to reduce repeated issues
+
+10. 🧩 Limitations
+We are not responsible for data corruption caused by third-party tools or misuse
+
+Delays due to client-side issues (e.g., server not powered on) are not counted under SLA
+
+Offline support will depend on location and technician availability
+
+11. 📄 Policy Review
+This support policy may be updated periodically. You will be notified of any significant changes.

@@ -1,0 +1,81 @@
+Demo Agreement & Trial Terms
+Version: 1.0
+Effective Date: [Insert Date]
+Applies To: All hospitals or healthcare institutions using the system under a demo or trial license.
+
+1. 🎯 Purpose
+This agreement defines the terms under which your hospital is granted temporary access to use our hospital management system on a free trial or demo basis, for evaluation purposes only.
+
+2. 📅 Trial Duration
+The demo or trial period is valid for [7 / 14 / 30] days, starting from the date of activation.
+
+Extensions may be granted in writing only and at our sole discretion.
+
+3. 🧾 Scope of Access
+During the trial period, the following access will be granted:
+
+| Feature                                      | Access Level                                |
+| -------------------------------------------- | ------------------------------------------  |
+| Core Modules (e.g., Patients, Pharmacy, Lab) | ✅ Full access                              |
+| Staff Management                             | ✅ Limited                                  |
+| Reports & Data Export                        | ✅ Enabled (watermarked or limited)         |
+| System Settings                              | ❌ No deep configuration allowed            |
+| Integration                                  | ❌ Disabled                                 |
+| Data Backup                                  | ✅ Manual backup available (not guaranteed) |
+
+
+4. 🛡️ Usage Restrictions
+The demo version:
+
+Is for evaluation only, not for production or real medical decisions.
+
+May contain limited data, or be reset without notice.
+
+Must not be used for commercial operations or resold.
+
+May be monitored for usage metrics and feedback.
+
+5. 🔐 Data & Privacy
+All data entered during the demo is temporary and may be deleted at the end of the trial.
+
+We do not guarantee data transfer from demo to live version unless requested in advance.
+
+Hospitals are advised not to enter real patient data unless authorized.
+
+6. 🛠️ Support During Trial
+Basic support will be provided (email or WhatsApp).
+
+No guaranteed SLA response times.
+
+On-site visits during the trial are not covered unless arranged separately.
+
+7. 💡 Transition to Full System
+To continue using the system after the trial:
+
+A full license agreement must be signed.
+
+Installation, training, and support will follow standard policy.
+
+Demo data can be migrated upon request, if technically possible.
+
+8. ❌ Termination
+We reserve the right to terminate or limit the trial at any time if:
+
+Misuse or abuse of the system is detected
+
+Unauthorized access or modification occurs
+
+The hospital violates any terms in this agreement
+
+9. ⚖️ Liability
+We are not liable for:
+
+Any loss of data or functionality during the demo
+
+Decisions made based on demo use
+
+Downtime, bugs, or limitations during the trial
+
+10. 📜 Acceptance
+By using the demo or trial system, you agree to be bound by these terms.
+

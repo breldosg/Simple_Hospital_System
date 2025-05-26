@@ -1,0 +1,91 @@
+Maintenance & Support Plan Options
+Effective After:
+
+Day 14 for Physical Maintenance
+
+Day 30 for Virtual Maintenance
+
+🎯 Objective
+To ensure smooth and uninterrupted use of the [Hospital System Name], your hospital can choose from the following affordable support plans, tailored for both virtual and physical service needs.
+
+🔹 1. Virtual Maintenance & Support Plans
+| Plan Tier    | Monthly Fee | Response Time | Features                                                                                 |
+| ------------ | ----------- | ------------- | ---------------------------------------------------------------------------------------- |
+| **Basic**    | \$30/month  | 24–48 hrs     | Email & chat support, monthly backups, 2 remote sessions/month                           |
+| **Standard** | \$70/month  | 12–24 hrs     | All Basic + remote bug fixing, 5 remote sessions/month, report customization             |
+| **Premium**  | \$120/month | 6–12 hrs      | All Standard + real-time support, unlimited remote sessions, staff retraining on request |
+
+
+Optional: Discounts for annual subscriptions (e.g., 10% off when paid yearly)
+
+✨ All Plans Include:
+Remote error resolution
+
+Data backup assistance
+
+Staff support via WhatsApp, email, or call
+
+Regular system updates & patches
+
+🔹 2. Physical (On-Site) Maintenance
+Available on a per-visit or prepaid package basis:
+
+| Package                   | Description                      | Pricing           | Notes                                  |
+| ------------------------- | -------------------------------- | ----------------- | -------------------------------------- |
+| **Single Visit**          | Technician visit to the hospital | \$100–\$250/visit | Includes travel, labor (max 6 hrs)     |
+| **Quarterly Maintenance** | 1 visit every 3 months           | \$500/year        | Prepaid, scheduled, cost-effective     |
+| **Emergency Visit**       | Urgent unscheduled visit         | \$150–\$300       | Higher priority, includes travel costs |
+
+
+Pricing may vary by location & issue severity.
+
+🧾 Add-On Services
+| Service                        | Fee                              |
+| ------------------------------ | -------------------------------- |
+| Extra Staff Training (virtual) | \$20/session                     |
+| System Customization Request   | Based on scope                   |
+| Module Upgrade Installation    | Free for Premium Plan, else \$50 |
+| Data Migration / Import        | From \$100                       |
+
+
+📅 Support Hours
+Regular Hours: Mon–Fri, 9 AM – 5 PM
+
+Extended (Premium Only): Weekends, after-hours
+
+Emergency Hotline: 24/7 (Premium & Emergency Visit Only)
+
+🛡️ Responsibilities
+We Provide:
+
+Reliable support
+
+Skilled technicians
+
+Timely bug resolution
+
+System improvements and updates
+
+Hospital Must:
+
+Have stable internet for remote support
+
+Cooperate in scheduled times
+
+Inform us of changes affecting the system
+
+📝 Subscription Terms
+Monthly plans are auto-renewed unless canceled
+
+Cancellation requires 15 days’ notice
+
+Physical visits must be scheduled 3–5 days ahead (except emergency)
+
+✅ How to Subscribe
+Hospitals can:
+
+Choose a plan during setup
+
+Upgrade/downgrade anytime
+
+Request custom plans for larger institutions

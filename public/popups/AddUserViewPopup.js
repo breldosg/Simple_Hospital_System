@@ -112,6 +112,10 @@ export class AddUserViewPopup {
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;"></br-input>
 
+                        <br-input label="Practitioner Number" name="practitioner_number" type="text" value="${this.is_update ? this.data.practitioner_number == null ? '' : this.data.practitioner_number : ''}" styles="
+                            ${this.input_styles()}
+                        " labelStyles="font-size: 12px;" ></br-input>
+
                         <br-input label="Phone number" type="tel" name="phone" value="${this.is_update ? this.data.phone == null ? '' : this.data.phone : ''}" styles="
                             ${this.input_styles()}
                         " labelStyles="font-size: 12px;" required></br-input>

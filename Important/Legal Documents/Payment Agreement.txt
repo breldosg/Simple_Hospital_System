@@ -1,0 +1,94 @@
+Payment Agreement
+Version: 1.0
+Effective Date: [Insert Date]
+Applies To: All registered hospitals using the [Your System Name] hospital management platform
+
+1. 🧾 Purpose
+This Payment Agreement outlines the terms, conditions, and obligations related to the use of and payment for the hospital system platform and associated services provided by [Your Company Name].
+
+2. 🏷️ Fees Structure
+| Service                            | Payment Type                | Description                                   |
+| ---------------------------------- | --------------------------- | --------------------------------------------- |
+| **System License (Cloud)**         | Monthly / Annually          | Access to full platform modules               |
+| **System License (Local Install)** | One-time + Optional Monthly | One-time install + optional virtual support   |
+| **Add-on Modules**                 | One-time / Monthly          | Optional features (e.g., Radiology, Pharmacy) |
+| **Support Plans**                  | Monthly / Quarterly         | Ongoing support & maintenance tiers           |
+| **Physical Maintenance**           | Per Visit                   | After free period, on-demand tech visits      |
+| **Custom Development**             | Per Project                 | Charged based on custom request scope         |
+
+
+3. 💳 Payment Methods Accepted
+Bank Transfer (details provided in invoice)
+
+Mobile Payment (e.g., M-Pesa, Airtel Money)
+
+Card Payment (if integrated)
+
+PayPal / International Gateway (for cross-border clients)
+
+⚠️ Cash payments are discouraged and must be confirmed in writing.
+
+4. 📅 Billing Cycle
+| Item                  | Frequency              | Invoice Delivery        |
+| --------------------- | ---------------------- | ----------------------- |
+| Monthly Subscriptions | Every 1st of the month | Email / Admin Portal    |
+| Annual Subscriptions  | Once per year          | On signup or renewal    |
+| Support & Maintenance | End of free period     | Monthly or per incident |
+| Custom Work           | Based on quote         | Per contract milestone  |
+
+
+5. 🕒 Payment Due Dates
+Invoices must be settled within 14 days from the issue date.
+
+Late payment may result in:
+
+System access restriction
+
+Suspension of support
+
+Late fee of 5% monthly
+
+🛑 Repeated failure to pay will result in account termination and data access freeze.
+
+6. 🧾 Refund Policy
+| Case                        | Refund Eligibility                   |
+| --------------------------- | ------------------------------------ |
+| Technical Failure (proven)  | Partial refund of unused time        |
+| Cancellation (annual plans) | Pro-rated refund minus 15% admin fee |
+| Cancellation (monthly)      | No refund after access granted       |
+| Custom Work                 | Only if milestones not delivered     |
+
+Refunds are not applicable for setup fees, completed installations, or used services.
+
+7. 🔁 Renewal Terms
+Subscriptions renew automatically unless canceled at least 7 days before the next billing cycle.
+
+Cancellation must be submitted in writing or via the Admin Portal.
+
+8. 📉 Discounts & Promotions
+Introductory discounts may apply for early adopters or referrals.
+
+Annual subscriptions may receive up to 2 months free.
+
+Custom deals may be made in writing.
+
+🎁 Discounts are not stackable unless explicitly approved.
+
+9. 📄 Receipts & Records
+Every payment will generate a receipt sent via email and stored in the system.
+
+Hospitals can view payment history under Billing & Invoices in the system dashboard.
+
+10. ⚖️ Dispute Resolution
+If you believe you’ve been charged incorrectly, notify us within 7 days of receiving the invoice.
+
+Disputes will be resolved within 14 working days.
+
+Payments under dispute do not pause other due invoices.
+
+11. 🔐 Confidentiality
+All payment data (card, account numbers, etc.) is handled securely and is never stored on your local system (if cloud-based). We comply with financial data regulations.
+
+12. ✍️ Agreement Acceptance
+By signing up and using the [Hospital System Name], or paying for any part of the service, the hospital agrees to all terms outlined in this Payment Agreement.
+

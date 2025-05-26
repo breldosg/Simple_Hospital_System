@@ -27,11 +27,6 @@ export class SettingsView {
                 component: 'companyInformationView',
             },
             {
-                type: 'link',
-                title: 'Appearance',
-                path: '/settings/appearance',
-            },
-            {
                 type: 'title',
                 title: 'Default Attribute Settings',
             },

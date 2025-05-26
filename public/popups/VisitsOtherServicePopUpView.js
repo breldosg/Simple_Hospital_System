@@ -1,327 +1,191 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { applyStyle, debounce, notify, searchInArray } from "../script/index.js";
+import { applyStyle, decodeHTML, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class VisitsOtherServicePopUpView {
     constructor() {
-        this.callback = null;
-        this.data = null;
-        this.selected_category = null;
-        window.render_lab_test_data = this.render_lab_test_data.bind(this);
-        // window.save_radiology_order = this.save_radiology_order.bind(this);
-        this.selected_lab_test = [];
-        this.searchQuery = '';
-        this.state = "creation";
-        applyStyle(this.style())
+        window.OtherService_Search_services = this.OtherService_Search_services.bind(this);
+        window.add_to_other_service_pending = this.add_to_other_service_pending.bind(this);
+        this.visit_id = null;
+        this.batchNumber = 1;
+        this.selected_product = '';
+        this.pending_data = new Set();
+        this.load_more_btn = null;
+        applyStyle(this.style());
     }
 
-    async PreRender(params = '') {
-        // Render the initial structure with the loader
+    async PreRender(params) {
         const check_dashboard = document.querySelector('.update_cont');
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        this.selected_lab_test = [];
-        this.visit_id = params.visit_id ? params.visit_id : '';
-        this.selected_lab_test = params.data ? params.data : [];
-        this.state = params.state ? params.state : 'creation';
+        console.log(params);
+
+        this.visit_id = params.visit_id;
+        this.state = params.state;
         this.visit_status = params.visit_status ? params.visit_status : 'checked_out';
 
 
+        // Clear all constructor variables
+        this.selected_product = '';
+        this.pending_data.clear;
+        this.load_more_btn = null;
+        this.batchNumber = 1;
 
+        // Render the initial structure with the loader
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
-        cont.innerHTML = this.ViewReturn();
+        cont.innerHTML = this.ViewReturn(params, 'active');
+
+
         this.main_container = document.querySelector('.other_service_popup');
 
-
         this.attachListeners();
-        this.render_lab_test_data();
+        this.OtherService_Search_services('');
     }
 
     ViewReturn() {
         return `
 <div class="container other_service_popup">
+    <div class="left">
+        <div class="slider" id="search_slide">
+            <p class="heading">Select Service</p>
+            <div class="search_cont_cont">
+                <br-form callback="OtherService_Search_services">
+                    <div class="search_cont">
+                        <br-input label="Service Name" name="query" type="text" styles="
+                    border-radius: var(--input_main_border_r);
+                    width: 350px;
+                    padding: 10px;
+                    height: 41px;
+                    background-color: transparent;
+                    border: 2px solid var(--input_border);
+                    " labelStyles="font-size: 12px;"></br-input>
 
-    <div class="cont_heading">
-        <p class="heading">Add Other Service</p>
-        <div class="close_btn">
-            <span class='switch_icon_close'>
-            </span>
-        </div>
-    </div>
-    <div class="lab_order_pop_cont">
-
-        <div class="left">
-            <div class="top_head">
-                <p class="heading">Select Other Service</p>
-
-                <div class="search_cont">
-                    <input type="text" placeholder="Search" class="lab_order_popup_search">
                     <br-button loader_width="23" class="btn_search" type="submit">
-                        <span class="switch_icon_magnifying_glass"></span>
+                        <span class='switch_icon_magnifying_glass'></span>
                     </br-button>
-                </div>
 
-            </div>
-
-            <div class="left_body_cont">
-                <div class="group_category_cont_cont">
-                    <div class="group_category_cont scroll_bar">
-                    
                     </div>
-                </div>
-
-                <div class="group_category_list">
-                    
-
-                </div>
-
-                <div class="lab_order_pop_loader_cont active">
-                    <div class="loader"></div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="right">
-            <div class="top_head">
-                <p class="heading">Selected Laboratory Test</p>
-            </div>
-
-            <div class="right_body_cont">
-                <!-- <div class="lab_order_list_item selected" data_src="x_ray_1">
-                    <p>X-Ray 1</p>
-                    <span class='switch_icon_indeterminate_check_box'></span>
-                </div> -->
-
-                <div class="lab_order_pop_loader_cont active">
-                    <div class="loader"></div>
-                </div>
+                </br-form>
                 
             </div>
 
-            <div class="btn_cont">
-                <br-button type="cancel" class="secondary" id="confirm_cancel">Cancel</br-button>
-                <br-button type="btn" loading="false">Submit</br-button>
+            <div class="result_cont scroll_bar">
+                ${this.loader_view()}
             </div>
         </div>
 
+        <div class="slider" id="input_slide">
+            <div class="heading_cont">
+                <p class="heading">Add Service Detail</p>
+                <div class="btn_back" id="back_btn">
+                    <span class='switch_icon_keyboard_arrow_right'></span>
+                </div>
+            </div>
+
+            <br-form id="more_detail_form" callback="add_to_other_service_pending">
+                <div class="search_cont">
+                    <br-input name="id" label="Service Name" id="service_name_view" type="text" styles="
+                    border-radius: var(--input_main_border_r);
+                    width: 400px;
+                    padding: 10px;
+                    height: 41px;
+                    background-color: transparent;
+                    border: 2px solid var(--input_border);
+                    " labelStyles="font-size: 12px;" disable="true"></br-input>
+
+                    <br-input required name="quantity" label="Quantity" value="1" type="number" styles="
+                    border-radius: var(--input_main_border_r);
+                    width: 400px;
+                    padding: 10px;
+                    height: 41px;
+                    background-color: transparent;
+                    border: 2px solid var(--input_border);
+                    " labelStyles="font-size: 12px;"></br-input>
+
+                    <div class="btn">
+                        <br-button loader_width="23" class="btn_next" type="submit">Add</br-button>
+                    </div>
+                </div>
+            </br-form>
+        </div>
     </div>
 
+    <div class="line"></div>
 
-
+    <div class="right">
+        <div class="heading_cont">
+            <p class="heading">Service Details</p>
+        </div>
+        <div class="pending_data_view">
+            <div class="pending_data_body scroll_bar" id="table_body_for_pending_data">
+                <div class="start_page">
+                    <p>No Services Added</p>
+                </div>
+            </div>
+            <div class="btn_cont">
+                <br-button loader_width="23" class="btn_next" type="cancel">Cancel</br-button>
+                <br-button loader_width="23" class="btn_next submit_btn disabled" type="submit">Save Services</br-button>
+            </div>
+        </div>
+    </div>
 </div>
-
 `;
     }
 
-    render_lab_test_data() {
-        if (globalStates.getState('lab_test_data_exists')) {
-            this.main_container.querySelector('.left_body_cont .lab_order_pop_loader_cont').classList.remove('active');
-            this.loadLabTestCategoryList();
-            this.loadLabTestList();
-            this.render_selected_lab_test();
-        }
-        else {
-            globalStates.setState({ radiology_data_render_function: 'render_lab_test_data' });
-        }
-    }
-
-    render_selected_lab_test() {
-        const selected_radiology_list = this.main_container.querySelector('.right_body_cont');
-        selected_radiology_list.innerHTML = '';
-        // the item is the id of radiology test so take name from the radiology_data.radiology_tests
-        const lab_test_data = globalStates.getState('lab_test_data');
-
-        if (this.selected_lab_test.length > 0) {
-
-
-
-            this.selected_lab_test.forEach((item_id) => {
-
-                const item = lab_test_data.lab_test_tests.find(val => parseInt(val.id) === item_id);
-                if (!item) return;
-                var row_item = document.createElement('div');
-                row_item.classList.add('lab_order_list_item');
-                row_item.classList.add('selected');
-                row_item.setAttribute('data_src', item.id);
-                row_item.innerHTML = `
-                <p>${item.name}</p>
-                <span class='switch_icon_indeterminate_check_box'></span>
-                `;
-
-                row_item.addEventListener('click', () => {
-                    //remove the clicked item from the selected_radiology_test array
-                    this.selected_lab_test = this.selected_lab_test.filter((selected_items) => selected_items != item_id);
-                    // remove the item from the selected_radiology_test array
-                    this.render_selected_lab_test();
-                    // remove the item from the selected_radiology_test array
-                    this.loadLabTestList();
-                });
-
-                selected_radiology_list.prepend(row_item);
-            }
-            );
-        }
-    }
-
-    loadLabTestCategoryList() {
-        if (globalStates.getState('lab_test_data_exists')) {
-            const lab_test_data = globalStates.getState('lab_test_data');
-            const category_list = this.main_container.querySelector('.group_category_cont');
-
-            category_list.innerHTML = '';
-
-            var category_list_data = lab_test_data.lab_test_category;
-            category_list_data = [
-                {
-                    id: 0,
-                    name: "All"
-                },
-                ...category_list_data
-            ];
-            var is_first_active = false;
-            category_list_data.forEach((item) => {
-
-                var category_item = document.createElement('div');
-                category_item.classList.add('group_category');
-                if (!is_first_active) {
-                    category_item.classList.add('active');
-                    this.selected_category = item.id;
-                }
-                category_item.setAttribute('data_src', item.id);
-                category_item.innerHTML = `
-                <p>${item.name}</p>
-                `;
-
-                category_item.addEventListener('click', () => {
-                    const selected_category = category_item.getAttribute('data_src');
-                    this.selected_category = selected_category;
-                    const active_category = category_list.querySelector('.group_category.active');
-                    active_category.classList.remove('active');
-                    category_item.classList.add('active');
-                    this.loadLabTestList();
-                });
-
-                category_list.appendChild(category_item);
-                is_first_active = true
-            });
-
-        }
-    }
-
-    loadLabTestList() {
-        if (globalStates.getState('lab_test_data_exists')) {
-            const lab_test_data = globalStates.getState('lab_test_data');
-            const lab_test_list = this.main_container.querySelector('.group_category_list');
-            lab_test_list.innerHTML = '';
-
-            var lab_test_list_data = lab_test_data.lab_test_tests;
-            lab_test_list_data.forEach((item) => {
-                if (this.searchQuery != '' && !item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
-                    return;
-                }
-                if (item.category == this.selected_category || this.selected_category == 0) {
-                    var span_class = "switch_icon_check_box_outline_blank";
-                    var lab_test_item = document.createElement('div');
-                    lab_test_item.classList.add('lab_test_list_item');
-
-                    if (this.selected_lab_test.includes(parseInt(item.id))) {
-                        lab_test_item.classList.add('selected');
-                        span_class = "switch_icon_check_box";
-                    }
-                    lab_test_item.setAttribute('data_src', item.id);
-                    lab_test_item.innerHTML = `
-                                                <p>${item.name}</p>
-                                                <span class='${span_class}'></span>
-                `;
-                    lab_test_item.addEventListener('click', () => {
-                        const selected_item = parseInt(lab_test_item.getAttribute('data_src'));
-                        // check if the clicked item has class selected
-                        if (lab_test_item.classList.contains('selected')) {
-                            lab_test_item.classList.remove('selected');
-                            // remove the item from the selected_lab_test array
-                            this.selected_lab_test = this.selected_lab_test.filter((item) => item != selected_item);
-                            // replace the span class with switch_icon_check_box_outline_blank
-                            lab_test_item.querySelector('span').classList.replace('switch_icon_check_box', 'switch_icon_check_box_outline_blank');
-                        }
-                        else {
-                            // replace the span class with switch_icon_check_box
-                            lab_test_item.querySelector('span').classList.replace('switch_icon_check_box_outline_blank', 'switch_icon_check_box');
-                            lab_test_item.classList.add('selected');
-                            // add the item to the selected_lab_test array
-                            this.selected_lab_test.push(selected_item);
-                        }
-                        this.render_selected_lab_test();
-                    });
-
-                    lab_test_list.appendChild(lab_test_item);
-                }
-            });
-        }
+    no_data_view() {
+        return `
+        <div class="start_page">
+            <p>No Services Added</p>
+        </div>`;
     }
 
     attachListeners() {
-        const cancel_btns = this.main_container.querySelectorAll('#confirm_cancel, .close_btn');
-
-        cancel_btns.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                this.close();
-            });
+        const cancel_btn = this.main_container.querySelector('br-button[type="cancel"]');
+        cancel_btn.addEventListener('click', () => {
+            this.close();
         });
 
-        const search_input = this.main_container.querySelector('.lab_order_popup_search');
-        search_input.addEventListener('input', debounce((e) => {
-            this.searchQuery = e.target.value;
-
-            this.loadLabTestList();
-        }, 500));
-
-        const search_btn = this.main_container.querySelector('.btn_search');
-        search_btn.addEventListener('click', () => {
-            this.searchQuery = search_input.value;
-            this.loadLabTestList();
+        const back_btn = this.main_container.querySelector('#back_btn');
+        back_btn.addEventListener('click', () => {
+            this.back_to_search_view();
         });
 
-        const submit_btn = this.main_container.querySelector('br-button[type="btn"]');
-        submit_btn.addEventListener('click', () => {
-            if (this.selected_lab_test.length == 0) {
-                notify('top_left', 'Please select at least one radiology test', 'warning');
-                return;
-            }
-            this.save_lab_test_order();
+        const submit_btn = this.main_container.querySelector('.submit_btn[type="submit"]');
+        submit_btn.addEventListener('click', async () => {
+            await this.save_other_services(submit_btn);
         });
     }
 
+    async save_other_services(btn) {
+        btn.setAttribute('loading', true);
 
-    close() {
-        const cont = document.querySelector('.popup');
-        cont.classList.remove('active');
-        cont.innerHTML = '';
-    }
+        if (this.pending_data.size <= 0) {
+            notify('top_left', 'No Services Added.', 'warning');
+            btn.removeAttribute('loading');
+            return;
+        }
 
-    async save_lab_test_order() {
-        var data = {
-            lab_order: this.selected_lab_test,
-            visit_id: this.visit_id
+
+        var body_form = {
+            visit_id: this.visit_id,
+            order_data: Array.from(this.pending_data),
         };
 
-
         try {
-            const response = await fetch('/api/patient/save_lab_test_order', {
+            const response = await fetch('/api/patient/save_other_services', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(body_form)
             });
 
             if (!response.ok) {
-                throw new Error('Fail to Save Note. Server Error');
+                throw new Error('Server Error');
             }
 
             const result = await response.json();
@@ -339,392 +203,758 @@ export class VisitsOtherServicePopUpView {
 
 
 
-            if (result.success) {
-                notify('top_left', result.message, 'success');
-                dashboardController.visitLabExamCardView.PreRender({
-                    visit_id: this.visit_id,
-                    state: this.state,
-                    data: result.data,
-                    visit_status: this.visit_status
+            if (!result.success) {
+                notify('top_left', result.message, 'warning');
+                return;
+            }
+            notify('top_left', result.message, 'success');
+            this.close();
+            dashboardController.visitOtherServicesCardView.PreRender({
+                visit_id: this.visit_id,
+                state: this.state,
+                data: result.data,
+                visit_status: this.visit_status
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', 'Failed To Save Services.', 'error');
+        } finally {
+            btn.removeAttribute('loading');
+        }
+    }
+
+    async fetch_data(searchTerm) {
+
+        try {
+            const response = await fetch('/api/patient/search_all_services', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: searchTerm,
+                    batch: this.batchNumber,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+            return result.success ? result.data : [];
+        } catch (error) {
+            console.error('Error:', error);
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
+    loader_view() {
+        return `
+                <div class="loader_cont active">
+                    <div class="loader"></div>
+                </div>
+        `;
+    }
+
+    async OtherService_Search_services(query) {
+        if (this.load_more_btn == null) this.batchNumber = 1;
+
+        const tableBody = document.querySelector('.result_cont');
+        if (this.batchNumber == 1) {
+            tableBody.innerHTML = this.loader_view();
+        }
+
+        const data = await this.fetch_data(query.query);
+
+        if (this.batchNumber === 1) {
+            tableBody.innerHTML = '';
+        }
+
+        if (data.servicesList && data.servicesList.length > 0) {
+            if (this.load_more_btn) { this.load_more_btn.remove(); }
+            this.load_more_btn = null;
+
+            data.servicesList.forEach((service) => {
+                const row = document.createElement('div');
+                row.classList.add('row');
+                row.setAttribute('data_src', service.id);
+                row.setAttribute('title', decodeHTML(service.name));
+                row.innerHTML = `
+                    <div class="info_top">
+                        <p class="name">${service.name}</p>
+                    </div>
+                `;
+                row.addEventListener('click', () => {
+                    this.open_fill_form(service.id, decodeHTML(service.name), service.status);
+                });
+                tableBody.appendChild(row);
+            });
+
+            if (data.pages > this.batchNumber) {
+                const btn_cont = document.createElement('div');
+                btn_cont.classList.add('more_btn_cont');
+                btn_cont.innerHTML = `
+                    <br-button loader_width="22" class="more_btn" title="Load More">Load More</br-button>
+                `;
+                const btn = btn_cont.querySelector('.more_btn');
+                btn.addEventListener('click', () => {
+                    this.batchNumber += 1;
+                    btn.setAttribute('loading', 'true');
+                    this.load_more_btn = btn_cont;
+                    this.OtherService_Search_services(query);
                 });
 
-
-                this.close();
-            } else {
-                notify('top_left', result.message, 'warning');
+                tableBody.appendChild(btn_cont);
             }
-        } catch (error) {
-            notify('top_left', error.message, 'error');
+        } else {
+            tableBody.innerHTML = `
+                <div class="start_view">
+                    <p class="start_view_overlay">No Results Found</p>
+                </div>
+            `;
         }
+    }
+
+    open_fill_form(id, name, status) {
+        const check_if_exist = [...this.pending_data].some(data => data.product == id);
+
+        if (check_if_exist) {
+            notify('top_left', 'Service already exists in the other services list.', 'warning');
+            return;
+        }
+
+        document.getElementById('input_slide').scrollIntoView({ behavior: 'smooth' });
+        const service_name_view = document.querySelector('#service_name_view');
+        this.selected_product = {
+            name: name,
+            id: id,
+            status: status
+        };
+        service_name_view.setValue(name);
+        service_name_view.setAttribute('shadow_value', id);
+    }
+
+    add_to_other_service_pending(data) {
+        data = {
+            product_name: this.selected_product.name,
+            ...data
+        };
+
+        this.selected_product = '';
+
+        this.pending_data.add(data);
+
+        this.render_cards();
+        this.back_to_search_view();
+    }
+
+    render_cards() {
+        const container = this.main_container.querySelector('#table_body_for_pending_data');
+
+        container.innerHTML = '';
+        const submit_btn = this.main_container.querySelector('.submit_btn[type="submit"]');
+
+        if (this.pending_data.size <= 0) {
+            container.innerHTML = this.no_data_view();
+            if (submit_btn) {
+                submit_btn.classList.add('disabled');
+            }
+            return;
+        }
+
+        if (submit_btn) {
+            submit_btn.classList.remove('disabled');
+        }
+
+        this.pending_data.forEach((data) => {
+
+
+            const card = document.createElement('div');
+            card.classList.add('procedure_card');
+            card.innerHTML = `
+            <div class="top">
+                <div class="card_left">
+                    <p class="date">${data.product_name}</p>
+                    <!-- <p class="created_by">Jan 24, 2025</p> -->
+                </div>
+                <div class="card_right">
+                    <div class="delete_btn btn">
+                        <span class="switch_icon_delete"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data">
+                <p class="head">Quantity:</p>
+                <p class="description">${data.quantity}</p>
+            </div>
+                    `;
+            card.setAttribute('title', data.product_name);
+
+
+            const remove_btn = card.querySelector('.delete_btn');
+            remove_btn.addEventListener('click', () => {
+                this.remove_from_pending(data);
+            });
+
+
+            container.prepend(card);
+
+        });
+    }
+
+    remove_from_pending(data) {
+        this.pending_data.delete(data);
+        this.render_cards();
+    }
+
+    back_to_search_view() {
+        document.getElementById('search_slide').scrollIntoView({ behavior: 'smooth' });
+        document.querySelector('#more_detail_form').reset();
+    }
+
+    close() {
+        this.pending_data.clear();
+        this.selected_product = '';
+        const cont = document.querySelector('.popup');
+        cont.classList.remove('active');
+        cont.innerHTML = '';
     }
 
     style() {
         return `
-            /* ------------------------------------------------------- */
-
     .other_service_popup {
-        width: 1200px;
-        max-width: 80%;
-        height: 650px;
-        max-height: 88%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        /* padding: 50px; */
+        border-radius: var(--main_border_r);
+        background-color: var(--pure_white_background);
         position: relative;
-        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 90%;
+        width: 90%;
+        max-width: 1300px;
+        max-height: 650px;
 
-        .cont_heading {
-            background: var(--pure_white_background);
-            border-radius: var(--main_border_r);
-            box-shadow: 0 0 5px 0 #0000001d;
-            padding: 10px 20px;
+
+        .loader_cont {
+            position: absolute;
             width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--pure_white_background);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-
-            .heading {
-                font-size: 17px;
-                font-weight: bold;
-            }
-
-            .close_btn {
-                width: 35px;
-                height: 35px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 5px;
-                flex: none;
-                cursor: pointer;
-            }
-
-            .close_btn:hover {
-                box-shadow: 0 0 5px 0 #00000019;
-            }
 
         }
 
-        .lab_order_pop_cont {
-            /* padding: 20px; */
-            display: flex;
-            width: 100%;
-            height: 100%;
-            gap: 20px;
-            overflow: scroll;
+        .heading {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-            .lab_order_pop_loader_cont {
-                position: absolute;
+        .left,
+        .right {
+            height: 100%;
+            flex: none;
+        }
+
+        .line {
+            width: 2px;
+            border-radius: 2px;
+            height: 95%;
+            background: var(--input_border);
+        }
+
+        .left {
+            display: flex;
+            overflow: hidden;
+            width: 500px;
+
+            .slider {
+                padding: 50px;
                 width: 100%;
                 height: 100%;
-                top: 0;
-                left: 0;
-                background-color: var(--pure_white_background);
-                display: none;
-                justify-content: center;
-                align-items: center;
-
-            }
-
-            .lab_order_pop_loader_cont.active {
-                display: flex;
-            }
-
-            .left {
-                padding-block: 20px;
-                width: 70%;
-                background: var(--pure_white_background);
-                border-radius: var(--main_border_r);
-                box-shadow: 0 0 5px 0 #0000001d;
+                flex: none;
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                overflow: hidden;
+                gap: 10px;
 
-                .top_head {
-                    padding-inline: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    /* border-bottom: 1px solid var(--input_border); */
-
-                    .heading {
-                        font-size: 15px;
-                        font-weight: 700;
-                    }
-
+                .search_cont_cont {
                     .search_cont {
                         display: flex;
-                        align-items: center;
-                        /* border: 2px solid var(--black-op3); */
-                        box-shadow: 0 0 5px 0 #23989e38;
-                        border-radius: var(--main_border_r);
-                        overflow: hidden;
-
-                        .lab_order_popup_search {
-                            width: 250px;
-                            padding: 10px;
-                            height: 41px;
-                            background-color: transparent;
-                            border: none;
-
-                        }
+                        gap: 10px;
+                        width: 100%;
+                        align-items: flex-end;
+                        flex-direction: row;
 
                         .btn_search {
                             border: none;
-                            /* background-color: var(--pri_color); */
+                            background-color: var(--pri_color);
                             width: 50px;
                             height: 40px;
                             cursor: pointer;
-                            /* border-radius: var(--input_main_border_r); */
+                            border-radius: var(--input_main_border_r);
                             display: flex;
                             justify-content: center;
                             align-items: center;
+
+                            span {
+                                font-size: 17px;
+                                color: var(--white);
+                            }
                         }
                     }
-
                 }
 
-                .left_body_cont {
+                .result_cont {
                     display: flex;
+                    gap: 5px;
                     flex-direction: column;
-                    gap: 20px;
-                    height: calc(100% - 60px);
+                    width: 100%;
+                    height: 100%;
+                    overflow-y: scroll;
+                    border-top: 2px solid var(--input_border);
+                    padding-top: 10px;
                     position: relative;
-                    /* overflow-y: scroll; */
 
-                    .group_category_cont_cont {
+                    .start_view {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                         width: 100%;
-                        padding-inline: 20px;
+                        height: 100%;
 
-                        .group_category_cont {
-                            display: flex;
-                            align-items: center;
-                            gap: 10px;
-                            overflow-x: scroll;
-                            padding-block: 2px;
-                            overflow-x: scroll;
-                            flex: none;
-                            padding-bottom: 10px;
-
-                            .group_category {
-                                border-radius: var(--main_border_r);
-                                cursor: pointer;
-                                border: 1px solid #00000007;
-                                flex: none;
-
-                                p {
-                                    padding: 10px 20px;
-                                    font-weight: 800;
-                                    white-space: nowrap;
-                                }
-                            }
-
-                            .group_category:hover {
-                                border: 1px solid var(--light_pri_color);
-                                box-shadow: 0 0 5px 0 #0000000b;
-
-                            }
-
-                            .group_category.active {
-                                border: 1px solid var(--light_pri_color);
-                                background-color: var(--pri_op);
-
-                                p {
-                                    color: var(--light_pri_color);
-                                }
-                            }
+                        .start_view_overlay {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
                         }
                     }
 
-                    .group_category_list {
-                        padding-inline: 20px;
-                        padding-bottom: 20px;
+                    .row {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        gap: 5px;
+                        width: 100%;
+                        padding: 10px;
+                        border-radius: var(--input_main_border_r);
+                        cursor: pointer;
+                        opacity: 1;
+                        transform: translateY(0);
+                        border: solid 1px var(--pri_border_color);
+
+                        .info_top {
+                            display: flex;
+                            justify-content: space-between;
+                            gap: 5px;
+                        }
+
+                        .name {
+                            font-size: 14px;
+                            font-weight: 600;
+                        }
+                    }
+
+                    .row:hover {
+                        background-color: var(--pri_op1);
+                    }
+
+                    .more_btn_cont {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        padding-block: 10px;
+
+                        .more_btn {
+                            border: none;
+                            background-color: var(--gray_text);
+                            padding: 10px 20px;
+                            font-weight: 500;
+                            font-size: 12px;
+                            color: var(--white);
+                            text-align: center;
+                            cursor: pointer;
+                            border-radius: 20px;
+                        }
+
+                        .more_btn:hover {
+                            background-color: var(--btn_hover_color);
+                            color: var(--white)
+                        }
+                    }
+                }
+
+                .scroll_bar::-webkit-scrollbar-thumb {
+                    background-color: var(--gray_text);
+                }
+
+                .search_cont {
+                    display: flex;
+                    gap: 10px;
+                    width: 100%;
+                    flex-direction: column;
+
+                    .btn {
+                        padding-top: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: end;
+                        height: 100%;
+
+                        .btn_next {
+                            border: none;
+                            background-color: var(--pri_color);
+                            padding: 10px 20px;
+                            font-weight: bold;
+                            width: 100%;
+                            font-size: 14px;
+                            color: var(--white);
+                            text-align: center;
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+
+                            span {
+                                color: var(--white);
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+
+                .heading_cont {
+                    display: flex;
+                    width: 100%;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .btn_back {
+                        border: none;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
+                    }
+
+                    .btn_back:hover {
+                        background-color: var(--btn_hover_color);
+
+                        span {
+                            color: var(--white);
+                        }
+                    }
+                }
+            }
+        }
+
+        .right {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: calc(100% - 502px);
+            gap: 10px;
+
+            .heading_cont {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .pending_data_view {
+                width: 100%;
+                height: 100%;
+                padding-top: 15px;
+                display: flex;
+                flex-direction: column;
+
+                .pending_data_body {
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    overflow-y: scroll;
+                    height: 100%;
+
+                    .start_page {
+                        width: 100%;
+                        height: 100%;
                         display: flex;
                         flex-direction: column;
                         align-items: center;
+                        justify-content: center;
                         gap: 10px;
-                        width: 100%;
-                        overflow-y: scroll;
-                        height: 100%;
 
-                        .lab_test_list_item {
-                            padding: 15px 20px;
-                            width: 100%;
-                            border-radius: var(--main_border_r);
-                            cursor: pointer;
-                            border: 1px solid #00000007;
+                        p {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
+                        }
+                    }
+
+                    .procedure_card {
+                        display: flex;
+                        flex-direction: column;
+                        width: calc(50% - 20px);
+                        max-width: 341px;
+                        padding: 15px;
+                        height: fit-content;
+                        border-radius: var(--main_border_r);
+                        border: solid 1px var(--pri_border_color);
+                        flex-grow: 1;
+
+
+                        .top {
+                            border: none;
                             display: flex;
                             justify-content: space-between;
-                        }
+                            align-items: center;
 
-                        .lab_test_list_item.selected {
-                            border: 1px solid var(--light_pri_color);
+                            .card_left {
+                                width: 70%;
+                            }
 
-                            span {
-                                color: var(--light_pri_color);
+                            .card_right {
+                                display: flex;
+                                gap: 10px;
+
+                                .btn {
+                                    width: 35px;
+                                    height: 35px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border-radius: 5px;
+                                    flex: none;
+                                    cursor: pointer;
+
+                                    span {
+                                        font-size: 16px;
+                                    }
+                                }
+
+                                .btn:hover {
+                                    background-color: var(--pri_op);
+
+                                    span {
+                                        color: var(--pri_color);
+                                    }
+                                }
+
+                                .delete_btn:hover {
+                                    background-color: var(--white_error_color_op1);
+
+                                    span {
+                                        color: var(--error_color);
+                                    }
+                                }
+                            }
+
+                            .date {
+                                font-size: 16px;
+                                font-weight: 900;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 2;
+
+                            }
+
+                            .created_by {
+                                font-size: 13px;
                             }
                         }
 
-                        .lab_test_list_item.selected:hover {
-                            border: 1px solid var(--light_pri_color);
-                            box-shadow: 0 0 5px 0 #0000000b;
+                        .data {
+                            display: flex;
+                            gap: 5px;
+                            align-items: center;
+                            padding-block: 5px;
+                            border-bottom: 1px solid var(--input_border);
 
-                            span {
-                                color: var(--light_pri_color);
+                            .head {
+                                font-weight: 500;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                            }
+
+                            .description {
+                                width: 40%;
+                                font-weight: 600;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
                             }
                         }
 
+                        .note {
+                            flex-direction: column;
+                            gap: 10px;
+                            height: 100%;
+                            overflow: auto;
 
+                            .head {
+                                font-weight: 700;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                                width: 100%;
+                                flex: none;
+                            }
 
-                        .lab_test_list_item:hover {
-                            border: 1px solid var(--light_pri_color);
-                            box-shadow: 0 0 5px 0 #0000000b;
-
-                            span {
-                                color: var(--light_pri_color);
+                            .description {
+                                width: 100%;
+                                font-weight: 400;
+                                white-space: unset;
+                                text-overflow: unset;
+                                overflow: unset;
+                                display: unset;
+                                word-break: break-all;
+                                overflow-y: scroll;
+                                height: 100%;
                             }
                         }
 
+                        .pills {
+                            align-items: left;
+                            flex-direction: column;
+                            gap: 10px;
+
+                            .head {
+                                font-weight: 700;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                                width: 100%;
+                            }
+
+                            .pills_cont {
+                                width: 100%;
+                                display: flex;
+                                gap: 5px;
+                                width: 100%;
+                                overflow-x: scroll;
+
+                                .pill {
+                                    flex: none;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    display: inline-block;
+                                    width: auto;
+                                    max-width: 200px;
+                                    padding: 5px 10px;
+                                    background-color: var(--pri_op);
+                                    font-weight: 700;
+                                    border-radius: 15px;
+                                    font-size: 10px;
+                                }
+                            }
+                        }
+
+                        .data:last-child {
+                            border: none;
+                        }
                     }
-                }
 
-                .loader_cont {
-                    position: absolute;
-                }
-
-            }
-
-            .right {
-                padding-block: 20px;
-                background: var(--pure_white_background);
-                border-radius: var(--main_border_r);
-                box-shadow: 0 0 5px 0 #0000001d;
-                width: 30%;
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                justify-content: space-between;
-
-                .top_head {
-                    padding: 10px 20px;
-                    /* border-bottom: 1px solid var(--input_border); */
-
-                    .heading {
-                        font-size: 15px;
-                        font-weight: 700;
-                    }
-                }
-
-                .right_body_cont {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                    height: 100%;
-                    overflow-y: scroll;
-                    padding-inline: 20px;
-                    padding-bottom: 20px;
-                    position: relative;
-
-                    .lab_order_list_item {
-                        padding: 15px 20px;
-                        width: 100%;
-                        box-shadow: 0 0 5px 0 #0000000b;
-                        border-radius: var(--main_border_r);
-                        cursor: pointer;
+                    .example {
                         display: flex;
-                        justify-content: space-between;
-                        border: 1px solid var(--light_pri_color);
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        height: 100%;
+                        font-weight: 600;
+
+                        .word {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: var(--black-op2);
+                        }
+                    }
+
+                    .procedure_card:hover {
+                        /* box-shadow: 0 0 5px 0 #0000003e; */
+                        background: var(--pri_op1);
+                    }
+
+
+
+                }
+
+
+                .btn_cont {
+                    width: 100%;
+                    border-top: 2px solid var(--border_color);
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    padding-top: 20px;
+                    gap: 20px;
+                    flex: none;
+
+                    .btn_next[type="cancel"] {
+                        background-color: var(--error_color);
+                    }
+
+                    .btn_next[type="cancel"]:hover {
+                        background-color: var(--btn_error_hover_color);
+                    }
+
+                    .btn_next {
+                        border: none;
+                        background-color: var(--pri_color);
+                        padding: 10px 20px;
+                        font-weight: bold;
+                        font-size: 14px;
+                        color: var(--white);
+                        text-align: center;
+                        cursor: pointer;
+                        border-radius: var(--input_main_border_r);
 
                         span {
-                            color: var(--light_pri_color);
-                        }
-                    }
-
-
-                }
-
-
-            }
-
-
-        }
-
-
-        .btn_cont {
-            padding-inline: 20px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: end;
-            gap: 10px;
-            padding-top: 0;
-            /* margin-top: 30px; */
-
-            br-button {
-                border: none;
-                background-color: var(--pri_color);
-                padding: 10px 35px;
-                font-weight: bold;
-                font-size: 12px;
-                color: var(--white);
-                cursor: pointer;
-                border-radius: var(--input_main_border_r);
-            }
-
-            .secondary {
-                background-color: var(--gray_text);
-                color: var(--white);
-            }
-
-        }
-
-    }
-
-    @media screen and (max-width: 850px) {
-        .other_service_popup {
-            gap:0;
-            width:100%;
-            max-width:95%;
-            height:88%;
-            background:var(--pure_white_background);
-            border-radius: var(--main_border_r);
-
-
-            .lab_order_pop_cont {
-                flex-direction:column;
-                gap:0;
-
-                .left{
-                    width:100%;
-                    height:100%;
-                    .top_head{
-                        .heading{
-                            display:none;
-                        }
-
-                        .search_cont{
-                            width:100%;
-                            .lab_order_popup_search{
-                                width:100%;
-                            }
+                            color: var(--white);
+                            font-size: 14px;
                         }
                     }
                 }
-
-                .right {
-                    box-shadow:none;
-                    width:100%;
-                    .top_head,.right_body_cont {
-                        display:none;
-                    }
-                }   
-            } 
+            }
         }
     }
+
         `;
     }
+
 }
+
+
+

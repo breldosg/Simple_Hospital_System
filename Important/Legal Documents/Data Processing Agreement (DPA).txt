@@ -1,0 +1,125 @@
+Data Processing Agreement (DPA)
+Effective Date: [Insert Date]
+Parties:
+
+[Your Company Name], a registered company ("Processor", "we", or "us")
+
+[Hospital Name], a healthcare institution ("Controller", "you" or "Hospital")
+
+1. 🎯 Purpose of the Agreement
+This Data Processing Agreement ("Agreement") governs the processing of personal and sensitive health data by the Processor on behalf of the Controller during the provision of the Hospital Management System ("Service").
+
+2. 🧾 Definitions
+Personal Data: Any information relating to an identified or identifiable individual (e.g., name, ID, phone).
+
+Sensitive Data: Includes medical records, lab results, diagnosis, prescriptions, etc.
+
+Processing: Any operation performed on data (collecting, storing, modifying, deleting).
+
+Controller: The hospital that determines the purposes and means of processing personal data.
+
+Processor: [Your Company Name], who processes data on behalf of the Controller.
+
+3. ⚙️ Scope of Processing
+We will process data only for the following purposes:
+
+Managing hospital operations
+
+Handling patient records
+
+Processing staff activities, lab orders, prescriptions, and billing
+
+Improving and supporting the software service
+
+We will not process data for any other purpose unless authorized in writing.
+
+4. 🔐 Security Measures
+We commit to implementing appropriate technical and organizational measures to ensure:
+
+Data is protected against unauthorized access, loss, alteration, or destruction
+
+Encryption of sensitive data (at rest and in transit)
+
+Access controls and secure authentication
+
+Activity logs and regular monitoring
+
+5. 🔄 Data Access and Confidentiality
+Only authorized personnel from the Processor will access the data for support or maintenance
+
+All personnel are bound by confidentiality obligations
+
+Subprocessors (e.g., cloud storage providers) will only be used with your approval and will follow the same data protection standards
+
+6. 🌍 Data Location
+All personal data will be stored in [Region/Country] or in data centers that comply with [local or GDPR-equivalent] data protection standards. You will be notified before any cross-border data transfers.
+
+7. 🧽 Data Retention and Deletion
+We will not store your data longer than necessary
+
+Upon contract termination or written request:
+
+Data will be returned to the Controller in a readable format (JSON, CSV, SQL dump, etc.)
+
+Data will then be securely deleted from our servers within 30 days
+
+8. 📢 Data Breach Notification
+In case of a data breach:
+
+We will notify the Hospital within 48 hours of becoming aware
+
+Provide details of the breach, affected data, and remediation steps
+
+Cooperate with any investigation or regulatory reporting obligations
+
+9. 📝 Audit and Compliance
+The Hospital may request a basic audit summary of the system’s data protection controls once a year
+
+If deeper audits are required, the Hospital must provide at least 14 days' notice and cover any necessary costs
+
+10. ⚖️ Legal Basis
+Both parties confirm:
+
+The Hospital is the lawful data controller
+
+The Hospital has obtained patient consent (where required)
+
+The Processor will process data in accordance with applicable privacy laws (e.g., [Local Privacy Law], GDPR if applicable)
+
+11. ⛔ Liability
+The Processor shall not be liable for:
+
+Controller’s misuse or illegal data collection
+
+Delays caused by the Controller’s failure to follow data security best practices
+
+12. 🤝 Term and Termination
+This DPA remains effective for as long as:
+
+The Hospital uses the Software; or
+
+Until terminated in writing by either party
+
+Upon termination, all data will be returned and then deleted as described in section 7.
+
+13. 📬 Contact Points
+Data Protection Contact – Processor
+[Your Company Name]
+Email: [dpo@yourcompany.com]
+Phone: [+XXX XXX XXX]
+
+Data Protection Contact – Controller
+[Hospital Name]
+Email: [Insert Hospital DPO Email]
+Phone: [Insert Number]
+
+14. ✍️ Signatures
+By signing below, both parties agree to this DPA.
+
+| **Processor**                       | **Controller (Hospital)**                 |
+| ----------------------------------- | ----------------------------------------- |
+| Name: \[Your Name]                  | Name: \[Hospital Admin]                   |
+| Title: \[DPO/CEO]                   | Title: \[Hospital Director]               |
+| Signature: ____________             | Signature: _______________                |
+| Date: [Insert Date]                 | Date: [Insert Date]                       |
+

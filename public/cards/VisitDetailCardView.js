@@ -1,4 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
+import { visit_priority, visit_type } from "../custom/customizing.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { applyStyle, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -43,6 +44,9 @@ export class VisitDetailCardView {
         const month = visitDate.toLocaleString('default', { month: 'short' }).toUpperCase();
         const year = visitDate.getFullYear();
 
+        var visit_type_title=visit_type.filter(item=>item.value==this.data.visit_type)[0].label;
+        var visit_priority_title=visit_priority.filter(item=>item.value==this.data.visit_priority)[0].label;
+
         card.innerHTML = `
             <div class="head_part">
                 <h4 class="heading">Visit Detail</h4>
@@ -72,12 +76,12 @@ export class VisitDetailCardView {
                     </div>
 
                     <div class="visit_info_cont">
-                        <p class="visit_info">${this.data.visit_priority.toUpperCase()}</p>
+                        <p class="visit_info">${visit_priority_title}</p>
                         <p class="visit_info_label">Priority</p>
                     </div>
 
                     <div class="visit_info_cont">
-                        <p class="visit_info">${this.data.visit_type}</p>
+                        <p class="visit_info">${visit_type_title}</p>
                         <p class="visit_info_label">Visit Type</p>
                     </div>
                     

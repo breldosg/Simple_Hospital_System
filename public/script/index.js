@@ -52,10 +52,6 @@ const routes = {
         view: dashboardController.aboutSystemView,
         title: 'About System'
     },
-    '/settings/appearance': {
-        view: dashboardController.appearanceSystemView,
-        title: 'Appearance'
-    },
     '/settings/diagnosis_codes_management': {
         view: dashboardController.diagnosisCodesManagementSettingView,
         title: 'Diagnosis Codes Management'
@@ -269,6 +265,10 @@ const routes = {
     '/billing/viewprices/laboratory': {
         view: dashboardController.viewBillingLaboratoryView,
         title: 'Laboratory Billing Price'
+    },
+    '/billing/viewprices/other_service': {
+        view: dashboardController.viewBillingOtherServiceView,
+        title: 'Other Service Billing Price'
     },
     '/billing/viewprices/default': {
         view: dashboardController.viewBillingDefaultPriceView,

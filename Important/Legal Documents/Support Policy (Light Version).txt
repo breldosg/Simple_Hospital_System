@@ -1,0 +1,63 @@
+Support Policy (Light Version)
+Welcome to our Support Center! We’re committed to helping hospitals run smoothly with reliable technical support and guidance.
+
+📞 How to Reach Us
+Email: support@[yourdomain].com
+
+Phone/WhatsApp: Mon–Fri, 9AM–5PM
+
+Remote Access: Scheduled (TeamViewer/AnyDesk)
+
+On-Site Visits: Available by request (fees may apply)
+
+✅ What We Support
+Help using the system (logins, reports, navigation)
+
+Fixing bugs or system errors
+
+Account & access support
+
+Basic staff guidance and follow-up
+
+Remote assistance & backups
+
+❌ What’s Not Covered
+Hardware issues (e.g., printers, scanners)
+
+Internet or power outages
+
+Unauthorized system changes
+
+Requests outside your active support plan
+
+⏱ Response Time (During Business Hours)
+Critical (System Down): Within 4 hours
+
+Major Issues: Within 12–24 hours
+
+Minor or Cosmetic Issues: Within 48–72 hours
+
+Premium plans receive faster priority support.
+
+🧾 Support Plans
+First Month Virtual Support: Free
+
+On-Site Help (First 14 Days): Free
+
+After Free Period: Support is plan-based or per visit
+
+[See Maintenance & Support Plans for details]
+
+👥 What You Need to Do
+Keep your devices, internet, and power stable
+
+Don’t change the system without us
+
+Contact us early if something’s wrong
+
+Work with us during remote support sessions
+
+🔄 Updates
+This policy may be updated. You’ll be informed of major changes.
+
+Need help? Just reach out — we’ve got your back.

@@ -1,0 +1,122 @@
+
+📄 Service Level Agreement (SLA)
+Effective Date: [Insert Date]
+Parties:
+This Service Level Agreement ("SLA") is entered into by and between:
+[Your Company Name] ("Service Provider")
+and
+[Hospital Name] ("Client" or "Hospital")
+
+1. 🎯 Purpose
+The purpose of this SLA is to define the service standards, responsibilities, and support provided by the Service Provider to the Client for the use of the Hospital Management System ("System").
+
+2. 🖥️ Scope of Services
+The Service Provider agrees to:
+
+Provide access to the System (cloud-based or on-premise)
+
+Ensure core modules are functional (Patients, Lab, Radiology, Pharmacy, Staff, Reports, etc.)
+
+Offer technical support and maintenance
+
+Provide regular backups (for cloud clients)
+
+3. 📈 System Uptime Guarantee
+For cloud-hosted systems, the Service Provider guarantees:
+
+99.5% system uptime per month, excluding:
+
+Scheduled maintenance (notified in advance)
+
+Emergency maintenance (with immediate notification)
+
+Downtime due to client-side issues (e.g., internet outage)
+
+4. 🆘 Support Services
+| **Support Channel** | **Availability** | **Response Time**    |
+| ------------------- | ---------------- | -------------------- |
+| Phone / WhatsApp    | Mon–Fri, 8am–5pm | ≤ 2 business hours   |
+| Email Support       | 24/7             | ≤ 6 business hours   |
+| Critical Issues     | 24/7             | Immediate escalation |
+
+
+Critical issues include full system downtime, login issues, or patient data loss risks.
+
+5. 🔄 Backup and Data Recovery
+For cloud clients:
+
+Daily automated backups
+
+Data stored securely in an encrypted format
+
+In case of data loss or failure, restoration is available within 24 hours
+
+For local installations:
+
+The hospital is responsible for performing regular backups
+
+The Service Provider can assist in setting up a backup system (if requested)
+
+6. 🧰 System Updates & Maintenance
+Regular updates every [monthly/quarterly] with feature improvements and bug fixes
+
+Major system updates will be communicated at least 3 days in advance
+
+Critical security patches may be deployed immediately without prior notice
+
+7. 🛠️ Incident Reporting
+All incidents or system issues must be reported via:
+
+Phone/WhatsApp: [Your Support Number]
+
+Email: [Your Support Email]
+
+Include:
+
+Time of incident
+
+Module affected
+
+Screenshots or error messages (if available)
+
+8. 📌 Client Responsibilities
+The Hospital agrees to:
+
+Ensure their staff are trained to use the System properly
+
+Report any issues or bugs promptly
+
+Maintain network and hardware infrastructure (for local version)
+
+Protect login credentials and user access rights
+
+9. 📅 SLA Review and Revisions
+This SLA will be reviewed:
+
+Annually, or
+
+Upon major system or service changes
+
+Changes will be communicated in writing and require agreement from both parties.
+
+10. ⚖️ Limitations & Liability
+The Service Provider is not responsible for:
+
+Internet outages or ISP issues on the client side
+
+Unauthorized access due to poor password practices
+
+Hardware failure or misuse (for local version)
+
+Liability is limited to the most recent one-month subscription/service fee paid by the Hospital.
+
+11. 🤝 Agreement Acceptance
+By signing below, both parties agree to the terms of this SLA.
+
+| **Service Provider**            | **Hospital**                    |
+| ------------------------------- | ------------------------------- |
+| Name: \[Your Name]              | Name: \[Admin Name]             |
+| Title: \[CEO/CTO]               | Title: \[Hospital Admin]        |
+| Date: \[Insert Date]            | Date: \[Insert Date]            |
+| Signature: \_\_\_\_\_\_\_\_\_\_ | Signature: \_\_\_\_\_\_\_\_\_\_ |
+

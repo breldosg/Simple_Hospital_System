@@ -301,6 +301,11 @@ export const view_price_cards = [
         title: 'Procedure',
     },
     {
+        link: 'other_service',
+        icon: 'switch_icon_bars_progress',
+        title: 'Other Service',
+    },
+    {
         link: 'default',
         icon: 'switch_icon_settings_applications',
         title: 'Default Prices',

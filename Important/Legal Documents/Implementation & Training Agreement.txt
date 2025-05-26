@@ -1,0 +1,122 @@
+Implementation & Training Agreement
+Effective Date: [Insert Date]
+Between:
+
+[Your Company Name], the Solution Provider ("we", "our", or "us")
+
+[Hospital Name], the Client Hospital ("you", "your" or "Hospital")
+
+1. 🎯 Purpose of the Agreement
+This agreement governs the implementation, onboarding, training, and initial support of the [Hospital System Name] software for hospitals that choose local installation.
+
+2. ⚙️ Scope of Implementation
+Our team will install and configure the full hospital system on your local infrastructure. This includes:
+
+System setup and environment configuration
+
+Network integration with your hospital's hardware
+
+Installation of software modules (e.g., Pharmacy, Lab, Records, Billing, etc.)
+
+Testing of all major functions
+
+Creating administrative and staff accounts
+
+3. 🎓 Training Services
+We will provide on-site or virtual training (based on your choice) for:
+
+Admin and IT staff on system use, user control, and troubleshooting
+
+Department heads (Lab, Pharmacy, Radiology, etc.)
+
+General staff using specific modules
+
+Training will cover:
+
+Daily usage of each module
+
+Report generation
+
+Access and permissions
+
+Backup procedures
+
+📅 Duration:
+Training will be completed within 5 working days post-installation.
+
+4. 🛠️ Initial Maintenance & Support
+✅ Free Physical Maintenance – 14 Days
+We provide up to 14 days of physical (on-site) support from the day of full installation.
+This includes:
+
+Troubleshooting hardware integration
+
+Local server and LAN issues
+
+Staff technical assistance
+
+No charges will apply for these 14 days.
+
+💻 Free Virtual Maintenance – 1 Month
+After the physical support period ends, you will receive:
+
+1 month of virtual support at no cost
+
+Support will include:
+
+Bug fixing
+
+Staff assistance via calls, chat, email, and remote sessions
+
+Module usage clarification
+
+Data backups and recovery assistance
+
+5. 💰 Post-Free Support Terms
+🌐 Virtual Support
+After the 1-month free virtual period:
+
+Support will be chargeable monthly or annually
+
+Support plans will include defined response times, hours of coverage, and number of remote sessions
+
+🧑‍🔧 Physical Support
+After the initial 14 days:
+
+Any future on-site maintenance (e.g., technician visits, hardware issues) will be charged per visit or on a service plan
+
+Travel, accommodation, and technician time will be covered by the hospital
+
+6. 📞 Support Hours & Response
+| Type of Support     | Available Hours      | Response Time              |
+| ------------------- | -------------------- | -------------------------- |
+| Virtual (Free/Plan) | Mon–Fri, 9 AM – 5 PM | Within 24 hours            |
+| Emergency           | 24/7                 | Within 6 hours (with plan) |
+| On-site             | Scheduled            | As per hospital agreement  |
+
+
+7. 📄 Documentation
+We will provide the hospital with:
+
+System user manuals
+
+Quick-start guides
+
+Emergency recovery procedures
+
+Contacts for technical support
+
+8. ⚖️ Terms and Conditions
+The Hospital agrees to provide a secure local environment for installation
+
+All training sessions must be completed within the agreed days
+
+Any delays caused by unprepared infrastructure may shift the support timeline
+
+9. ✍️ Signatures
+| **Provider**                            | **Hospital**                              |
+| --------------------------------------- | ----------------------------------------- |
+| Name: \[Your Name]                      | Name: \[Hospital Rep]                     |
+| Title: \[CEO/Technician]                | Title: \[Director/Admin]                  |
+| Signature: ______________               | Signature: _______________                |
+| Date: \[Insert Date]                    | Date: \[Insert Date]                      |
