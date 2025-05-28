@@ -107,6 +107,7 @@ import { VisitOtherServicesCardView } from "../cards/VisitOtherServicesCardView.
 import { ViewBillingOtherServiceView } from "../views/ViewBillingOtherServiceView.js";
 import { UpdateServicePricePopUpView } from "../popups/UpdateServicePricePopUpView.js";
 import { PrintJointReceiptPopUpView } from "../popups/PrintJointReceiptPopUpView.js";
+import { CompanyDetailComponent } from "../views/CompanyDetailComponent.js";
 
 
 
@@ -114,6 +115,9 @@ class DashboardController {
 
     // Dashboard View   
     dashboardView = new DashboardView();
+
+    // Company Detail Component
+    companyDetailComponent = new CompanyDetailComponent();
 
     // Settings View
     settingsView = new SettingsView();

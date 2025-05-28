@@ -28,7 +28,7 @@ export class VisitPreDiagnosisCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        console.log(params);
+ 
 
         this.resetState(data, visit_id, state, visit_status);
         this.render();
@@ -235,9 +235,9 @@ export class VisitPreDiagnosisCardView {
 
         const isChecked = checkbox.querySelector('span').classList.contains('switch_icon_check_box');
 
-        console.log(this.datas);
+ 
 
-        console.log(id);
+ 
 
 
         if (isChecked) {

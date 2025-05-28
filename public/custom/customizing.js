@@ -1,83 +1,145 @@
 // Visit View Add Card
 export const visit_add_card_btn = [
     {
+        title: 'Clinical Notes',
         body_container_id: 'clinical_group',
+        show_if: ['opd', 'emergency'],
         cards: [
             {
                 component: 'visitsClinicalEvaluationPopUpView',
                 title: 'Clinical Evaluation',
-                active_if: ['addVitalPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['addVitalPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency'],
+
             },
             {
                 component: 'visitsPreliminaryDiagnosisPopUpView',
                 title: 'Preliminary Diagnosis',
-                active_if: ['visitsClinicalEvaluationPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitsClinicalEvaluationPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency']
             },
             {
                 component: 'visitPlanForNextVisitPopUpView',
                 title: 'Plan for Next Visit',
-                active_if: [],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: [],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency']
             },
             {
                 component: 'visitsAttachmentPopUpView',
                 title: 'Attachments',
-                active_if: [],
-                operator_roles: ['ICT', 'DCT', 'SDCT', 'NRS']
+                active_if: {
+                    opd: [],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT', 'NRS'],
+                show_if_visit_type: ['opd', 'emergency']
             },
         ],
     },
     {
+        title: 'Diagnosis & Investigation',
         body_container_id: 'diagnosis_group',
+        show_if: ['opd', 'emergency', 'walkin'],
         cards: [
             {
                 component: 'visitRadiologyExamPopUpView',
                 title: 'Radiology Exam',
-                active_if: ['visitsPreliminaryDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitsPreliminaryDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency', 'walkin']
             },
             {
                 component: 'visitLabTestOrdersPopUpView',
                 title: 'Laboratory Test',
-                active_if: ['visitsPreliminaryDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitsPreliminaryDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency', 'walkin']
             },
             {
                 component: 'visitFinalDiagnosisPopUpView',
                 title: 'Final Diagnosis',
-                active_if: ['visitsPreliminaryDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitsPreliminaryDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency']
             },
         ],
     },
     {
+        title: 'Treatment Plan',
         body_container_id: 'treatment_group',
+        show_if: ['opd', 'emergency', 'walkin'],
         cards: [
             {
                 component: 'visitsPrescriptionPopUpView',
                 title: 'Prescriptions',
-                active_if: ['visitFinalDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitFinalDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency', 'walkin']
             },
             {
                 component: 'visitsProcedurePopUpView',
                 title: 'Procedures',
-                active_if: ['visitFinalDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitFinalDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency']
             },
             {
                 component: 'visitsImplementableDevicePopUpView',
                 title: 'Implantable Devices',
-                active_if: ['visitFinalDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitFinalDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency', 'walkin']
             },
             {
                 component: 'visitsOtherServicePopUpView',
                 title: 'Other Services',
-                active_if: ['visitFinalDiagnosisPopUpView'],
-                operator_roles: ['ICT', 'DCT', 'SDCT']
+                active_if: {
+                    opd: ['visitFinalDiagnosisPopUpView'],
+                    emergency: [],
+                    walkin: [],
+                },
+                operator_roles: ['ICT', 'DCT', 'SDCT'],
+                show_if_visit_type: ['opd', 'emergency', 'walkin']
             },
         ],
     },

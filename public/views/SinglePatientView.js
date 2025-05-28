@@ -47,11 +47,11 @@ export class SinglePatientView {
     addEventListeners() {
         const dateRangePicker = this.main_container.querySelector('br-date-range-picker');
         const btn_search = this.main_container.querySelector('.btn_search');
-        
+
         btn_search.addEventListener('click', () => {
             const fromDate = dateRangePicker.startDate;
             const toDate = dateRangePicker.endDate;
-            
+
             console.log('From:', fromDate);
             console.log('To:', toDate);
         });
@@ -171,7 +171,7 @@ export class SinglePatientView {
         }
 
         noVisitsMessage.style.display = 'none';
-        
+
         // Clear existing content if it's first page
         if (this.currentPage === 1) {
             timeline.innerHTML = '';
@@ -182,12 +182,6 @@ export class SinglePatientView {
             const timelineItem = document.createElement('div');
             timelineItem.className = 'timeline-item';
             timelineItem.setAttribute('data-visit-id', visit.id);
-
-            // Add click event to the entire card
-            timelineItem.addEventListener('click', () => {
-                this.handleVisitClick(visit);
-            });
-
             timelineItem.innerHTML = `
                 <div class="timeline-dot-container">
                     <div class="timeline-dot ${visit.status}"></div>
@@ -198,10 +192,10 @@ export class SinglePatientView {
                 <div class="timeline-content">
                     <div class="timeline-header">
                         <p class="visit-id">#${visit.id}</p>
-                        ${visit.status == 'active' ? 
-                            `<span class="status-badge active">Current Visit</span>` 
-                            : ''
-                        }
+                        ${visit.status == 'active' ?
+                    `<span class="status-badge active">Current Visit</span>`
+                    : ''
+                }
                     </div>
                     <div class="timeline-body">
                         <div class="doctor-info">
@@ -209,13 +203,23 @@ export class SinglePatientView {
                             <p class="doctor-name">${visit.doctor_name}</p>
                         </div>
                         <div class="visit-info">
-                            <div class="department">
-                                <p class="label">Department:</p>
-                                <p>${visit.department_name}</p>
+                            <div>
+                                <div class="department">
+                                    <p class="label">Department:</p>
+                                    <p>${visit.department_name}</p>
+                                </div>
+                                <div class="diagnosis">
+                                    <p class="label">Final Diagnosis:</p>
+                                    <p>${visit.final_diagnosis || '-'}</p>
+                                </div>
                             </div>
-                            <div class="diagnosis">
-                                <p class="label">Final Diagnosis:</p>
-                                <p>${visit.final_diagnosis || '-'}</p>
+                            <div class="visit_actions">
+                                <a href="/patient/activevisit/${visit.id}" target="_blank">
+                                    <br-button class="btn_view_visit" id="view_visit" type="button">View Visit</br-button>
+                                </a>
+                                <a href="/patient/visithistory/${visit.id}" target="_blank">
+                                    <br-button class="btn_view_visit" id="print_visit" type="button">Print Visit</br-button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -228,21 +232,5 @@ export class SinglePatientView {
             // Append the timeline item to the timeline
             timeline.appendChild(timelineItem);
         });
-    }
-
-    // Add the handler for visit clicks
-    handleVisitClick(visit) {
-        console.log('Visit clicked:', visit);
-        // You can navigate to visit details or show a modal here
-        // For example:
-        // frontRouter.navigate(`/visit/${visit.id}`);
-        // or
-        // this.showVisitDetails(visit);
-        frontRouter.navigate('/patient/visithistory/' + visit.id);
-        // dashboardController.singleVisitHistoryView.PreRender({
-        //     container: this.main_container,
-        //     visit_id: visit.id,
-        //     patient_id: this.patient_id,
-        // })
     }
 }

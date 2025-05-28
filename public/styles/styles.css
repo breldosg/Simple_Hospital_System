@@ -5351,6 +5351,10 @@ body {
                                     }
 
                                     .visit-info {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: end;
+
                                         .department {
                                             margin-bottom: 7px;
                                         }
@@ -5360,6 +5364,22 @@ body {
                                             color: var(--light_pri_color);
                                         }
 
+                                        .visit_actions {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 10px;
+
+                                            .btn_view_visit {
+                                                border: none;
+                                                background-color: var(--pri_color);
+                                                padding: 10px 35px;
+                                                font-weight: bold;
+                                                font-size: var(--main_font_size);
+                                                color: var(--white);
+                                                cursor: pointer;
+                                                border-radius: var(--input_main_border_r);
+                                            }
+                                        }
 
                                     }
 
@@ -5917,7 +5937,7 @@ body {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 15px;
+                                gap: 5px;
 
                                 .loader_cont {
                                     position: relative;
@@ -6170,7 +6190,7 @@ body {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 15px;
+                                gap: 5px;
 
 
                                 .lab_test_card {
@@ -6402,7 +6422,7 @@ body {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 15px;
+                                gap: 5px;
 
 
                                 .pre_diagnosis_card {
@@ -6634,7 +6654,7 @@ body {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 15px;
+                                gap: 5px;
 
 
                                 .final_diagnosis_card {
@@ -6783,7 +6803,7 @@ body {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 20px;
+                                gap: 5px;
 
                                 .device_card {
                                     display: flex;
@@ -7244,7 +7264,7 @@ body {
                                 display: flex;
                                 flex-direction: column;
                                 flex: none;
-                                gap: 20px;
+                                gap: 5px;
 
                                 .procedure_card {
                                     display: flex;
@@ -8915,6 +8935,57 @@ body {
 
     }
 
+    .top_card_company_info_cont {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .logo_cont {
+            width: 100px;
+            height: 100px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+
+        .company_info_cont {
+            display: block;
+            gap: 10px;
+
+            p {
+                text-align: center;
+            }
+
+            .company_moto {
+                color: var(--gray_text);
+                
+            }
+
+            .company_name {
+                font-size: 40px;
+                font-weight: 900;
+            }
+
+            .company_address {
+                color: var(--gray_text);
+            }
+
+            .company_contact_info{
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+
+                p{
+                    color: var(--gray_text);
+                }
+            }
+
+        }
+
+    }
 
 }
 

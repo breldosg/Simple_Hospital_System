@@ -510,6 +510,12 @@ export class VisitLabTestOrdersPopUpView {
                             flex: none;
                             padding-bottom: 10px;
 
+                            &::-webkit-scrollbar{
+                                width: 10px;
+                                height: 10px;
+                                cursor:pointer;
+                            }
+
                             .group_category {
                                 border-radius: var(--main_border_r);
                                 cursor: pointer;
@@ -622,7 +628,7 @@ export class VisitLabTestOrdersPopUpView {
                 .right_body_cont {
                     display: flex;
                     flex-direction: column;
-                    gap: 10px;
+                    gap: 5px;
                     height: 100%;
                     overflow-y: scroll;
                     padding-inline: 20px;
@@ -638,6 +644,7 @@ export class VisitLabTestOrdersPopUpView {
                         display: flex;
                         justify-content: space-between;
                         border: 1px solid var(--light_pri_color);
+                        align-items: center;
 
                         span {
                             color: var(--light_pri_color);

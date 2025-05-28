@@ -53,7 +53,7 @@ export class VisitPrescriptionsCardView {
         if (this.datas.length > 0) {
             this.datas.forEach((data) => {
 
-                console.log(data);
+ 
 
                 // construct if status is base on is_paid and is_given
                 let status = '';

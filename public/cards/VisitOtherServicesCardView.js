@@ -206,7 +206,7 @@ export class VisitOtherServicesCardView {
                 display: flex;
                 flex-direction: column;
                 flex: none;
-                gap: 20px;
+                gap: 5px !important;
 
                 .service_card {
                     display: flex;

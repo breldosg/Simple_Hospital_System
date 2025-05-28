@@ -19,6 +19,7 @@
 1- add check history btn ✔️
 2- kwenye view ya daktar lab na radiology card listener zake hazijakaa vzr after internal reloding ✔️
 3- Procedure haisave bila assistance au anestesia
+4- sehem yan kuangalia active visit checkout inatuma patient id badala ya visit id
 
 ======= *Procedure*
 1- tengeneza section ya kutengeneza na update procedure na category ✔️

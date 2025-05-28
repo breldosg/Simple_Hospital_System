@@ -17,7 +17,7 @@ export class VisitClinicalEvaluationCardView {
         if (!check_dashboard) {
             await screenCollection.dashboardScreen.PreRender();
         }
-        console.log(params);
+ 
 
 
         this.data = params.data ? params.data : [];

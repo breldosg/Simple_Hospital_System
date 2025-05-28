@@ -28,7 +28,7 @@ export class VisitRadiologyExamCardView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
-        console.log("radiology", params);
+
 
 
         this.resetState(data, visit_id, state, visit_status);

@@ -69,7 +69,7 @@ export class VisitLabExamCardView {
         // Only fetch data if we're in creation state and no data was provided
         if (this.state === "creation" && (!this.data || this.data.length === 0)) {
             this.data = await this.fetch_laboratory_request(this.visit_id);
-            console.log(this.data);
+
         }
     }
 
@@ -135,7 +135,7 @@ export class VisitLabExamCardView {
                     .filter(item => item.status === 'pending')
                     .map(item => item.lab_test_id);
 
-                console.log(pendingIds);
+
 
 
                 dashboardController.visitLabTestOrdersPopUpView.PreRender({

@@ -27,8 +27,8 @@ export class PatientDetailComponent {
             throw new Error('container is required');
         }
 
-        console.log(this.container);
-        
+
+
 
         // get role from global state
         this.role = globalStates.getState('user_data').role;
@@ -63,7 +63,7 @@ export class PatientDetailComponent {
         this.vitalSignsRaw_data = patient_data.vital_signs;
         this.patient_id = patient_data.id;
         this.full_patient_data = patient_data;
-        console.log(patient_data);
+
 
         // Render top patient card
         this.top_card_view(patient_data);
@@ -852,6 +852,96 @@ export class PatientDetailComponent {
                     
                 }
             }
+            
+            
+            /* -------------- Print -------------- */
+            @media print {
+                .top_card_patient_info_cont {
+                    gap: 10px;
+                    flex-direction: column;
+                    
+                    .more_btn{
+                        display: none;
+                    }
+                    
+                    .Patient_imag_cont {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+
+                        .card {
+                            width: 100%;
+                            /* overflow: auto; */
+                            display: flex;
+                            gap:20px;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            .name {
+                                font-size: var(--main_font_size_30);
+                                width: calc(100% - 70px);
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                display: inline-block;
+                            }
+                        }
+
+                        .Patient_imag {
+                            width: 70px;
+                            height: 70px;
+                            display: none;
+                        }
+
+                    
+                    
+                    }
+                    .patient_detail {
+                        .hide_on_tablet {
+                            display: none;
+                        }
+                        
+                        .card {
+                            gap: 10px 10px;
+                            
+                            .icon_card {
+                                span {
+                                    font-size: var(--main_font_size_sm);
+                                }
+                            }
+                        }
+                        .vital {
+                            margin-top: 5px;
+                            .no_vital_sign_data_view {
+                                height: 50px;
+                            }
+                            .vital_card {
+                                flex-grow: 1;
+                                padding: 5px 10px;
+                                .main_ms {
+                                    font-size: var(--main_font_size_20);
+                                    span {
+                                        font-size: var(--main_font_size_15);
+                                    }
+                                }
+                                .dist {
+                                    p {
+                                        font-size: var(--main_font_size_sm);
+                                    }
+                                    .range {
+                                        padding: 0px 5px;
+                                        span {
+                                            font-size:  var(--main_font_size_sm);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            
         `;
     }
 }

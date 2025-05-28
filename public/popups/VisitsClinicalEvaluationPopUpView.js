@@ -314,6 +314,17 @@ export class VisitsClinicalEvaluationPopUpView {
 
         }
 
+        @media screen and (max-width: 850px) {
+            .clinical_note_add_popUp {
+                max-height: none;
+
+                .section_group{
+                    width: 100% !important;
+                }
+            }
+        
+        }
+
         `;
     }
 }

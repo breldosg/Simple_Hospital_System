@@ -14,7 +14,8 @@ export class SingleVisitView {
         this.add_cards_container = [];
         this.staff_role = '';
         this.visit_detail_data = null;
-        applyStyle(this.style(), 'single_visit_cont');
+        this.visit_type = 'opd';
+        applyStyle(this.style());
     }
 
     async PreRender(params) {
@@ -24,6 +25,7 @@ export class SingleVisitView {
             await screenCollection.dashboardScreen.PreRender();
         }
 
+        this.visit_type = 'opd';
         this.rendered_card = [];
         this.visit_id = params.id;
         this.staff_role = globalStates.getState('user_data').role;
@@ -34,7 +36,7 @@ export class SingleVisitView {
 
         // Render patient detail component
         this.main_container = document.querySelector('.single_visit_cont');
-        dashboardController.patientDetailComponent.PreRender({
+        await dashboardController.patientDetailComponent.PreRender({
             container: this.main_container,
             visit_id: this.visit_id,
             location: 'visit_view',
@@ -43,7 +45,7 @@ export class SingleVisitView {
 
         this.render(params.id);
 
-        this.attach_switch_btn_listener();
+
 
         // Remove any existing window click listener
         if (this.is_add_card_open) {
@@ -57,8 +59,9 @@ export class SingleVisitView {
         if (!visit_data) return;
 
         this.visit_detail_data = visit_data.visit_detail.visit_data;
+        this.visit_type = visit_data.visit_detail.visit_data.visit_type;
 
-        console.log(this.visit_detail_data);
+        await this.render_containers(this.visit_type);
 
 
         // Render various card views
@@ -170,6 +173,7 @@ export class SingleVisitView {
             this.render_add_btn();
         }
 
+        this.attach_switch_btn_listener();
         this.fetch_Dataset();
     }
 
@@ -185,27 +189,55 @@ export class SingleVisitView {
         </div>
     </div>
     <div class="more_visit_detail" id="tablet_mobile_switch_container"></div>
-
-    <div class="card_switch_cont">
-        ${['Clinical Notes', 'Diagnosis & Investigation', 'Treatment Plan']
-                .map((title, index) => `
-        <div class="card_switch_btn ${index == 0 ? 'active' : ''}" id="tablet_mobile_switch_main_cards" data_switch="${['clinical', 'diagnosis', 'treatment'][index]}_group">
-            <p>${title}</p>
-        </div>
-        `).join('')}
-    </div>
-
-    <div class="more_visit_cards" id="tablet_mobile_switch_main_container">
-        ${['Clinical Notes', 'Diagnosis & Investigation', 'Treatment Plan']
-                .map((title, index) => `
-        <div class="card_group_cont_cont" id="${['clinical', 'diagnosis', 'treatment'][index]}_group">
-            <h4 class="main_card_group_cont_title">${title}</h4>
-            <div class="card_group_cont"></div>
-        </div>
-        `).join('')}
-    </div>
 </div>
 `;
+    }
+
+    async render_containers(visit_type = 'opd') {
+        var card_switch_cont = document.createElement('div');
+        card_switch_cont.className = 'card_switch_cont';
+        card_switch_cont.id = 'tablet_mobile_switch_container';
+
+        var more_visit_cards = document.createElement('div');
+        more_visit_cards.className = 'more_visit_cards';
+        more_visit_cards.id = 'tablet_mobile_switch_main_container';
+
+        visit_add_card_btn.forEach((container, index) => {
+
+            if (container.show_if.includes(visit_type)) {
+                var card_switch_btn = document.createElement('div');
+                card_switch_btn.className = `card_switch_btn ${index == 0 ? 'active' : ''}`;
+                card_switch_btn.id = "tablet_mobile_switch_main_cards";
+                card_switch_btn.innerHTML = `<p>${container.title}</p>`;
+
+                card_switch_btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // remove active class from all switch btn
+                    this.main_container.querySelector('#tablet_mobile_switch_main_cards.active').classList.remove('active');
+                    // add active class to the clicked btn
+                    card_switch_btn.classList.add('active');
+
+                    const card_to_switch = this.main_container.querySelector(`#${container.body_container_id}`);
+
+                    scrollToItem(more_visit_cards, card_to_switch);
+                });
+
+                card_switch_cont.appendChild(card_switch_btn);
+
+                var card_group_cont_cont = document.createElement('div');
+                card_group_cont_cont.className = 'card_group_cont_cont';
+                card_group_cont_cont.id = container.body_container_id;
+                card_group_cont_cont.innerHTML = `<h4 class="main_card_group_cont_title">${container.title}</h4>
+                                                <div class="card_group_cont"></div>
+                                                `;
+                more_visit_cards.appendChild(card_group_cont_cont);
+
+
+            }
+        })
+
+        this.main_container.appendChild(card_switch_cont);
+        this.main_container.appendChild(more_visit_cards);
     }
 
     render_add_btn() {
@@ -219,7 +251,7 @@ export class SingleVisitView {
 
         //create new add card btn
         visit_add_card_btn.forEach(btn => {
-            const body = document.querySelector(`.single_visit_cont #${btn.body_container_id} .card_group_cont`);
+            const body = this.main_container.querySelector(`#${btn.body_container_id} .card_group_cont`);
             if (!body) return;
 
             const cards_cont = this.createAddCardButton(btn);
@@ -243,7 +275,7 @@ export class SingleVisitView {
                 // get card to switch to
                 const card_to_switch = btn.getAttribute('data_switch');
                 var scroll_width = card_to_switch_cont.scrollWidth;
-                console.log(scroll_width);
+
 
                 if (card_to_switch == 'right') {
                     card_to_switch_cont.scrollBy({ left: scroll_width, behavior: 'smooth' });
@@ -252,25 +284,7 @@ export class SingleVisitView {
                 }
             });
         });
-
-        const main_switch_btn = this.main_container.querySelectorAll('#tablet_mobile_switch_main_cards');
-        const main_switch_cont = this.main_container.querySelector('#tablet_mobile_switch_main_container');
-        main_switch_btn.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // remove active class from all switch btn
-                this.main_container.querySelector('#tablet_mobile_switch_main_cards.active').classList.remove('active');
-                // add active class to the clicked btn
-                btn.classList.add('active');
-
-                const card_to_switch = this.main_container.querySelector(`#${btn.getAttribute('data_switch')}`);
-
-                scrollToItem(main_switch_cont, card_to_switch);
-
-            });
-        });
     }
-
-
 
     createAddCardButton(btn) {
         const cards_cont = document.createElement('div');
@@ -295,29 +309,31 @@ export class SingleVisitView {
         option_cont.className = 'option_cont';
 
         btn.cards.forEach(card => {
-            const option = document.createElement('div');
-            option.className = 'option';
-            option.innerText = card.title;
 
-            var is_role_support = !card.operator_roles.includes(this.staff_role);
-            var is_component_rendered = this.rendered_card.includes(card.component);
-            var is_restricted = false;
+            if (card.show_if_visit_type.includes(this.visit_type ?? 'opd')) {
+                const option = document.createElement('div');
+                option.className = 'option';
+                option.innerText = card.title;
 
+                var is_role_support = !card.operator_roles.includes(this.staff_role);
+                var is_component_rendered = this.rendered_card.includes(card.component);
+                var is_restricted = false;
 
+                card.active_if[this.visit_type].forEach(active_if => {
+                    if (!this.rendered_card.includes(active_if)) {
+                        is_restricted = true;
+                    }
+                });
 
-            card.active_if.forEach(active_if => {
-                if (!this.rendered_card.includes(active_if)) {
-                    is_restricted = true;
+                if (is_component_rendered || is_role_support || is_restricted) {
+                    option.classList.add('disabled');
+                } else {
+                    this.setupCardOptionListener(option, card, cards_cont);
                 }
-            });
 
-            if (is_component_rendered || is_role_support || is_restricted) {
-                option.classList.add('disabled');
-            } else {
-                this.setupCardOptionListener(option, card, cards_cont);
-            }
+                option_cont.appendChild(option);
+            };
 
-            option_cont.appendChild(option);
         });
 
         return option_cont;
@@ -657,9 +673,12 @@ export class SingleVisitView {
 
             .more_visit_cards {
                 width: 100%;
-                display: grid;
-                grid-template-columns: repeat(3, minmax(300px, 1fr));
+                display: flex;
                 gap: 20px;
+
+                .card_group_cont_cont{
+                    width: 100%;
+                }
             }
         }
 

@@ -11,6 +11,7 @@ export class SingleVisitHistoryView {
         applyStyle(this.style())
         this.rendered_cards = new Set();
 
+
         this.card_to_show = [
             {
                 title: 'Visit Details',
@@ -106,216 +107,137 @@ export class SingleVisitHistoryView {
     }
 
     async PreRender(params) {
-        try {
-            if (!params?.id) {
-                throw new Error('Visit ID is required');
-            }
-
-            // Reset state
-            this.visit_id = params.id;
-            this.rendered_cards = new Set();
-
-            // Ensure dashboard is rendered
-            const check_dashboard = document.querySelector('.print_cont');
-            if (!check_dashboard) {
-                await screenCollection.printScreen.PreRender();
-            }
-
-            // Get container and render initial structure
-            const cont = document.querySelector('.print_cont');
-            if (!cont) {
-                throw new Error('Container not found');
-            }
-
-            cont.innerHTML = this.ViewReturn();
-            this.main_container = document.querySelector('.single_visit_history_cont');
-
-            if (!this.main_container) {
-                throw new Error('Main container not found after rendering');
-            }
-
-
-            // Render patient details
-            await dashboardController.patientDetailComponent.PreRender({
-                container: this.main_container,
-                visit_id: this.visit_id,
-                location: 'patient_history',
-            });
-
-            // Render company details
-            await dashboardController.companyDetailComponent.PreRender({
-                container: this.main_container,
-            });
-
-            // Render main content
-            await this.render();
-
-        } catch (error) {
-            console.error('Error in PreRender:', error);
-            notify('top_left', error.message || 'Failed to initialize view', 'error');
+        // Render the initial structure with the loader
+        const check_dashboard = document.querySelector('.update_cont');
+        if (!check_dashboard) {
+            await screenCollection.dashboardScreen.PreRender();
         }
+
+        this.rendered_cards = new Set();
+
+        this.visit_id = params.id;
+
+
+        const cont = document.querySelector('.update_cont');
+        cont.innerHTML = this.ViewReturn('', 'active');
+        this.main_container = document.querySelector('.single_visit_history_cont');
+
+        dashboardController.patientDetailComponent.PreRender({
+            container: this.main_container,
+            visit_id: this.visit_id,
+            location: 'patient_history',
+        })
+
+
+        // Now call render which will fetch data and populate it
+        this.render();
     }
 
     async render() {
-        try {
-            const visit_data = await this.fetchData();
-            if (!visit_data) {
-                notify('top_left', 'Failed to load visit data', 'error');
-                return;
-            }
+        // const cont = document.querySelector('.update_cont');
+        const visit_data = await this.fetchData(); // Wait for fetchData to complete
 
-            console.log("history data", visit_data);
+        console.log("history data", visit_data);
 
-            const cardRenderConfig = [
-                {
-                    method: this.render_visit_detail,
-                    dataKey: 'visit_detail',
-                    dataArray: 'visit_data',
-                    cardName: 'visit_detail'
-                },
-                {
-                    method: this.render_clinic_evaluation,
-                    dataKey: 'clinical_evaluation_data',
-                    dataArray: 'evaluation_data',
-                    cardName: 'clinic_evaluation'
-                },
-                {
-                    method: this.render_visit_plan,
-                    dataKey: 'plan_visit_data',
-                    dataArray: 'plan_data',
-                    cardName: 'visit_plan'
-                },
-                {
-                    method: this.render_pre_diagnosis,
-                    dataKey: 'pre_diagnosis_data',
-                    dataArray: 'diagnosis_data',
-                    cardName: 'pre_diagnosis'
-                },
-                {
-                    method: this.render_final_diagnosis,
-                    dataKey: 'final_diagnosis_data',
-                    dataArray: 'diagnosis_data',
-                    cardName: 'final_diagnosis'
-                },
-                {
-                    method: this.render_lab_results,
-                    dataKey: 'lab_order_data',
-                    dataArray: 'order_data',
-                    condition: (data) => data?.success,
-                    cardName: 'lab_results',
-                    fetchData: true
-                },
-                {
-                    method: this.render_radiology_results,
-                    dataKey: 'radiology_order_data',
-                    dataArray: 'order_data',
-                    condition: (data) => data?.success,
-                    cardName: 'radiology_results',
-                    fetchData: true
-                },
-                {
-                    method: this.render_patient_notes,
-                    dataKey: 'patient_note',
-                    dataArray: 'note_data',
-                    condition: (data) => data?.success && data?.note_data?.length > 0,
-                    cardName: 'patient_notes'
-                },
-                {
-                    method: this.render_allergies,
-                    dataKey: 'allergy_data',
-                    dataArray: 'allergy_data',
-                    condition: (data) => data?.success && data?.allergy_data?.length > 0,
-                    cardName: 'allergies'
-                },
-                {
-                    method: this.render_vaccines,
-                    dataKey: 'vaccine_data',
-                    dataArray: 'vaccine_data',
-                    condition: (data) => data?.success && data?.vaccine_data?.length > 0,
-                    cardName: 'vaccines'
-                },
-                {
-                    method: this.render_implants,
-                    dataKey: 'implantable_device_data',
-                    dataArray: 'devices_data',
-                    condition: (data) => data?.success && data?.devices_data?.length > 0,
-                    cardName: 'implants'
-                },
-                {
-                    method: this.render_procedures,
-                    dataKey: 'procedure_data',
-                    dataArray: 'procedure_data',
-                    condition: (data) => data?.success && data?.procedure_data?.length > 0,
-                    cardName: 'procedures'
-                },
-                {
-                    method: this.render_prescriptions,
-                    dataKey: 'prescription_data',
-                    dataArray: 'prescription_data',
-                    condition: (data) => data?.success && data?.prescription_data?.length > 0,
-                    cardName: 'prescriptions'
-                },
-                {
-                    method: this.render_attachments,
-                    dataKey: 'attachments_data',
-                    dataArray: 'attachments_data',
-                    condition: (data) => data?.success && data?.attachments_data?.length > 0,
-                    cardName: 'attachments'
-                },
-            ];
+        const cardRenderConfig = [
+            {
+                method: this.render_visit_detail,
+                dataKey: 'visit_detail',
+                dataArray: 'visit_data',
+                cardName: 'visit_detail'
+            },
+            {
+                method: this.render_clinic_evaluation,
+                dataKey: 'clinical_evaluation_data',
+                dataArray: 'evaluation_data',
+                cardName: 'clinic_evaluation'
+            },
+            {
+                method: this.render_visit_plan,
+                dataKey: 'plan_visit_data',
+                dataArray: 'plan_data',
+                cardName: 'visit_plan'
+            },
+            {
+                method: this.render_pre_diagnosis,
+                dataKey: 'pre_diagnosis_data',
+                dataArray: 'diagnosis_data',
+                cardName: 'pre_diagnosis'
+            },
+            {
+                method: this.render_final_diagnosis,
+                dataKey: 'final_diagnosis_data',
+                dataArray: 'diagnosis_data',
+                cardName: 'final_diagnosis'
+            },
+            {
+                method: this.render_patient_notes,
+                dataKey: 'patient_note',
+                dataArray: 'note_data',
+                condition: (data) => data.success && data.note_data.length > 0,
+                cardName: 'patient_notes'
+            },
+            {
+                method: this.render_allergies,
+                dataKey: 'allergy_data',
+                dataArray: 'allergy_data',
+                condition: (data) => data.success && data.allergy_data.length > 0,
+                cardName: 'allergies'
+            },
+            {
+                method: this.render_vaccines,
+                dataKey: 'vaccine_data',
+                dataArray: 'vaccine_data',
+                condition: (data) => data.success && data.vaccine_data.length > 0,
+                cardName: 'vaccines'
+            },
+            {
+                method: this.render_implants,
+                dataKey: 'implantable_device_data',
+                dataArray: 'devices_data',
+                condition: (data) => data.success && data.devices_data.length > 0,
+                cardName: 'implants'
+            },
+            {
+                method: this.render_procedures,
+                dataKey: 'procedure_data',
+                dataArray: 'procedure_data',
+                condition: (data) => data.success && data.procedure_data.length > 0,
+                cardName: 'procedures'
+            },
+            {
+                method: this.render_prescriptions,
+                dataKey: 'prescription_data',
+                dataArray: 'prescription_data',
+                condition: (data) => data.success && data.prescription_data.length > 0,
+                cardName: 'prescriptions'
+            },
+            {
+                method: this.render_attachments,
+                dataKey: 'attachments_data',
+                dataArray: 'attachments_data',
+                condition: (data) => data.success && data.attachments_data.length > 0,
+                cardName: 'attachments'
+            },
+        ];
 
-            // Clear rendered cards set
-            this.rendered_cards = new Set();
+        await cardRenderConfig.forEach(async (config) => {
+            if (config.condition && !config.condition(visit_data[config.dataKey])) return;
+            var data = visit_data[config.dataKey];
 
-            // Process each card configuration sequentially
-            for (const config of cardRenderConfig) {
-                try {
-                    const data = visit_data[config.dataKey];
+            config.method.call(this, // Use .call(this, ...) to ensure 'this' context
+                config.dataArray ? data[config.dataArray] : undefined,
+            );
 
-                    // Skip if condition exists and is not met
-                    if (config.condition && !config.condition(data)) continue;
+            this.rendered_cards.add(config.cardName);
 
-                    // If this config requires fetching additional data
-                    let renderData;
-                    if (config.fetchData) {
-                        if (config.cardName === 'lab_results') {
-                            renderData = await this.fetch_laboratory_request(this.visit_id);
-                        } else if (config.cardName === 'radiology_results') {
-                            renderData = await this.fetch_radiology_request(this.visit_id);
-                        }
-                    } else {
-                        renderData = config.dataArray ? data[config.dataArray] : undefined;
-                    }
+            if (config.afterRender) config.afterRender();
+        });
 
-                    // Call render method with proper context and data
-                    await config.method.call(
-                        this,
-                        renderData
-                    );
+        console.log("rendered cards", this.rendered_cards);
+        this.render_settings_popup();
 
-                    // Add to rendered cards set
-                    this.rendered_cards.add(config.cardName);
-
-                    // Call afterRender if exists
-                    if (config.afterRender) {
-                        await config.afterRender.call(this);
-                    }
-                } catch (error) {
-                    console.error(`Error rendering ${config.cardName}:`, error);
-                    notify('top_left', `Failed to render ${config.cardName}`, 'warning');
-                }
-            }
-
-            console.log("rendered cards", this.rendered_cards);
-
-            // Render settings popup and attach listeners
-            await this.render_settings_popup();
-            this.attach_listeners();
-
-        } catch (error) {
-            console.error('Error in render:', error);
-            notify('top_left', 'Failed to render visit history', 'error');
-        }
+        this.attach_listeners();
     }
 
     ViewReturn(data, loader = '') {
@@ -327,296 +249,257 @@ export class SingleVisitHistoryView {
                     </div>
                     <button type="button" class="print_btn_btn">Print Report</button>
                 </div>
-                
+                ${this.card_to_show.map(card => card.render_in_view ? `<div class="${card.class_name}"></div>` : '').join('')}
             </div>
         `;
     }
 
     attach_listeners() {
-        try {
-            // Remove any existing listeners first
-            const existingPrintBtn = this.main_container.querySelector('.print_btn_btn');
-            const existingSettingsBtn = this.main_container.querySelector('.settings_btn');
-            const newPrintBtn = existingPrintBtn.cloneNode(true);
-            const newSettingsBtn = existingSettingsBtn.cloneNode(true);
+        // Disable Ctrl+P
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                this.print_document();
 
-            if (existingPrintBtn) {
-                existingPrintBtn.parentNode.replaceChild(newPrintBtn, existingPrintBtn);
             }
+        });
 
-            if (existingSettingsBtn) {
-                existingSettingsBtn.parentNode.replaceChild(newSettingsBtn, existingSettingsBtn);
-            }
-
-            // Attach print button listener
-            newPrintBtn.addEventListener('click', () => {
+        const print_btn = this.main_container.querySelector('.print_btn_btn');
+        if (print_btn) {
+            print_btn.addEventListener('click', () => {
                 this.print_document();
             });
+        }
 
-            // Attach settings button listener
-            newSettingsBtn.addEventListener('click', () => {
+        const settings_btn = this.main_container.querySelector('.settings_btn');
+        if (settings_btn) {
+            settings_btn.addEventListener('click', () => {
                 this.open_render_settings_popup();
             });
-
-            // Attach keyboard shortcut for printing
-            const handleKeyPress = (e) => {
-                if (e.ctrlKey && e.key === 'p') {
-                    e.preventDefault();
-                    this.print_document();
-                }
-            };
-
-            // Remove existing listener if any
-            document.removeEventListener('keydown', handleKeyPress);
-            // Add new listener
-            document.addEventListener('keydown', handleKeyPress);
-
-        } catch (error) {
-            console.error('Error attaching listeners:', error);
-            notify('top_left', 'Failed to attach event listeners', 'warning');
         }
     }
 
     async print_document() {
-        try {
-            // Store original body classes and theme
-            const originalBodyClasses = document.body.classList.value;
-            const originalTheme = document.documentElement.getAttribute('data-theme');
 
-            // Create and append print styles
-            const style = document.createElement('style');
-            style.id = 'print_style';
-            style.innerHTML = this.report_style();
-            document.head.appendChild(style);
+        // Add print styles
+        var style = document.createElement('style');
+        style.id = 'print_style';
+        style.innerHTML = this.report_style();
+        document.head.appendChild(style);
 
-            // Set light theme for printing
-            document.body.classList.value = '';
-            document.body.classList.add('light_mode');
-            document.documentElement.setAttribute('data-theme', 'light');
+        // Get body class list
+        var body_class = document.body.classList.value;
+        // Clean body class list
+        document.body.classList.value = '';
+        // Add print class to body
+        document.body.classList.add('light_mode');
 
-            // Close settings popup
-            this.close_render_settings_popup();
+        // Close popup
+        this.close_render_settings_popup();
 
-            // Print the document
-            window.print();
+        // Print
+        window.print();
 
-            // Cleanup and restore original state
-            document.head.removeChild(style);
+        // Restore everything
+        document.head.removeChild(style);
+        body_class.split(' ').forEach(cls => {
+            if (cls) document.body.classList.add(cls);
+        });
 
-            // Restore original body classes
-            document.body.classList.value = originalBodyClasses;
-
-            // Restore original theme
-            document.documentElement.setAttribute('data-theme', originalTheme);
-
-            // Show all sections again
-            this.rendered_cards.forEach(card_name => {
-                const card_info = this.card_to_show.find(card => card.cardName === card_name);
-                if (card_info) {
-                    const section = this.main_container.querySelector(`.${card_info.class_name}`);
-                    if (section) {
-                        section.style.display = '';
-                        section.classList.remove('display_hidden');
-                    }
-                }
-            });
-
-            // Update print options UI
-            const popup = document.querySelector('.wrapper .popup');
-            if (popup) {
-                const selectAllAction = popup.querySelector('.select_all_action');
-                if (selectAllAction) {
-                    selectAllAction.innerHTML = "Hide All";
-                    selectAllAction.setAttribute('data_action', 'hide');
-                }
-                await this.render_on_print_options_item(popup, 'show');
+        // Show all sections again
+        section_checkboxes.forEach(checkbox => {
+            const section = document.querySelector(`.${checkbox.dataset.section}`);
+            if (section) {
+                section.style.display = '';
             }
-
-        } catch (error) {
-            console.error('Error during printing:', error);
-            notify('top_left', 'Failed to print document', 'error');
-        }
-    }
-
-    async render_settings_popup() {
-        try {
-            // Create popup if it doesn't exist
-            await this.create_popup();
-
-            const popup = document.querySelector('.wrapper .popup');
-            if (!popup) {
-                throw new Error('Failed to find or create popup element');
-            }
-
-            popup.innerHTML = `
-                <div class="popup_content">
-                    <div class="print_sections">
-                        <div class="print_sections_header">
-                            <h3>Print Options</h3>
-                            <div class="close_print_sections">
-                                <span class='switch_icon_close'></span>
-                            </div>
-                        </div>
-
-                        <div class="select_all_cont">
-                            <p class="select_all_text">Shown</p>
-                            <p class="select_all_action" data_action="hide">Hide All</p>
-                        </div>
-                        <div class="sections_list"></div>
-                        <div class="print_actions">
-                            <button class="print_now_btn">Print Now</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // Attach event listeners
-            const closeBtn = popup.querySelector('.close_print_sections');
-            const selectAllAction = popup.querySelector('.select_all_action');
-            const printNowBtn = popup.querySelector('.print_now_btn');
-
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => this.close_render_settings_popup());
-            }
-
-            if (selectAllAction) {
-                selectAllAction.addEventListener('click', (e) => {
-                    const action = e.target.getAttribute('data_action');
-                    this.handle_select_all_action(action, e.target);
-                });
-            }
-
-            if (printNowBtn) {
-                printNowBtn.addEventListener('click', () => this.print_document());
-            }
-
-            // Render section options
-            await this.render_on_print_options_item(popup);
-
-        } catch (error) {
-            console.error('Error rendering settings popup:', error);
-            notify('top_left', 'Failed to render print settings', 'warning');
-        }
-    }
-
-    create_popup() {
-        return new Promise((resolve) => {
-            let popup = document.querySelector('.wrapper .popup');
-            if (!popup) {
-                popup = document.createElement('div');
-                popup.className = 'popup';
-                const popup_content = document.createElement('div');
-                popup_content.className = 'popup_content';
-                popup.appendChild(popup_content);
-                document.querySelector(".wrapper").appendChild(popup);
-            }
-            resolve(popup);
         });
     }
 
-    open_render_settings_popup() {
-        const popup = document.querySelector('.wrapper .popup');
-        if (popup) {
-            popup.classList.add('active');
+    async render_settings_popup() {
+        let popup = document.querySelector('.wrapper .popup');
+
+        // Create popup if it doesn't exist
+        if (!popup) {
+            console.log('in popup');
+
+            this.create_popup();
+            popup = document.querySelector('.wrapper .popup');
         }
+        popup.innerHTML = "";
+
+        // Prepare popup content
+        const content = `
+                    <div class="popup_content">
+                        <div class="print_sections">
+                            <div class="print_sections_header">
+                                <h3>Print Options</h3>
+                                <div class="close_print_sections">
+                                    <span class='switch_icon_close'></span>
+                                </div>
+                            </div>
+
+                            <div class="select_all_cont">
+                                <p class="select_all_text">Shown</p>
+                                <p class="select_all_action" data_action="hide">Hide All</p>
+                            </div>
+                            <div class="sections_list">
+
+                            </div>
+                            <div class="print_actions">
+                                <button class="print_now_btn">Print Now</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+        popup.innerHTML = content;
+
+
+        // close the popup
+        popup.querySelector('.close_print_sections').addEventListener('click', () => {
+            this.close_render_settings_popup();
+        });
+
+        // select all action 
+        popup.querySelector('.select_all_action').addEventListener('click', (e) => {
+            // get data action
+            var action = e.target.getAttribute('data_action');
+            console.log(action);
+
+            if (action == "hide") {
+                console.log('hapa hide');
+                e.target.innerHTML = "Show All";
+                e.target.setAttribute('data_action', 'show')
+                this.rendered_cards.forEach(async (card_name) => {
+                    var card_info = this.card_to_show.find(card => card.cardName === card_name);
+                    // hide the card
+                    this.main_container.querySelector(`.${card_info.class_name}`).classList.add('display_hidden');
+                })
+                this.render_on_print_options_item(popup, 'hide')
+            } else {
+                console.log('hapa show');
+
+                e.target.innerHTML = "Hide All";
+                e.target.setAttribute('data_action', 'hide')
+                this.rendered_cards.forEach(async (card_name) => {
+                    var card_info = this.card_to_show.find(card => card.cardName === card_name);
+
+                    // hide the card
+                    this.main_container.querySelector(`.${card_info.class_name}`).classList.remove('display_hidden');
+                })
+                this.render_on_print_options_item(popup, 'show')
+            }
+        })
+
+        // render selection options
+        this.render_on_print_options_item(popup)
+
+
+        // Add event listeners for the new content
+        const select_all = popup.querySelector('.select_all_checkbox');
+        const section_checkboxes = popup.querySelectorAll('.sections_list input[type="checkbox"]');
+        const print_now_btn = popup.querySelector('.print_now_btn');
+
+        if (select_all) {
+            select_all.addEventListener('change', (e) => {
+                section_checkboxes.forEach(checkbox => {
+                    checkbox.checked = e.target.checked;
+                });
+            });
+        }
+
+        if (section_checkboxes) {
+            section_checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const all_checked = Array.from(section_checkboxes).every(cb => cb.checked);
+                    select_all.checked = all_checked;
+                });
+            });
+        }
+
+        if (print_now_btn) {
+            print_now_btn.addEventListener('click', async () => {
+                this.print_document();
+            });
+        }
+
+    }
+
+    open_render_settings_popup() {
+        let popup = document.querySelector('.wrapper .popup');
+        popup.classList.add('active');
     }
 
     close_render_settings_popup() {
-        const popup = document.querySelector('.wrapper .popup');
-        if (popup) {
-            popup.classList.remove('active');
-        }
+        var popup = document.querySelector('.wrapper .popup');
+        popup.classList.remove('active');
     }
 
-    async handle_select_all_action(action, element) {
-        try {
-            if (action === "hide") {
-                element.innerHTML = "Show All";
-                element.setAttribute('data_action', 'show');
-                this.rendered_cards.forEach(card_name => {
-                    const card_info = this.card_to_show.find(card => card.cardName === card_name);
-                    if (card_info) {
-                        const cardElement = this.main_container.querySelector(`.${card_info.class_name}`);
-                        if (cardElement) {
-                            cardElement.classList.add('display_hidden');
-                        }
-                    }
-                });
-                await this.render_on_print_options_item(document.querySelector('.wrapper .popup'), 'hide');
-            } else {
-                element.innerHTML = "Hide All";
-                element.setAttribute('data_action', 'hide');
-                this.rendered_cards.forEach(card_name => {
-                    const card_info = this.card_to_show.find(card => card.cardName === card_name);
-                    if (card_info) {
-                        const cardElement = this.main_container.querySelector(`.${card_info.class_name}`);
-                        if (cardElement) {
-                            cardElement.classList.remove('display_hidden');
-                        }
-                    }
-                });
-                await this.render_on_print_options_item(document.querySelector('.wrapper .popup'), 'show');
-            }
-        } catch (error) {
-            console.error('Error in handle_select_all_action:', error);
-            notify('top_left', 'Failed to update section visibility', 'warning');
-        }
-    }
 
-    async render_on_print_options_item(popup, state = 'show') {
-        try {
-            const sections_list = popup.querySelector('.sections_list');
-            if (!sections_list) return;
+    render_on_print_options_item(popup, state = 'show') {
+        const sections_list = popup.querySelector('.sections_list');
+        sections_list.innerHTML = '';
+        this.rendered_cards.forEach(async (card_name) => {
+            const option = document.createElement('div');
+            option.className = 'checkbox_container';
+            option.setAttribute('is-checked', true);
 
-            sections_list.innerHTML = '';
+            var card_info = this.card_to_show.find(card => card.cardName === card_name);
+            // console.log("card info", card_info);
 
-            const icon_map = {
+            var title = card_info.title;
+
+            var icon_map = {
                 show: 'switch_icon_eye',
                 hide: 'switch_icon_eye_slash',
-            };
+            }
 
-            this.rendered_cards.forEach(card_name => {
-                const card_info = this.card_to_show.find(card => card.cardName === card_name);
-                if (!card_info) return;
 
-                const option = document.createElement('div');
-                option.className = 'checkbox_container';
-                option.setAttribute('is-checked', true);
-                option.innerHTML = `
-                    <p class="label">${card_info.title}</p>
-                    <span class='${icon_map[state]}'></span>
-                `;
 
-                option.addEventListener('click', () => {
-                    const is_checked = option.getAttribute('is-checked') === 'true';
-                    option.setAttribute('is-checked', !is_checked);
+            option.innerHTML = `<p class="label">${title}</p><span class='${icon_map[state]}'></span>`;
+            sections_list.appendChild(option);
 
-                    const icon = option.querySelector('span');
-                    if (is_checked) {
-                        icon.classList.replace('switch_icon_eye', 'switch_icon_eye_slash');
-                        this.main_container.querySelector(`.${card_info.class_name}`)?.classList.add('display_hidden');
-                    } else {
-                        icon.classList.replace('switch_icon_eye_slash', 'switch_icon_eye');
-                        this.main_container.querySelector(`.${card_info.class_name}`)?.classList.remove('display_hidden');
-                    }
-                });
+            option.addEventListener('click', () => {
+                // get attribute is-checked
+                var is_checked = option.getAttribute('is-checked');
 
-                sections_list.appendChild(option);
+                if (is_checked === 'true') {
+                    option.setAttribute('is-checked', false);
+                    option.querySelector('span').classList.replace('switch_icon_eye', 'switch_icon_eye_slash');
+
+                    // hide the card
+                    this.main_container.querySelector(`.${card_info.class_name}`).classList.add('display_hidden');
+
+                } else {
+                    option.setAttribute('is-checked', true);
+                    option.querySelector('span').classList.replace('switch_icon_eye_slash', 'switch_icon_eye');
+                    // show the card
+                    this.main_container.querySelector(`.${card_info.class_name}`).classList.remove('display_hidden');
+                }
             });
-        } catch (error) {
-            console.error('Error in render_on_print_options_item:', error);
-            notify('top_left', 'Failed to render print options', 'warning');
-        }
+
+        });
     }
+
+    create_popup() {
+        let popup = document.querySelector('.wrapper .popup');
+
+        if (!popup) {
+            popup = document.createElement('div');
+            popup.className = 'popup';
+            const popup_content = document.createElement('div');
+            popup_content.className = 'popup_content';
+            popup.appendChild(popup_content);
+            document.querySelector(".wrapper").appendChild(popup);
+        }
+
+    }
+
 
     render_clinic_evaluation(data) {
         var cont = this.main_container.querySelector('.clinic_plan_cont'); // Added missing dot for class selector
 
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'section_cont clinic_plan_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         // Format date
         const date = data.created_at ? date_formatter(data.created_at) : '';
@@ -651,11 +534,7 @@ export class SingleVisitHistoryView {
 
         var cont = this.main_container.querySelector('.clinic_plan_cont');
 
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'section_cont clinic_plan_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         // Format date
         const date = data.created_at ? date_formatter(data.created_at) : '';
@@ -689,11 +568,7 @@ export class SingleVisitHistoryView {
     render_pre_diagnosis(data) {
         var cont = this.main_container.querySelector('.pre_final_diagnosis');
 
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'pre_final_diagnosis';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         let content = '';
 
@@ -728,11 +603,7 @@ export class SingleVisitHistoryView {
 
     render_final_diagnosis(data) {
         var cont = this.main_container.querySelector('.pre_final_diagnosis');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'pre_final_diagnosis';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         let content = '';
         if (Array.isArray(data) && data.length > 0) {
@@ -766,11 +637,7 @@ export class SingleVisitHistoryView {
 
     render_patient_notes(data) {
         var cont = this.main_container.querySelector('.patient_notes_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'patient_notes_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.innerHTML = `
             <div class="notes_section">
@@ -792,11 +659,7 @@ export class SingleVisitHistoryView {
 
     render_allergies(data) {
         var cont = this.main_container.querySelector('.allergies_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'allergies_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.innerHTML = `
             <div class="allergies_section">
@@ -826,11 +689,7 @@ export class SingleVisitHistoryView {
 
     render_vaccines(data) {
         var cont = this.main_container.querySelector('.vaccines_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'vaccines_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.innerHTML = `
             <div class="vaccines_section">
@@ -853,11 +712,7 @@ export class SingleVisitHistoryView {
 
     render_implants(data) {
         var cont = this.main_container.querySelector('.implants_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'implants_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.innerHTML = `
             <div class="implants_section">
@@ -883,11 +738,7 @@ export class SingleVisitHistoryView {
 
     render_procedures(data) {
         var cont = this.main_container.querySelector('.procedures_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'procedures_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.innerHTML = `
             <h3>Procedures</h3>
@@ -924,11 +775,7 @@ export class SingleVisitHistoryView {
 
     render_prescriptions(data) {
         var cont = this.main_container.querySelector('.prescription_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'prescription_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.innerHTML = `
             <h3>Prescription</h3>
@@ -961,11 +808,7 @@ export class SingleVisitHistoryView {
 
     render_attachments(data) {
         var cont = this.main_container.querySelector('.attachments_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'attachments_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         cont.classList.add('page_break');
 
@@ -998,11 +841,7 @@ export class SingleVisitHistoryView {
 
     render_visit_detail(data) {
         var cont = this.main_container.querySelector('.visit_detail_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'visit_detail_cont';
-            this.main_container.appendChild(cont);
-        }
+        if (!cont) return;
 
         var visit_priority_title = visit_priority.find(priority => priority.value === data.visit_priority).label ?? "N/A";
         var visit_type_title = visit_type.find(type => type.value === data.visit_type).label ?? "N/A";
@@ -1025,80 +864,14 @@ export class SingleVisitHistoryView {
 
     async fetchData() {
         try {
-            if (!this.visit_id) {
-                throw new Error('Visit ID is not set');
-            }
-
             const response = await fetch('/api/patient/single_visit_detail', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     visit_id: this.visit_id,
-                }),
-                credentials: 'same-origin'
-            });
-
-            if (!response.ok) {
-                if (response.status === 401) {
-                    // Handle unauthorized access
-                    await this.handleUnauthorized();
-                    return null;
-                }
-                throw new Error(`Server error: ${response.status}`);
-            }
-
-            const result = await response.json();
-
-            if (!result.success) {
-                throw new Error(result.message || 'Failed to fetch visit data');
-            }
-
-            return result.data;
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            notify('top_left', error.message || 'Failed to fetch visit data', 'error');
-            return null;
-        }
-    }
-
-    async handleUnauthorized() {
-        try {
-            // Fade out the body
-            document.body.style.transition = 'opacity 0.5s ease';
-            document.body.style.opacity = '0';
-
-            // Wait for fade out animation
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            // Navigate to login
-            frontRouter.navigate('/login');
-
-            // Fade back in
-            document.body.style.opacity = '1';
-
-        } catch (error) {
-            console.error('Error handling unauthorized access:', error);
-            // Force navigation to login as fallback
-            frontRouter.navigate('/login');
-        }
-    }
-
-    async fetch_laboratory_request(visit_id) {
-        try {
-            const response = await fetch('/api/laboratory/get_laboratory_test_order_list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    visit_id: visit_id,
-                }),
-                credentials: 'same-origin'
+                })
             });
 
             if (!response.ok) {
@@ -1107,172 +880,29 @@ export class SingleVisitHistoryView {
 
             const result = await response.json();
 
-            if (result.status === 401) {
-                await this.handleUnauthorized();
-                return null;
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
             }
 
-            if (!result.success) {
+
+
+            if (result.success) {
+                return result.data;
+            } else {
                 notify('top_left', result.message, 'warning');
                 return null;
             }
-
-            return result.data;
         } catch (error) {
-            console.error('Error fetching laboratory data:', error);
             notify('top_left', error.message, 'error');
             return null;
         }
-    }
-
-    async fetch_radiology_request(visit_id) {
-        try {
-            const response = await fetch('/api/patient/get_radiology_test_order_list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    visit_id: visit_id,
-                }),
-                credentials: 'same-origin'
-            });
-
-            if (!response.ok) {
-                throw new Error('Server Error');
-            }
-
-            const result = await response.json();
-
-            if (result.status === 401) {
-                await this.handleUnauthorized();
-                return null;
-            }
-
-            if (!result.success) {
-                notify('top_left', result.message, 'warning');
-                return null;
-            }
-
-            return result.data;
-        } catch (error) {
-            console.error('Error fetching radiology data:', error);
-            notify('top_left', error.message, 'error');
-            return null;
-        }
-    }
-
-    render_lab_results(data) {
-        if (!Array.isArray(data) || data.length === 0) return;
-
-        var cont = this.main_container.querySelector('.lab_report_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'lab_report_cont';
-            this.main_container.appendChild(cont);
-        }
-
-        cont.innerHTML = `
-            <h3>Laboratory Report</h3>
-            ${data.map(test => `
-                <div class="card">
-                    <div class="lab_card_top">
-                        <p class="name">${test.lab_test_name}</p>
-                        <p class="date">${date_formatter(test.created_at)}</p>
-                    </div>
-                    <div class="lab_card_bottom">
-                        ${test.status === 'complete' && test.lab_test_items.length > 0 ? `
-                            <div class="t_head tr">
-                                <p class="column">Test</p>
-                                <p class="column">Result</p>
-                                <p class="column">Normal Range</p>
-                            </div>
-                            ${test.lab_test_items.map(item => `
-                                <div class="t_body tr">
-                                    <p class="column">${item.name}</p>
-                                    <p class="column">${item.result || ''} ${item.unit || ''}</p>
-                                    <p class="column">${item.normal_range || ''}</p>
-                                </div>
-                            `).join('')}
-                            <div class="result_info">
-                                <p class="served_by">Served by: ${test.served_by}</p>
-                                <p class="served_at">Completed: ${test.served_at ? date_formatter(test.served_at) : ''}</p>
-                            </div>
-                        ` : `
-                            <div class="status_info">
-                                <p class="status ${test.status}">${test.status.toUpperCase()}</p>
-                                <p class="ordered_by">Ordered by: ${test.created_by}</p>
-                            </div>
-                        `}
-                    </div>
-                </div>
-            `).join('')}
-        `;
-    }
-
-    render_radiology_results(data) {
-        if (!Array.isArray(data) || data.length === 0) return;
-
-        var cont = this.main_container.querySelector('.radiology_report_cont');
-        if (!cont) {
-            cont = document.createElement('div');
-            cont.className = 'radiology_report_cont';
-            this.main_container.appendChild(cont);
-        }
-
-        cont.innerHTML = `
-            <h3>Radiology Report</h3>
-            ${data.map(exam => `
-                <div class="card">
-                    <div class="rad_card_top">
-                        <p class="name">${exam.radiology_name}</p>
-                        <p class="date">${date_formatter(exam.created_at)}</p>
-                    </div>
-                    <div class="rad_card_bottom">
-                        ${exam.status === 'complete' && exam.report ? `
-                            <div class="group">
-                                <p class="head">Comparison</p>
-                                <p class="value">${exam.report.comparison || ''}</p>
-                            </div>
-                            <div class="group">
-                                <p class="head">Findings</p>
-                                <p class="value">${exam.report.findings || ''}</p>
-                            </div>
-                            <div class="group">
-                                <p class="head">Impression</p>
-                                <p class="value">${exam.report.impression || ''}</p>
-                            </div>
-                            <div class="group">
-                                <p class="head">Recommendation</p>
-                                <p class="value">${exam.report.recommendation || ''}</p>
-                            </div>
-                            ${exam.report_attachment.length > 0 ? `
-                                <div class="attachments">
-                                    <p class="head">Attachments</p>
-                                    <div class="attachment_grid">
-                                        ${exam.report_attachment.map(attachment => `
-                                            <div class="attachment_preview">
-                                                <img src="${attachment.url}" alt="${attachment.file_name}" loading="lazy">
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
-                            <div class="result_info">
-                                <p class="served_by">Report by: ${exam.report.created_by}</p>
-                                <p class="served_at">Completed: ${exam.report.created_at ? date_formatter(exam.report.created_at) : ''}</p>
-                            </div>
-                        ` : `
-                            <div class="status_info">
-                                <p class="status ${exam.status}">${exam.status.toUpperCase()}</p>
-                                <p class="ordered_by">Ordered by: ${exam.created_by}</p>
-                            </div>
-                        `}
-                    </div>
-                </div>
-            `).join('')}
-        `;
     }
 
     report_style() {
@@ -1290,7 +920,6 @@ export class SingleVisitHistoryView {
             overflow: unset !important;
             padding: 0 !important;
             margin: 0 !important;
-            gap: 0 !important;
             
             .print_btn{
                 display: none !important;
@@ -1673,10 +1302,10 @@ export class SingleVisitHistoryView {
                 }
             }
 
-            .lab_report_cont,
-            .radiology_report_cont {
+            .lab_report_cont {
                 width: 100%;
                 display: flex;
+                /* display: none; */
                 flex-direction: column;
                 background-color: var(--pure_white_background);
                 gap: 20px;
@@ -1691,21 +1320,14 @@ export class SingleVisitHistoryView {
                     flex-direction: column;
                     gap: 10px;
 
-                    .lab_card_top,
-                    .rad_card_top {
+                    .lab_card_top {
                         .name {
                             font-size: 20px;
                             font-weight: 700;
                         }
-
-                        .date {
-                            color: var(--text_color_op);
-                            font-size: 14px;
-                        }
                     }
 
-                    .lab_card_bottom,
-                    .rad_card_bottom {
+                    .lab_card_bottom {
                         .tr {
                             display: grid;
                             grid-template-columns: 2fr 1fr 3.5fr;
@@ -1726,6 +1348,41 @@ export class SingleVisitHistoryView {
                             padding-block: 10px;
                             border-bottom: solid 1px var(--input_border);
                         }
+                    }
+
+                }
+
+            }
+
+            .radiology_report_cont {
+                width: 100%;
+                display: flex;
+                /* display: none; */
+                flex-direction: column;
+                background-color: var(--pure_white_background);
+                gap: 20px;
+                padding: 20px;
+                border-radius: 10px;
+
+                .card {
+                    padding: 10px;
+                    border-radius: 10px;
+                    border: solid 1px var(--active_color);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    .rad_card_top {
+                        .name {
+                            font-size: 20px;
+                            font-weight: 700;
+                        }
+                    }
+
+                    .rad_card_bottom {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
 
                         .group {
                             display: flex;
@@ -1744,87 +1401,15 @@ export class SingleVisitHistoryView {
                                 font-size: 14px;
                                 font-weight: 500;
                             }
+
+
+
                         }
 
-                        .status_info {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 5px;
-                            padding: 10px;
-                            background-color: var(--background);
-                            border-radius: 5px;
-
-                            .status {
-                                font-weight: 600;
-                                font-size: 14px;
-                                padding: 4px 8px;
-                                border-radius: 4px;
-                                width: fit-content;
-
-                                &.pending {
-                                    background-color: var(--warning_color_op);
-                                    color: var(--warning_color);
-                                }
-
-                                &.complete {
-                                    background-color: var(--success_color_op);
-                                    color: var(--success_color);
-                                }
-
-                                &.approved {
-                                    background-color: var(--pri_op);
-                                    color: var(--light_pri_color);
-                                }
-                            }
-
-                            .ordered_by {
-                                font-size: 14px;
-                                color: var(--text_color_op);
-                            }
-                        }
-
-                        .result_info {
-                            display: flex;
-                            justify-content: space-between;
-                            padding-top: 10px;
-                            border-top: 1px solid var(--active_color);
-                            font-size: 14px;
-                            color: var(--text_color_op);
-                        }
-
-                        .attachments {
-                            margin-top: 10px;
-                            
-                            .head {
-                                font-size: 16px;
-                                font-weight: 700;
-                                padding-bottom: 10px;
-                                color: var(--light_pri_color);
-                                border-bottom: solid 1px var(--active_color);
-                            }
-
-                            .attachment_grid {
-                                display: grid;
-                                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                                gap: 10px;
-                                margin-top: 10px;
-
-                                .attachment_preview {
-                                    aspect-ratio: 16/9;
-                                    overflow: hidden;
-                                    border-radius: 5px;
-                                    border: 1px solid var(--active_color);
-
-                                    img {
-                                        width: 100%;
-                                        height: 100%;
-                                        object-fit: cover;
-                                    }
-                                }
-                            }
-                        }
                     }
+
                 }
+
             }
 
             .prescription_cont {
@@ -2147,7 +1732,154 @@ export class SingleVisitHistoryView {
             }
         }
 
+        @media print {
+            .attachments_cont {
+                .attachment_card {
+                    break-inside: avoid;
+                    page-break-inside: avoid;
+                }
+            }
+        }
         
+        .popup_content{
+            width: 100%;
+            height: 100%;
+            position: relative;
+
+            .print_sections {
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                height: 100%;
+                background-color: var(--pure_white_background);
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 25%;
+                min-width: 400px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                -webkit-animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+                .print_sections_header{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-bottom: 20px;
+
+                    .close_print_sections{
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 5px;
+                        flex: none;
+                        cursor: pointer;
+                        background-color: var(--white_error_color_op1);
+                        span {
+                            color: var(--white_error_color);
+                            font-size: 16px;
+                        }
+                    }
+
+                    .close_print_sections:hover{
+                        span {
+                            color: var(--error_color);
+                        }
+                    }
+
+                }
+            
+                .select_all_cont {
+                    padding-block: 20px;
+                    border-top: 1px solid var(--active_color);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    .select_all_text{
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--gray_text);
+                    }
+                    .select_all_action{
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--light_pri_color);
+                        cursor: pointer;
+                    }
+                    
+                }
+
+                .sections_list {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+
+                    /* Scrollbar styling */
+                    &::-webkit-scrollbar {
+                        width: 6px;
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background: var(--pure_white_background);
+                        border-radius: 10px;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background: var(--active_color);
+                        border-radius: 10px;
+                    }
+                }
+
+                .print_actions {
+                    padding-top: 20px;
+                    border-top: 1px solid var(--active_color);
+                    background-color: var(--pure_white_background);
+                }
+
+                .print_now_btn {
+                    width: 100%;
+                    padding: 12px;
+                    background: var(--pri_color);
+                    color: var(--pure_white_background);
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                    color: var(--white);
+
+                    &:hover {
+                        opacity: 0.9;
+                        transform: translateY(-1px);
+                    }
+                }
+
+                .checkbox_container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    cursor: pointer;
+                    user-select: none;
+                    padding: 10px 8px;
+                    border-radius: 5px;
+                    transition: background-color 0.2s ease;
+                    width: 100%;
+
+                    &:hover{
+                        background: var(--pri_op1);
+                    }
+
+                    .label {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
         `
     }
 

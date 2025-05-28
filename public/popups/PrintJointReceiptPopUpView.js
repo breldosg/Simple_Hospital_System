@@ -1,4 +1,5 @@
 import { dashboardController } from "../controller/DashboardController.js";
+import { joint_receipt_configs } from "../custom/receipt_configs.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
 import { currency_formatter, date_formatter, getCurrentDate, notify, print_div } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -17,9 +18,15 @@ export class PrintJointReceiptPopUpView {
         console.log(params);
         this.params = params;
         this.bill_data = this.params.bills;
+        this.receipt_configs = this.params.receipt_configs;
 
         const cont = document.querySelector('.popup');
         cont.classList.add('active');
+
+        this.render(cont);
+    }
+
+    render(cont) {
         cont.innerHTML = this.ViewReturn();
 
         this.main_container = document.querySelector('.create_invoice_and_pay_bill_popup');
@@ -28,7 +35,6 @@ export class PrintJointReceiptPopUpView {
 
 
         this.attachListeners()
-
     }
 
     ViewReturn() {
@@ -74,13 +80,7 @@ export class PrintJointReceiptPopUpView {
         </div>
         
         <div class="receipt_footer">
-    ${this.bill_data.status == 'not_paid' ? `
-        <br-button loader_width="23" class="btn_primary pay_now_btn" type="submit">Pay Now</br-button>
-        ` : `
-        <br-button loader_width="23" class="btn_primary print_invoice_btn" type="submit">Print Invoice</br-button>
-        `
-            }
-
+            <br-button loader_width="23" class="btn_primary print_invoice_btn" type="submit">Print Invoice</br-button>
         </div>
 </div>
 `;
