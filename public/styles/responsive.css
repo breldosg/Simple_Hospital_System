@@ -382,14 +382,24 @@
 }
 
 @media print {
-    br-navigation {
-        display: none;
+    div {
+        border-radius: 0 !important;
+        ;
     }
 
-    .update_cont {
-        height: fit-content !important;
-        /* background: #f4f7f6 !important; */
+    .print_cont {
+        background: none !important;
+    }
+
+    .single_visit_history_cont {
+        overflow: unset !important;
         padding: 0 !important;
         margin: 0 !important;
+        gap: 0 !important;
+
+        .print_btn {
+            display: none !important;
+        }
     }
+
 }

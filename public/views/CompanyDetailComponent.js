@@ -39,12 +39,12 @@ export class CompanyDetailComponent {
         <div class="company_info_cont">
             <p class="company_moto">${INSTITUTION_MOTO}</p>
             <p class="company_name">${INSTITUTION_NAME}</p>
-            <p class="company_address">${INSTITUTION_ADDRESS}</p>
             <div class="company_contact_info">
                 <p class="small_text company_phone">${INSTITUTION_PHONE}</p>
                 <p class="small_text company_email">${INSTITUTION_EMAIL}</p>
                 <p class="small_text company_website">${INSTITUTION_WEBSITE}</p>
             </div>
+            <p class="company_address">${INSTITUTION_ADDRESS}</p>
         </div>
 
         <div class="logo_cont">

@@ -103,8 +103,6 @@ export class PrintScreen {
             .print_cont{
                 width: 100%;
                 height: 100%;
-                background-color: var(--pure_white_background);
-                background: var(--gradient_background);
                 display: flex;
                 align-items: center;
                 justify-content: center;

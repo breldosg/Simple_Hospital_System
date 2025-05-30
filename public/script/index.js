@@ -675,6 +675,64 @@ export function scrollToItem(container, item, speed = 'normal') {
     }
 }
 
+export function prepareVitalReport(data) {
+    const vitalRanges = {
+        temperature: { low: 36.1, high: 37.2, unit: '°C' },
+        pulse: { low: 60, high: 100, unit: 'bpm' },
+        respiration: { low: 12, high: 20, unit: 'bpm' },
+        o2_saturation: { low: 95, high: 100, unit: '%' },
+        blood_pressure: { 
+            systolic: { low: 90, high: 120 },
+            diastolic: { low: 60, high: 80 },
+            unit: 'mmHg'
+        }
+    };
+
+    const getStatus = (value, range) => {
+        if (!value || !range) return '';
+        const numValue = parseFloat(value);
+        if (numValue < range.low) return 'low';
+        if (numValue > range.high) return 'high';
+        return 'normal';
+    };
+
+    const getBPStatus = (bp) => {
+        if (!bp) return '';
+        const [systolic, diastolic] = bp.split('/').map(Number);
+        const sys = getStatus(systolic, vitalRanges.blood_pressure.systolic);
+        const dia = getStatus(diastolic, vitalRanges.blood_pressure.diastolic);
+        return sys === 'high' || dia === 'high' ? 'high' : sys === 'low' || dia === 'low' ? 'low' : 'normal';
+    };
+
+    return {
+        temperature: {
+            value: data.temperature,
+            status: getStatus(data.temperature, vitalRanges.temperature),
+            unit: vitalRanges.temperature.unit
+        },
+        pulse: {
+            value: data.pulse,
+            status: getStatus(data.pulse, vitalRanges.pulse),
+            unit: vitalRanges.pulse.unit
+        },
+        respiration: {
+            value: data.respiration,
+            status: getStatus(data.respiration, vitalRanges.respiration),
+            unit: vitalRanges.respiration.unit
+        },
+        o2_saturation: {
+            value: data.o2_saturation,
+            status: getStatus(data.o2_saturation, vitalRanges.o2_saturation),
+            unit: vitalRanges.o2_saturation.unit
+        },
+        blood_pressure: {
+            value: data.blood_pressure,
+            status: getBPStatus(data.blood_pressure),
+            unit: vitalRanges.blood_pressure.unit
+        }
+    };
+}
+
 
 function listen_window_width() {
     console.log(window.innerWidth);

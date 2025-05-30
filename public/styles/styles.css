@@ -59,11 +59,10 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    /* font-family: "DM Sans"; */
-    /* font-family: "Geist", sans-serif; */
     color: var(--main_text);
     transition: all 0.3s ease-in;
 
+    /* font-family: "DM Sans"; */
     font-family: "Geist", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
@@ -222,7 +221,7 @@ input {
     --click_btn: #005059;
     --hover_list_table: #00d0e71f;
 
-    --success_color: #05cd99;
+    --success_color: #04bb8a;
     --error_color: #ee5d50;
     --error_background_color: #ad0e0065;
     --warning_color: #ffce20;
@@ -8938,11 +8937,12 @@ body {
     .top_card_company_info_cont {
         display: flex;
         justify-content: space-between;
+        border-bottom: 0.5px solid var(--black-op3);
         align-items: center;
 
         .logo_cont {
-            width: 100px;
-            height: 100px;
+            width: 4rem;
+            height: 4rem;
 
             img {
                 width: 100%;
@@ -8952,8 +8952,9 @@ body {
         }
 
         .company_info_cont {
-            display: block;
-            gap: 10px;
+            display: flex;
+            gap: 2px;
+            flex-direction: column;
 
             p {
                 text-align: center;
@@ -8961,11 +8962,11 @@ body {
 
             .company_moto {
                 color: var(--gray_text);
-                
+                letter-spacing: 0.3em;
             }
 
             .company_name {
-                font-size: 40px;
+                font-size: 1.5rem;
                 font-weight: 900;
             }
 
@@ -8973,16 +8974,531 @@ body {
                 color: var(--gray_text);
             }
 
-            .company_contact_info{
+            .company_contact_info {
                 display: flex;
                 justify-content: center;
                 gap: 20px;
 
-                p{
+                p {
                     color: var(--gray_text);
                 }
             }
 
+        }
+
+    }
+
+    .single_visit_history_cont {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        overflow: scroll;
+        position: relative;
+
+        .print_btn {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .settings_btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--light_pri_color);
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 10px;
+
+                span {
+                    color: var(--white);
+                    font-size: 17px;
+                }
+
+            }
+
+            .print_btn_btn {
+                padding: 10px 20px;
+                cursor: pointer;
+                border: none;
+                background-color: var(--light_pri_color);
+                color: var(--white);
+                font-weight: bold;
+                border-radius: 5px;
+            }
+        }
+
+        .head_title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-top: 20px;
+        }
+
+        .patient_detail_cont {
+            width: 100%;
+            padding: 20px;
+            border-bottom: 0.5px solid var(--black-op3);
+
+            .patient_detail_section {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .card {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 70px;
+                row-gap: 10px;
+                /* justify-content: space-between; */
+
+                .response {
+                    min-width: 40%;
+                    font-weight: 500;
+
+                    .response_text {
+                        font-weight: 700;
+                        text-transform: capitalize;
+                        text-decoration: underline;
+                        /* change underline to dots */
+                        text-decoration-style: dotted;
+                    }
+                }
+
+                .right_info {
+                    display: flex;
+                    gap: 10px;
+
+                    p {
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        .visit_detail_cont {
+            width: 100%;
+            padding: 20px;
+            border-bottom: 0.5px solid var(--black-op3);
+
+            .visit_detail_section {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .card {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 70px;
+                row-gap: 10px;
+
+                .response {
+                    min-width: 40%;
+                    font-weight: 500;
+
+                    .response_text {
+                        font-weight: 700;
+                        text-transform: capitalize;
+                        text-decoration: underline;
+                        /* change underline to dots */
+                        text-decoration-style: dotted;
+                    }
+                }
+
+                .right_info {
+                    display: flex;
+                    gap: 10px;
+
+                    p {
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        .vital_detail_cont {
+            width: 100%;
+            padding: 20px;
+
+            .vital_detail_section {
+                display: flex;
+                flex-direction: column;
+
+                .vital_table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+
+                    th,
+                    td {
+                        padding: 7px;
+                        text-align: left;
+                        border: 1px solid var(--gray_text);
+                        font-size: var(--main_font_size_sm);
+                    }
+
+                    th {
+                        background-color: var(--pri_op1);
+                        font-weight: 700;
+                    }
+
+                    td {
+                        font-weight: 500;
+                    }
+
+                    .high {
+                        color: var(--error_color);
+                        font-weight: 700;
+                    }
+
+                    .low {
+                        color: var(--warning_color);
+                        font-weight: 700;
+                    }
+
+                    .normal {
+                        color: var(--success_color);
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+
+        .clinical_evaluation_cont {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-bottom: 0.5px solid var(--black-op3);
+
+            .card {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+
+                .group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+
+                    .head {
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--light_pri_color);
+                    }
+                }
+
+            }
+        }
+
+        .plan_for_next_visit_cont {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-bottom: 0.5px solid var(--black-op3);
+
+            .card {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+
+                .group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+
+                    .head {
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--light_pri_color);
+                    }
+                }
+
+            }
+        }
+
+        .pre_diagnosis_cont,
+        .final_diagnosis_cont {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-bottom: 0.5px solid var(--black-op3);
+
+            .card_cont {
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                padding-left: 20px;
+
+                .name {
+                    font-weight: 500;
+                }
+
+            }
+
+        }
+
+        .lab_report_cont,
+        .radiology_report_cont {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+
+            .card {
+                border: 0.5px solid var(--pri_op1);
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+                border-radius: 10px;
+
+                .lab_card_top,
+                .rad_card_top {
+                    .name {
+                        font-size: 14px;
+                        font-weight: 900;
+                    }
+
+                    .date {
+                        color: var(--text_color_op);
+                    }
+                }
+
+                .lab_card_bottom,
+                .rad_card_bottom {
+                    .tr {
+                        display: grid;
+                        grid-template-columns: 2fr 1fr 3.5fr;
+                        gap: 10px;
+                    }
+
+                    .t_head {
+                        padding-bottom: 10px;
+                        border-bottom: solid 1px var(--active_color);
+
+                        .column {
+                            font-weight: 700;
+                        }
+                    }
+
+                    .t_body {
+                        padding-block: 10px;
+                        border-bottom: solid 1px var(--input_border);
+                    }
+
+                    .group {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+
+                        .head {
+                            font-weight: 700;
+                            color: var(--light_pri_color);
+                        }
+
+                    }
+
+                    .status_info {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+                        padding: 10px;
+                        background-color: var(--background);
+                        border-radius: 5px;
+
+                        .status {
+                            font-weight: 600;
+                            font-size: 14px;
+                            padding: 4px 8px;
+                            border-radius: 4px;
+                            width: fit-content;
+
+                            &.pending {
+                                background-color: var(--warning_color_op);
+                                color: var(--warning_color);
+                            }
+
+                            &.complete {
+                                background-color: var(--success_color_op);
+                                color: var(--success_color);
+                            }
+
+                            &.approved {
+                                background-color: var(--pri_op);
+                                color: var(--light_pri_color);
+                            }
+                        }
+
+                        .ordered_by {
+                            font-size: 14px;
+                            color: var(--text_color_op);
+                        }
+                    }
+
+                    .result_info {
+                        display: flex;
+                        justify-content: space-between;
+                        padding-top: 10px;
+                        border-top: 1px solid var(--active_color);
+                        font-size: 14px;
+                        color: var(--text_color_op);
+                    }
+
+                    .attachments {
+                        margin-top: 10px;
+
+                        .head {
+                            font-size: 16px;
+                            font-weight: 700;
+                            padding-bottom: 10px;
+                            color: var(--light_pri_color);
+                            border-bottom: solid 1px var(--active_color);
+                        }
+
+                        .attachment_grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                            gap: 10px;
+                            margin-top: 10px;
+
+                            .attachment_preview {
+                                aspect-ratio: 16/9;
+                                overflow: hidden;
+                                border-radius: 5px;
+                                border: 1px solid var(--active_color);
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .implants_cont,
+        .attachments_cont {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--pure_white_background);
+            gap: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            
+            .card_cont {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                
+                .card {
+                    padding: 15px;
+                    border-radius: 10px;
+                    border: solid 1px var(--active_color);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+        }
+        
+        .implants_cont{
+            .device_top{
+                .name{
+                    font-size: 14px;
+                    font-weight: 700;
+                }
+                .note_title{
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+            }
+            .device_footer{
+                
+            }
+        }
+
+        .attachments_cont {
+            width: 100%;
+            background-color: var(--pure_white_background);
+            padding: 20px;
+            border-radius: 10px;
+
+            .attachments_grid {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .attachment_card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                padding: 15px;
+                border-radius: 10px;
+                border: solid 1px var(--active_color);
+
+                .attachment_info {
+                    margin-bottom: 15px;
+                }
+
+                .attachment_top {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 10px;
+
+                    .type {
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                }
+
+                .note {
+                    margin-bottom: 10px;
+                }
+
+                .created_by {
+                    color: var(--text_color_op);
+                    font-size: 14px;
+                }
+
+                .attachment_preview {
+                    width: 100%;
+                    max-height: none;
+                    overflow: hidden;
+                    
+                    img {
+                        border-radius: 8px;
+                        width: 100%;
+                        height: auto;
+                        object-fit: contain;
+                    }
+                }
+            }
         }
 
     }
