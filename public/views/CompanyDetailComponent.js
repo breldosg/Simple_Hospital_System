@@ -1,4 +1,4 @@
-import { INSTITUTION_ADDRESS, INSTITUTION_COUNTRY_EMBLEM, INSTITUTION_EMAIL, INSTITUTION_LOGO, INSTITUTION_MOTO, INSTITUTION_NAME, INSTITUTION_PHONE, INSTITUTION_WEBSITE } from "../config/config.js";
+import { INSTITUTION_ADDRESS, INSTITUTION_COUNTRY_EMBLEM, INSTITUTION_EMAIL, INSTITUTION_FULL_NAME, INSTITUTION_LOGO, INSTITUTION_MOTO, INSTITUTION_NAME, INSTITUTION_PHONE, INSTITUTION_WEBSITE } from "../config/config.js";
 import { dashboardController } from "../controller/DashboardController.js";
 import { applyStyle, date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
@@ -34,11 +34,11 @@ export class CompanyDetailComponent {
         return `
     <div class="top_card_company_info_cont">
         <div class="logo_cont">
-            <img src="${INSTITUTION_LOGO}" alt="company logo">
+            <img src="${INSTITUTION_COUNTRY_EMBLEM}" alt="country emblem">
         </div>
         <div class="company_info_cont">
             <p class="company_moto">${INSTITUTION_MOTO}</p>
-            <p class="company_name">${INSTITUTION_NAME}</p>
+            <p class="company_name">${INSTITUTION_FULL_NAME}</p>
             <div class="company_contact_info">
                 <p class="small_text company_phone">${INSTITUTION_PHONE}</p>
                 <p class="small_text company_email">${INSTITUTION_EMAIL}</p>
@@ -48,7 +48,7 @@ export class CompanyDetailComponent {
         </div>
 
         <div class="logo_cont">
-            <img src="${INSTITUTION_COUNTRY_EMBLEM}" alt="country emblem">
+            <img src="${INSTITUTION_LOGO}" alt="company logo">
         </div>
     </div>
         `;

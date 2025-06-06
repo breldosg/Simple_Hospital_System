@@ -62,6 +62,8 @@
     .patient_info_cont {
         display: none;
     }
+
+
 }
 
 
@@ -384,7 +386,6 @@
 @media print {
     div {
         border-radius: 0 !important;
-        ;
     }
 
     .print_cont {
@@ -400,6 +401,161 @@
         .print_btn {
             display: none !important;
         }
+
+        .attachment_preview {
+            width: 100%;
+            max-height: none;
+            border-radius: 8px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+        }
     }
 
+}
+
+.popup_content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .print_sections {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        height: 100%;
+        background-color: var(--pure_white_background);
+        border-radius: 10px;
+        width: 25%;
+        min-width: 400px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        -webkit-animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+        .print_sections_header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+
+            .close_print_sections {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 5px;
+                flex: none;
+                cursor: pointer;
+                background-color: var(--white_error_color_op1);
+
+                span {
+                    color: var(--white_error_color);
+                    font-size: 16px;
+                }
+            }
+
+            .close_print_sections:hover {
+                span {
+                    color: var(--error_color);
+                }
+            }
+
+        }
+
+        .select_all_cont {
+            padding-block: 20px;
+            border-top: 1px solid var(--active_color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .select_all_text {
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--gray_text);
+            }
+
+            .select_all_action {
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--light_pri_color);
+                cursor: pointer;
+            }
+
+        }
+
+        .sections_list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+
+            /* Scrollbar styling */
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: var(--pure_white_background);
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: var(--active_color);
+                border-radius: 10px;
+            }
+        }
+
+        .print_actions {
+            padding-top: 20px;
+            border-top: 1px solid var(--active_color);
+            background-color: var(--pure_white_background);
+        }
+
+        .print_now_btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--pri_color);
+            color: var(--pure_white_background);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--white);
+
+            &:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+        }
+
+        .checkbox_container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            padding: 10px 8px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+            width: 100%;
+
+            &:hover {
+                background: var(--pri_op1);
+            }
+
+            .label {
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
+    }
 }

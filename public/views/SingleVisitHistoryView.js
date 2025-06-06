@@ -8,6 +8,8 @@ export class SingleVisitHistoryView {
     constructor() {
         this.visit_id = null;
         this.patient_name = null;
+        this.lab_data = null;
+        this.radiology_data = null;
         // applyStyle(this.style())
         this.rendered_cards = new Set();
 
@@ -21,91 +23,86 @@ export class SingleVisitHistoryView {
                 title: 'Visit Details',
                 cardName: 'visit_detail',
                 class_name: 'visit_detail_cont',
-                render_in_view: true,
             },
             {
                 title: 'Clinic Evaluation & Visit Plan',
                 cardName: 'clinic_plan_cont',
                 class_name: 'section_cont clinic_plan_cont',
-                render_in_view: true,
             },
             {
                 title: 'Clinic Evaluation',
                 cardName: 'clinic_evaluation',
                 class_name: 'clinical_evaluation_cont',
-                render_in_view: false,
             },
             {
                 title: 'Preliminary Diagnosis',
                 cardName: 'pre_final_diagnosis',
-                class_name: 'pre_final_diagnosis',
-                render_in_view: true,
+                class_name: 'prescription_cont',
             },
             {
                 title: 'Visit Plan',
                 cardName: 'visit_plan',
                 class_name: 'plan_for_next_visit_cont',
-                render_in_view: false,
             },
             {
                 title: 'Pre-Diagnosis',
                 cardName: 'pre_diagnosis',
                 class_name: 'pre_diagnosis_cont',
-                render_in_view: false,
             },
             {
                 title: 'Final Diagnosis',
                 cardName: 'final_diagnosis',
                 class_name: 'final_diagnosis_cont',
-                render_in_view: false,
             },
             {
                 title: 'Patient Notes',
                 cardName: 'patient_notes',
                 class_name: 'patient_notes_cont',
-                render_in_view: true,
             },
             {
                 title: 'Allergies',
                 cardName: 'allergies',
                 class_name: 'allergies_cont',
-                render_in_view: true,
             },
             {
                 title: 'Vaccines',
                 cardName: 'vaccines',
                 class_name: 'vaccines_cont',
-                render_in_view: true,
             },
             {
                 title: 'Implants',
                 cardName: 'implants',
                 class_name: 'implants_cont',
-                render_in_view: true,
             },
             {
                 title: 'Procedures',
                 cardName: 'procedures',
                 class_name: 'procedures_cont',
-                render_in_view: true,
             },
             {
                 title: 'Prescriptions',
                 cardName: 'prescriptions',
-                class_name: 'prescriptions_cont',
-                render_in_view: true,
+                class_name: 'prescription_cont',
             },
             {
                 title: 'Attachments',
                 cardName: 'attachments',
                 class_name: 'attachments_cont',
-                render_in_view: true,
             },
             {
                 title: 'Lab Results',
                 cardName: 'lab_results',
-                class_name: 'lab_results_cont',
-                render_in_view: false,
+                class_name: 'lab_report_cont',
+            },
+            {
+                title: 'Radiology Results',
+                cardName: 'radiology_results',
+                class_name: 'radiology_report_cont',
+            },
+            {
+                title: 'Vital Signs',
+                cardName: 'vital_signs',
+                class_name: 'vital_detail_cont',
             }
         ];
     }
@@ -119,6 +116,8 @@ export class SingleVisitHistoryView {
             // Reset state
             this.visit_id = params.id;
             this.rendered_cards = new Set();
+            this.lab_data = null;
+            this.radiology_data = null;
 
             // Ensure dashboard is rendered
             const check_dashboard = document.querySelector('.print_cont');
@@ -139,6 +138,10 @@ export class SingleVisitHistoryView {
                 throw new Error('Main container not found after rendering');
             }
 
+            // Set light theme
+            document.body.classList.value = '';
+            document.body.classList.add('light_mode');
+            document.documentElement.setAttribute('data-theme', 'light');
 
             // // Render patient details
             // await dashboardController.patientDetailComponent.PreRender({
@@ -177,45 +180,45 @@ export class SingleVisitHistoryView {
             }
 
             // fetch visit detail
-            const visit_data = await this.fetchData('visit_detail');
-            if (!visit_data) {
+            this.visit_data = await this.fetchData('visit_detail');
+            if (!this.visit_data) {
                 notify('top_left', 'Failed to load visit data', 'error');
                 return;
             }
 
             // i push patient data to visit data
-            visit_data.patient_data = patient_data_obj;
+            this.visit_data.patient_data = patient_data_obj;
 
             // log data
-            console.log("history data", visit_data);
+            console.log("history data", this.visit_data);
             console.log("patient data", patient_data);
 
             const cardRenderConfig = [
-                // {
-                //     method: this.render_patient_detail,
-                //     dataKey: 'patient_data',
-                //     dataArray: 'patient_data',
-                //     cardName: 'patient_detail'
-                // },
-                // {
-                //     method: this.render_visit_detail,
-                //     dataKey: 'visit_detail',
-                //     dataArray: 'visit_data',
-                //     cardName: 'visit_detail'
-                // },
-                // {
-                //     method: this.render_vital_detail,
-                //     dataKey: 'vital_sign',
-                //     dataArray: 'vital_data',
-                //     cardName: 'vital_detail'
-                // },
-                // {
-                //     method: this.render_clinic_evaluation,
-                //     dataKey: 'clinical_evaluation_data',
-                //     dataArray: 'evaluation_data',
-                //     condition: (data) => data?.success,
-                //     cardName: 'clinic_evaluation'
-                // },
+                {
+                    method: this.render_patient_detail,
+                    dataKey: 'patient_data',
+                    dataArray: 'patient_data',
+                    cardName: 'patient_detail'
+                },
+                {
+                    method: this.render_visit_detail,
+                    dataKey: 'visit_detail',
+                    dataArray: 'visit_data',
+                    cardName: 'visit_detail'
+                },
+                {
+                    method: this.render_vital_detail,
+                    dataKey: 'vital_sign',
+                    dataArray: 'vital_data',
+                    cardName: 'vital_signs'
+                },
+                {
+                    method: this.render_clinic_evaluation,
+                    dataKey: 'clinical_evaluation_data',
+                    dataArray: 'evaluation_data',
+                    condition: (data) => data?.success,
+                    cardName: 'clinic_evaluation'
+                },
                 {
                     method: this.render_visit_plan,
                     dataKey: 'plan_visit_data',
@@ -223,36 +226,36 @@ export class SingleVisitHistoryView {
                     condition: (data) => data?.success,
                     cardName: 'visit_plan'
                 },
-                // {
-                //     method: this.render_pre_diagnosis,
-                //     dataKey: 'pre_diagnosis_data',
-                //     dataArray: 'diagnosis_data',
-                //     condition: (data) => data?.success,
-                //     cardName: 'pre_diagnosis'
-                // },
-                // {
-                //     method: this.render_final_diagnosis,
-                //     dataKey: 'final_diagnosis_data',
-                //     dataArray: 'diagnosis_data',
-                //     condition: (data) => data?.success,
-                //     cardName: 'final_diagnosis'
-                // },
-                // {
-                //     method: this.render_lab_results,
-                //     dataKey: 'lab_order_data',
-                //     dataArray: 'order_data',
-                //     condition: (data) => data?.success,
-                //     cardName: 'lab_results',
-                //     fetchData: true
-                // },
-                // {
-                //     method: this.render_radiology_results,
-                //     dataKey: 'radiology_order_data',
-                //     dataArray: 'order_data',
-                //     condition: (data) => data?.success,
-                //     cardName: 'radiology_results',
-                //     fetchData: true
-                // },
+                {
+                    method: this.render_pre_diagnosis,
+                    dataKey: 'pre_diagnosis_data',
+                    dataArray: 'diagnosis_data',
+                    condition: (data) => data?.success,
+                    cardName: 'pre_diagnosis'
+                },
+                {
+                    method: this.render_final_diagnosis,
+                    dataKey: 'final_diagnosis_data',
+                    dataArray: 'diagnosis_data',
+                    condition: (data) => data?.success,
+                    cardName: 'final_diagnosis'
+                },
+                {
+                    method: this.render_lab_results,
+                    dataKey: 'lab_order_data',
+                    dataArray: 'order_data',
+                    condition: (data) => data?.success,
+                    cardName: 'lab_results',
+                    fetchData: true
+                },
+                {
+                    method: this.render_radiology_results,
+                    dataKey: 'radiology_order_data',
+                    dataArray: 'order_data',
+                    condition: (data) => data?.success,
+                    cardName: 'radiology_results',
+                    fetchData: true
+                },
                 {
                     method: this.render_patient_notes,
                     dataKey: 'patient_note',
@@ -281,20 +284,20 @@ export class SingleVisitHistoryView {
                     condition: (data) => data?.success && data?.devices_data?.length > 0,
                     cardName: 'implants'
                 },
-                // {
-                //     method: this.render_procedures,
-                //     dataKey: 'procedure_data',
-                //     dataArray: 'procedure_data',
-                //     condition: (data) => data?.success && data?.procedure_data?.length > 0,
-                //     cardName: 'procedures'
-                // },
-                // {
-                //     method: this.render_prescriptions,
-                //     dataKey: 'prescription_data',
-                //     dataArray: 'prescription_data',
-                //     condition: (data) => data?.success && data?.prescription_data?.length > 0,
-                //     cardName: 'prescriptions'
-                // },
+                {
+                    method: this.render_procedures,
+                    dataKey: 'procedure_data',
+                    dataArray: 'procedure_data',
+                    condition: (data) => data?.success && data?.procedure_data?.length > 0,
+                    cardName: 'procedures'
+                },
+                {
+                    method: this.render_prescriptions,
+                    dataKey: 'prescription_data',
+                    dataArray: 'prescription_data',
+                    condition: (data) => data?.success && data?.prescription_data?.length > 0,
+                    cardName: 'prescriptions'
+                },
                 {
                     method: this.render_attachments,
                     dataKey: 'attachments_data',
@@ -310,7 +313,7 @@ export class SingleVisitHistoryView {
             // Process each card configuration sequentially
             for (const config of cardRenderConfig) {
                 try {
-                    const data = visit_data[config.dataKey];
+                    const data = this.visit_data[config.dataKey];
 
                     // Skip if condition exists and is not met
                     if (config.condition && !config.condition(data)) continue;
@@ -401,18 +404,18 @@ export class SingleVisitHistoryView {
                 this.open_render_settings_popup();
             });
 
-            // Attach keyboard shortcut for printing
-            const handleKeyPress = (e) => {
-                if (e.ctrlKey && e.key === 'p') {
-                    e.preventDefault();
-                    this.print_document();
-                }
-            };
+            // // Attach keyboard shortcut for printing
+            // const handleKeyPress = (e) => {
+            //     if (e.ctrlKey && e.key === 'p') {
+            //         // e.preventDefault();
+            //         this.print_document();
+            //     }
+            // };
 
-            // Remove existing listener if any
-            document.removeEventListener('keydown', handleKeyPress);
-            // Add new listener
-            document.addEventListener('keydown', handleKeyPress);
+            // // Remove existing listener if any
+            // document.removeEventListener('keydown', handleKeyPress);
+            // // Add new listener
+            // document.addEventListener('keydown', handleKeyPress);
 
         } catch (error) {
             console.error('Error attaching listeners:', error);
@@ -422,59 +425,11 @@ export class SingleVisitHistoryView {
 
     async print_document() {
         try {
-            // Store original body classes and theme
-            const originalBodyClasses = document.body.classList.value;
-            const originalTheme = document.documentElement.getAttribute('data-theme');
-
-            // Create and append print styles
-            const style = document.createElement('style');
-            style.id = 'print_style';
-            style.innerHTML = this.report_style();
-            document.head.appendChild(style);
-
-            // Set light theme for printing
-            document.body.classList.value = '';
-            document.body.classList.add('light_mode');
-            document.documentElement.setAttribute('data-theme', 'light');
-
             // Close settings popup
             this.close_render_settings_popup();
 
             // Print the document
             window.print();
-
-            // Cleanup and restore original state
-            document.head.removeChild(style);
-
-            // Restore original body classes
-            document.body.classList.value = originalBodyClasses;
-
-            // Restore original theme
-            document.documentElement.setAttribute('data-theme', originalTheme);
-
-            // Show all sections again
-            this.rendered_cards.forEach(card_name => {
-                const card_info = this.card_to_show.find(card => card.cardName === card_name);
-                if (card_info) {
-                    const section = this.main_container.querySelector(`.${card_info.class_name}`);
-                    if (section) {
-                        section.style.display = '';
-                        section.classList.remove('display_hidden');
-                    }
-                }
-            });
-
-            // Update print options UI
-            const popup = document.querySelector('.wrapper .popup');
-            if (popup) {
-                const selectAllAction = popup.querySelector('.select_all_action');
-                if (selectAllAction) {
-                    selectAllAction.innerHTML = "Hide All";
-                    selectAllAction.setAttribute('data_action', 'hide');
-                }
-                await this.render_on_print_options_item(popup, 'show');
-            }
-
         } catch (error) {
             console.error('Error during printing:', error);
             notify('top_left', 'Failed to print document', 'error');
@@ -653,10 +608,10 @@ export class SingleVisitHistoryView {
     }
 
     render_patient_detail(data) {
-        var cont = this.main_container.querySelector('.patient_detail_cont');
+        var cont = this.main_container.querySelector('.patient_detail_cont ');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'patient_detail_cont';
+            cont.className = 'patient_detail_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -682,7 +637,7 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.vital_detail_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'vital_detail_cont';
+            cont.className = 'vital_detail_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -746,7 +701,7 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.visit_detail_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'visit_detail_cont';
+            cont.className = 'visit_detail_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -770,11 +725,11 @@ export class SingleVisitHistoryView {
     }
 
     render_clinic_evaluation(data) {
-        var cont = this.main_container.querySelector('.clinical_evaluation_cont'); // Added missing dot for class selector
+        var cont = this.main_container.querySelector('.clinical_evaluation_cont '); // Added missing dot for class selector
 
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'section_cont clinical_evaluation_cont';
+            cont.className = 'section_cont clinical_evaluation_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -806,7 +761,7 @@ export class SingleVisitHistoryView {
 
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'section_cont plan_for_next_visit_cont';
+            cont.className = 'section_cont plan_for_next_visit_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -839,7 +794,7 @@ export class SingleVisitHistoryView {
 
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'pre_diagnosis_cont';
+            cont.className = 'pre_diagnosis_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -867,7 +822,7 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.final_diagnosis_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'final_diagnosis_cont';
+            cont.className = 'final_diagnosis_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -897,12 +852,15 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.lab_report_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'lab_report_cont';
+            cont.className = 'lab_report_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
+        this.lab_data = data;
+
         cont.innerHTML = `
             <h3>Laboratory Report</h3>
+            <p class="sub_text">The following is the laboratory report for the patient. This report is based on the information provided by the patient and the doctor.</p>
             ${data.map(test => test.status === 'complete' ? `
                 <div class="card">
                     <div class="lab_card_top">
@@ -945,20 +903,23 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.radiology_report_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'radiology_report_cont';
+            cont.className = 'radiology_report_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
+        this.radiology_data = data;
+
         cont.innerHTML = `
         <h3>Radiology Report</h3>
+        <p class="sub_text">The following is the radiology report for the patient. This report is based on the information provided by the patient and the doctor.</p>
         ${data.map(exam => exam.status === 'complete' ? `
-            <div class="card">
+            <div class="card page_breaker">
                 <div class="rad_card_top">
                     <p class="name">${exam.radiology_name}</p>
                     <p class="date">${date_formatter(exam.created_at)}</p>
                 </div>
                 <div class="rad_card_bottom">
-                    ${exam.status === 'complete' && exam.report ? `
+                    ${exam.report ? `
                         <div class="group">
                             <p class="head">Comparison</p>
                             <p class="value">${exam.report.comparison || ''}</p>
@@ -975,39 +936,41 @@ export class SingleVisitHistoryView {
                             <p class="head">Recommendation</p>
                             <p class="value">${exam.report.recommendation || ''}</p>
                         </div>
-                        ${exam.report_attachment.length > 0 ? `
-                            <div class="attachments">
-                                <p class="head">Attachments</p>
-                                <div class="attachment_grid">
-                                    ${exam.report_attachment.map(attachment => `
-                                        <div class="attachment_preview">
-                                            <img src="${attachment.url}" alt="${attachment.file_name}" loading="lazy">
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-                        <div class="result_info">
-                            <p class="served_by">Report by: ${exam.report.created_by}</p>
-                            <p class="served_at">Completed: ${exam.report.created_at ? date_formatter(exam.report.created_at) : ''}</p>
-                        </div>
-                    ` : `
-                        <div class="status_info">
-                            <p class="status ${exam.status}">${exam.status.toUpperCase()}</p>
-                            <p class="ordered_by">Ordered by: ${exam.created_by}</p>
-                        </div>
-                    `}
+                        ` : `
+                        <div class="no_report_group">
+                            <p class="no_report">No report found, only attachments are available.</p>
+                        </div>`}
+                    <div class="result_info">
+                        <p class="status ${exam.status}">${exam.status.toUpperCase()}</p>
+                        <p class="ordered_by">Ordered by: ${exam.created_by}</p>
+                    </div>
                 </div>
             </div>
         ` : ``).join('')}
     `;
     }
 
+
+    // {
+    //     "success": true,
+    //     "attachments_data": [
+    //         {
+    //             "id": 4,
+    //             "file_name": "attach-6836e1c748d1a3.92723608.jpg",
+    //             "type": "CT Scan",
+    //             "note": "hr",
+    //             "created_by": "Faiz Ally",
+    //             "created_at": "2025-05-28 13:13:27",
+    //             "url": "/attachments/attach-6836e1c748d1a3.92723608.jpg"
+    //         },
+    //     ]
+    // }
+
     render_patient_notes(data) {
         var cont = this.main_container.querySelector('.patient_notes_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'patient_notes_cont';
+            cont.className = 'patient_notes_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -1033,7 +996,7 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.allergies_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'allergies_cont';
+            cont.className = 'allergies_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -1067,7 +1030,7 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.vaccines_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'vaccines_cont';
+            cont.className = 'vaccines_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -1094,27 +1057,25 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.implants_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'implants_cont';
+            cont.className = 'implants_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
         cont.innerHTML = `
             <div class="implants_section">
                 <h3>Implantable Devices</h3>
+                <p>The following implants were inserted into the patient's body.</p>
                 <div class="card_cont">
                     ${data.map(device => `
-        <div class="card">
-                <div class="device_top">
-                    <p class="name">Name: ${device.device_name}</p>
-                    <p class="implanted_date">Implanted: ${date_formatter(device.implanted_date)}</p>
-                    <p class="identifier">Identifier: ${device.identifier ? device.identifier : 'N/A'}</p>
-                    <p class="note_title">Note</p>
-                    <p class="note">${device.note}</p>
-                </div>
-                <div class="device_footer">
-                    <p class="created_by">${device.created_by}</p>
-                </div>
-                </div>
+                    <div class="card">
+                        <div class="device_top">
+                            <p class="name">${device.device_name}</p>
+                            <p class="implanted_date">Implanted: ${date_formatter(device.implanted_date)}</p>
+                            <p class="identifier">Identifier: ${device.identifier ? device.identifier : 'N/A'}</p>
+                            <p class="note_title">Note</p>
+                            <p class="note">${device.note}</p>
+                        </div>
+                    </div>
                     `).join('')}
                 </div>
                 </div>
@@ -1125,7 +1086,7 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.procedures_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'procedures_cont';
+            cont.className = 'procedures_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
@@ -1166,27 +1127,32 @@ export class SingleVisitHistoryView {
         var cont = this.main_container.querySelector('.prescription_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'prescription_cont';
+            cont.className = 'prescription_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
         cont.innerHTML = `
             <h3>Prescription</h3>
+            <p class="sub_text">The following is the prescription for the patient. This prescription is based on the information provided by the patient and the doctor.</p>
             <div class="card_cont">
                 ${data.map(prescription => `
             <div class="card">
                 <div class="medication_card_top">
-                            <p class="name">${prescription.product_name}</p>
-                            <p class="date">${date_formatter(prescription.created_at)}</p>
+                    <p class="name">${prescription.product_name}</p>
+                    <p class="date">${date_formatter(prescription.created_at)}</p>
                 </div>
                 <div class="card_bottom">
                     <div class="group">
                         <p class="head">Quantity:</p>
-                                <p class="value">${prescription.amount} ${prescription.unit}</p>
+                        <p class="value">${prescription.amount} ${prescription.unit}</p>
                     </div>
                     <div class="group">
                         <p class="head">Duration:</p>    
-                                <p class="value">${prescription.duration} days</p>
+                        <p class="value">${prescription.duration} days</p>
+                    </div>
+                    <div class="group">
+                        <p class="head">Is Given:</p>    
+                        <p class="value ${prescription.is_given == 'true' ? 'success' : 'error'}">${prescription.is_given == 'true' ? 'Yes' : 'No'}</p>
                     </div>
                     <div class="group instruction_group">
                         <p class="head">Instruction:</p>    
@@ -1199,23 +1165,58 @@ export class SingleVisitHistoryView {
         `;
     }
 
-    render_attachments(data) {
+    async add_images_to_attachments(data, type) {
+        data.forEach(async attachment_report => {
+            attachment_report.report_attachment.forEach(async attachment => {
+                console.log("attachment", attachment);
+                if (type === 'radiology') {
+                    // prepare the array of images
+                    const attachment_prepare = {
+                        "id": attachment.id,
+                        "file_name": attachment.file_name,
+                        "type": attachment_report.radiology_name,
+                        "note": "No note provided.",
+                        "created_by": attachment.created_by,
+                        "created_at": attachment.created_at,
+                        "url": attachment.url
+                    };
+
+                    // update visit data attachments_data by add the images from radiology
+                    await this.visit_data.attachments_data.attachments_data.push(attachment_prepare);
+                }
+            });
+        });
+
+        return '';
+    }
+
+
+    async render_attachments(data) {
+        console.log("render_attachments");
+        console.log("radiology data", this.radiology_data);
+        console.log("lab data", this.lab_data);
+
         var cont = this.main_container.querySelector('.attachments_cont');
         if (!cont) {
             cont = document.createElement('div');
-            cont.className = 'attachments_cont';
+            cont.className = 'attachments_cont page_breaker';
             this.main_container.appendChild(cont);
         }
 
-        cont.classList.add('page_break');
+        // add images to attachments data
+        if (this.radiology_data != null) {
+            await this.add_images_to_attachments(this.radiology_data, 'radiology');
+        }
+        if (this.lab_data != null) {
+            await this.add_images_to_attachments(this.lab_data, 'laboratory');
+        }
 
         cont.innerHTML = `
             <div class="attachments_section">
                 <h3>Attachments</h3>
-                <p>The following attachments were added to the patient's record on <u>${date_formatter(data[0].created_at)}</u>.</p>
                 <div class="attachments_grid">
-                    ${data.map((attachment, index) => `
-                        <div class="attachment_card">
+                    ${data.map((attachment) => `
+                        <div class="attachment_card page_breaker">
                             <div class="attachment_info">
                                 <div class="attachment_top">
                                     <div class="left_info">
@@ -1223,12 +1224,12 @@ export class SingleVisitHistoryView {
                                         <p class="date">${date_formatter(attachment.created_at)}</p>
                                     </div>
                                 </div>
-                                ${attachment.note ? `<p class="note">${attachment.note}</p>` : ''}
-                                </div>
+                                <p class="note">${attachment.note ? attachment.note : 'No note provided.'}</p>
+                            </div>
                             <div class="attachment_preview">
-                                <img src="${attachment.url}" alt="${attachment.file_name}" loading="lazy">
-                        </div>    
-                    </div>
+                                <img src="${attachment.url}" alt="${attachment.file_name}">
+                            </div>    
+                        </div>
                     `).join('')}
                 </div>
             </div>
@@ -1375,186 +1376,12 @@ export class SingleVisitHistoryView {
         }
     }
 
-    report_style() {
-        return `
-
-    `;
-    }
-
-    report_stylewww() {
-        return `
-        br-navigation{
-            display: none;
-        }
-        .update_cont{
-            height: fit-content !important;
-            background: #f4f7f6 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        .single_visit_history_cont{
-            overflow: unset !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            gap: 0 !important;
-            
-            .print_btn{
-                display: none !important;
-            }
-        }
-
-        /* General card print styles */
-
-
-        .card_cont {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 20px !important;
-        }
-
-        /* Section specific print styles */
-        .visit_detail_cont,
-        .pre_final_diagnosis,
-        .patient_notes_cont,
-        .allergies_cont,
-        .vaccines_cont,
-        .implants_cont,
-        .procedures_cont,
-        .prescription_cont {
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
-        }
-
-        /* Handle section breaks */
-        .section_cont,
-        .diagnosis_cont,
-        .notes_section,
-        .allergies_section,
-        .vaccines_section,
-        .implants_section {
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
-            margin-bottom: 20px !important;
-        }
-
-        /* Ensure headers stay with their content */
-        h3 {
-            break-after: avoid !important;
-            page-break-after: avoid !important;
-            margin-bottom: 15px !important;
-        }
-        
-        .attachments_cont {
-            page-break-before: always !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            background: none !important;
-            width: 100% !important;
-
-            .attachments_section {
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            h3 {
-                margin-bottom: 30px !important;
-            }
-
-            .attachments_grid {
-                gap: 0 !important;
-            }
-
-            .attachment_card {
-                page-break-after: always !important;
-                break-after: page !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                border: none !important;
-                background: none !important;
-                width: 100% !important;
-
-                &:last-child {
-                    page-break-after: avoid !important;
-                    break-after: avoid !important;
-                }
-
-                .attachment_info {
-                    margin-bottom: 20px !important;
-                    padding: 0 20px !important;
-                }
-
-                .attachment_preview {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    width: 100% !important;
-                    height: auto !important;
-                    page-break-inside: avoid !important;
-                    
-                    img {
-                        width: 100% !important;
-                        height: auto !important;
-                        max-height: none !important;
-                        object-fit: contain !important;
-                        page-break-inside: avoid !important;
-                    }
-                }
-            }
-        }
-
-        @media print {
-            /* Force page breaks between major sections */
-            .clinic_plan_cont,
-            .pre_final_diagnosis,
-            .patient_notes_cont,
-            .allergies_cont,
-            .vaccines_cont,
-            .implants_cont,
-            .procedures_cont,
-            .prescription_cont {
-                break-before: auto !important;
-                break-after: auto !important;
-                page-break-before: auto !important;
-                page-break-after: auto !important;
-            }
-
-            /* Ensure grid layout works in print */
-            .card_cont {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 20px !important;
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-            }
-
-            /* Force cards to stay together */
-            .card {
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-                margin-bottom: 20px !important;
-                background-color: white !important;
-            }
-
-            /* Keep section headers with their content */
-            h3 {
-                break-after: avoid !important;
-                page-break-after: avoid !important;
-            }
-
-            /* Ensure proper margins and spacing */
-            @page {
-                margin: 2cm !important;
-                padding: 0 !important;
-            }
-        }
-    `;
-    }
-
     style() {
         return `
              /* ------------------------------------------------------- */
 
 
-        .single_visit_history_conts {
+        .single_visit_history_cont {
             width: 100%;
             height: 100%;
             display: flex;

@@ -8,6 +8,7 @@ export const ROLES = {
             { label: 'Store&Pharmacy', link: '/store' },
             { label: 'Procedure', link: '/procedure' },
             { label: 'Reports', link: '/reports' },
+            { label: 'Documents', link: '/all_documents' },
             { label: 'Notice', link: '/notice' },
         ],
         navigationSections: [
@@ -37,6 +38,12 @@ export const ROLES = {
                 ]
             },
             {
+                type: '/all_documents',
+                choices: [
+                    { label: 'All Documents', href: '/all_documents/view_documents' }
+                ]
+            },
+            {
                 type: '/notice',
                 choices: [
                     { label: 'View All notice', href: '/notice/viewnotice' }
@@ -53,6 +60,7 @@ export const ROLES = {
             { label: 'Store & Pharmacy', link: '/store' },
             { label: 'Procedure', link: '/procedure' },
             { label: 'Reports', link: '/reports' },
+            { label: 'Documents', link: '/all_documents' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -82,6 +90,12 @@ export const ROLES = {
                 ]
             },
             {
+                type: '/all_documents',
+                choices: [
+                    { label: 'All Documents', href: '/all_documents/view_documents' }
+                ]
+            },
+            {
                 type: '/notice',
                 choices: [
                     { label: 'View All notice', href: '/notice/viewnotice' }
@@ -97,6 +111,7 @@ export const ROLES = {
             { label: 'Patients', link: '/patient' },
             { label: 'Billing', link: '/billing' },
             { label: 'Reports', link: '/reports' },
+            { label: 'Documents', link: '/all_documents' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -117,6 +132,12 @@ export const ROLES = {
                 type: '/reports',
                 choices: [
                     { label: 'All Reports', href: '/reports/viewreports' }
+                ]
+            },
+            {
+                type: '/all_documents',
+                choices: [
+                    { label: 'All Documents', href: '/all_documents/view_documents' }
                 ]
             },
             {
@@ -165,6 +186,7 @@ export const ROLES = {
             { label: 'Store', link: '/store' },
             { label: 'Billing', link: '/billing' },
             { label: 'Reports', link: '/reports' },
+            { label: 'Documents', link: '/all_documents' },
             { label: 'Notice', link: '/notice' }
         ],
         navigationSections: [
@@ -234,6 +256,12 @@ export const ROLES = {
                 type: '/reports',
                 choices: [
                     { label: 'All Reports', href: '/reports/viewreports' }
+                ]
+            },
+            {
+                type: '/all_documents',
+                choices: [
+                    { label: 'All Documents', href: '/all_documents/view_documents' }
                 ]
             },
             {

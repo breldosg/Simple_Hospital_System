@@ -68,6 +68,11 @@
     font-style: normal;
 }
 
+.page_breaker {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
 .example {
     display: flex;
     justify-content: center;
@@ -174,9 +179,8 @@ input {
 }
 
 .dark_mode {
-    --main_color: #ff9616;
     --pri_color: #125d61;
-    --sec_color: #708871;
+    --sec_color: #F97A00;
     --light_pri_color: #2ebfc6;
 
     --pri_op: #6af8ff34;
@@ -277,10 +281,9 @@ input {
 }
 
 .light_mode {
-    --main_color: #ff9616;
     --pri_color: #23989e;
     --light_pri_color: #23989e;
-    --sec_color: #708871;
+    --sec_color: #F97A00;
 
     --pri_op: #59cdd334;
     --pri_op1: #a5eef665;
@@ -5003,416 +5006,6 @@ body {
 
 
 
-        /* ------------------------------------------------------- */
-
-        .single_patient_cont {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            overflow: scroll;
-
-            .loader_cont {
-                border-radius: var(--main_border_r);
-                position: absolute;
-            }
-
-            .top_card {
-                width: 100%;
-                background-color: var(--pure_white_background);
-                /* height: 100px; */
-                border-radius: 10px;
-                padding: 20px;
-                display: flex;
-                gap: 40px;
-                position: relative;
-
-                .Patient_imag {
-                    width: 170px;
-                    height: 170px;
-                    border-radius: 50%;
-                    overflow: hidden;
-                    background-color: var(--image_background);
-                    flex: none;
-
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                }
-
-                .patient_detail {
-                    width: 100%;
-                    display: flex;
-                    gap: 10px;
-                    flex-direction: column;
-
-                    .card {
-                        width: 100%;
-                        display: flex;
-                        align-items: flex-end;
-                        gap: 40px;
-                        flex-wrap: wrap;
-
-                        .name {
-                            font-size: 30px;
-                            font-weight: 900;
-                        }
-
-                        .edit_btn {
-                            padding: 10px;
-                            cursor: pointer;
-                            border: none;
-                            background: none;
-                            font-size: 24px;
-
-                            span {
-                                color: var(--main_background);
-                            }
-                        }
-
-                        .icon_card {
-                            display: flex;
-                            align-items: center;
-                            gap: 10px;
-
-                            p {
-                                font-weight: 500;
-                                color: var(--gray_text);
-
-                                span {
-                                    color: var(--gray_text);
-                                    font-weight: 700;
-                                }
-                            }
-                        }
-                    }
-
-                    .name_card {
-                        justify-content: space-between;
-                    }
-
-                    .vital {
-                        gap: 30px;
-                        margin-top: 20px;
-
-                        .vital_card {
-                            padding: 5px 15px;
-                            border: dashed 2px var(--input_border);
-                            border-radius: 10px;
-
-                            .main_ms {
-                                font-size: 30px;
-                                font-weight: 900;
-
-                            }
-
-                            .dist {
-                                display: flex;
-                                gap: 5px;
-
-                                p {
-                                    color: var(--gray_text);
-                                    font-weight: 500;
-                                }
-
-                                .range {
-                                    display: flex;
-                                    gap: 5px;
-                                }
-
-                                .up {
-
-                                    p,
-                                    span {
-                                        color: var(--success_color);
-                                    }
-                                }
-
-                                .down {
-
-                                    p,
-                                    span {
-                                        color: var(--error_color);
-                                    }
-                                }
-                            }
-                        }
-
-                        .create_visit_btn {
-                            margin-left: auto;
-                            padding: 10px 20px;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            color: var(--white);
-                            font-weight: bold;
-                            width: auto;
-                        }
-                    }
-                }
-            }
-
-            .visit_list {
-                width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                flex: none;
-
-
-                .visit_list_top_part {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 20px;
-
-                    .heading {
-                        font-size: 24px;
-                        font-weight: 700;
-                    }
-
-                    .date_range_picker_container {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        flex: none;
-
-                        .date_range_picker_container_inner {
-                            width: 280px;
-                        }
-
-                        .next_btn {
-                            padding: 10px 20px;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            color: var(--white);
-                            font-weight: bold;
-                            background-color: var(--btn_color);
-                        }
-
-                        .btn_search {
-                            border: none;
-                            background-color: var(--pri_color);
-                            width: 50px;
-                            height: 40px;
-                            cursor: pointer;
-                            border-radius: var(--input_main_border_r);
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-
-                            span {
-                                font-size: 17px;
-                                color: var(--white);
-                            }
-                        }
-
-                    }
-                }
-
-                .visit_list_bottom_part {
-                    width: 100%;
-                    height: 100%;
-                    overflow-y: scroll;
-                    position: relative;
-
-                    &:before {
-                        content: '';
-                        position: absolute;
-                        transform: translateX(-50%);
-                        left: 20px;
-                        top: 0px;
-                        bottom: 0;
-                        width: 2px;
-                        height: 98%;
-                        background: var(--pure_white_background);
-                        border-radius: 2px;
-                    }
-
-                    .timeline {
-                        overflow-y: scroll;
-                        height: 100%;
-                        /* overflow-y: scroll; */
-
-
-
-                        .timeline-item {
-                            position: relative;
-                            margin-bottom: 30px;
-                            display: flex;
-                            cursor: pointer;
-
-                            .timeline-dot-container {
-                                width: 40px;
-                                display: flex;
-                                justify-content: center;
-
-
-                                .timeline-dot {
-                                    width: 20px;
-                                    height: 20px;
-                                    border-radius: 50%;
-                                    background: var(--pure_white_background);
-                                    position: relative;
-
-                                    &:before {
-                                        content: '';
-                                        position: absolute;
-                                        left: 50%;
-                                        top: 50%;
-                                        transform: translate(-50%, -50%);
-                                        width: 70%;
-                                        height: 70%;
-                                        background: var(--pri_color);
-                                        border-radius: 10px;
-                                        opacity: 0;
-                                    }
-                                }
-
-                                .timeline-dot.active {
-                                    &:before {
-                                        opacity: 1;
-                                    }
-                                }
-                            }
-
-                            .timeline-date {
-                                color: var(--gray_text);
-                                margin-bottom: 8px;
-                                display: flex;
-                                gap: 5px;
-                                height: 20px;
-                                position: absolute;
-                                left: 55px;
-                                top: 0;
-
-                                span {
-                                    font-size: 14px;
-                                }
-
-                                p {
-                                    font-weight: 600;
-
-                                }
-                            }
-
-                            .timeline-content {
-                                background: var(--pure_white_background);
-                                border-radius: 8px;
-                                padding: 15px;
-                                margin-top: 23px;
-                                width: 100%;
-
-                                .timeline-header {
-                                    display: flex;
-                                    justify-content: space-between;
-                                    align-items: center;
-                                    margin-bottom: 10px;
-
-                                    .visit-id {
-                                        font-weight: 600;
-                                        font-size: 16px;
-                                    }
-
-                                    .status-badge {
-                                        font-size: 12px;
-
-                                        &.active {
-                                            font-size: 14px;
-                                            font-weight: 700;
-                                            color: var(--light_pri_color);
-                                        }
-
-
-                                    }
-                                }
-
-                                .timeline-body {
-                                    .doctor-info {
-                                        display: flex;
-                                        align-items: center;
-                                        gap: 8px;
-                                        margin-bottom: 10px;
-
-                                        .doctor-name {
-                                            font-weight: 700;
-                                            font-size: 14px;
-                                            /* color: var(--light_pri_color); */
-                                        }
-
-                                        span {
-                                            font-size: 14px;
-                                            /* color: var(--light_pri_color); */
-                                        }
-                                    }
-
-                                    .visit-info {
-                                        display: flex;
-                                        justify-content: space-between;
-                                        align-items: end;
-
-                                        .department {
-                                            margin-bottom: 7px;
-                                        }
-
-                                        .label {
-                                            font-weight: 700;
-                                            color: var(--light_pri_color);
-                                        }
-
-                                        .visit_actions {
-                                            display: flex;
-                                            flex-direction: column;
-                                            gap: 10px;
-
-                                            .btn_view_visit {
-                                                border: none;
-                                                background-color: var(--pri_color);
-                                                padding: 10px 35px;
-                                                font-weight: bold;
-                                                font-size: var(--main_font_size);
-                                                color: var(--white);
-                                                cursor: pointer;
-                                                border-radius: var(--input_main_border_r);
-                                            }
-                                        }
-
-                                    }
-
-
-                                }
-                            }
-                        }
-                    }
-
-                    .load_more_container {
-                        display: flex;
-                        justify-content: center;
-                        padding: 20px;
-
-                        .load_more_btn {
-                            padding: 8px 24px;
-                            background: var(--primary-color);
-                            color: white;
-                            border: none;
-                            border-radius: 4px;
-                            cursor: pointer;
-                            transition: background 0.2s;
-
-                            &:hover {
-                                background: var(--primary-color-dark);
-                            }
-                        }
-                    }
-                }
-            }
-
-
-
-        }
 
         /* ------------------------------------------------------- */
 
@@ -8977,7 +8570,7 @@ body {
             .company_contact_info {
                 display: flex;
                 justify-content: center;
-                gap: 20px;
+                gap: 10px;
 
                 p {
                     color: var(--gray_text);
@@ -9139,6 +8732,7 @@ body {
                     width: 100%;
                     border-collapse: collapse;
                     margin-top: 10px;
+                    border-radius: 10px;
 
                     th,
                     td {
@@ -9150,7 +8744,7 @@ body {
 
                     th {
                         background-color: var(--pri_op1);
-                        font-weight: 700;
+                        font-weight: 900;
                     }
 
                     td {
@@ -9262,16 +8856,16 @@ body {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
             padding: 20px;
 
             .card {
+                margin-top: 10px;
                 border: 0.5px solid var(--pri_op1);
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
                 padding: 10px;
-                border-radius: 10px;
+                border-radius: 10px !important;
 
                 .lab_card_top,
                 .rad_card_top {
@@ -9287,6 +8881,10 @@ body {
 
                 .lab_card_bottom,
                 .rad_card_bottom {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
                     .tr {
                         display: grid;
                         grid-template-columns: 2fr 1fr 3.5fr;
@@ -9310,7 +8908,6 @@ body {
                     .group {
                         display: flex;
                         flex-direction: column;
-                        gap: 10px;
 
                         .head {
                             font-weight: 700;
@@ -9319,18 +8916,28 @@ body {
 
                     }
 
-                    .status_info {
+                    .no_report_group {
                         display: flex;
-                        flex-direction: column;
-                        gap: 5px;
-                        padding: 10px;
-                        background-color: var(--background);
-                        border-radius: 5px;
+                        justify-content: center;
+                        align-items: center;
+                        padding-block: 10px;
+
+                        .no_report {
+                            font-weight: 700;
+                            color: var(--gray_text);
+                            font-size: var(--main_font_size_15);
+                        }
+                    }
+
+                    .result_info {
+                        display: flex;
+                        justify-content: space-between;
+                        padding-top: 10px;
+                        border-top: 1px solid var(--active_color);
+                        font-size: 14px;
 
                         .status {
-                            font-weight: 600;
-                            font-size: 14px;
-                            padding: 4px 8px;
+                            font-weight: 700;
                             border-radius: 4px;
                             width: fit-content;
 
@@ -9349,20 +8956,6 @@ body {
                                 color: var(--light_pri_color);
                             }
                         }
-
-                        .ordered_by {
-                            font-size: 14px;
-                            color: var(--text_color_op);
-                        }
-                    }
-
-                    .result_info {
-                        display: flex;
-                        justify-content: space-between;
-                        padding-top: 10px;
-                        border-top: 1px solid var(--active_color);
-                        font-size: 14px;
-                        color: var(--text_color_op);
                     }
 
                     .attachments {
@@ -9400,105 +8993,183 @@ body {
             }
         }
 
-        .implants_cont,
-        .attachments_cont {
+        .implants_cont {
             width: 100%;
             display: flex;
             flex-direction: column;
-            background-color: var(--pure_white_background);
-            gap: 20px;
             padding: 20px;
-            border-radius: 10px;
-            
+
             .card_cont {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 10px;
-                
+                margin-top: 10px;
+
                 .card {
                     padding: 15px;
-                    border-radius: 10px;
+                    border-radius: 10px !important;
                     border: solid 1px var(--active_color);
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
+
+                    .device_top {
+                        .name {
+                            font-size: 14px;
+                            font-weight: 900;
+                        }
+
+                        .note_title {
+                            font-weight: 600;
+                            margin-top: 5px;
+                        }
+                    }
                 }
             }
-        }
-        
-        .implants_cont{
-            .device_top{
-                .name{
-                    font-size: 14px;
-                    font-weight: 700;
-                }
-                .note_title{
-                    font-size: 14px;
-                    font-weight: 500;
-                }
-            }
-            .device_footer{
-                
-            }
+
+
         }
 
         .attachments_cont {
             width: 100%;
-            background-color: var(--pure_white_background);
             padding: 20px;
             border-radius: 10px;
+            break-inside: avoid;
+            page-break-inside: avoid;
 
             .attachments_grid {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
                 margin-top: 10px;
-            }
+                width: 100%;
 
-            .attachment_card {
-                break-inside: avoid;
-                page-break-inside: avoid;
-                padding: 15px;
-                border-radius: 10px;
-                border: solid 1px var(--active_color);
+                .attachment_card {
+                    padding: 15px;
+                    border-radius: 10px !important;
+                    border: solid 1px var(--active_color);
 
-                .attachment_info {
-                    margin-bottom: 15px;
-                }
-
-                .attachment_top {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 10px;
-
-                    .type {
-                        font-size: 14px;
-                        font-weight: 700;
+                    &:first-child {
+                        break-inside: auto;
+                        page-break-inside: auto;
                     }
-                }
 
-                .note {
-                    margin-bottom: 10px;
-                }
+                    .attachment_info {
+                        margin-bottom: 10px;
+                    }
 
-                .created_by {
-                    color: var(--text_color_op);
-                    font-size: 14px;
-                }
+                    .attachment_top {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
 
-                .attachment_preview {
-                    width: 100%;
-                    max-height: none;
-                    overflow: hidden;
-                    
-                    img {
-                        border-radius: 8px;
+                        .type {
+                            font-size: 14px;
+                            font-weight: 700;
+                        }
+                    }
+
+                    .note {
+                        margin-bottom: 10px;
+                    }
+
+                    .attachment_preview {
                         width: 100%;
-                        height: auto;
-                        object-fit: contain;
+                        overflow: hidden;
+
+                        img {
+                            border-radius: 8px;
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
                     }
                 }
             }
+        }
+
+        .prescription_cont {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            /* display: none; */
+
+            .success {
+                color: var(--success_color);
+            }
+
+            .error {
+                color: var(--error_color);
+            }
+
+            .card_cont {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-top: 10px;
+
+                .card {
+                    padding: 10px;
+                    border-radius: 10px !important;
+                    border: solid 1px var(--active_color);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    .medication_card_top {
+                        display: flex;
+                        flex-direction: column;
+
+                        .name {
+                            font-size: 20px;
+                            font-weight: 700;
+                        }
+
+                    }
+
+                    .card_bottom {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+
+                        .group {
+                            display: flex;
+                            gap: 5px;
+                            padding-block: 5px;
+                            border-bottom: solid 1px var(--input_border);
+
+                            .head {
+                                width: 40%;
+                            }
+
+                            .value {
+                                font-weight: 700;
+                            }
+
+                        }
+
+                        .instruction_group {
+                            gap: 0;
+                            flex-direction: column;
+                            border: none;
+
+                            .head {
+                                font-weight: 700;
+
+                            }
+
+                            .value {
+                                font-weight: normal;
+
+                            }
+                        }
+                    }
+                }
+
+            }
+
         }
 
     }

@@ -1,6 +1,6 @@
 import { dashboardController } from "../controller/DashboardController.js";
 import { screenCollection } from "../screens/ScreenCollection.js";
-import { date_formatter, notify } from "../script/index.js";
+import { applyStyle, date_formatter, notify } from "../script/index.js";
 import { frontRouter } from "../script/route.js";
 
 export class SinglePatientView {
@@ -10,6 +10,7 @@ export class SinglePatientView {
         this.currentPage = 1;
         this.pageSize = 10;
         this.hasMore = true;
+        applyStyle(this.style());
     }
 
     async PreRender(params) {
@@ -232,5 +233,289 @@ export class SinglePatientView {
             // Append the timeline item to the timeline
             timeline.appendChild(timelineItem);
         });
+    }
+
+    style(){
+        return `
+                    /* ------------------------------------------------------- */
+
+        .single_patient_cont {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            overflow: scroll;
+
+            .loader_cont {
+                border-radius: var(--main_border_r);
+                position: absolute;
+            }
+
+            .visit_list {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                flex: none;
+
+
+                .visit_list_top_part {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+
+                    .heading {
+                        font-size: 24px;
+                        font-weight: 700;
+                    }
+
+                    .date_range_picker_container {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        flex: none;
+
+                        .date_range_picker_container_inner {
+                            width: 280px;
+                        }
+
+                        .next_btn {
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            color: var(--white);
+                            font-weight: bold;
+                            background-color: var(--btn_color);
+                        }
+
+                        .btn_search {
+                            border: none;
+                            background-color: var(--pri_color);
+                            width: 50px;
+                            height: 40px;
+                            cursor: pointer;
+                            border-radius: var(--input_main_border_r);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            span {
+                                font-size: 17px;
+                                color: var(--white);
+                            }
+                        }
+
+                    }
+                }
+
+                .visit_list_bottom_part {
+                    width: 100%;
+                    height: 100%;
+                    overflow-y: scroll;
+                    position: relative;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        transform: translateX(-50%);
+                        left: 20px;
+                        top: 0px;
+                        bottom: 0;
+                        width: 2px;
+                        height: 98%;
+                        background: var(--pure_white_background);
+                        border-radius: 2px;
+                    }
+
+                    .timeline {
+                        overflow-y: scroll;
+                        height: 100%;
+                        /* overflow-y: scroll; */
+
+
+
+                        .timeline-item {
+                            position: relative;
+                            margin-bottom: 30px;
+                            display: flex;
+                            cursor: pointer;
+
+                            .timeline-dot-container {
+                                width: 40px;
+                                display: flex;
+                                justify-content: center;
+
+
+                                .timeline-dot {
+                                    width: 20px;
+                                    height: 20px;
+                                    border-radius: 50%;
+                                    background: var(--pure_white_background);
+                                    position: relative;
+
+                                    &:before {
+                                        content: '';
+                                        position: absolute;
+                                        left: 50%;
+                                        top: 50%;
+                                        transform: translate(-50%, -50%);
+                                        width: 70%;
+                                        height: 70%;
+                                        background: var(--pri_color);
+                                        border-radius: 10px;
+                                        opacity: 0;
+                                    }
+                                }
+
+                                .timeline-dot.active {
+                                    &:before {
+                                        opacity: 1;
+                                    }
+                                }
+                            }
+
+                            .timeline-date {
+                                color: var(--gray_text);
+                                margin-bottom: 8px;
+                                display: flex;
+                                gap: 5px;
+                                height: 20px;
+                                position: absolute;
+                                left: 55px;
+                                top: 0;
+
+                                span {
+                                    font-size: 14px;
+                                }
+
+                                p {
+                                    font-weight: 600;
+
+                                }
+                            }
+
+                            .timeline-content {
+                                background: var(--pure_white_background);
+                                border-radius: 8px;
+                                padding: 15px;
+                                margin-top: 23px;
+                                width: 100%;
+
+                                .timeline-header {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    margin-bottom: 10px;
+
+                                    .visit-id {
+                                        font-weight: 600;
+                                        font-size: 16px;
+                                    }
+
+                                    .status-badge {
+                                        font-size: 12px;
+
+                                        &.active {
+                                            font-size: 14px;
+                                            font-weight: 700;
+                                            color: var(--light_pri_color);
+                                        }
+
+
+                                    }
+                                }
+
+                                .timeline-body {
+                                    .doctor-info {
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 8px;
+                                        margin-bottom: 10px;
+
+                                        .doctor-name {
+                                            font-weight: 700;
+                                            font-size: 14px;
+                                            /* color: var(--light_pri_color); */
+                                        }
+
+                                        span {
+                                            font-size: 14px;
+                                            /* color: var(--light_pri_color); */
+                                        }
+                                    }
+
+                                    .visit-info {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: end;
+
+                                        .department {
+                                            margin-bottom: 7px;
+                                        }
+
+                                        .label {
+                                            font-weight: 700;
+                                            color: var(--light_pri_color);
+                                        }
+
+                                        .visit_actions {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 10px;
+
+                                            .btn_view_visit {
+                                                border: none;
+                                                background-color: var(--pri_color);
+                                                padding: 10px 35px;
+                                                font-weight: bold;
+                                                font-size: var(--main_font_size);
+                                                color: var(--white);
+                                                cursor: pointer;
+                                                border-radius: var(--input_main_border_r);
+                                            }
+
+                                            #print_visit{
+                                                background-color: var(--sec_color);
+                                            }
+                                        }
+
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+
+                    .load_more_container {
+                        display: flex;
+                        justify-content: center;
+                        padding: 20px;
+
+                        .load_more_btn {
+                            padding: 8px 24px;
+                            background: var(--primary-color);
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            transition: background 0.2s;
+
+                            &:hover {
+                                background: var(--primary-color-dark);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+        }
+
+        `
     }
 }

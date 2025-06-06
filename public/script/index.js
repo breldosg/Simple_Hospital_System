@@ -681,7 +681,7 @@ export function prepareVitalReport(data) {
         pulse: { low: 60, high: 100, unit: 'bpm' },
         respiration: { low: 12, high: 20, unit: 'bpm' },
         o2_saturation: { low: 95, high: 100, unit: '%' },
-        blood_pressure: { 
+        blood_pressure: {
             systolic: { low: 90, high: 120 },
             diastolic: { low: 60, high: 80 },
             unit: 'mmHg'
@@ -733,6 +733,60 @@ export function prepareVitalReport(data) {
     };
 }
 
+/**
+ * Custom fetch wrapper for making HTTP requests with standardized error handling and authentication checks
+ * 
+ * @param {string} url - The API endpoint URL to fetch from
+ * @param {Object} data - Request payload data that will be stringified to JSON
+ * @param {Object} options - Additional fetch options to override defaults
+ * @returns {Promise<Object|null>} Returns the response data if successful, null if error
+ */
+export async function customFetch(url, data = {}, options = {}) {
+    try {
+        // Set up default POST request options with JSON content type
+        const defaultOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+        // Merge default options with any custom options passed in
+        const fetchOptions = { ...defaultOptions, ...options };
+
+        // Make the fetch request
+        const response = await fetch(url, fetchOptions);
+
+        // Check if response was successful
+        if (!response.ok) {
+            throw new Error('Server Error');
+        }
+
+        const result = await response.json();
+
+        // Handle unauthorized (401) responses by redirecting to login
+        if (result.status == 401) {
+            // Fade out page and redirect to login with animation
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    frontRouter.navigate('/login');
+                    document.body.style.opacity = '1';
+                }, 500);
+            }, 500);
+            return null;
+        }
+
+        return result;
+
+    } catch (error) {
+        // Show error notification for any caught errors
+        notify('top_left', error.message, 'error');
+        return null;
+    }
+}
 
 function listen_window_width() {
     console.log(window.innerWidth);
@@ -744,3 +798,7 @@ function listen_window_width() {
 }
 
 listen_window_width()
+
+
+
+

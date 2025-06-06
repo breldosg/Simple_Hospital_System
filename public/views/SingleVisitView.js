@@ -588,6 +588,60 @@ export class SingleVisitView {
         }
     }
 
+    async fetchDiagnosisData() {
+        try {
+            const response = await fetch('/api/patient/get_lab_test_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    visit_id: this.visit_id,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server Error');
+            }
+
+            const result = await response.json();
+
+            if (result.status == 401) {
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        frontRouter.navigate('/login');
+                        document.body.style.opacity = '1';
+                    }, 500);
+                }, 500);
+            }
+
+
+
+            if (result.success) {
+                globalStates.setState({ lab_test_data_exists: true });
+                globalStates.setState({ lab_test_data: result.data });
+                if (globalStates.hasState('lab_test_data_render_function')) {
+                    var callbackName = globalStates.getState('lab_test_data_render_function');
+                    if (callbackName && typeof window[callbackName] === 'function') {
+                        window[callbackName]();
+                        globalStates.removeState('lab_test_data_render_function');
+                    } else {
+                        console.warn(`Callback function ${callbackName} is not defined or not a function`);
+                    }
+                }
+
+            } else {
+                notify('top_left', result.message, 'warning');
+                return null;
+            }
+        } catch (error) {
+            notify('top_left', error.message, 'error');
+            return null;
+        }
+    }
+
     async fetch_add_procedure_form() {
         try {
             const response = await fetch('/api/patient/get_data_add_procedure_form', {
@@ -641,8 +695,6 @@ export class SingleVisitView {
             return null;
         }
     }
-
-
 
     style() {
         return `
@@ -747,3 +799,4 @@ export class SingleVisitView {
         `
     }
 }
+

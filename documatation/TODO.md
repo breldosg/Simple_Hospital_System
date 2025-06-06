@@ -40,7 +40,8 @@
 
 ========= *Global*
 1- Login page theme mode  
-2- kwenye hospital system muda unacreate mgonjwa hmn haja ya gardian wala payment detail gardian na payment detail anatakiwa mda unacreate visit 
+2- kwenye hospital system muda unacreate mgonjwa hmn haja ya gardian wala payment detail gardian na payment detail anatakiwa mda unacreate visit ✔️
+3- tengeneza shm inayoruhusu user kuweka document zao kuhifadhi kwenye mfunmo kwaajili ya kudownload mda wowote 
 
 ========= *ADMIN*
 1- Complete Setting 90%
